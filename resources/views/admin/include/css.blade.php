@@ -1,4 +1,5 @@
 	<!-- Meta Tags -->
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +19,9 @@
 
 	<!-- Apple Touch Icon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('public/admin/assets/img/apple-touch-icon.png') }}">
+
+	<!-- toaster css plugin -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="{{ asset('public/admin/assets/css/bootstrap.min.css') }}">
@@ -43,5 +47,6 @@
 
 	<!-- Main CSS -->
 	<link rel="stylesheet" href="{{ asset('public/admin/assets/css/style.css') }}">
+	<link rel="stylesheet" href="{{ asset('public/admin/assets/css/main.css') }}">
 
 	@stack('add-css')

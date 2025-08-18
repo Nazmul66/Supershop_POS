@@ -35,10 +35,21 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
 
-Route::prefix('admin')->group(function () {
+
+Route::group(["as" => 'admin.',"prefix" => '/admin'], function () {
+
+    Route::get('/cc', [AdminController::class, "cacheClear"])->name('cacheClear');
+    
     Route::get('/dashboard', function () {
         return view('admin.pages.dashboard');
-    });
+    })->name('dashboard');
+
+
+    //______ Category _____//
+    Route::resource('/categories', CategoryController::class)->names('category');
+    Route::get('/category-data', [CategoryController::class, 'getData'])->name('category-data');
+    Route::post('/categories/status', [CategoryController::class, 'changeCategoryStatus'])->name('category.status');
+    Route::get('/categories/view/{id}', [CategoryController::class, 'CategoryView'])->name('category.view');
 });
 
 

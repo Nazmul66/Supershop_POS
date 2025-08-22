@@ -20,14 +20,14 @@ class CategoryController extends Controller
 {
     use ImageUploadTraits;
 
-    // public $user;
-    // public function __construct()
-    // {
-    //     $this->user = Auth::guard('admin')->user();
-    //     if (!$this->user) {
-    //         abort(403, 'Unauthorized access');
-    //     }
-    // }
+    public $user;
+    public function __construct()
+    {
+        $this->user = Auth::guard('admin')->user();
+        if (!$this->user) {
+            abort(403, 'Unauthorized access');
+        }
+    }
     /**
      * Display a listing of the resource.
      */
@@ -49,21 +49,21 @@ class CategoryController extends Controller
                 </a>';
             })
             ->addColumn('status', function ($category) {
-                // if(auth("admin")->user()->can("status.category"))
+                if(auth("admin")->user()->can("status.category"))
                     if ($category->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$category->id.'" data-status="'.$category->status.'"> <i
-                                class="fa-solid fa-toggle-on fa-2x"></i>
+                                class="fa-solid fa-toggle-on fa-2x text-success"></i>
                         </a>';
                     } else {
                         return '<a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$category->id.'" data-status="'.$category->status.'"> <i
-                                class="fa-solid fa-toggle-off fa-2x" style="color: grey"></i>
+                                class="fa-solid fa-toggle-off fa-2x text-danger"></i>
                         </a>';
                     }
-                // else{
-                //     return '<span class="badge bg-info">N/A</span>'; 
-                // }
+                else{
+                    return '<span class="badge bg-info">N/A</span>'; 
+                }
             })
             ->addColumn('action', function ($category) {
                 $actionHtml = Blade::render('
@@ -76,17 +76,17 @@ class CategoryController extends Controller
                                 <i class="fas fa-eye"></i> View
                             </a>
 
-                       
+                            @if(auth("admin")->user()->can("update.category"))
                                 <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$category->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
-                           
+                            @endif
 
-                            
+                            @if(auth("admin")->user()->can("delete.category"))
                                 <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$category->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
-                            
+                            @endif
                         </div>
                     </div>
                 ', ['category' => $category]);
@@ -98,9 +98,9 @@ class CategoryController extends Controller
 
     public function changeCategoryStatus(Request $request)
     {
-        // if (!$this->user || !$this->user->can('status.category')) {
-        //     throw UnauthorizedException::forPermissions(['status.category']);
-        // }
+        if (!$this->user || !$this->user->can('status.category')) {
+            throw UnauthorizedException::forPermissions(['status.category']);
+        }
 
         $id = $request->id;
         $Current_status = $request->status;
@@ -124,9 +124,9 @@ class CategoryController extends Controller
      */
     public function store(CreateCategoryRequest $request)
     {
-        // if (!$this->user || !$this->user->can('create.category')) {
-        //     throw UnauthorizedException::forPermissions(['create.category']);
-        // }
+        if (!$this->user || !$this->user->can('create.category')) {
+            throw UnauthorizedException::forPermissions(['create.category']);
+        }
 
         DB::beginTransaction();
         try {
@@ -156,9 +156,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        // if (!$this->user || !$this->user->can('update.category')) {
-        //     throw UnauthorizedException::forPermissions(['update.category']);
-        // }
+        if (!$this->user || !$this->user->can('update.category')) {
+            throw UnauthorizedException::forPermissions(['update.category']);
+        }
 
         // dd($category);
         return response()->json(['success' => $category]);
@@ -169,9 +169,9 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, $id)
     {
-        // if (!$this->user || !$this->user->can('update.category')) {
-        //     throw UnauthorizedException::forPermissions(['update.category']);
-        // }
+        if (!$this->user || !$this->user->can('update.category')) {
+            throw UnauthorizedException::forPermissions(['update.category']);
+        }
 
         $category  = Category::find($id);
 
@@ -203,9 +203,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        // if (!$this->user || !$this->user->can('delete.category')) {
-        //     throw UnauthorizedException::forPermissions(['delete.category']);
-        // }
+        if (!$this->user || !$this->user->can('delete.category')) {
+            throw UnauthorizedException::forPermissions(['delete.category']);
+        }
 
         if ($category->category_img) {
             if (file_exists($category->category_img)) {
@@ -253,6 +253,10 @@ class CategoryController extends Controller
 
     public function allCategoryPdf()
     {
+        if (!$this->user || !$this->user->can('delete.category')) {
+            throw UnauthorizedException::forPermissions(['delete.category']);
+        }
+        
         $categories = Category::get();
 
         $pdf = Pdf::loadView('admin.pages.categories.pdf', compact('categories'))

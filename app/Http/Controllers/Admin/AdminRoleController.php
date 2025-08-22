@@ -34,7 +34,7 @@ class AdminRoleController extends Controller
         }
 
         $admins = Admin::where('id', '!=', Admin::min('id'))->get();
-        return view('backend.pages.role_and_permission.admin.index',[
+        return view('admin.pages.role_and_permission.admin.index',[
             "admins" => $admins,
         ]);
     }
@@ -46,7 +46,7 @@ class AdminRoleController extends Controller
         }
 
         $roles = Role::where('guard_name', 'admin')->pluck('name', 'name')->all();
-        return view('backend.pages.role_and_permission.admin.create',[
+        return view('admin.pages.role_and_permission.admin.create',[
             'roles' => $roles
         ]);
     }
@@ -132,7 +132,7 @@ class AdminRoleController extends Controller
         $roles     = Role::where('guard_name', 'admin')->pluck('name', 'name')->all();
         $userRoles = $admin->roles->pluck('name', 'name')->all();
         
-        return view('backend.pages.role_and_permission.admin.edit',[
+        return view('admin.pages.role_and_permission.admin.edit',[
             'admin'     => $admin,
             'roles'     => $roles,
             'userRoles' => $userRoles,

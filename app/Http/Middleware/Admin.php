@@ -19,7 +19,7 @@ class Admin
     {
         if( !Auth::guard('admin')->check() ){
             // Log::info('Admin not authenticated.');
-            return redirect('/admin/login');
+            return redirect()->route('admin.login');
         }
         else{
             // Log::info('Admin authenticated.');

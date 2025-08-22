@@ -70,6 +70,8 @@
             </div>
         </div>
     </div>
+
+    {{-- Dashboard --}}
     <div class="sidebar-inner slimscroll">
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
@@ -92,6 +94,27 @@
                         <li class="@yield('category')"><a href="{{ route('admin.category.index') }}"><i class="ti ti-list-details fs-16 me-2"></i><span>Category</span></a></li>
                     </ul>
                 </li>
+
+
+                {{-- Role & Permission --}}
+                @if(auth("admin")->user()->can("main-admin-access"))
+                    <li class="submenu-open">
+                        <h6 class="submenu-hdr">User Management</h6>
+                        <ul>
+                            @if(auth("admin")->user()->can("index.permission"))
+                                <li class="@yield('permission')"><a href="{{ route('admin.permission.index') }}"><i class="ti ti ti-key fs-16 me-2"></i><span>Permission</span></a></li>
+                            @endif
+
+                            @if(auth("admin")->user()->can("index.role"))
+                                <li class="@yield('role')"><a href="{{ route('admin.role.index') }}"><i class="ti ti-jump-rope fs-16 me-2"></i><span>Role</span></a></li>
+                            @endif
+                            
+                            @if(auth("admin")->user()->can("index.admin-role"))
+                                <li class="@yield('admin-role')"><a href="{{ route('admin.admin-role.index') }}"><i class="ti ti-shield-up fs-16 me-2"></i><span>Admin</span></a></li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

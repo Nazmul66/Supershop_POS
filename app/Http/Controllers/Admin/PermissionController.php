@@ -31,7 +31,7 @@ class PermissionController extends Controller
             throw UnauthorizedException::forPermissions(['index.permission']);
         }
 
-        return view('backend.pages.role_and_permission.permission.index');
+        return view('admin.pages.role_and_permission.permission.index');
     }
 
     public function getData()
@@ -49,6 +49,7 @@ class PermissionController extends Controller
             ->addColumn('action', function ($permission) {
                 $actionHtml = Blade::render('
                     <div class="d-flex gap-3">
+
                         @if(auth("admin")->user()->can("update.permission"))
                             <a class="btn btn-sm btn-primary" id="editButton" href="javascript:void(0)" data-id="'.$permission->id.'" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fas fa-edit"></i></a>
                         @endif

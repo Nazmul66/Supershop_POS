@@ -32,7 +32,7 @@ class RoleController extends Controller
         }
         
         $roles = Role::where('guard_name', 'admin')->get();
-        return view('backend.pages.role_and_permission.role.index',[
+        return view('admin.pages.role_and_permission.role.index',[
             "roles" => $roles
         ]);
     }
@@ -47,7 +47,7 @@ class RoleController extends Controller
 
         $data['permissions']        = Permission::all();
         $data['permission_groups']  = Admin::getPermissionGroup();
-       return view('backend.pages.role_and_permission.role.create', $data);
+       return view('admin.pages.role_and_permission.role.create', $data);
     }
     /**
      * Store a newly created resource in storage.
@@ -102,7 +102,7 @@ class RoleController extends Controller
 
         // Get all permissions for this role
         $data['rolePermissions']   = $data['role']->permissions->pluck('name')->toArray();
-        return view('backend.pages.role_and_permission.role.edit', $data);
+        return view('admin.pages.role_and_permission.role.edit', $data);
     }
 
     /**

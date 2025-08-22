@@ -36,13 +36,13 @@ use Illuminate\Support\Facades\Session;
 
 
 
-Route::group(["as" => 'admin.',"prefix" => '/admin'], function () {
+Route::get('/admin/logout', [AdminController::class, "logout"])->name('admin.logout');
+Route::match(["get", "post"], '/admin/login', [AdminController::class, "login"])->name('admin.login'); // login page
 
-    Route::get('/cc', [AdminController::class, "cacheClear"])->name('cacheClear');
+Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admin', 'role:SuperAdmin|Admin']], function () {
     
-    Route::get('/dashboard', function () {
-        return view('admin.pages.dashboard');
-    })->name('dashboard');
+    Route::get('/cc', [AdminController::class, "cacheClear"])->name('cacheClear');
+    Route::get('/dashboard', [AdminController::class, "dashboard"])->name('dashboard');
 
 
     //______ Category _____//
@@ -51,6 +51,22 @@ Route::group(["as" => 'admin.',"prefix" => '/admin'], function () {
     Route::post('/categories/status', [CategoryController::class, 'changeCategoryStatus'])->name('category.status');
     Route::get('/categories/view/{id}', [CategoryController::class, 'CategoryView'])->name('category.view');
     Route::get('/categories/pdf', [CategoryController::class, 'allCategoryPdf'])->name('category.pdf');
+
+
+    //______ Subcategory _____//
+    Route::resource('/subcategories', SubcategoryController::class)->names('subcategory');
+    Route::get('/subcategory-data', [SubcategoryController::class, 'getData'])->name('subcategory-data');
+    Route::post('/subcategory/status', [SubcategoryController::class, 'changeSubCategoryStatus'])->name('subcategory.status');
+    Route::get('/subcategories/view/{id}', [SubcategoryController::class, 'subCategoryView'])->name('subcategory.view');
+    Route::get('/subcategories/pdf', [SubcategoryController::class, 'allSubcategoryPdf'])->name('category.pdf');
+
+
+    //______ Role & Permission _____//
+    Route::resource('/permission', PermissionController::class)->names('permission');
+    Route::get('/permission-data', [PermissionController::class, 'getData'])->name('permission-data');
+    
+    Route::resource('/role', RoleController::class)->names('role');
+    Route::resource('/admin-role', AdminRoleController::class)->names('admin-role');
 });
 
 

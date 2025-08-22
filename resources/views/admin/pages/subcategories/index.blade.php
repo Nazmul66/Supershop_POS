@@ -1,69 +1,65 @@
-@extends('admin.layout.master')
 
-@push('add-title')
-    Create Category
-@endpush
+
+@extends('backend.layout.master')
+
 
 @push('add-css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css">
+    Create SubCategory
 @endpush
 
-{{-- Active sidebar --}}
-@section('category', 'active')
+
+@push('add-css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css">
+@endpush
 
 
 @section('body-content')
 
-    {{-- Breadcrumb --}}
-    <div class="page-header">
-        <div class="add-item d-flex">
-            <div class="page-title">
-                <h4 class="fw-bold">Category</h4>
-                <h6>Manage your categories</h6>
+    <!-- Breadcrumb -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">SubCategories List </h4>
+
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboards') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">SubCategory</li>
+                    </ol>
+                </div>
             </div>
-        </div>
-        <ul class="table-top-head">
-            @if(auth("admin")->user()->can("pdf.category"))
-                <li>
-                    <a data-bs-toggle="tooltip" data-bs-placement="top" href="{{ route('admin.category.pdf') }}" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
-                </li>
-            @endif
-
-            @if(auth("admin")->user()->can("excel.category"))
-                <li>
-                    <a data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Excel" data-bs-original-title="Excel"><img src="{{ asset('public/admin/assets/img/icons/excel.svg') }}" alt="img"></a>
-                </li>
-            @endif
-
-            <li>
-                <a href="{{ route('admin.cacheClear') }}" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i class="ti ti-refresh"></i></a>
-            </li>
-            <li>
-                <a data-bs-toggle="tooltip" data-bs-placement="top" id="collapse-header" aria-label="Collapse" data-bs-original-title="Collapse" class=""><i class="ti ti-chevron-up"></i></a>
-            </li>
-        </ul>
-        <div class="page-btn">
-            @if(auth("admin")->user()->can("create.category"))
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Category</button>
-             @endif
         </div>
     </div>
 
-
     <!-- Content part Start -->
     <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="card-title">SubCategories List</h4>
+
+                @if(auth("admin")->user()->can("create.subcategory"))
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+                        Add New
+                    </button>
+                @endif
+            </div>
+        </div>
+
         <div class="card-body">
             <div class="">
-                <table class="table table-bordered mb-0" id="categoryTable">
+                <table class="table table-bordered mb-0" id="datatables">
                     <thead class="bg-primary text-white">
                         <tr>
                             <th>#SL.</th>
                             <th>Image</th>
-                            <th>Name</th>
+                            <th>Category Name</th>
+                            <th>SubCategory Name</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
+                    
                     <tbody>
 
                     </tbody>
@@ -76,57 +72,67 @@
              style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Create Category</h5>
-
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="myModalLabel">Create SubCategory</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
                     </div>
 
                     <div class="modal-body">
+                        {{-- method="POST" action="{{ route('admin.category.store') }}" --}}
                         <form id="createForm" enctype="multipart/form-data">
                             @csrf
 
                             <div class="mb-3">
-                                <label for="category_name" class="form-label">Name <span class="text-danger">*</span></label>
-                                <input class="form-control" id="category_name" type="text" name="category_name" placeholder="Category Name">
+                                <label class="form-label">Category Name <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select" name="category_id" id="category_id">
+                                    <option value="" disabled selected>Select</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}" data-image-url="{{ asset($category->category_img) }}">{{ $category->category_name }}</option>
+                                        @endforeach
+                                </select>
 
-                                <span id="name_validate" class="text-danger validation-error mt-1"></span>
+                                <span id="cat_name_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="mb-3">
-                                <label for="category_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(160px x 160px)</sup></label>
-                                <input type="file" class="form-control" name="category_img" id="category_img" accept=".png, .jpeg, .jpg, .webp" onchange="previewImage(event)">
+                                <label for="subcategory_name" class="form-label">SubCategory Name <span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control" id="subcategory_name" type="text" name="subcategory_name" placeholder="SubCategory Name">
+
+                                <span id="subCat_name_validate" class="text-danger validation-error mt-1"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="subcategory_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(160px x 160px)</sup></label>
+                                <input type="file" class="form-control" name="subcategory_img" id="subcategory_img" accept=".png, .jpeg, .jpg, .webp" onchange="previewImage(event)">
 
                                 <span id="image_validate" class="text-danger validation-error mt-1"></span>
 
-                                <div id="image_preview" class="mt-3">
-                                    <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                                 <div id="image_preview" class="mt-3">
+                                    <img src="{{ asset('public/backend/assets/images/no_Image_available.jpg') }}" width="100" height="100">
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Status <span class="text-danger">*</span></label>
+                                <label class="form-label">Status <span class="text-danger">*</span>
+                                </label>
                                 <select class="form-select" name="status">
                                     <option value="1" selected>Active</option>
                                     <option value="0">Inactive</option>
                                 </select>
 
-                                <span id="status_validate" class="text-danger mt-1"></span>
+                                <span id="status_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn btn-secondary waves-effect me-3"
-                                        data-bs-dismiss="modal">Close
-                                </button>
+                                <button type="button" class="btn btn-danger waves-effect me-3"
+                                  data-bs-dismiss="modal">Close </button>
 
-                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
-                                    Save Changes
-                                </button>
+                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save Changes </button>
                             </div>
                         </form>
                     </div>
-
-
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
@@ -137,12 +143,13 @@
              style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Update Category</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="myModalLabel">Update SubCategory</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
                     </div>
 
                     <div class="modal-body">
+                        {{-- method="POST" action="{{ route('admin.category.store') }}" --}}
                         <form id="EditForm" enctype="multipart/form-data">
                             @csrf
                             @method("PUT")
@@ -150,29 +157,34 @@
                             <input type="text" name="id" id="id" hidden>
 
                             <div class="mb-3">
-                                <label for="up_category_name" class="form-label">Name <span class="text-danger">*</span></label>
-                                <input class="form-control" id="up_category_name" type="text" name="category_name" placeholder="Category Name">
-
-                                <span id="up_name_validate" class="text-danger validation-error mt-1"></span>
+                                <label class="form-label">Category Name <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select" name="category_id" id="up_category_id">
+                                    <option value="" disabled selected>Select</option>
+                                        @foreach ($categories as $row)
+                                            <option value="{{ $row->id }}" data-image-url="{{ asset($row->category_img) }}">{{ $row->category_name }}</option>
+                                        @endforeach
+                                </select>
                             </div>
 
                             <div class="mb-3">
-                                <label for="category_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(160px x 160px)</sup></label>
-                                <input type="file" class="form-control" name="category_img" id="up_cat_img" accept=".png, .jpeg, .jpg, .webp" onchange="imageShow(event)">
+                                <label for="up_subcat_name" class="form-label">SubCategory Name <span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control" id="up_subcat_name" type="text" name="subcategory_name" placeholder="SubCategory Name">
+
+                                <span id="up_subCat_name_validate" class="text-danger validation-error mt-1"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="subcategory_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(160px x 160px)</sup></label>
+                                <input type="file" class="form-control" name="subcategory_img" id="subcategory_img" accept=".png, .jpeg, .jpg, .webp" onchange="imageShow(event)">
 
                                 <div id="imageShow" class="mt-3"></div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Front Status <span class="text-danger">*</span></label>
-                                <select class="form-select" id="up_front_status" name="front_status">
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Status <span class="text-danger">*</span></label>
+                                <label class="form-label">Status <span class="text-danger">*</span>
+                                </label>
                                 <select class="form-select" id="up_status" name="status">
                                     <option value="1">Active</option>
                                     <option value="0">Inactive</option>
@@ -180,16 +192,16 @@
                             </div>
 
                             <div class="d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn btn-secondary waves-effect me-3"
+                                <button type="button" class="btn btn-danger waves-effect me-3"
                                         data-bs-dismiss="modal">Close
                                 </button>
 
-                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
-                                   Update
-                                </button>
+                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Update</button>
                             </div>
                         </form>
                     </div>
+
+
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
@@ -200,16 +212,21 @@
         style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">View Category List</h5>
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="myModalLabel">View SubCategory List</h5>
 
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
                     </div>
 
                     <div class="modal-body">
                         <div class="view_modal_content">
-                            <label>Name : </label>
+                            <label>Category Name : </label>
                             <span class="text-dark" id="view_category_name"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>SubCategory Name : </label>
+                            <span class="text-dark" id="view_subCategory_name"></span>
                         </div>
 
                         <div class="view_modal_content">
@@ -226,11 +243,6 @@
                             <label>Updated Date : </label>
                             <div id="updated_date"></div>
                         </div>
-                        
-                        <div class="view_modal_content">
-                            <label>Front Status : </label>
-                            <div id="view_front_status"></div>
-                        </div>
 
                         <div class="view_modal_content">
                             <label>Status : </label>
@@ -246,7 +258,8 @@
 
 @endsection
 
-@push('add-js')
+@push('add-script')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
 
     <script>
@@ -273,16 +286,47 @@
 
     <script>
         $(document).ready(function () {
+            //____ For Create Modal ____//
+            $('#category_id').select2({
+                dropdownParent: $('#createModal'),
+                templateResult: formatState, // Only Text content when select, it will be shown 
+                templateSelection: formatState,    // When select any option, it will be display image and text both
+            });
+            
+            //____ For Create Modal ____//
+            $('#up_category_id').select2({
+                dropdownParent: $('#editModal'),
+                templateResult: formatState, // Only Text content when select, it will be shown 
+                templateSelection: formatState,    // When select any option, it will be display image and text both
+            });
+
+            function formatState (state) {
+                if (!state.id) {
+                    return state.text; // Return text for disabled option
+                }
+
+                var imageUrl = $(state.element).data('image-url'); // Access image URL from data attribute
+
+                if (!imageUrl) {
+                    return state.text; // Return text if no image URL is available
+                }
+
+                var $state = $(
+                    '<span><img src="' + imageUrl + '" style="width: 35px; height: 30px; margin-right: 8px;" /> ' + state.text + '</span>'
+                );
+                return $state;
+            };
+
 
             // Show Data through Datatable
-            let datatables = $('#categoryTable').DataTable({
+            let datatables = $('#datatables').DataTable({
                 order: [
                     [0, 'desc']
                 ],
                 processing: true,
                 serverSide: true,
 
-                ajax: "{{ route('admin.category-data') }}",
+                ajax: "{{ route('admin.subcategory-data') }}",
                 // pageLength: 30,
 
                 columns: [
@@ -293,12 +337,15 @@
                         searchable: false 
                     },
                     {
-                        data: 'categoryImg',
+                        data: 'subCategoryImg',
                         orderable: false,
                         searchable: false,
                     },
                     {
                         data: 'category_name',
+                    },
+                    {
+                        data: 'subcategory_name',
                     },
                     {
                         data: 'status',
@@ -313,6 +360,7 @@
                 ]
             });
 
+
             // status updates
             $(document).on('click', '#status', function () {
                 var id = $(this).data('id');
@@ -322,7 +370,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('admin.category.status') }}",
+                    url: "{{ route('admin.subcategory.status') }}",
                     data: {
                         // '_token': token,
                         id: id,
@@ -352,6 +400,7 @@
                 })
             })
 
+
             // Create Data
             $('#createForm').submit(function (e) {
                 e.preventDefault();
@@ -363,7 +412,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ route('admin.category.store') }}",
+                    url: "{{ route('admin.subcategory.store') }}",
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
@@ -385,8 +434,9 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#name_validate').empty().html(error.category_name);
-                        $('#image_validate').empty().html(error.category_img);
+                        $('#cat_name_validate').empty().html(error.category_id);
+                        $('#subCat_name_validate').empty().html(error.subcategory_name);
+                        $('#image_validate').empty().html(error.subcategory_img);
                         $('#status_validate').empty().html(error.status);
 
                         swal.fire({
@@ -409,22 +459,24 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/categories') }}/" + id + "/edit",
+                    url: "{{ url('admin/subcategories') }}/" + id + "/edit",
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
+                        // console.log(res)
 
                         $('#id').val(data.id);
-                        $('#up_category_name').val(data.category_name);
+                        $('#up_category_id').val(data.category_id).trigger('change');
+                        $('#up_subcat_name').val(data.subcategory_name);
                         $('#imageShow').html('');
                         $('#imageShow').append(`
-                          <a href="{{ asset("`+ data.category_img +`") }}" target="__blank">
-                            <img src='{{ asset("`+ data.category_img +`") }}' alt="" style="width: 100px; height: 100px;">    
+                          <a href="{{ asset("`+ data.subcategory_img +`") }}" target="__blank">
+                            <img src={{ asset("`+ data.subcategory_img +`") }} alt="" style="width: 75px;">    
                           </a>
-                        `);
-                        $('#up_front_status').val(data.front_status);
+                       `);
                         $('#up_status').val(data.status);
+
                     },
                     error: function (error) {
                         console.log('error');
@@ -446,7 +498,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ url('admin/categories') }}/" + id,
+                    url: "{{ url('admin/subcategories') }}/" + id,
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
@@ -454,10 +506,9 @@
 
                         swal.fire({
                             title: "Success",
-                            text: "Category Updated Successfully",
+                            text: "SubCategory Edited",
                             icon: "success"
                         })
-
                         $('#editModal').modal('hide');
                         $('#EditForm')[0].reset();
                         $('.validation-error').html('');
@@ -466,7 +517,7 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#up_name_validate').empty().html(error.category_name);
+                        $('#up_subCat_name_validate').empty().html(error.subcategory_name);
 
                         swal.fire({
                             title: "Failed",
@@ -492,35 +543,36 @@
                     cancelButtonColor: "#3085d6",
                     confirmButtonText: "Yes, delete it!"
                 })
-                .then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            type: 'DELETE',
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'DELETE',
 
-                            url: "{{ url('admin/categories') }}/" + id,
-                            data: {
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                url: "{{ url('admin/subcategories') }}/" + id,
+                                data: {
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    }
+                                },
+                                success: function (res) {
+                                    Swal.fire({
+                                        title: "Deleted!",
+                                        text: `${res.message}`,
+                                        icon: "success"
+                                    });
+
+                                    datatables.ajax.reload();
+                                },
+                                error: function (err) {
+                                    console.log('error')
                                 }
-                            },
-                            success: function (res) {
-                                Swal.fire({
-                                    title: "Deleted!",
-                                    text: `${res.message}`,
-                                    icon: "success"
-                                });
+                            })
 
-                                datatables.ajax.reload();
-                            },
-                            error: function (err) {
-                                console.log('error')
-                            }
-                        })
+                        } else {
+                            swal.fire('Your Data is Safe');
+                        }
 
-                    } else {
-                        swal.fire('Your Image is Safe');
-                    }
-                })
+                    })
             })
 
 
@@ -534,24 +586,25 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/categories/view') }}/" + id,
+                    url: "{{ url('admin/subcategories/view') }}/" + id,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
 
                         $('#view_category_name').html(data.category_name);
+                        $('#view_subCategory_name').html(data.subcategory_name);
                         $('#viewImageShow').html('');
                         $('#viewImageShow').append(`
-                          <a href="{{ asset("`+ data.category_img +`") }}" target="__blank">
-                            <img src={{ asset("`+ data.category_img +`") }} alt="" style="width: 75px;">    
+                          <a href="{{ asset("`+ data.subcategory_img +`") }}" target="__blank">
+                            <img src={{ asset("`+ data.subcategory_img +`") }} alt="" style="width: 75px;">    
                           </a>
                        `);
 
                         $('#created_date').html(res.created_date);
                         $('#updated_date').html(res.updated_date);
                         $('#view_status').html(res.statusHtml);
-                        $('#view_front_status').html(res.front_status_html);
+
                     },
                     error: function (error) {
                         console.log('error');

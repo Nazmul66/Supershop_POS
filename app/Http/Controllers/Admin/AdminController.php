@@ -43,6 +43,11 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
+    public function dashboard()
+    {
+        return view('admin.pages.dashboard');
+    }
+
     public function dashboards()
     {
         $data['total_order']     = Order::get()->count();
@@ -72,6 +77,7 @@ class AdminController extends Controller
     public function login(Request $request)
     {
         if( $request->isMethod('POST') ){
+            // dd($request->all());
            $data = $request->all();
 
            // validation
@@ -87,6 +93,10 @@ class AdminController extends Controller
                     'string',
                     'min:8',          // Minimum 8 characters
                     'max:30',         // Maximum 30 characters
+                    'regex:/[a-z]/',    // Must contain at least one lowercase letter
+                    'regex:/[A-Z]/',    // Must contain at least one uppercase letter
+                    'regex:/[0-9]/',    // Must contain at least one number
+                    'regex:/[@$!%*?&#]/' // Must contain a special character
                 ]
            ];
 
@@ -98,13 +108,14 @@ class AdminController extends Controller
                 "password.min"      => 'Password must be at least 8 characters long.',
                 "password.max"      => 'Password cannot exceed 30 characters.',
                 "password.regex"    => 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+                'password.regex'    => 'The new password must include at least one lowercase letter, one uppercase letter, one number, and one special character.',
             ];
 
            $request->validate($rules, $customMessage);
 
            if( $admin = Auth::guard('admin')->attempt(["email" => $data['email'], "password" => $data['password']]) ){
                 Toastr::success('Login Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-                return redirect('/admin/dashboards');
+                return redirect('/admin/dashboard');
            }
            else{
                 Toastr::error('Invalid Email or Password', 'Error', ["positionClass" => "toast-top-right"]);
@@ -113,7 +124,7 @@ class AdminController extends Controller
         }
 
         else{
-            return view("backend.pages.auth.login");
+            return view("admin.pages.auth.login");
         }
     }
 
@@ -125,7 +136,7 @@ class AdminController extends Controller
         Auth::guard('admin')->logout();
         
         Toastr::success('Admin Logout Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return redirect('/admin/login');
+        return redirect()->route('admin.login');
     }
 
     public function profiles()

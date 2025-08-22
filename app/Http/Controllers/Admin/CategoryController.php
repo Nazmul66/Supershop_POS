@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\CreateCategoryRequest;
 use App\Http\Requests\Admin\UpdateCategoryRequest;
 use App\Traits\ImageUploadTraits;
 use App\Models\Category;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -246,5 +247,18 @@ class CategoryController extends Controller
             'created_date'      => $created_date,
             'updated_date'      => $updated_date,
         ]);
+    }
+
+
+
+    public function allCategoryPdf()
+    {
+        $categories = Category::get();
+
+        $pdf = Pdf::loadView('admin.pages.categories.pdf', compact('categories'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('category.pdf');
+        // return view('admin.pages.categories.pdf', compact('categories'));
     }
 }

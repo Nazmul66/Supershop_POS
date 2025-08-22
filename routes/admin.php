@@ -46,10 +46,11 @@ Route::group(["as" => 'admin.',"prefix" => '/admin'], function () {
 
 
     //______ Category _____//
-    Route::resource('/categories', CategoryController::class)->names('category');
+    Route::resource('/categories', CategoryController::class)->names('category')->except('show');
     Route::get('/category-data', [CategoryController::class, 'getData'])->name('category-data');
     Route::post('/categories/status', [CategoryController::class, 'changeCategoryStatus'])->name('category.status');
     Route::get('/categories/view/{id}', [CategoryController::class, 'CategoryView'])->name('category.view');
+    Route::get('/categories/pdf', [CategoryController::class, 'allCategoryPdf'])->name('category.pdf');
 });
 
 

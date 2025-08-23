@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\ProductCollectionController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\DBbackupController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\HomeSettingController;
 use App\Http\Controllers\Admin\EssentialSettingController;
@@ -78,11 +79,12 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
 
    //______ Other Settings  _____//
     Route::group(["as" => 'other-settings.',"prefix" => '/other-settings'], function () {
+        
         //______ Database Backup _____//
-        Route::get('/pull-backup', [OtherSettingController::class, 'pull_backup'])->name('pull.backup');
-        Route::get('/list-backup', [OtherSettingController::class, 'list_backup'])->name('list.backup');
-        Route::get('/backup-download/{path}', [OtherSettingController::class, 'backup_download'])->name('backup.download');
-        Route::get('/backup-delete/{path}', [OtherSettingController::class, 'backup_delete'])->name('backup.delete');
+        Route::get('/pull-backup', [DBbackupController::class, 'pull_backup'])->name('pull.backup');
+        Route::get('/list-backup', [DBbackupController::class, 'list_backup'])->name('list.backup');
+        Route::get('/backup-download/{path}', [DBbackupController::class, 'backup_download'])->name('backup.download');
+        Route::get('/backup-delete/{path}', [DBbackupController::class, 'backup_delete'])->name('backup.delete');
     });
    
 

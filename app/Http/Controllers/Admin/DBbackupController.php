@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 
-class OtherSettingController extends Controller
+class DBbackupController extends Controller
 {
     public function pull_backup()
     {

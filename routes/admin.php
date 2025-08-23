@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\HomeSettingController;
 use App\Http\Controllers\Admin\EssentialSettingController;
 use App\Http\Controllers\Admin\LandingPageController;
 use App\Http\Controllers\Admin\Hrms\ExpenseController;
+use App\Http\Controllers\Admin\OtherSettingController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
@@ -67,6 +68,25 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     
     Route::resource('/role', RoleController::class)->names('role');
     Route::resource('/admin-role', AdminRoleController::class)->names('admin-role');
+
+
+    //______ Settings _____//
+    Route::resource('/settings', SettingController::class)->names('settings')->except('show');
+    Route::get('/email-setup', [SettingController::class, 'emailSetupIndex'])->name('email.setup');
+    Route::put('/email-setting-update', [SettingController::class, 'emailConfigSettingUpdate'])->name('email.setting.update');
+
+
+   //______ Other Settings  _____//
+    Route::group(["as" => 'other-settings.',"prefix" => '/other-settings'], function () {
+        //______ Database Backup _____//
+        Route::get('/pull-backup', [OtherSettingController::class, 'pull_backup'])->name('pull.backup');
+        Route::get('/list-backup', [OtherSettingController::class, 'list_backup'])->name('list.backup');
+        Route::get('/backup-download/{path}', [OtherSettingController::class, 'backup_download'])->name('backup.download');
+        Route::get('/backup-delete/{path}', [OtherSettingController::class, 'backup_delete'])->name('backup.delete');
+    });
+   
+
+
 });
 
 

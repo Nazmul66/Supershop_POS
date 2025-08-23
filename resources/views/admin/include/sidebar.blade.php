@@ -115,6 +115,30 @@
                         </ul>
                     </li>
                 @endif
+
+
+                {{-- Settings --}}
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Settings</h6>
+                    <ul>
+                        <li class="submenu">
+                            <a href="javascript:void(0);" class="@yield('other-setting')"><i class="ti ti-settings-2 fs-16 me-2"></i>
+                                <span>Other Settings</span><span class="menu-arrow"></span>
+                            </a>
+                            <ul >
+                                @if(auth("admin")->user()->can("list.backup"))
+                                    <li><a href="{{ route('admin.other-settings.list.backup') }}" class="@yield('backup-setting')">DB Backup</a></li>
+                                @endif
+
+                                <li><a href="ban-ip-address.html">Ban IP Address</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="{{ url('/admin/logout') }}"><i class="ti ti-logout fs-16 me-2"></i><span>Logout</span> </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>

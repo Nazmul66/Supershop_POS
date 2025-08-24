@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\UpdateSubCategoryRequest;
 use App\Traits\ImageUploadTraits;
 use App\Models\Category;
 use App\Models\Subcategory;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -33,7 +34,7 @@ class SubcategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('backend.pages.subcategories.index', compact('categories'));
+        return view('admin.pages.subcategories.index', compact('categories'));
     }
 
     /**
@@ -58,12 +59,12 @@ class SubcategoryController extends Controller
                     if ($subCategory->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$subCategory->id.'" data-status="'.$subCategory->status.'"> <i
-                                class="fa-solid fa-toggle-on fa-2x"></i>
+                                class="fa-solid fa-toggle-on fa-2x text-success"></i>
                         </a>';
                     } else {
                         return '<a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$subCategory->id.'" data-status="'.$subCategory->status.'"> <i
-                                class="fa-solid fa-toggle-off fa-2x" style="color: grey"></i>
+                                class="fa-solid fa-toggle-off fa-2x text-danger"></i>
                         </a>';
                     }
                 else{
@@ -250,5 +251,23 @@ class SubcategoryController extends Controller
             'created_date'      => $created_date,
             'updated_date'      => $updated_date,
         ]);
+    }
+
+
+    public function allSubcategoryPdf()
+    {
+        if (!$this->user || !$this->user->can('pdf.subcategory')) {
+            throw UnauthorizedException::forPermissions(['pdf.subcategory']);
+        }
+        
+        $subCategories = Category::join('subcategories', 'subcategories.category_id', '=', 'categories.id')
+                ->select('categories.category_name', 'subcategories.*')
+                ->get();
+
+        $pdf = Pdf::loadView('admin.pages.subcategories.pdf', compact('subCategories'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('SubCategory.pdf');
+        // return view('admin.pages.categories.pdf', compact('categories'));
     }
 }

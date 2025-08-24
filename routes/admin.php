@@ -56,11 +56,11 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
 
 
     //______ Subcategory _____//
-    Route::resource('/subcategories', SubcategoryController::class)->names('subcategory');
+    Route::resource('/subcategories', SubcategoryController::class)->names('subcategory')->except('show');
     Route::get('/subcategory-data', [SubcategoryController::class, 'getData'])->name('subcategory-data');
     Route::post('/subcategory/status', [SubcategoryController::class, 'changeSubCategoryStatus'])->name('subcategory.status');
     Route::get('/subcategories/view/{id}', [SubcategoryController::class, 'subCategoryView'])->name('subcategory.view');
-    Route::get('/subcategories/pdf', [SubcategoryController::class, 'allSubcategoryPdf'])->name('category.pdf');
+    Route::get('/subcategories/pdf', [SubcategoryController::class, 'allSubcategoryPdf'])->name('subcategory.pdf');
 
 
     //______ Role & Permission _____//

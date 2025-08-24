@@ -253,8 +253,8 @@ class CategoryController extends Controller
 
     public function allCategoryPdf()
     {
-        if (!$this->user || !$this->user->can('delete.category')) {
-            throw UnauthorizedException::forPermissions(['delete.category']);
+        if (!$this->user || !$this->user->can('pdf.category')) {
+            throw UnauthorizedException::forPermissions(['pdf.category']);
         }
         
         $categories = Category::get();

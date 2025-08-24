@@ -1,9 +1,9 @@
 
 
-@extends('backend.layout.master')
+@extends('admin.layout.master')
 
 
-@push('add-css')
+@push('add-title')
     Create SubCategory
 @endpush
 
@@ -16,36 +16,43 @@
 
 @section('body-content')
 
-    <!-- Breadcrumb -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">SubCategories List </h4>
-
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboards') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">SubCategory</li>
-                    </ol>
-                </div>
+    <!-- Breadcrumb --> 
+    <div class="page-header">
+        <div class="add-item d-flex">
+            <div class="page-title">
+                <h4 class="fw-bold">SubCategory</h4>
+                <h6>Manage your SubCategories</h6>
             </div>
+        </div>
+        <ul class="table-top-head">
+            @if(auth("admin")->user()->can("pdf.subcategory"))
+                <li>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" href="{{ route('admin.subcategory.pdf') }}" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
+                </li>
+            @endif
+
+            @if(auth("admin")->user()->can("excel.subcategory"))
+                <li>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Excel" data-bs-original-title="Excel"><img src="{{ asset('public/admin/assets/img/icons/excel.svg') }}" alt="img"></a>
+                </li>
+            @endif
+
+            <li>
+                <a href="{{ route('admin.cacheClear') }}" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i class="ti ti-refresh"></i></a>
+            </li>
+            <li>
+                <a data-bs-toggle="tooltip" data-bs-placement="top" id="collapse-header" aria-label="Collapse" data-bs-original-title="Collapse" class=""><i class="ti ti-chevron-up"></i></a>
+            </li>
+        </ul>
+        <div class="page-btn">
+            @if(auth("admin")->user()->can("create.subcategory"))
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add SubCategory</button>
+                @endif
         </div>
     </div>
 
     <!-- Content part Start -->
     <div class="card">
-        <div class="card-header">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4 class="card-title">SubCategories List</h4>
-
-                @if(auth("admin")->user()->can("create.subcategory"))
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-                        Add New
-                    </button>
-                @endif
-            </div>
-        </div>
-
         <div class="card-body">
             <div class="">
                 <table class="table table-bordered mb-0" id="datatables">
@@ -72,9 +79,9 @@
              style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header bg-primary">
+                    <div class="modal-header">
                         <h5 class="modal-title" id="myModalLabel">Create SubCategory</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
                     <div class="modal-body">
@@ -110,7 +117,7 @@
                                 <span id="image_validate" class="text-danger validation-error mt-1"></span>
 
                                  <div id="image_preview" class="mt-3">
-                                    <img src="{{ asset('public/backend/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                                    <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
                                 </div>
                             </div>
 
@@ -126,7 +133,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn btn-danger waves-effect me-3"
+                                <button type="button" class="btn btn-secondary waves-effect me-3"
                                   data-bs-dismiss="modal">Close </button>
 
                                 <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save Changes </button>
@@ -143,9 +150,9 @@
              style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header bg-primary">
+                    <div class="modal-header">
                         <h5 class="modal-title" id="myModalLabel">Update SubCategory</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
                     <div class="modal-body">
@@ -192,7 +199,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn btn-danger waves-effect me-3"
+                                <button type="button" class="btn btn-secondary waves-effect me-3"
                                         data-bs-dismiss="modal">Close
                                 </button>
 
@@ -212,10 +219,10 @@
         style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header bg-primary">
+                    <div class="modal-header">
                         <h5 class="modal-title" id="myModalLabel">View SubCategory List</h5>
 
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
                     <div class="modal-body">
@@ -258,7 +265,7 @@
 
 @endsection
 
-@push('add-script')
+@push('add-js')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
 

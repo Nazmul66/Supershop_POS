@@ -150,9 +150,6 @@
 
 		<!-- Apple Touch Icon -->
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('public/admin/assets/img/apple-touch-icon.png') }}">
-
-        <!-- toaster css plugin -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 		
 		<!-- Bootstrap CSS -->
         <link rel="stylesheet" href="{{ asset('public/admin/assets/css/bootstrap.min.css') }}">
@@ -163,6 +160,9 @@
 
         <!-- Tabler Icon CSS -->
 	    <link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/tabler-icons/tabler-icons.css') }}">
+
+        <!-- toaster css plugin -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 	    <!-- Main CSS -->
         <link rel="stylesheet" href="{{ asset('public/admin/assets/css/style.css') }}">

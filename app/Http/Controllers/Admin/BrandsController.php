@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\CreateBrandRequest;
 use App\Http\Requests\Admin\UpdateBrandRequest;
 use App\Traits\ImageUploadTraits;
 use App\Models\Brand;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -32,7 +33,7 @@ class BrandsController extends Controller
      */
     public function index()
     {
-        return view('backend.pages.brands.index');
+        return view('admin.pages.brands.index');
     }
 
     public function getData()
@@ -52,12 +53,12 @@ class BrandsController extends Controller
                     if ($brand->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$brand->id.'" data-status="'.$brand->status.'"> <i
-                                class="fa-solid fa-toggle-on fa-2x"></i>
+                                class="fa-solid fa-toggle-on fa-2x text-success"></i>
                         </a>';
                     } else {
                         return '<a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$brand->id.'" data-status="'.$brand->status.'"> <i
-                                class="fa-solid fa-toggle-off fa-2x" style="color: grey"></i>
+                                class="fa-solid fa-toggle-off fa-2x text-danger"></i>
                         </a>';
                     }
                 else{
@@ -239,6 +240,23 @@ class BrandsController extends Controller
             'created_date'      => $created_date,
             'updated_date'      => $updated_date,
         ]);
+    }
+
+
+
+    public function allBrandsPdf()
+    {
+        if (!$this->user || !$this->user->can('pdf.brand')) {
+            throw UnauthorizedException::forPermissions(['pdf.brand']);
+        }
+        
+        $brands = Brand::get();
+
+        $pdf = Pdf::loadView('admin.pages.brands.pdf', compact('brands'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('Brand.pdf');
+        // return view('admin.pages.brands.pdf', compact('categories'));
     }
 
 }

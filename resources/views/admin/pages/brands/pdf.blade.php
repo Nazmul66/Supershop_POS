@@ -89,14 +89,14 @@
 </style>
 
 {{-- Active sidebar --}}
-@section('category', 'active')
+@section('brands', 'active')
 
 </head>
 
 <body>
     
     <header>
-        <h2>ChildCategory List</h2>
+        <h2>Brands List</h2>
         <p>Generated on: {{ date('d-m-Y H:i:A') }}</p>
     </header>
 
@@ -110,25 +110,21 @@
                 <tr>
                     <th>SL.</th>
                     <th>Image</th>
-                    <th>Category Name</th>
-                    <th>SubCategory Name</th>
-                    <th>ChildCategory Name</th>
+                    <th>Brand Name</th>
                     <th>Slug</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($childCategories as $index => $row)
+                @foreach ($brands as $index => $row)
                     <tr>
                         <td>{{ $index+1 }}</td>
                         <td>
-                            @if ( !empty($row->img) )
-                                <img src="{{ url($row->img) }}" alt="" style="width: 70px;">
+                            @if ( !empty($row->image) )
+                                <img src="{{ url($row->image) }}" alt="" style="width: 70px;">
                             @endif
                         </td>
-                        <td>{{ $row->category_name }}</td>
-                        <td>{{ $row->subcategory_name }}</td>
-                        <td>{{ $row->name }}</td>
+                        <td>{{ $row->brand_name }}</td>
                         <td>{{ $row->slug }}</td>
                         <td>
                             @if ( $row->status == 1 )

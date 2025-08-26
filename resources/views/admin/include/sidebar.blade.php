@@ -96,6 +96,8 @@
                         <li class="@yield('subCategory')"><a href="{{ route('admin.subcategory.index') }}"><i class="ti ti-carousel-vertical fs-16 me-2"></i><span>Sub Category</span></a></li>
 
                         <li class="@yield('childCategory')"><a href="{{ route('admin.childCategory.index') }}"><i class="ti ti-brand-airtable fs-16 me-2"></i><span>Child Category</span></a></li>
+
+                        <li class="@yield('brand')"><a href="{{ route('admin.brand.index') }}"><i class="ti ti-triangles fs-16 me-2"></i><span>Brand</span></a></li>
                     </ul>
                 </li>
 

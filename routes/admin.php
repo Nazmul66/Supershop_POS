@@ -72,6 +72,14 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::post('/get/subCategory-data', [ChildCategoryController::class, 'get_subCategory_data'])->name('childCategory.subCategory.data');
 
 
+    //______ Brand _____//
+    Route::resource('/brands', BrandsController::class)->names('brand')->except('show');
+    Route::get('/brand-data', [BrandsController::class, 'getData'])->name('brand-data');
+    Route::post('/change-brand-status', [BrandsController::class, 'changeBrandStatus'])->name('brand.status');
+    Route::get('/brands/view/{id}', [BrandsController::class, 'brandView'])->name('brand.view');
+    Route::get('/brands/pdf', [BrandsController::class, 'allBrandsPdf'])->name('brand.pdf');
+
+
     //______ Role & Permission _____//
     Route::resource('/permission', PermissionController::class)->names('permission');
     Route::get('/permission-data', [PermissionController::class, 'getData'])->name('permission-data');

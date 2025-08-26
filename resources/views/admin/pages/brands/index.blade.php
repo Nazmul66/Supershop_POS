@@ -1,18 +1,16 @@
 @extends('admin.layout.master')
 
-@push('add-title')
-    Create Child-Category
+@push('title')
+    Create Brand
 @endpush
 
 
 @push('add-css')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 
-
 {{-- Active sidebar --}}
-@section('childCategory', 'active')
+@section('brand', 'active')
 
 
 @section('body-content')
@@ -21,18 +19,18 @@
     <div class="page-header">
         <div class="add-item d-flex">
             <div class="page-title">
-                <h4 class="fw-bold">Child Category</h4>
-                <h6>Manage your child categories</h6>
+                <h4 class="fw-bold">Brand</h4>
+                <h6>Manage your brands</h6>
             </div>
         </div>
         <ul class="table-top-head">
-            @if(auth("admin")->user()->can("pdf.childcategory"))
+            @if(auth("admin")->user()->can("pdf.brand"))
                 <li>
-                    <a data-bs-toggle="tooltip" data-bs-placement="top" href="{{ route('admin.childCategory.pdf') }}" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" href="{{ route('admin.brand.pdf') }}" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
                 </li>
             @endif
 
-            @if(auth("admin")->user()->can("excel.childcategory"))
+            @if(auth("admin")->user()->can("excel.brand"))
                 <li>
                     <a data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Excel" data-bs-original-title="Excel"><img src="{{ asset('public/admin/assets/img/icons/excel.svg') }}" alt="img"></a>
                 </li>
@@ -46,8 +44,8 @@
             </li>
         </ul>
         <div class="page-btn">
-            @if(auth("admin")->user()->can("create.childcategory"))
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Child Category</button>
+            @if(auth("admin")->user()->can("create.brand"))
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Brand</button>
              @endif
         </div>
     </div>
@@ -59,17 +57,14 @@
             <div class="">
                 <table class="table table-bordered mb-0" id="datatables">
                     <thead class="bg-primary text-white">
-                    <tr>
-                        <th>#SL.</th>
-                        <th>Image</th>
-                        <th>Category Name</th>
-                        <th>Subcategory Name</th>
-                        <th>Childcategory Name</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
+                        <tr>
+                            <th>#SL.</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
-
                     <tbody>
 
                     </tbody>
@@ -83,7 +78,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Create Child-Category</h5>
+                        <h5 class="modal-title" id="myModalLabel">Create Brand</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
@@ -92,39 +87,15 @@
                             @csrf
 
                             <div class="mb-3">
-                                <label class="form-label">Category Name <span class="text-danger">*</span></label>
-                                <select class="form-select category_id" name="category_id" id="category_id">
-                                    <option value="" disabled selected>Select</option>
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}" data-image-url="{{ asset($category->category_img) }}">{{ $category->category_name }}</option>
-                                        @endforeach
-                                </select>
+                                <label for="brand_name" class="form-label">Brand Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="brand_name" name="brand_name" placeholder="Brand name">
 
-                                <span id="cat_name_validate" class="text-danger validation-error mt-1"></span>
+                                <span id="name_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">SubCategory Name <span class="text-danger">*</span></label>
-                                <select class="form-select subCategory_id" name="subCategory_id" id="subCategory_id">
-                                    <option value="" disabled selected>Select </option>
-                                        @foreach ($subCategories as $subCat)
-                                            <option value="{{ $subCat->id }}" data-image-url="{{ asset($subCat->subcategory_img) }}">{{ $subCat->subcategory_name }}</option>
-                                        @endforeach
-                                </select>
-
-                                <span id="subCat_name_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="childCategory_name" class="form-label">ChildCategory Name <span class="text-danger">*</span></label>
-                                <input class="form-control" id="childCategory_name" type="text" name="name" placeholder="ChildCategory Name">
-
-                                <span id="childCat_name_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="childCategory_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
-                                <input type="file" class="form-control" name="img" id="childCategory_img" accept=".png, .jpeg, .jpg, .webp" onchange="previewImage(event)">
+                                <label for="image" class="form-label">Brand Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
+                                <input type="file" class="form-control" name="image" id="image"  accept=".png, .jpeg, .jpg, .webp" onchange="previewImage(event)">
 
                                 <span id="image_validate" class="text-danger validation-error mt-1"></span>
 
@@ -136,20 +107,18 @@
                             <div class="mb-3">
                                 <label class="form-label">Status <span class="text-danger">*</span></label>
                                 <select class="form-select" name="status">
-                                    <option value="1" selected>Active</option>
-                                    <option value="0">Inactive</option>
+                                    <option value="1" selected>Yes</option>
+                                    <option value="0">No</option>
                                 </select>
 
-                                <span id="status_validate" class="text-danger validation-error mt-1"></span>
+                                <span id="featured_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="modal">Close
-                                </button>
+                                <button type="button" class="btn btn-secondary waves-effect me-3"
+                                    data-bs-dismiss="modal">Close </button>
 
-                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
-                                    Save Changes
-                                </button>
+                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save changes</button>
                             </div>
                         </form>
                     </div>
@@ -166,7 +135,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Update Child Category</h5>
+                        <h5 class="modal-title" id="myModalLabel">Update Brand</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
@@ -175,38 +144,18 @@
                             @csrf
                             @method("PUT")
 
-                            <input type="text" name="id" id="up_id" hidden>
+                            <input type="text" name="id" id="id" hidden>
 
                             <div class="mb-3">
-                                <label class="form-label">Category Name <span class="text-danger">*</span></label>
-                                <select class="form-select category_id" name="category_id" id="up_category_id">
-                                    <option value="" disabled selected>Select</option>
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}" data-image-url="{{ asset($category->category_img) }}">{{ $category->category_name }}</option>
-                                        @endforeach
-                                </select>
+                                <label for="up_brand_name" class="form-label">Brand Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="up_brand_name" name="brand_name" placeholder="Brand Name">
+
+                                <span id="up_name_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">SubCategory Name <span class="text-danger">*</span></label>
-                                <select class="form-select subCategory_id" name="subCategory_id" id="up_subCategory_id">
-                                    <option value="" disabled selected>Select</option>
-                                        @foreach ($subCategories as $subCat)
-                                            <option value="{{ $subCat->id }}" data-image-url="{{ asset($subCat->subcategory_img) }}">{{ $subCat->subcategory_name }}</option>
-                                        @endforeach
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="childCategory_name" class="form-label">ChildCategory Name <span class="text-danger">*</span></label>
-                                <input class="form-control" id="up_childCategory_name" type="text" name="name" placeholder="ChildCategory Name">
-
-                                <span id="up_childCat_name_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="childCategory_img" class="form-label">Category Image  <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
-                                <input type="file" class="form-control" name="img" id="childCategory_img" accept=".png, .jpeg, .jpg, .webp" onchange="imageShow(event)">
+                                <label for="image" class="form-label">Brand Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
+                                <input type="file" class="form-control" name="image" id="image" accept=".png, .jpeg, .jpg, .webp" onchange="imageShow(event)">
 
                                 <div id="imageShow" class="mt-3"></div>
                             </div>
@@ -214,23 +163,19 @@
                             <div class="mb-3">
                                 <label class="form-label">Status <span class="text-danger">*</span></label>
                                 <select class="form-select" id="up_status" name="status">
-                                    <option value="1" selected>Active</option>
-                                    <option value="0">Inactive</option>
+                                    <option value="1" selected>Yes</option>
+                                    <option value="0">No</option>
                                 </select>
                             </div>
 
                             <div class="d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="modal">Close
-                                </button>
+                                <button type="button" class="btn btn-secondary waves-effect me-3"
+                                    data-bs-dismiss="modal">Close</button>
 
-                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
-                                    Update
-                                </button>
+                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Update </button>
                             </div>
                         </form>
                     </div>
-
-
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
@@ -242,25 +187,15 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">View ChildSubCategory List</h5>
+                        <h5 class="modal-title" id="myModalLabel">View Brand List</h5>
 
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
                     <div class="modal-body">
                         <div class="view_modal_content">
-                            <label>Category Name : </label>
-                            <span class="text-dark" id="view_category_name"></span>
-                        </div>
-
-                        <div class="view_modal_content">
-                            <label>SubCategory Name : </label>
-                            <span class="text-dark" id="view_subCategory_name"></span>
-                        </div>
-
-                        <div class="view_modal_content">
-                            <label>ChildCategory Name : </label>
-                            <span class="text-dark" id="view_childCategory_name"></span>
+                            <label>Name : </label>
+                            <span class="text-dark" id="view_brand_name"></span>
                         </div>
 
                         <div class="view_modal_content">
@@ -283,8 +218,6 @@
                             <div id="view_status"></div>
                         </div>
                     </div>
-
-
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
@@ -294,7 +227,6 @@
 
 @push('add-js')
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
         function previewImage(event) {
@@ -321,90 +253,6 @@
     <script>
         $(document).ready(function () {
 
-            //____ Category_id Select2 ____//
-            $('#category_id').select2({
-                dropdownParent: $('#createModal'),
-                templateResult: formatState, // Only Text content when select, it will be shown 
-                templateSelection: formatState,    // When select any option, it will be display image and text both
-            });
-
-            //____ subCategory_id Select2 ____//
-            $('#subCategory_id').select2({
-                dropdownParent: $('#createModal'),
-                templateResult: formatState, // Only Text content when select, it will be shown 
-                templateSelection: formatState,    // When select any option, it will be display image and text both
-            });
-
-            //____ up_category_id Select2 ____//
-            $('#up_category_id').select2({
-                dropdownParent: $('#editModal'),
-                templateResult: formatState, // Only Text content when select, it will be shown 
-                templateSelection: formatState,    // When select any option, it will be display image and text both
-            });
-
-            //____ up_subCategory_id Select2 ____//
-            $('#up_subCategory_id').select2({
-                dropdownParent: $('#editModal'),
-                templateResult: formatState, // Only Text content when select, it will be shown 
-                templateSelection: formatState,    // When select any option, it will be display image and text both
-            });
-
-            function formatState (state) {
-                if (!state.id) {
-                    return state.text; // Return text for disabled option
-                }
-
-                var imageUrl = $(state.element).data('image-url'); // Access image URL from data attribute
-
-                if (!imageUrl) {
-                    return state.text; // Return text if no image URL is available
-                }
-
-                var $state = $(
-                    '<span><img src="' + imageUrl + '" style="width: 35px; height: 30px; margin-right: 8px;" /> ' + state.text + '</span>'
-                );
-                return $state;
-            };
-
-            // Fetching subcategory information
-            $(document).on('input', '.category_id', function(){
-                var category_id = $(this).val();
-                // console.log(category_id);
-
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('admin.childCategory.subCategory.data') }}",
-                    data: {
-                        id: category_id
-                    },
-                    success: function (res) {
-                        // console.log(res.data);
-                        if (res.status) {
-                            // Clear any previous subcategory options
-                            $('.subCategory_id').empty();
-                            // Add default "Select" option
-                            $('.subCategory_id').append('<option value="" disabled selected>Select</option>');
-
-                            // const baseUrl = ``;
-                            // Append new subcategories
-                            $.each(res.data, function (key, subCategory) {
-                                const imageUrl = '{{ asset('') }}' + subCategory.subcategory_img;
-
-                                $('.subCategory_id').append(
-                                    '<option value="' + subCategory.id + '" data-image-url="' + imageUrl + '">' + 
-                                    subCategory.subcategory_name + 
-                                    '</option>'
-                                );
-                            });
-                        }
-                    },
-                    error: function (err) {
-                        console.log(err);
-                    }
-
-                })
-            })
-
             // Show Data through Datatable
             let datatables = $('#datatables').DataTable({
                 order: [
@@ -413,7 +261,7 @@
                 processing: true,
                 serverSide: true,
 
-                ajax: "{{ route('admin.childCategory-data') }}",
+                ajax: "{{ route('admin.brand-data') }}",
                 // pageLength: 30,
 
                 columns: [
@@ -424,18 +272,12 @@
                         searchable: false 
                     },
                     {
-                        data: 'childCategoryImg',
+                        data: 'brandImage',
                         orderable: false,
                         searchable: false,
                     },
                     {
-                        data: 'category_name',
-                    },
-                    {
-                        data: 'subcategory_name',
-                    },
-                    {
-                        data: 'name',
+                        data: 'brand_name',
                     },
                     {
                         data: 'status',
@@ -450,6 +292,7 @@
                 ]
             });
 
+
             // status updates
             $(document).on('click', '#status', function () {
                 var id = $(this).data('id');
@@ -459,7 +302,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('admin.childCategory.status') }}",
+                    url: "{{ route('admin.brand.status') }}",
                     data: {
                         // '_token': token,
                         id: id,
@@ -489,7 +332,8 @@
                 })
             })
 
-            // Create Data
+
+            // Create
             $('#createForm').submit(function (e) {
                 e.preventDefault();
 
@@ -500,7 +344,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ route('admin.childCategory.store') }}",
+                    url: "{{ route('admin.brand.store') }}",
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
@@ -522,11 +366,9 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#cat_name_validate').empty().html(error.category_id);
-                        $('#subCat_name_validate').empty().html(error.subCategory_id);
-                        $('#childCat_name_validate').empty().html(error.name);
-                        $('#image_validate').empty().html(error.img);
-                        $('#status_validate').empty().html(error.status);
+                        $('#name_validate').empty().html(error.brand_name);
+                        $('#image_validate').empty().html(error.image);
+                        $('#featured_validate').empty().html(error.is_featured);
 
                         swal.fire({
                             title: "Failed",
@@ -548,21 +390,19 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/childCategories') }}/" + id + "/edit",
+                    url: "{{ url('admin/brands') }}/" + id + "/edit",
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
 
-                        $('#up_id').val(data.id);
-                        $('#up_category_id').val(data.category_id).trigger('change');
-                        $('#up_subCategory_id').val(data.subCategory_id).trigger('change');
-                        $('#up_childCategory_name').val(data.name);
+                        $('#id').val(data.id);
+                        $('#up_brand_name').val(data.brand_name);
                         $('#imageShow').html('');
                         $('#imageShow').append(`
-                          <a href={{ asset("`+ data.img +`") }} target="__blank">
-                            <img src={{ asset("`+ data.img +`") }} alt="" style="width: 75px;">  
-                          </a>
+                            <a href="{{ asset("`+ data.image +`") }}" target="__blank">
+                                 <img src={{ asset("`+ data.image +`") }} alt="" style="width: 75px;">
+                            </a>
                         `);
                         $('#up_status').val(data.status);
                     },
@@ -578,7 +418,7 @@
             $("#EditForm").submit(function (e) {
                 e.preventDefault();
 
-                let id = $('#up_id').val();
+                let id = $('#id').val();
                 let formData = new FormData(this);
 
                 $.ajax({
@@ -586,7 +426,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ url('admin/childCategories') }}/" + id,
+                    url: "{{ url('admin/brands') }}/" + id,
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
@@ -594,7 +434,7 @@
 
                         swal.fire({
                             title: "Success",
-                            text: "Child-Category Updated Successfully",
+                            text: "Brand Updated Successfully",
                             icon: "success"
                         })
 
@@ -606,7 +446,7 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#up_childCat_name_validate').empty().html(error.name);
+                        $('#up_name_validate').empty().html(error.brand_name);
 
                         swal.fire({
                             title: "Failed",
@@ -637,7 +477,7 @@
                         $.ajax({
                             type: 'DELETE',
 
-                            url: "{{ url('admin/childCategories') }}/" + id,
+                            url: "{{ url('admin/brands') }}/" + id,
                             data: {
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -664,7 +504,6 @@
                 })
             })
 
-
             // View Data
             $(document).on("click", '#viewButton', function (e) {
                 let id = $(this).attr('data-id');
@@ -675,25 +514,23 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/childCategories/view') }}/" + id,
+                    url: "{{ url('admin/brands/view') }}/" + id,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
 
-                        $('#view_category_name').html(data.category_name);
-                        $('#view_subCategory_name').html(data.subcategory_name);
-                        $('#view_childCategory_name').html(data.name);
+                        $('#view_brand_name').html(data.brand_name);
                         $('#viewImageShow').html('');
                         $('#viewImageShow').append(`
-                          <a href="{{ asset("`+ data.img +`") }}" target="__blank">
-                            <img src={{ asset("`+ data.img +`") }} alt="" style="width: 75px;">    
+                          <a href="{{ asset("`+ data.image +`") }}" target="__blank">
+                            <img src={{ asset("`+ data.image +`") }} alt="" style="width: 75px;">    
                           </a>
                        `);
+
                         $('#created_date').html(res.created_date);
                         $('#updated_date').html(res.updated_date);
                         $('#view_status').html(res.statusHtml);
-
                     },
                     error: function (error) {
                         console.log('error');
@@ -701,7 +538,8 @@
 
                 });
             })
-    })
+        })
+
     </script>
 @endpush
 

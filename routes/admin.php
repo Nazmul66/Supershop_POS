@@ -63,6 +63,15 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/subcategories/pdf', [SubcategoryController::class, 'allSubcategoryPdf'])->name('subcategory.pdf');
 
 
+    //______ ChildCategory _____//
+    Route::resource('/childCategories', ChildCategoryController::class)->names('childCategory')->except('show');
+    Route::get('/childCategory-data', [ChildCategoryController::class, 'getData'])->name('childCategory-data');
+    Route::post('/childCategory/status', [ChildCategoryController::class, 'changeChildCategoryStatus'])->name('childCategory.status');
+    Route::get('/childCategories/view/{id}', [ChildCategoryController::class, 'childSubCategoryView'])->name('childCategory.view');
+    Route::get('/childCategories/pdf', [ChildCategoryController::class, 'allChildCategoryPdf'])->name('childCategory.pdf');
+    Route::post('/get/subCategory-data', [ChildCategoryController::class, 'get_subCategory_data'])->name('childCategory.subCategory.data');
+
+
     //______ Role & Permission _____//
     Route::resource('/permission', PermissionController::class)->names('permission');
     Route::get('/permission-data', [PermissionController::class, 'getData'])->name('permission-data');

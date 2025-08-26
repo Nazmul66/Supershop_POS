@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\ChildCategory;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
@@ -38,7 +39,7 @@ class ChildCategoryController extends Controller
         $categories = Category::where('status', 1)->get();
         $subCategories = Subcategory::where('status', 1)->get();
         // dd($categories);
-        return view('backend.pages.childCategories.index', compact('categories', 'subCategories'));
+        return view('admin.pages.childCategories.index', compact('categories', 'subCategories'));
     }
 
     /**
@@ -63,12 +64,12 @@ class ChildCategoryController extends Controller
                     if ($childCategory->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$childCategory->id.'" data-status="'.$childCategory->status.'"> <i
-                                class="fa-solid fa-toggle-on fa-2x"></i>
+                                class="fa-solid fa-toggle-on fa-2x text-success"></i>
                         </a>';
                     } else {
                         return '<a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$childCategory->id.'" data-status="'.$childCategory->status.'"> <i
-                                class="fa-solid fa-toggle-off fa-2x" style="color: grey"></i>
+                                class="fa-solid fa-toggle-off fa-2x text-danger"></i>
                         </a>';
                     }
                 else{
@@ -118,7 +119,6 @@ class ChildCategoryController extends Controller
 
         DB::beginTransaction();
         try {
-
             $childCategory = new ChildCategory();
 
             $childCategory->category_id            = $request->category_id;
@@ -265,5 +265,23 @@ class ChildCategoryController extends Controller
         // dd($request->all());
         $subCategories = Subcategory::where('category_id', $request->id)->where('status', 1)->get();
         return response()->json(['status' => true, 'data' => $subCategories]);
+    }
+
+    public function allChildCategoryPdf()
+    {
+        if (!$this->user || !$this->user->can('pdf.childcategory')) {
+            throw UnauthorizedException::forPermissions(['pdf.childcategory']);
+        }
+        
+        $childCategories = ChildCategory::join('categories', 'child_categories.category_id', '=', 'categories.id')
+            ->join('subcategories', 'child_categories.subCategory_id', '=', 'subcategories.id')
+            ->select('categories.category_name', 'subcategories.subcategory_name', 'child_categories.name', 'child_categories.*')
+            ->get();
+
+        $pdf = Pdf::loadView('admin.pages.childCategories.pdf', compact('childCategories'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('ChildCategory.pdf');
+        // return view('admin.pages.categories.pdf', compact('categories'));
     }
 }

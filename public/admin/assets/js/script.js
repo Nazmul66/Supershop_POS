@@ -166,17 +166,17 @@ $(document).ready(function(){
 
 
 	// Datetimepicker
-	if($('.datetimepicker').length > 0 ){
-		$('.datetimepicker').datetimepicker({
-			format: 'DD-MM-YYYY',
-			icons: {
-				up: "fas fa-angle-up",
-				down: "fas fa-angle-down",
-				next: 'fas fa-angle-right',
-				previous: 'fas fa-angle-left'
-			}
-		});
-	}
+	// if($('.datetimepicker').length > 0 ){
+	// 	$('.datetimepicker').datetimepicker({
+	// 		format: 'DD-MM-YYYY',
+	// 		icons: {
+	// 			up: "fas fa-angle-up",
+	// 			down: "fas fa-angle-down",
+	// 			next: 'fas fa-angle-right',
+	// 			previous: 'fas fa-angle-left'
+	// 		}
+	// 	});
+	// }
 	
 	// toggle-password
 	if($('.toggle-password').length > 0) {
@@ -295,13 +295,13 @@ $(document).ready(function(){
 		setCountdown()
 	}
 
-	// Select 2
-	if ($('.select').length > 0) {
-		$('.select').select2({
-			minimumResultsForSearch: -1,
-			width: '100%'
-		});
-	}
+	// // Select 2
+	// if ($('.select').length > 0) {
+	// 	$('.select').select2({
+	// 		minimumResultsForSearch: -1,
+	// 		width: '100%'
+	// 	});
+	// }
 
 	// Counter 
 	if($('.counter').length > 0) {

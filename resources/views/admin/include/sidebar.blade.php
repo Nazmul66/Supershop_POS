@@ -85,9 +85,19 @@
                                 <li><a href="index.html">Analytics Dashboard</a></li>
                             </ul>
                         </li>
+
+                        <li class="submenu">
+                            <a href="javascript:void(0);" class="@yield('application')"><i class="ti ti-brand-apple-arcade  fs-16 me-2"></i><span>Application</span><span class="menu-arrow"></span></a>
+                            <ul>
+                                <li><a href="{{ route('admin.dashboard') }}" class="@yield('todo')">Todo List</a></li>
+                                <li><a href="{{ route('admin.note.index') }}" class="@yield('notes')">Notes</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
 
+
+                 {{-- Inventory --}}
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Inventory</h6>
                     <ul>

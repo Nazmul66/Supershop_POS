@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\LandingPageController;
 use App\Http\Controllers\Admin\Hrms\ExpenseController;
 use App\Http\Controllers\Admin\OtherSettingController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\NotesController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
@@ -87,6 +88,10 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::post('/change-unit-status', [UnitController::class, 'changeUnitStatus'])->name('unit.status');
     Route::get('/units/view/{id}', [UnitController::class, 'unitView'])->name('unit.view');
     Route::get('/units/pdf', [UnitController::class, 'allUnitsPdf'])->name('unit.pdf');
+
+
+    //______ Notes _____//
+    Route::resource('/notes', NotesController::class)->names('note')->except('show');
 
 
     //______ Role & Permission _____//
@@ -166,35 +171,6 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
 //         Route::get('/slider-data', [SliderController::class, 'getData'])->name('slider-data');
 //         Route::post('/slider/status', [SliderController::class, 'changeSliderStatus'])->name('slider.status');
 //         Route::get('/slider/view/{id}', [SliderController::class, 'sliderView'])->name('slider.view');
-
-
-//         //______ Category _____//
-//         Route::resource('/categories', CategoryController::class)->names('category');
-//         Route::get('/category-data', [CategoryController::class, 'getData'])->name('category-data');
-//         Route::post('/categories/status', [CategoryController::class, 'changeCategoryStatus'])->name('category.status');
-//         Route::get('/categories/view/{id}', [CategoryController::class, 'CategoryView'])->name('category.view');
-
-
-//         //______ Subcategory _____//
-//         Route::resource('/subcategories', SubcategoryController::class)->names('subcategory');
-//         Route::get('/subcategory-data', [SubcategoryController::class, 'getData'])->name('subcategory-data');
-//         Route::post('/subcategory/status', [SubcategoryController::class, 'changeSubCategoryStatus'])->name('subcategory.status');
-//         Route::get('/subcategories/view/{id}', [SubcategoryController::class, 'subCategoryView'])->name('subcategory.view');
-
-
-//         //______ ChildCategory _____//
-//         Route::resource('/childCategories', ChildCategoryController::class)->names('childCategory');
-//         Route::get('/childCategory-data', [ChildCategoryController::class, 'getData'])->name('childCategory-data');
-//         Route::post('/childCategory/status', [ChildCategoryController::class, 'changeChildCategoryStatus'])->name('childCategory.status');
-//         Route::get('/childCategories/view/{id}', [ChildCategoryController::class, 'childSubCategoryView'])->name('childCategory.view');
-//         Route::post('/get/subCategory-data', [ChildCategoryController::class, 'get_subCategory_data'])->name('childCategory.subCategory.data');
-
-
-//         //______ Brand _____//
-//         Route::resource('/brands', BrandsController::class)->names('brand');
-//         Route::get('/brand-data', [BrandsController::class, 'getData'])->name('brand-data');
-//         Route::post('/change-brand-status', [BrandsController::class, 'changeBrandStatus'])->name('brand.status');
-//         Route::get('/brands/view/{id}', [BrandsController::class, 'brandView'])->name('brand.view');
 
 
 //         //______ Attribute Name _____//

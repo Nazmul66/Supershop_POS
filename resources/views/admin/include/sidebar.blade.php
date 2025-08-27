@@ -98,6 +98,8 @@
                         <li class="@yield('childCategory')"><a href="{{ route('admin.childCategory.index') }}"><i class="ti ti-brand-airtable fs-16 me-2"></i><span>Child Category</span></a></li>
 
                         <li class="@yield('brand')"><a href="{{ route('admin.brand.index') }}"><i class="ti ti-triangles fs-16 me-2"></i><span>Brand</span></a></li>
+
+                        <li class="@yield('unit')"><a href="{{ route('admin.unit.index') }}"><i class="ti ti-brand-unity fs-16 me-2"></i><span>Unit</span></a></li>
                     </ul>
                 </li>
 

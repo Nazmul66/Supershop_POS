@@ -112,6 +112,7 @@
                     <th>Image</th>
                     <th>Name</th>
                     <th>Slug</th>
+                    <th>Create Date</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -126,6 +127,7 @@
                         </td>
                         <td>{{ $category->category_name }}</td>
                         <td>{{ $category->slug }}</td>
+                        <td>{{ $row->created_at }}</td>
                         <td>
                             @if ( $category->status == 1 )
                                 <span class="badge bg-success fw-medium fs-10">Active</span>

@@ -113,6 +113,7 @@
                     <th>Category Name</th>
                     <th>SubCategory Name</th>
                     <th>Slug</th>
+                    <th>Create Date</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -128,6 +129,7 @@
                         <td>{{ $subCategory->category_name }}</td>
                         <td>{{ $subCategory->subcategory_name }}</td>
                         <td>{{ $subCategory->slug }}</td>
+                        <td>{{ $row->created_at }}</td>
                         <td>
                             @if ( $subCategory->status == 1 )
                                 <span class="badge bg-success fw-medium fs-10">Active</span>

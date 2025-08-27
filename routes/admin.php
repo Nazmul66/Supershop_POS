@@ -33,6 +33,7 @@ use App\Http\Controllers\Admin\EssentialSettingController;
 use App\Http\Controllers\Admin\LandingPageController;
 use App\Http\Controllers\Admin\Hrms\ExpenseController;
 use App\Http\Controllers\Admin\OtherSettingController;
+use App\Http\Controllers\Admin\UnitController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
@@ -78,6 +79,14 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::post('/change-brand-status', [BrandsController::class, 'changeBrandStatus'])->name('brand.status');
     Route::get('/brands/view/{id}', [BrandsController::class, 'brandView'])->name('brand.view');
     Route::get('/brands/pdf', [BrandsController::class, 'allBrandsPdf'])->name('brand.pdf');
+
+
+    //______ Units _____//
+    Route::resource('/units', UnitController::class)->names('unit')->except('show');
+    Route::get('/unit-data', [UnitController::class, 'getData'])->name('unit-data');
+    Route::post('/change-unit-status', [UnitController::class, 'changeUnitStatus'])->name('unit.status');
+    Route::get('/units/view/{id}', [UnitController::class, 'unitView'])->name('unit.view');
+    Route::get('/units/pdf', [UnitController::class, 'allUnitsPdf'])->name('unit.pdf');
 
 
     //______ Role & Permission _____//

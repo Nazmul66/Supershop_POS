@@ -34,7 +34,7 @@ use App\Http\Controllers\Admin\LandingPageController;
 use App\Http\Controllers\Admin\Hrms\ExpenseController;
 use App\Http\Controllers\Admin\OtherSettingController;
 use App\Http\Controllers\Admin\UnitController;
-use App\Http\Controllers\NotesController;
+use App\Http\Controllers\Admin\NotesController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 

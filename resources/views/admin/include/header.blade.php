@@ -60,7 +60,15 @@
                             <div class="search-info">
                                 <h6><span><i data-feather="user" class="feather-16"></i></span>Customers</h6>
                                 <ul class="customers">
-                                    <li><a href="javascript:void(0);">Aron Varu<img src="assets/img/profiles/avator1.jpg" alt="Img" class="img-fluid"></a></li>
+                                    <li>
+                                        <a href="javascript:void(0);">{{ Auth::guard('admin')->user()->name }}
+                                            @if ( Auth::guard('admin')->user() && !empty(Auth::guard('admin')->user()->image) )
+                                                <img src="{{ asset(Auth::guard('admin')->user()->image) }}" alt="Img" class="img-fluid">
+                                            @else
+                                                 <img src="{{ asset('public/admin/assets/img/profiles/avator1.jpg') }}" alt="Img" class="img-fluid">
+                                            @endif
+                                        </a>
+                                    </li>
                                     <li><a href="javascript:void(0);">Jonita<img src="assets/img/profiles/avatar-01.jpg" alt="Img" class="img-fluid"></a></li>
                                     <li><a href="javascript:void(0);">Aaron<img src="assets/img/profiles/avatar-10.jpg" alt="Img" class="img-fluid"></a></li>
                                 </ul>
@@ -322,17 +330,26 @@
                 <a href="javascript:void(0);" class="nav-link userset" data-bs-toggle="dropdown">
                     <span class="user-info p-0">
                         <span class="user-letter">
-                            <img src="assets/img/profiles/avator1.jpg" alt="Img" class="img-fluid">
+                            @if ( Auth::guard('admin')->user() && !empty(Auth::guard('admin')->user()->image) )
+                                <img src="{{ asset(Auth::guard('admin')->user()->image) }}" alt="Img" class="img-fluid">
+                            @else
+                                <img src="{{ asset('public/admin/assets/img/profiles/avator1.jpg') }}" alt="Img" class="img-fluid">
+                            @endif
                         </span>
                     </span>
                 </a>
                 <div class="dropdown-menu menu-drop-user">
                     <div class="profileset d-flex align-items-center">
                         <span class="user-img me-2">
-                            <img src="assets/img/profiles/avator1.jpg" alt="Img">
+                            @if ( Auth::guard('admin')->user() && !empty(Auth::guard('admin')->user()->image) )
+                                <img src="{{ asset(Auth::guard('admin')->user()->image) }}" alt="Img">
+                            @else
+                                <img src="{{ asset('public/admin/assets/img/profiles/avator1.jpg') }}" alt="Img">
+                            @endif
+
                         </span>
                         <div>
-                            <h6 class="fw-medium">John Smilga</h6>
+                            <h6 class="fw-medium">{{ Auth::guard('admin')->user()->name }}</h6>
                             <p>Admin</p>
                         </div>
                     </div>

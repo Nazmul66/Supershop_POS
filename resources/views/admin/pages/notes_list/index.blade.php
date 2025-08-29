@@ -350,7 +350,7 @@
                                         
                                     </div>	
                                     <div class="modal-footer-btn edit-footer-menu">
-                                        <button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary me-2" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>	

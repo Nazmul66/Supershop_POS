@@ -89,7 +89,7 @@
                         <li class="submenu">
                             <a href="javascript:void(0);" class="@yield('application')"><i class="ti ti-brand-apple-arcade  fs-16 me-2"></i><span>Application</span><span class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="{{ route('admin.dashboard') }}" class="@yield('todo')">Todo List</a></li>
+                                <li><a href="{{ route('admin.todo.index') }}" class="@yield('todo')">Todo List</a></li>
                                 <li><a href="{{ route('admin.note.index') }}" class="@yield('notes')">Notes</a></li>
                             </ul>
                         </li>

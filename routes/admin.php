@@ -35,6 +35,7 @@ use App\Http\Controllers\Admin\Hrms\ExpenseController;
 use App\Http\Controllers\Admin\OtherSettingController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\NotesController;
+use App\Http\Controllers\Admin\TodoController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
@@ -88,6 +89,12 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::post('/change-unit-status', [UnitController::class, 'changeUnitStatus'])->name('unit.status');
     Route::get('/units/view/{id}', [UnitController::class, 'unitView'])->name('unit.view');
     Route::get('/units/pdf', [UnitController::class, 'allUnitsPdf'])->name('unit.pdf');
+
+
+    //______ Todo List _____//
+    Route::resource('/todo', TodoController::class)->names('todo')->except('show');
+    Route::post('/change-important-todo', [TodoController::class, 'changeImportantStatus'])->name('todo.important');
+    Route::get('/todo/view/{id}', [TodoController::class, 'todoView'])->name('todo.view');
 
 
     //______ Notes _____//

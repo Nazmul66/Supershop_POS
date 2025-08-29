@@ -92,6 +92,8 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
 
     //______ Notes _____//
     Route::resource('/notes', NotesController::class)->names('note')->except('show');
+    Route::post('/change-important-note', [NotesController::class, 'changeImportantStatus'])->name('note.important');
+    Route::get('/notes/view/{id}', [NotesController::class, 'noteView'])->name('note.view');
 
 
     //______ Role & Permission _____//

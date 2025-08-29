@@ -26,6 +26,7 @@
                 <h6 class="mb-0">Manage your notes</h6>
             </div>
         </div>
+
         <div class="d-flex flex-sm-row flex-column align-items-sm-center align-items-start">
             <ul class="table-top-head me-2">
                 <li>
@@ -35,16 +36,12 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" id="collapse-header" aria-label="Collapse" data-bs-original-title="Collapse"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
-            {{-- <div class="search-set">
-                <div class="search-input">
-                    <span class="btn-searchset"><i class="ti ti-search fs-14 feather-search"></i></span>
-                <div class="dataTables_filter">
-                    <label> <input type="search" class="form-control form-control-sm py-0" placeholder="Search"></label>
-                </div></div>
-            </div> --}}
-            <div class="page-btn">
-                <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Note</a>
-            </div>
+
+            @if(auth("admin")->user()->can("create.note"))
+                <div class="page-btn">
+                    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Note</a>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -318,6 +315,55 @@
     <!-- /Edit Note Modal -->
 
 
+    <!-- View Note Modal -->
+    <div id="viewModal" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="page-wrapper-new p-0">
+                    <div class="modal-header">
+                        <div class="page-title edit-page-title">
+                            <h4>Notes</h4>
+                            <p id="view_tag">Personal</p>
+                        </div>
+                        <div class="edit-noted-head d-flex align-items-center">
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal-body">
+                        <form action="notes.html">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="edit-head-view">
+                                        <h6 id="view_title">Take a hike at a local park</h6>
+                                        <p id="view_description">Hiking is a long, vigorous walk, usually on trails or footpaths in the countryside.
+                                            Walking for pleasure developed in Europe during the eighteenth century.
+                                            Religious pilgrimages have existed much longer but they involve walking long
+                                            distances for a spiritual purpose associated with specific religions and also
+                                            we achieve inner peace while we hike at a local park.</p>
+
+                                        <div id="view_priority">
+                                            <p class="badged low"><i class="fas fa-circle"></i> Low</p>
+                                        </div>
+                                        
+                                    </div>	
+                                    <div class="modal-footer-btn edit-footer-menu">
+                                        <button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>	
+                        </form>							
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /View Note Modal -->
+
+
 
     <div class="row" style="transform: none;">
         <div class="col-xl-3 col-md-12 sidebars-right theiaStickySidebar section-bulk-widget" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
@@ -362,6 +408,8 @@
 
         <div class="col-xl-9 budget-role-notes">
             <div class="tab-content" id="v-pills-tabContent2">
+
+                {{-- All Notes --}}
                 <div class="tab-pane fade active show" id="v-pills-profile" role="tabpanel"
                     aria-labelledby="v-pills-profile-tab">
                     <div class="border-bottom mb-4 pb-4">
@@ -378,12 +426,153 @@
 
                             {{-- For ( Carousel/Slider ) important notes --}}
                             <div class="col-md-12">
-                                <div class="notes-slider owl-carousel">
+                                @if ( $important_notes->count() > 0 )
+                                    <div class="notes-slider owl-carousel">
+                                        @foreach ($important_notes as $row)
+                                            <div class="card rounded-3 mb-0">
+                                                <div class="card-body p-4">
+                                                    <div class="d-flex align-items-center justify-content-between">
 
-                                    @foreach ($important_notes as $row)
-                                        <div class="card rounded-3 mb-0">
-                                            <div class="card-body p-4">
-                                                <div class="d-flex align-items-center justify-content-between">
+                                                        @if ( $row->priority === 'low' )
+                                                            <span
+                                                            class="badge bg-outline-danger d-inline-flex align-items-center"><i
+                                                                class="fas fa-circle fs-6 me-1"></i>Low</span>
+                                                        @elseif( $row->priority === 'medium' )
+                                                            <span
+                                                            class="badge bg-outline-warning d-inline-flex align-items-center"><i
+                                                                class="fas fa-circle fs-6 me-1"></i>Medium</span>
+                                                        @elseif( $row->priority === 'high' )
+                                                            <span
+                                                            class="badge bg-outline-success d-inline-flex align-items-center"><i
+                                                                class="fas fa-circle fs-6 me-1"></i>High</span>
+                                                        @elseif( $row->priority === 'urgent' )
+                                                            <span class="badge bg-outline-info d-inline-flex align-items-center"><i class="fas fa-circle fs-6 me-1"></i>Urgent</span>
+                                                        @endif
+                                                        
+                                                        <div>
+                                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
+                                                                <i class="fas fa-ellipsis-v"></i>
+                                                            </a>
+                                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
+
+                                                            @if(auth("admin")->user()->can("update.note"))
+                                                                <a href="javascript:void();" class="dropdown-item" id="editButton"
+                                                                    data-id="{{ $row->id }}"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#editModal"><span><i
+                                                                            data-feather="edit"></i></span>Edit</a>
+                                                            @endif
+
+                                                            @if(auth("admin")->user()->can("delete.note"))
+                                                                <a href="#" class="dropdown-item"
+                                                                    href="javascript:void(0)"
+                                                                    data-id="{{ $row->id }}" 
+                                                                    id="deleteBtn"><span>
+                                                                        <i data-feather="trash-2"></i></span>Delete</a>
+                                                            @endif
+
+                                                            @if(auth("admin")->user()->can("important.note"))
+                                                                <a href="javascript:void(0);"
+                                                                    class="dropdown-item important"
+                                                                    data-id="{{ $row->id }}" 
+                                                                    data-important="{{ $row->important }}">
+                                                                    <span><i data-feather="star"></i></span>Not
+                                                                    Important</a>
+                                                            @endif
+
+                                                            
+                                                                    <a href="#" class="dropdown-item"
+                                                                    id="viewButton" href="javascript:void(0)" data-id="{{ $row->id }}" data-bs-toggle="modal" data-bs-target="#viewModal">
+                                                                <span><i data-feather="eye"></i></span>View</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="my-3">
+                                                        <h5 class="text-truncate mb-1"><a
+                                                                href="javascript:void(0);">{{ \Illuminate\Support\Str::limit($row->title, 24) }}...</a></h5>
+                                                        <p class="mb-3 d-flex align-items-center text-dark"><i
+                                                                class="ti ti-calendar me-1"></i>{{ \Carbon\Carbon::parse($row->created_at)->format('d M Y') }}</p>
+                                                        <p class="text-truncate line-clamb-2 text-wrap">{{ \Illuminate\Support\Str::limit($row->description, 60) }}...</p>
+                                                    </div>
+
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-between border-top pt-3">
+                                                        <div class="d-flex align-items-center">
+                                                            <a href="javascript:void(0);"
+                                                                class="avatar avatar-md me-2">
+
+                                                                @if ( !empty($row->image) && $row->image )
+                                                                    <img src="{{ asset($row->image) }}"
+                                                                    alt="Profile" class="img-fluid rounded-circle">
+                                                                @else
+                                                                    <img src="{{ asset('public/admin/assets/img/profiles/avatar-01.jpg') }}"
+                                                                    alt="Profile" class="img-fluid rounded-circle">
+                                                                @endif
+                                                               
+                                                            </a>
+
+                                                            @if ( $row->tag === 'personal' )
+                                                            <span class="text-info d-flex align-items-center"><i
+                                                                class="fas fa-square square-rotate fs-10 me-1"></i>Personal</span>
+                                                            @elseif( $row->tag === 'social' )
+                                                                <span class="text-warning d-flex align-items-center"><i class="fas fa-square square-rotate fs-10 me-1"></i>Social</span>
+                                                            @elseif( $row->tag === 'work' )
+                                                                <span class="text-success d-flex align-items-center"><i class="fas fa-square square-rotate fs-10 me-1"></i>Work</span>
+                                                            @endif
+                                                        </div>
+
+                                                        <div class="d-flex align-items-center">
+                                                        @if(auth("admin")->user()->can("important.note"))
+                                                            @if ( $row->important == 1 )
+                                                                <a href="javascript:void(0);"
+                                                                    data-id="{{ $row->id }}" 
+                                                                    data-important="{{ $row->important }}" 
+                                                                    class="me-2 important">
+                                                                    <span><i class="fas fa-star text-warning"></i></span>
+                                                                </a>
+                                                            @else
+                                                                <a href="javascript:void(0);"
+                                                                    data-id="{{ $row->id }}" 
+                                                                    data-important="{{ $row->important }}" 
+                                                                class="me-2 important">
+                                                                    <span><i class="fas fa-star"></i></span>
+                                                                </a>
+                                                            @endif
+                                                        @endif
+                                                            
+                                                        @if(auth("admin")->user()->can("delete.note"))
+                                                            <a href="javascript:void(0)"
+                                                            data-id="{{ $row->id }}" 
+                                                            id="deleteBtn">
+                                                                <span><i class="ti ti-trash text-danger"></i></span>
+                                                            </a>
+                                                        @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div class="card-body">
+                                        <div class="alert alert-solid-secondary alert-dismissible fade show">
+                                            There is no importants notes here!
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        @if ( $all_notes->count() > 0 )
+                            @foreach ($all_notes as $row)
+                                <div class="col-md-4 d-flex">
+                                    <div class="card rounded-3 mb-4 flex-fill">
+                                        <div class="card-body p-4">
+                                            <div class="d-flex align-items-center justify-content-between">
 
                                                     @if ( $row->priority === 'low' )
                                                         <span
@@ -408,26 +597,34 @@
                                                         </a>
                                                         <div class="dropdown-menu notes-menu dropdown-menu-end">
 
+                                                        @if(auth("admin")->user()->can("update.note"))
                                                             <a href="javascript:void();" class="dropdown-item" id="editButton"
                                                                 data-id="{{ $row->id }}"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#editModal"><span><i
                                                                         data-feather="edit"></i></span>Edit</a>
+                                                        @endif
 
+                                                        @if(auth("admin")->user()->can("delete.note"))
                                                             <a href="#" class="dropdown-item"
                                                                 href="javascript:void(0)"
                                                                 data-id="{{ $row->id }}" 
                                                                 id="deleteBtn"><span>
                                                                     <i data-feather="trash-2"></i></span>Delete</a>
+                                                        @endif
 
+                                                        @if(auth("admin")->user()->can("important.note"))
                                                             <a href="javascript:void(0);"
-                                                                class="dropdown-item"><span><i
+                                                                data-id="{{ $row->id }}" 
+                                                                data-important="{{ $row->important }}"
+                                                                class="dropdown-item important"><span><i
                                                                         data-feather="star"></i></span>Not
                                                                 Important</a>
+                                                        @endif
+
                                                             <a href="#" class="dropdown-item"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#view-note-units"><span><i
-                                                                        data-feather="eye"></i></span>View</a>
+                                                                id="viewButton" href="javascript:void(0)" data-id="{{ $row->id }}" data-bs-toggle="modal" data-bs-target="#viewModal">
+                                                            <span><i data-feather="eye"></i></span>View</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -445,12 +642,18 @@
                                                     <div class="d-flex align-items-center">
                                                         <a href="javascript:void(0);"
                                                             class="avatar avatar-md me-2">
-                                                            <img src="./assets/img/profiles/avatar-01.jpg"
+
+                                                            @if ( !empty($row->image) && $row->image )
+                                                                <img src="{{ asset($row->image) }}"
                                                                 alt="Profile" class="img-fluid rounded-circle">
+                                                            @else
+                                                                <img src="{{ asset('public/admin/assets/img/profiles/avatar-01.jpg') }}"
+                                                                alt="Profile" class="img-fluid rounded-circle">
+                                                            @endif
                                                         </a>
 
                                                         @if ( $row->tag === 'personal' )
-                                                           <span class="text-info d-flex align-items-center"><i
+                                                            <span class="text-info d-flex align-items-center"><i
                                                             class="fas fa-square square-rotate fs-10 me-1"></i>Personal</span>
                                                         @elseif( $row->tag === 'social' )
                                                             <span class="text-warning d-flex align-items-center"><i class="fas fa-square square-rotate fs-10 me-1"></i>Social</span>
@@ -460,948 +663,324 @@
                                                     </div>
 
                                                     <div class="d-flex align-items-center">
+                                                    @if(auth("admin")->user()->can("important.note"))
                                                         @if ( $row->important == 1 )
                                                             <a href="javascript:void(0);" class="me-2">
                                                                 <span><i class="fas fa-star text-warning"></i></span>
                                                             </a>
                                                         @else
-                                                            <a href="javascript:void(0);" class="me-2">
+                                                            <a href="javascript:void(0);" 
+                                                                data-id="{{ $row->id }}" 
+                                                                data-important="{{ $row->important }}"
+                                                                class="me-2 important">
                                                                 <span><i class="fas fa-star"></i></span>
                                                             </a>
                                                         @endif
+                                                    @endif
                                                         
+                                                    @if(auth("admin")->user()->can("delete.note"))
                                                         <a href="javascript:void(0)"
                                                         data-id="{{ $row->id }}" 
                                                         id="deleteBtn">
                                                             <span><i class="ti ti-trash text-danger"></i></span>
                                                         </a>
+                                                    @endif
                                                     </div>
                                                 </div>
-                                            </div>
                                         </div>
-                                    @endforeach
-                                    
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="col-md-12">
+                                <div class="card-body">
+                                    <div class="alert alert-solid-secondary alert-dismissible fade show">
+                                        There is no notes here!
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
-
-
-
-                    {{-- <div class="row">
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-success d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>High</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a href="javascript:void(0);">Backup
-                                                Files EOD</a></h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>20 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Project files should
-                                            be took backup before end of the day.</p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-05.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-info d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Personal</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-danger d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>Low</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a
-                                                href="javascript:void(0);">Download Server Logs</a></h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>25 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Server log is a text
-                                            document that contains a record of all activity.</p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-06.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-success d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Work</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-warning d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>Medium</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a href="javascript:void(0);">Team
-                                                meet at Starbucks</a></h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>26 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Meeting all teamets
-                                            at Starbucks for identifying them all.</p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-07.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-warning d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Social</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-success d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>High</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a href="javascript:void(0);">Create
-                                                a compost pile</a></h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>27 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Compost pile refers
-                                            to fruit and vegetable scraps, used tea, coffee grounds etc..
-                                        </p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-08.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-warning d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Social</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-danger d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>Low</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a href="javascript:void(0);">Take a
-                                                hike at a local park</a></h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>28 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Hiking involves a
-                                            long energetic walk in a natural environment.</p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-09.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-info d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Personal</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-info d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>medium</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a
-                                                href="javascript:void(0);">Research a topic interested</a>
-                                        </h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>28 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Research a topic
-                                            interested by listen actively and attentively.</p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-10.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-success d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Work</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
 
-                
+                {{-- Important Notes --}}
                 <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
                     aria-labelledby="v-pills-messages-tab">
                     <div class="row">
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-success d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>High</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a href="javascript:void(0);">Backup
-                                                Files EOD</a></h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>20 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Project files should
-                                            be took backup before end of the day.</p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-05.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-info d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Personal</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-danger d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>Low</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a
-                                                href="javascript:void(0);">Download Server Logs</a></h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>25 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Server log is a text
-                                            document that contains a record of all activity.</p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-06.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-success d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Work</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-warning d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>Medium</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a href="javascript:void(0);">Team
-                                                meet at Starbucks</a></h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>26 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Meeting all teamets
-                                            at Starbucks for identifying them all.</p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-07.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-warning d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Social</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
+                        @if ( $important_notes->count() > 0 )
+                            @foreach ($important_notes as $row)
+                                <div class="col-md-4 d-flex">
+                                    <div class="card rounded-3 mb-4 flex-fill">
+                                        <div class="card-body p-4">
+                                            <div class="d-flex align-items-center justify-content-between">
+
+                                                    @if ( $row->priority === 'low' )
+                                                        <span
+                                                        class="badge bg-outline-danger d-inline-flex align-items-center"><i
+                                                            class="fas fa-circle fs-6 me-1"></i>Low</span>
+                                                    @elseif( $row->priority === 'medium' )
+                                                        <span
+                                                        class="badge bg-outline-warning d-inline-flex align-items-center"><i
+                                                            class="fas fa-circle fs-6 me-1"></i>Medium</span>
+                                                    @elseif( $row->priority === 'high' )
+                                                        <span
+                                                        class="badge bg-outline-success d-inline-flex align-items-center"><i
+                                                            class="fas fa-circle fs-6 me-1"></i>High</span>
+                                                    @elseif( $row->priority === 'urgent' )
+                                                        <span class="badge bg-outline-info d-inline-flex align-items-center"><i class="fas fa-circle fs-6 me-1"></i>Urgent</span>
+                                                    @endif
+                                                    
+                                                    <div>
+                                                        <a href="javascript:void(0);" data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu notes-menu dropdown-menu-end">
+
+                                                        @if(auth("admin")->user()->can("update.note"))
+                                                            <a href="javascript:void();" class="dropdown-item" id="editButton"
+                                                                data-id="{{ $row->id }}"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#editModal"><span><i
+                                                                        data-feather="edit"></i></span>Edit</a>
+                                                        @endif
+
+                                                        @if(auth("admin")->user()->can("delete.note"))
+                                                            <a href="#" class="dropdown-item"
+                                                                href="javascript:void(0)"
+                                                                data-id="{{ $row->id }}" 
+                                                                id="deleteBtn"><span>
+                                                                    <i data-feather="trash-2"></i></span>Delete</a>
+                                                        @endif
+
+                                                        @if(auth("admin")->user()->can("important.note"))
+                                                            <a href="javascript:void(0);"
+                                                                data-id="{{ $row->id }}" 
+                                                                data-important="{{ $row->important }}"
+                                                                class="dropdown-item important"><span><i
+                                                                        data-feather="star"></i></span>Not
+                                                                Important</a>
+                                                        @endif
+
+                                                            <a href="#" class="dropdown-item"
+                                                                id="viewButton" href="javascript:void(0)" data-id="{{ $row->id }}" data-bs-toggle="modal" data-bs-target="#viewModal">
+                                                            <span><i data-feather="eye"></i></span>View</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="my-3">
+                                                    <h5 class="text-truncate mb-1"><a
+                                                            href="javascript:void(0);">{{ \Illuminate\Support\Str::limit($row->title, 24) }}...</a></h5>
+                                                    <p class="mb-3 d-flex align-items-center text-dark"><i
+                                                            class="ti ti-calendar me-1"></i>{{ \Carbon\Carbon::parse($row->created_at)->format('d M Y') }}</p>
+                                                    <p class="text-truncate line-clamb-2 text-wrap">{{ \Illuminate\Support\Str::limit($row->description, 60) }}...</p>
+                                                </div>
+
+                                                <div
+                                                    class="d-flex align-items-center justify-content-between border-top pt-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <a href="javascript:void(0);"
+                                                            class="avatar avatar-md me-2">
+
+                                                            @if ( !empty($row->image) && $row->image )
+                                                                <img src="{{ asset($row->image) }}"
+                                                                alt="Profile" class="img-fluid rounded-circle">
+                                                            @else
+                                                                <img src="{{ asset('public/admin/assets/img/profiles/avatar-01.jpg') }}"
+                                                                alt="Profile" class="img-fluid rounded-circle">
+                                                            @endif
+                                                        </a>
+
+                                                        @if ( $row->tag === 'personal' )
+                                                            <span class="text-info d-flex align-items-center"><i
+                                                            class="fas fa-square square-rotate fs-10 me-1"></i>Personal</span>
+                                                        @elseif( $row->tag === 'social' )
+                                                            <span class="text-warning d-flex align-items-center"><i class="fas fa-square square-rotate fs-10 me-1"></i>Social</span>
+                                                        @elseif( $row->tag === 'work' )
+                                                            <span class="text-success d-flex align-items-center"><i class="fas fa-square square-rotate fs-10 me-1"></i>Work</span>
+                                                        @endif
+                                                    </div>
+
+                                                    <div class="d-flex align-items-center">
+                                                    @if(auth("admin")->user()->can("important.note"))
+                                                        @if ( $row->important == 1 )
+                                                            <a href="javascript:void(0);" class="me-2">
+                                                                <span><i class="fas fa-star text-warning"></i></span>
+                                                            </a>
+                                                        @else
+                                                            <a href="javascript:void(0);" 
+                                                                data-id="{{ $row->id }}" 
+                                                                data-important="{{ $row->important }}"
+                                                                class="me-2 important">
+                                                                <span><i class="fas fa-star"></i></span>
+                                                            </a>
+                                                        @endif
+                                                    @endif
+                                                        
+                                                    @if(auth("admin")->user()->can("delete.note"))
+                                                        <a href="javascript:void(0)"
+                                                        data-id="{{ $row->id }}" 
+                                                        id="deleteBtn">
+                                                            <span><i class="ti ti-trash text-danger"></i></span>
+                                                        </a>
+                                                    @endif
+                                                    </div>
+                                                </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-success d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>High</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a href="javascript:void(0);">Create
-                                                a compost pile</a></h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>27 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Compost pile refers
-                                            to fruit and vegetable scraps, used tea, coffee grounds etc..
-                                        </p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-08.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-warning d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Social</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
+                            @endforeach
+                        @else
+                            <div class="col-md-12">
+                                <div class="card-body">
+                                    <div class="alert alert-solid-secondary alert-dismissible fade show">
+                                        There is no importants notes here!
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-danger d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>Low</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a href="javascript:void(0);">Take a
-                                                hike at a local park</a></h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>28 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Hiking involves a
-                                            long energetic walk in a natural environment.</p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-09.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-info d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Personal</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-info d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>medium</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a
-                                                href="javascript:void(0);">Research a topic interested</a>
-                                        </h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>28 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Research a topic
-                                            interested by listen actively and attentively.</p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-10.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-success d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Work</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
 
+                 {{-- Trash Notes --}}
                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
                     aria-labelledby="v-pills-settings-tab">
                     <div class="row">
-                        <div class="col-12 d-flex align-items-center justify-content-end">
-                            <a href="#" class="btn btn-danger mb-4">
-                                <span> <i class="ti ti-trash f-20 me-2"></i> </span>
-                                Restore all
-                            </a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-success d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>High</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a href="javascript:void(0);">Create
-                                                a compost pile</a></h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>27 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Compost pile refers
-                                            to fruit and vegetable scraps, used tea, coffee grounds etc..
-                                        </p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-08.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-warning d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Social</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-danger d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>Low</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a href="javascript:void(0);">Take a
-                                                hike at a local park</a></h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>28 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Hiking involves a
-                                            long energetic walk in a natural environment.</p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-09.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-info d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Personal</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-flex">
-                            <div class="card rounded-3 mb-4 flex-fill">
-                                <div class="card-body p-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span
-                                            class="badge bg-outline-info d-inline-flex align-items-center"><i
-                                                class="fas fa-circle fs-6 me-1"></i>medium</span>
-                                        <div>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu notes-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-note-units"><span><i
-                                                            data-feather="edit"></i></span>Edit</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal"><span><i
-                                                            data-feather="trash-2"></i></span>Delete</a>
-                                                <a href="javascript:void(0);" class="dropdown-item"><span><i
-                                                            data-feather="star"></i></span>Not Important</a>
-                                                <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#view-note-units"><span><i
-                                                            data-feather="eye"></i></span>View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="my-3">
-                                        <h5 class="text-truncate mb-1"><a
-                                                href="javascript:void(0);">Research a topic interested</a>
-                                        </h5>
-                                        <p class="mb-3 d-flex align-items-center text-dark"><i
-                                                class="ti ti-calendar me-1"></i>28 Jan 2024</p>
-                                        <p class="text-truncate line-clamb-2 text-wrap">Research a topic
-                                            interested by listen actively and attentively.</p>
-                                    </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="avatar avatar-md me-2">
-                                                <img src="./assets/img/profiles/avatar-10.jpg" alt="Profile"
-                                                    class="img-fluid rounded-circle">
-                                            </a>
-                                            <span class="text-success d-flex align-items-center"><i
-                                                    class="fas fa-square square-rotate fs-10 me-1"></i>Work</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <a href="javascript:void(0);" class="me-2">
-                                                <span><i class="fas fa-star text-warning"></i></span>
-                                            </a>
-                                            <a href="javascript:void(0);">
-                                                <span><i class="ti ti-trash text-danger"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row custom-pagination">
-                <div class="col-md-12">
-                    <div class="paginations d-flex justify-content-end">
-                        <span><i class="fas fa-chevron-left"></i></span>
-                        <ul class="d-flex align-items-center page-wrap">
-                            <li>
-                                <a href="javascript:void(0);" class="active">
-                                    1
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);">
-                                    2
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);">
-                                    3
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);">
-                                    4
-                                </a>
-                            </li>
-                        </ul>
-                        <span><i class="fas fa-chevron-right"></i></span>
+                        @if ( $trash_notes->count() > 0 )
+                            @foreach ($trash_notes as $row)
+                                <div class="col-md-4 d-flex">
+                                    <div class="card rounded-3 mb-4 flex-fill">
+                                        <div class="card-body p-4">
+                                            <div class="d-flex align-items-center justify-content-between">
+
+                                                    @if ( $row->priority === 'low' )
+                                                        <span
+                                                        class="badge bg-outline-danger d-inline-flex align-items-center"><i
+                                                            class="fas fa-circle fs-6 me-1"></i>Low</span>
+                                                    @elseif( $row->priority === 'medium' )
+                                                        <span
+                                                        class="badge bg-outline-warning d-inline-flex align-items-center"><i
+                                                            class="fas fa-circle fs-6 me-1"></i>Medium</span>
+                                                    @elseif( $row->priority === 'high' )
+                                                        <span
+                                                        class="badge bg-outline-success d-inline-flex align-items-center"><i
+                                                            class="fas fa-circle fs-6 me-1"></i>High</span>
+                                                    @elseif( $row->priority === 'urgent' )
+                                                        <span class="badge bg-outline-info d-inline-flex align-items-center"><i class="fas fa-circle fs-6 me-1"></i>Urgent</span>
+                                                    @endif
+                                                    
+                                                    <div>
+                                                        <a href="javascript:void(0);" data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu notes-menu dropdown-menu-end">
+
+                                                        @if(auth("admin")->user()->can("update.note"))
+                                                            <a href="javascript:void();" class="dropdown-item" id="editButton"
+                                                                data-id="{{ $row->id }}"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#editModal"><span><i
+                                                                        data-feather="edit"></i></span>Edit</a>
+                                                        @endif
+
+                                                        @if(auth("admin")->user()->can("delete.note"))
+                                                            <a href="#" class="dropdown-item"
+                                                                href="javascript:void(0)"
+                                                                data-id="{{ $row->id }}" 
+                                                                id="deleteBtn"><span>
+                                                                    <i data-feather="trash-2"></i></span>Delete</a>
+                                                        @endif
+
+                                                        @if(auth("admin")->user()->can("important.note"))
+                                                            <a href="javascript:void(0);"
+                                                                data-id="{{ $row->id }}" 
+                                                                data-important="{{ $row->important }}"
+                                                                class="dropdown-item important"><span><i
+                                                                        data-feather="star"></i></span>Not
+                                                                Important</a>
+                                                        @endif
+
+                                                            <a href="#" class="dropdown-item"
+                                                                id="viewButton" href="javascript:void(0)" data-id="{{ $row->id }}" data-bs-toggle="modal" data-bs-target="#viewModal">
+                                                            <span><i data-feather="eye"></i></span>View</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="my-3">
+                                                    <h5 class="text-truncate mb-1"><a
+                                                            href="javascript:void(0);">{{ \Illuminate\Support\Str::limit($row->title, 24) }}...</a></h5>
+                                                    <p class="mb-3 d-flex align-items-center text-dark"><i
+                                                            class="ti ti-calendar me-1"></i>{{ \Carbon\Carbon::parse($row->created_at)->format('d M Y') }}</p>
+                                                    <p class="text-truncate line-clamb-2 text-wrap">{{ \Illuminate\Support\Str::limit($row->description, 60) }}...</p>
+                                                </div>
+
+                                                <div
+                                                    class="d-flex align-items-center justify-content-between border-top pt-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <a href="javascript:void(0);"
+                                                            class="avatar avatar-md me-2">
+
+                                                            @if ( !empty($row->image) && $row->image )
+                                                                <img src="{{ asset($row->image) }}"
+                                                                alt="Profile" class="img-fluid rounded-circle">
+                                                            @else
+                                                                <img src="{{ asset('public/admin/assets/img/profiles/avatar-01.jpg') }}"
+                                                                alt="Profile" class="img-fluid rounded-circle">
+                                                            @endif
+                                                        </a>
+
+                                                        @if ( $row->tag === 'personal' )
+                                                            <span class="text-info d-flex align-items-center"><i
+                                                            class="fas fa-square square-rotate fs-10 me-1"></i>Personal</span>
+                                                        @elseif( $row->tag === 'social' )
+                                                            <span class="text-warning d-flex align-items-center"><i class="fas fa-square square-rotate fs-10 me-1"></i>Social</span>
+                                                        @elseif( $row->tag === 'work' )
+                                                            <span class="text-success d-flex align-items-center"><i class="fas fa-square square-rotate fs-10 me-1"></i>Work</span>
+                                                        @endif
+                                                    </div>
+
+                                                    <div class="d-flex align-items-center">
+                                                    @if(auth("admin")->user()->can("important.note"))
+                                                        @if ( $row->important == 1 )
+                                                            <a href="javascript:void(0);" class="me-2">
+                                                                <span><i class="fas fa-star text-warning"></i></span>
+                                                            </a>
+                                                        @else
+                                                            <a href="javascript:void(0);" 
+                                                                data-id="{{ $row->id }}" 
+                                                                data-important="{{ $row->important }}"
+                                                                class="me-2 important">
+                                                                <span><i class="fas fa-star"></i></span>
+                                                            </a>
+                                                        @endif
+                                                    @endif
+                                                        
+                                                    @if(auth("admin")->user()->can("delete.note"))
+                                                        <a href="javascript:void(0)"
+                                                        data-id="{{ $row->id }}" 
+                                                        id="deleteBtn">
+                                                            <span><i class="ti ti-trash text-danger"></i></span>
+                                                        </a>
+                                                    @endif
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="col-md-12">
+                                <div class="card-body">
+                                    <div class="alert alert-solid-secondary alert-dismissible fade show">
+                                        There is no Trash notes here!
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -1615,6 +1194,51 @@
             })
 
 
+            // Important status updates
+            $(document).on('click', '.important', function () {
+                var id = $(this).data('id');
+                var important = $(this).data('important');
+
+                // console.log(id, status);
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('admin.note.important') }}",
+                    data: {
+                        // '_token': token,
+                        id: id,
+                        important: important
+                    },
+                    success: function (res) {
+                        if (res.status == 1) {
+                            swal.fire(
+                                {
+                                    title: 'Status changed to important',
+                                    icon: 'success'
+                                }).then(() => {
+                                    // Reload page after alert is closed
+                                    location.reload();
+                                });
+                        } else {
+                            swal.fire(
+                                {
+                                    title: 'Status changed to not important',
+                                    icon: 'success'
+                                })
+                                .then(() => {
+                                    // Reload page after alert is closed
+                                    location.reload();
+                                });
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+
+                })
+            })
+
+
             // View Data
             $(document).on("click", '#viewButton', function (e) {
                 let id = $(this).attr('data-id');
@@ -1625,24 +1249,16 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/categories/view') }}/" + id,
+                    url: "{{ url('admin/notes/view') }}/" + id,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
 
-                        $('#view_category_name').html(data.category_name);
-                        $('#viewImageShow').html('');
-                        $('#viewImageShow').append(`
-                          <a href="{{ asset("`+ data.category_img +`") }}" target="__blank">
-                            <img src={{ asset("`+ data.category_img +`") }} alt="" style="width: 75px;">    
-                          </a>
-                       `);
-
-                        $('#created_date').html(res.created_date);
-                        $('#updated_date').html(res.updated_date);
-                        $('#view_status').html(res.statusHtml);
-                        $('#view_front_status').html(res.front_status_html);
+                        $('#view_title').html(data.title);
+                        $('#view_tag').html(res.tag);
+                        $('#view_description').html(data.description);
+                        $('#view_priority').html(res.priority);
                     },
                     error: function (error) {
                         console.log('error');

@@ -94,6 +94,7 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     //______ Todo List _____//
     Route::resource('/todo', TodoController::class)->names('todo')->except('show');
     Route::post('/change-important-todo', [TodoController::class, 'changeImportantStatus'])->name('todo.important');
+    Route::post('/todo/cross/{id}', [TodoController::class, 'todoCross'])->name('todo.cross');
     Route::get('/todo/view/{id}', [TodoController::class, 'todoView'])->name('todo.view');
 
 

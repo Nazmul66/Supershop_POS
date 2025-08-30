@@ -33,7 +33,7 @@
                 </li>
             </ul>
 
-            @if(auth("admin")->user()->can("create.note"))
+            @if(auth("admin")->user()->can("create.todo"))
                 <div class="page-btn">
                     <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Create New</a>
                 </div>
@@ -100,9 +100,12 @@
                                     <label class="form-label">Tag <span class="text-danger">*</span></label>
                                     <select class="form-select" name="tag">
                                         <option value="" disabled selected>selected</option>
-                                        <option value="personal">Personal</option>
-                                        <option value="work">Work</option>
                                         <option value="social">Social</option>
+                                        <option value="meeting">Meeting</option>
+                                        <option value="internal">Internal</option>
+                                        <option value="projects">Projects</option>
+                                        <option value="research">Research</option>
+                                        <option value="reminder">Reminder</option>
                                     </select>
 
                                     <span id="tag_validate" class="text-danger mt-1"></span>
@@ -236,9 +239,12 @@
                                     <label class="form-label" for="up_tag">Tag <span class="text-danger">*</span></label>
                                     <select class="form-select" id="up_tag" name="tag">
                                         <option value="" disabled selected>selected</option>
-                                        <option value="personal">Personal</option>
-                                        <option value="work">Work</option>
                                         <option value="social">Social</option>
+                                        <option value="meeting">Meeting</option>
+                                        <option value="internal">Internal</option>
+                                        <option value="projects">Projects</option>
+                                        <option value="research">Research</option>
+                                        <option value="reminder">Reminder</option>
                                     </select>
 
                                     <span id="up_tag_validate" class="text-danger mt-1"></span>
@@ -366,22 +372,24 @@
                 <div class="col-sm-4">
                     <div class="d-flex align-items-center">
                         <h4>Total Todo</h4>
-                        <span class="badge badge-dark rounded-pill badge-xs ms-2">+1</span>
                     </div>
                 </div>
                 <div class="col-sm-8">
                     <div class="d-flex align-items-center justify-content-end">
-                        <p class="mb-0 me-3 pe-3 border-end fs-14">Total Task : <span class="text-dark"> 55 </span></p>
-                        <p class="mb-0 me-3 pe-3 border-end fs-14">Pending : <span class="text-dark"> 15 </span></p>
-                        <p class="mb-0 fs-14">Completed : <span class="text-dark"> 40 </span></p>
+                        <p class="mb-0 me-3 pe-3 border-end fs-14">Total Task : <span class="text-dark"> {{ $all_todo->count() }} </span></p>
+                        <p class="mb-0 me-3 pe-3 border-end fs-14">Pending : <span class="text-dark"> {{ $pending_todo }} </span></p>
+                        <p class="mb-0 fs-14">Completed : <span class="text-dark"> {{ $complete_todo }} </span></p>
                     </div>
                 </div>
             </div>
-            <div class="mb-3">
-                <button class="btn bg-primary-transparent border-dashed border-primary w-100 text-start" data-bs-toggle="modal" data-bs-target="#createModal">
-                    <i class="ti ti-plus me-2"></i>New task
-                </button>
-            </div>
+
+            @if(auth("admin")->user()->can("create.todo"))
+                <div class="mb-3">
+                    <button class="btn bg-primary-transparent border-dashed border-primary w-100 text-start" data-bs-toggle="modal" data-bs-target="#createModal">
+                        <i class="ti ti-plus me-2"></i>New task
+                    </button>
+                </div>
+            @endif
 
             {{-- Priority Tab list --}}
             <div class="row border-bottom mb-3">
@@ -392,15 +400,24 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link btn btn-sm btn-icon py-3 d-flex align-items-center justify-content-center w-auto active" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-selected="true">All</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link btn btn-sm btn-icon py-3 d-flex align-items-center justify-content-center w-auto" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-selected="false">High</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link btn btn-sm btn-icon py-3 d-flex align-items-center justify-content-center w-auto" data-bs-toggle="pill" data-bs-target="#pills-medium" type="button" role="tab" aria-selected="false">Medium</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link btn btn-sm btn-icon py-3 d-flex align-items-center justify-content-center w-auto" data-bs-toggle="pill" data-bs-target="#pills-low" type="button" role="tab" aria-selected="false">Low</button>
-                            </li>
+
+                            @if ( $high_todo->count() > 0 )
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link btn btn-sm btn-icon py-3 d-flex align-items-center justify-content-center w-auto" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-selected="false">High</button>
+                                </li>
+                            @endif
+
+                            @if ( $medium_todo->count() > 0 )
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link btn btn-sm btn-icon py-3 d-flex align-items-center justify-content-center w-auto" data-bs-toggle="pill" data-bs-target="#pills-medium" type="button" role="tab" aria-selected="false">Medium</button>
+                                </li>
+                            @endif
+
+                            @if ( $low_todo->count() > 0 )
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link btn btn-sm btn-icon py-3 d-flex align-items-center justify-content-center w-auto" data-bs-toggle="pill" data-bs-target="#pills-low" type="button" role="tab" aria-selected="false">Low</button>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -437,958 +454,1256 @@
                 {{-- All Priority --}}
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
                     <div class="accordion todo-accordion" id="accordionExample">
-                        <div class="accordion-item border-0 mb-3">
-                            <div class="row align-items-center mb-3 row-gap-3">
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="accordion-header" id="headingTwo">
-                                        <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseUrgent" aria-controls="collapseUrgent">
-                                            <div class="d-flex align-items-center w-100">
-                                                <div class="me-2">
-                                                    <a href="javascript:void(0);">
-                                                        <span><i class="fas fa-chevron-down"></i></span>
-                                                    </a>
-                                                </div>
-                                                <div class="d-flex align-items-center">
-                                                    <span><i class="ti ti-square-rounded text-danger me-2"></i></span>
-                                                    <h5 class="fw-semibold">Urgent</h5>
-                                                    <span class="badge bg-light rounded-pill ms-2">32</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-8 col-sm-6">
-                                    <div class="d-flex align-items-center justify-content-sm-end">
-                                        <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-2"></i>Add New</a>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div id="collapseUrgent" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <div class="list-group list-group-flush border-bottom pb-2">
-
-                                    @foreach ($urgent_todo as $row)
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-6 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox">
-                                                        </div>
-                                                        <span class="me-2 d-flex align-items-center rating-select"><i class="ti ti-star-filled filled"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Update calendar and schedule</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>15 Jan 2025</span>
+                        {{-- Urgent Priority --}}
+                        @if ( $urgent_todo->count() > 0 )
+                            <div class="accordion-item border-0 mb-3">
+                                <div class="row align-items-center mb-3 row-gap-3">
+                                    <div class="col-lg-4 col-sm-6">
+                                        <div class="accordion-header" id="headingTwo">
+                                            <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseUrgent" aria-controls="collapseUrgent">
+                                                <div class="d-flex align-items-center w-100">
+                                                    <div class="me-2">
+                                                        <a href="javascript:void(0);">
+                                                            <span><i class="fas fa-chevron-down"></i></span>
+                                                        </a>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-info me-3">Social</span>
-                                                        <span class="badge badge-soft-pink badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Onhold</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-13.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-14.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-15.jpg" alt="img">
-                                                                </span>
-                                                            </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
+                                                    <div class="d-flex align-items-center">
+                                                        <span><i class="ti ti-square-rounded text-danger me-2"></i></span>
+                                                        <h5 class="fw-semibold">Urgent</h5>
+                                                        <span class="badge bg-light rounded-pill ms-2">{{ $urgent_todo->count() }}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
-
                                     </div>
-                                </div>
-                            </div>
-                        </div>
 
-
-                        <div class="accordion-item border-0 mb-3">
-                            <div class="row align-items-center mb-3 row-gap-3">
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="accordion-header" id="heading3">
-                                        <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-controls="collapseTwo">
-                                            <div class="d-flex align-items-center w-100">
-                                                <div class="me-2">
-                                                    <a href="javascript:void(0);">
-                                                        <span><i class="fas fa-chevron-down"></i></span>
-                                                    </a>
-                                                </div>
-                                                <div class="d-flex align-items-center">
-                                                    <span><i class="ti ti-square-rounded text-purple me-2"></i></span>
-                                                    <h5 class="fw-semibold">High</h5>
-                                                    <span class="badge bg-light rounded-pill ms-2">15</span>
-                                                </div>
+                                    @if(auth("admin")->user()->can("create.todo"))
+                                        <div class="col-lg-8 col-sm-6">
+                                            <div class="d-flex align-items-center justify-content-sm-end">
+                                                <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-2"></i>Add New</a>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
                                 </div>
-                                <div class="col-lg-8 col-sm-6">
-                                    <div class="d-flex align-items-center justify-content-sm-end">
-                                        <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#add_todo"><i class="ti ti-circle-plus me-2"></i>Add New</a>
-                                        <a href="#" class="btn btn-outline-light border">See All <i class="ti ti-arrow-right ms-2"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="heading3" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <div class="list-group list-group-flush border-bottom pb-2">
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-6 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox">
-                                                        </div>
-                                                        <span class="me-2 d-flex align-items-center rating-select"><i class="ti ti-star-filled filled"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Finalize project proposal</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>15 Jan 2025</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-success me-3">Projects</span>
-                                                        <span class="badge badge-soft-pink shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Onhold</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-13.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-14.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-15.jpg" alt="img">
-                                                                </span>
+
+
+                                <div id="collapseUrgent" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="list-group list-group-flush border-bottom pb-2">
+
+                                        @foreach ($urgent_todo as $row)
+                                            <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
+                                                <div class="row align-items-center row-gap-3">
+                                                    <div class="col-lg-6 col-md-7">
+                                                        <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3 
+                                                        @if( $row->todo_cross == 1 ) todo-strike-content @endif
+                                                        ">
+                                                            <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
+                                                            
+                                                            <div class="form-check form-check-md me-2">
+                                                                <input class="form-check-input todo-cross-input" 
+                                                                    type="checkbox"
+                                                                    data-id={{ $row->id }}
+                                                                    data-cross="{{ $row->todo_cross }}"
+                                                                    @if ( $row->todo_cross == 1 )
+                                                                        checked       
+                                                                    @endif
+                                                                >
                                                             </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
+
+                                                            @if ( $row->important == 1 )
+                                                                <a href="javascript:void(0);" 
+
+                                                                @if(auth("admin")->user()->can("important.todo"))
+                                                                    data-id="{{ $row->id }}" 
+                                                                    data-important="{{ $row->important }}"
+                                                                @endif
+
+                                                                class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled filled"></i></a>
+                                                            @else
+                                                                <a href="javascript:void(0);"
+
+                                                                @if(auth("admin")->user()->can("important.todo"))
+                                                                    data-id="{{ $row->id }}" 
+                                                                    data-important="{{ $row->important }}"
+                                                                @endif
+
+                                                                class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled"></i></a>
+                                                            @endif
+                                                            
+
+                                                            <div class="strike-info">
+                                                                <h4 class="fs-14">{{ $row->title }}</h4>
                                                             </div>
+
+                                                            <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>{{ \Carbon\Carbon::parse($row->created_at)->format('d M Y') }}</span>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-6 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox">
-                                                        </div>
-                                                        <span class="me-2 rating-select d-flex align-items-center"><i class="ti ti-star"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Submit to supervisor by EOD</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>25 May 2024</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-danger me-3">Internal</span>
-                                                        <span class="badge badge-soft-indigo shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Inprogress</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-20.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-21.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-22.jpg" alt="img">
-                                                                </span>
-                                                            </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-6 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3 todo-strike-content">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox" checked>
-                                                        </div>
-                                                        <span class="me-2 rating-select d-flex align-items-center"><i class="ti ti-star"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Prepare presentation slides</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>15 Jan 2025</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-secondary me-3">Reminder</span>
-                                                        <span class="badge badge-soft-secondary badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Pending</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-23.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-24.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-25.jpg" alt="img">
-                                                                </span>
-                                                            </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
+
+                                                    <div class="col-lg-6 col-md-5">
+                                                        <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
+
+                                                            @if ( $row->tag === 'social' )
+                                                                <span class="badge badge-info me-3">Social</span>
+                                                            @elseif ( $row->tag === 'meeting' )
+                                                                <span class="badge badge-purple me-3">Meeting</span>
+                                                            @elseif ( $row->tag === 'internal' )
+                                                                <span class="badge badge-danger me-3">Internal</span>
+                                                            @elseif ( $row->tag === 'projects' )
+                                                                <span class="badge badge-success me-3">Projects</span>
+                                                            @elseif ( $row->tag === 'research' )
+                                                                <span class="badge badge-pink me-3">Research</span>
+                                                            @elseif ( $row->tag === 'reminder' )
+                                                                <span class="badge badge-secondary me-3">Reminder</span>
+                                                            @endif
+
+
+                                                            @if ( $row->priority_status == 1 )
+
+                                                                <span class="badge badge-soft-success badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Completed</span>
+
+                                                            @elseif ( $row->priority_status == 2 )
+
+                                                                <span class="badge badge-soft-secondary badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Pending</span>
+
+                                                            @elseif ( $row->priority_status == 3 )
+
+                                                                <span class="badge badge-soft-pink shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Onhold</span>
+
+                                                            @elseif ( $row->priority_status == 4 )
+
+                                                                <span class="badge badge-soft-indigo shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Inprogress</span>
+                                                                
+                                                            @endif
+
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="avatar-list-stacked avatar-group-sm">
+
+                                                                    @if ( !empty($row->image) && $row->image )
+                                                                        <span class="avatar avatar-rounded">
+                                                                            <img class="border border-white" src="{{ asset($row->image) }}" alt="img">
+                                                                        </span>
+                                                                    @else
+                                                                        <span class="avatar avatar-rounded">
+                                                                            <img class="border border-white" src="{{ asset('public/admin/assets/img/profiles/avatar-13.jpg') }}" alt="img">
+                                                                        </span>
+                                                                    @endif
+                                                                    
+                                                                </div>
+
+
+                                                                <div class="dropdown ms-2">
+                                                                    <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                                                        <i class="ti ti-dots-vertical"></i>
+                                                                    </a>
+                                                                    <ul class="dropdown-menu dropdown-menu-end p-3">
+                                                                        @if(auth("admin")->user()->can("update.todo"))
+                                                                            <li>
+                                                                                <a href="javascript:void(0);" class="dropdown-item rounded-1" id="editButton"
+                                                                                data-id="{{ $row->id }}"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#editModal"><i class="ti ti-edit me-2"></i>Edit</a>
+                                                                            </li>
+                                                                        @endif
+
+                                                                        @if(auth("admin")->user()->can("delete.todo"))
+                                                                            <li>
+                                                                                <a href="javascript:void(0);" class="dropdown-item rounded-1" 
+                                                                                data-id="{{ $row->id }}" 
+                                                                                id="deleteBtn"><i class="ti ti-trash me-2"></i>Delete</a>
+                                                                            </li>
+                                                                         @endif
+
+                                                                        <li>
+                                                                            <a href="javascript:void(0);" class="dropdown-item rounded-1" id="viewButton"
+                                                                            data-id="{{ $row->id }}" data-bs-toggle="modal" data-bs-target="#viewModal"><i class="ti ti-eye me-2"></i>View</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        @endforeach
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
 
-                        <div class="accordion-item border-0 mb-3">
-                            <div class="row align-items-center mb-3 row-gap-3">
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="accordion-header" id="headingThree">
-                                        <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-controls="collapseThree">
-                                            <div class="d-flex align-items-center w-100">
-                                                <div class="me-2">
-                                                    <a href="javascript:void(0);">
-                                                        <span><i class="fas fa-chevron-down"></i></span>
-                                                    </a>
-                                                </div>
-                                                <div class="d-flex align-items-center">
-                                                    <span><i class="ti ti-square-rounded text-warning me-2"></i></span>
-                                                    <h5 class="fw-semibold">Medium</h5>
-                                                    <span class="badge bg-light rounded-pill ms-2">05</span>
+                        {{-- High Priority --}}
+                        @if ( $high_todo->count() > 0 )
+                            <div class="accordion-item border-0 mb-3">
+                                <div class="row align-items-center mb-3 row-gap-3">
+                                    <div class="col-lg-4 col-sm-6">
+                                        <div class="accordion-header" id="heading3">
+                                            <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-controls="collapseTwo">
+                                                <div class="d-flex align-items-center w-100">
+                                                    <div class="me-2">
+                                                        <a href="javascript:void(0);">
+                                                            <span><i class="fas fa-chevron-down"></i></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="d-flex align-items-center">
+                                                        <span><i class="ti ti-square-rounded text-purple me-2"></i></span>
+                                                        <h5 class="fw-semibold">High</h5>
+                                                        <span class="badge bg-light rounded-pill ms-2">{{ $high_todo->count() }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-8 col-sm-6">
+                                        @if(auth("admin")->user()->can("create.todo"))
+                                            <div class="d-flex align-items-center justify-content-sm-end">
+                                                <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-2"></i>Add New</a>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="col-lg-8 col-sm-6">
-                                    <div class="d-flex align-items-center justify-content-sm-end">
-                                        <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#add_todo"><i class="ti ti-circle-plus me-2"></i>Add New</a>
-                                        <a href="#" class="btn btn-outline-light border">See All <i class="ti ti-arrow-right ms-2"></i></a>
+                                <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="heading3" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="list-group list-group-flush border-bottom pb-2">
+                                            @foreach ($high_todo as $row)
+                                                <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
+                                                    <div class="row align-items-center row-gap-3">
+                                                        <div class="col-lg-6 col-md-7">
+                                                            <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3 
+                                                            @if( $row->todo_cross == 1 ) todo-strike-content @endif
+                                                            ">
+                                                                <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
+                                                                
+                                                                <div class="form-check form-check-md me-2">
+                                                                    <input class="form-check-input todo-cross-input" 
+                                                                        type="checkbox"
+                                                                        data-id={{ $row->id }}
+                                                                        data-cross="{{ $row->todo_cross }}"
+                                                                        @if ( $row->todo_cross == 1 )
+                                                                            checked       
+                                                                        @endif
+                                                                    >
+                                                                </div>
+
+                                                                @if ( $row->important == 1 )
+                                                                    <a href="javascript:void(0);" 
+
+                                                                    @if(auth("admin")->user()->can("important.todo"))
+                                                                        data-id="{{ $row->id }}" 
+                                                                        data-important="{{ $row->important }}"
+                                                                    @endif
+
+                                                                    class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled filled"></i></a>
+                                                                @else
+                                                                    <a href="javascript:void(0);"
+
+                                                                    @if(auth("admin")->user()->can("important.todo"))
+                                                                        data-id="{{ $row->id }}" 
+                                                                        data-important="{{ $row->important }}"
+                                                                    @endif
+
+                                                                    class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled"></i></a>
+                                                                @endif
+                                                                
+
+                                                                <div class="strike-info">
+                                                                    <h4 class="fs-14">{{ $row->title }}</h4>
+                                                                </div>
+
+                                                                <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>{{ \Carbon\Carbon::parse($row->created_at)->format('d M Y') }}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-6 col-md-5">
+                                                            <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
+
+                                                                @if ( $row->tag === 'social' )
+                                                                    <span class="badge badge-info me-3">Social</span>
+                                                                @elseif ( $row->tag === 'meeting' )
+                                                                    <span class="badge badge-purple me-3">Meeting</span>
+                                                                @elseif ( $row->tag === 'internal' )
+                                                                    <span class="badge badge-danger me-3">Internal</span>
+                                                                @elseif ( $row->tag === 'projects' )
+                                                                    <span class="badge badge-success me-3">Projects</span>
+                                                                @elseif ( $row->tag === 'research' )
+                                                                    <span class="badge badge-pink me-3">Research</span>
+                                                                @elseif ( $row->tag === 'reminder' )
+                                                                    <span class="badge badge-secondary me-3">Reminder</span>
+                                                                @endif
+
+
+                                                                @if ( $row->priority_status == 1 )
+
+                                                                    <span class="badge badge-soft-success badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Completed</span>
+
+                                                                @elseif ( $row->priority_status == 2 )
+
+                                                                    <span class="badge badge-soft-secondary badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Pending</span>
+
+                                                                @elseif ( $row->priority_status == 3 )
+
+                                                                    <span class="badge badge-soft-pink shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Onhold</span>
+
+                                                                @elseif ( $row->priority_status == 4 )
+
+                                                                    <span class="badge badge-soft-indigo shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Inprogress</span>
+                                                                    
+                                                                @endif
+
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="avatar-list-stacked avatar-group-sm">
+
+                                                                        @if ( !empty($row->image) && $row->image )
+                                                                            <span class="avatar avatar-rounded">
+                                                                                <img class="border border-white" src="{{ asset($row->image) }}" alt="img">
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="avatar avatar-rounded">
+                                                                                <img class="border border-white" src="{{ asset('public/admin/assets/img/profiles/avatar-13.jpg') }}" alt="img">
+                                                                            </span>
+                                                                        @endif
+                                                                        
+                                                                    </div>
+
+
+                                                                    <div class="dropdown ms-2">
+                                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                                                            <i class="ti ti-dots-vertical"></i>
+                                                                        </a>
+                                                                        <ul class="dropdown-menu dropdown-menu-end p-3">
+                                                                            @if(auth("admin")->user()->can("update.todo"))
+                                                                                <li>
+                                                                                    <a href="javascript:void(0);" class="dropdown-item rounded-1" id="editButton"
+                                                                                    data-id="{{ $row->id }}"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#editModal"><i class="ti ti-edit me-2"></i>Edit</a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            @if(auth("admin")->user()->can("delete.todo"))
+                                                                                <li>
+                                                                                    <a href="javascript:void(0);" class="dropdown-item rounded-1" 
+                                                                                    data-id="{{ $row->id }}" 
+                                                                                    id="deleteBtn"><i class="ti ti-trash me-2"></i>Delete</a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            <li>
+                                                                                <a href="javascript:void(0);" class="dropdown-item rounded-1" id="viewButton"
+                                                                                data-id="{{ $row->id }}" data-bs-toggle="modal" data-bs-target="#viewModal"><i class="ti ti-eye me-2"></i>View</a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <div class="list-group list-group-flush border-bottom pb-2">
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-6 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox">
-                                                        </div>
-                                                        <span class="me-2 rating-select d-flex align-items-center"><i class="ti ti-star"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Check and respond to emails</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>Tomorrow</span>
+                        @endif
+
+
+                        {{-- Medium Priority --}}
+                        @if ( $medium_todo->count() > 0 )
+                            <div class="accordion-item border-0 mb-3">
+                                <div class="row align-items-center mb-3 row-gap-3">
+                                    <div class="col-lg-4 col-sm-6">
+                                        <div class="accordion-header" id="headingThree">
+                                            <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-controls="collapseThree">
+                                                <div class="d-flex align-items-center w-100">
+                                                    <div class="me-2">
+                                                        <a href="javascript:void(0);">
+                                                            <span><i class="fas fa-chevron-down"></i></span>
+                                                        </a>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-secondary me-3">Reminder</span>
-                                                        <span class="badge badge-soft-success badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Completed</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-28.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-29.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-24.jpg" alt="img">
-                                                                </span>
-                                                            </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-7 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox">
-                                                        </div>
-                                                        <span class="me-2 rating-select d-flex align-items-center"><i class="ti ti-star"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Coordinate with department head on progress</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>25 May 2024</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-5 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-danger me-3">Internal</span>
-                                                        <span class="badge badge-soft-danger badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Inprogress</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-06.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-09.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-14.jpg" alt="img">
-                                                                </span>
-                                                            </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
+                                                    <div class="d-flex align-items-center">
+                                                        <span><i class="ti ti-square-rounded text-warning me-2"></i></span>
+                                                        <h5 class="fw-semibold">Medium</h5>
+                                                        <span class="badge bg-light rounded-pill ms-2">{{ $medium_todo->count() }}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+                                    @if(auth("admin")->user()->can("create.todo"))
+                                        <div class="col-lg-8 col-sm-6">
+                                            <div class="d-flex align-items-center justify-content-sm-end">
+                                                <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-2"></i>Add New</a>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                </div>
+                                <div id="collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="list-group list-group-flush border-bottom pb-2">
+                                            @foreach ($medium_todo as $row)
+                                                <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
+                                                    <div class="row align-items-center row-gap-3">
+                                                        <div class="col-lg-6 col-md-7">
+                                                            <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3 
+                                                            @if( $row->todo_cross == 1 ) todo-strike-content @endif
+                                                            ">
+                                                                <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
+                                                                
+                                                                <div class="form-check form-check-md me-2">
+                                                                    <input class="form-check-input todo-cross-input" 
+                                                                        type="checkbox"
+                                                                        data-id={{ $row->id }}
+                                                                        data-cross="{{ $row->todo_cross }}"
+                                                                        @if ( $row->todo_cross == 1 )
+                                                                            checked       
+                                                                        @endif
+                                                                    >
+                                                                </div>
+
+                                                                @if ( $row->important == 1 )
+                                                                    <a href="javascript:void(0);" 
+
+                                                                    @if(auth("admin")->user()->can("important.todo"))
+                                                                        data-id="{{ $row->id }}" 
+                                                                        data-important="{{ $row->important }}"
+                                                                    @endif
+
+                                                                    class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled filled"></i></a>
+                                                                @else
+                                                                    <a href="javascript:void(0);"
+
+                                                                    @if(auth("admin")->user()->can("important.todo"))
+                                                                        data-id="{{ $row->id }}" 
+                                                                        data-important="{{ $row->important }}"
+                                                                    @endif
+
+                                                                    class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled"></i></a>
+                                                                @endif
+                                                                
+
+                                                                <div class="strike-info">
+                                                                    <h4 class="fs-14">{{ $row->title }}</h4>
+                                                                </div>
+
+                                                                <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>{{ \Carbon\Carbon::parse($row->created_at)->format('d M Y') }}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-6 col-md-5">
+                                                            <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
+
+                                                                @if ( $row->tag === 'social' )
+                                                                    <span class="badge badge-info me-3">Social</span>
+                                                                @elseif ( $row->tag === 'meeting' )
+                                                                    <span class="badge badge-purple me-3">Meeting</span>
+                                                                @elseif ( $row->tag === 'internal' )
+                                                                    <span class="badge badge-danger me-3">Internal</span>
+                                                                @elseif ( $row->tag === 'projects' )
+                                                                    <span class="badge badge-success me-3">Projects</span>
+                                                                @elseif ( $row->tag === 'research' )
+                                                                    <span class="badge badge-pink me-3">Research</span>
+                                                                @elseif ( $row->tag === 'reminder' )
+                                                                    <span class="badge badge-secondary me-3">Reminder</span>
+                                                                @endif
+
+
+                                                                @if ( $row->priority_status == 1 )
+
+                                                                    <span class="badge badge-soft-success badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Completed</span>
+
+                                                                @elseif ( $row->priority_status == 2 )
+
+                                                                    <span class="badge badge-soft-secondary badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Pending</span>
+
+                                                                @elseif ( $row->priority_status == 3 )
+
+                                                                    <span class="badge badge-soft-pink shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Onhold</span>
+
+                                                                @elseif ( $row->priority_status == 4 )
+
+                                                                    <span class="badge badge-soft-indigo shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Inprogress</span>
+                                                                    
+                                                                @endif
+
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="avatar-list-stacked avatar-group-sm">
+
+                                                                        @if ( !empty($row->image) && $row->image )
+                                                                            <span class="avatar avatar-rounded">
+                                                                                <img class="border border-white" src="{{ asset($row->image) }}" alt="img">
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="avatar avatar-rounded">
+                                                                                <img class="border border-white" src="{{ asset('public/admin/assets/img/profiles/avatar-13.jpg') }}" alt="img">
+                                                                            </span>
+                                                                        @endif
+                                                                        
+                                                                    </div>
+
+
+                                                                    <div class="dropdown ms-2">
+                                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                                                            <i class="ti ti-dots-vertical"></i>
+                                                                        </a>
+                                                                        <ul class="dropdown-menu dropdown-menu-end p-3">
+                                                                            @if(auth("admin")->user()->can("update.todo"))
+                                                                                <li>
+                                                                                    <a href="javascript:void(0);" class="dropdown-item rounded-1" id="editButton"
+                                                                                    data-id="{{ $row->id }}"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#editModal"><i class="ti ti-edit me-2"></i>Edit</a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            @if(auth("admin")->user()->can("delete.todo"))
+                                                                                <li>
+                                                                                    <a href="javascript:void(0);" class="dropdown-item rounded-1" 
+                                                                                    data-id="{{ $row->id }}" 
+                                                                                    id="deleteBtn"><i class="ti ti-trash me-2"></i>Delete</a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            <li>
+                                                                                <a href="javascript:void(0);" class="dropdown-item rounded-1" id="viewButton"
+                                                                                data-id="{{ $row->id }}" data-bs-toggle="modal" data-bs-target="#viewModal"><i class="ti ti-eye me-2"></i>View</a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
                         
-                        <div class="accordion-item border-0 mb-3">
-                            <div class="row align-items-center mb-3 row-gap-3">
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="accordion-header" id="headingFour">
-                                        <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-controls="collapseFour">
-                                            <div class="d-flex align-items-center w-100">
-                                                <div class="me-2">
-                                                    <a href="javascript:void(0);">
-                                                        <span><i class="fas fa-chevron-down"></i></span>
-                                                    </a>
-                                                </div>
-                                                <div class="d-flex align-items-center">
-                                                    <span><i class="ti ti-square-rounded text-success me-2"></i></span>
-                                                    <h5 class="fw-semibold">Low</h5>
-                                                    <span class="badge bg-light rounded-pill ms-2">24</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-8 col-sm-6">
-                                    <div class="d-flex align-items-center justify-content-sm-end">
-                                        <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#add_todo"><i class="ti ti-circle-plus me-2"></i>Add New</a>
-                                        <a href="#" class="btn btn-outline-light border">See All <i class="ti ti-arrow-right ms-2"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="collapseFour" class="accordion-collapse collapse show" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <div class="list-group list-group-flush">
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-6 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox">
-                                                        </div>
-                                                        <span class="me-2 rating-select d-flex align-items-center"><i class="ti ti-star"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Plan tasks for the next day</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>Today</span>
+                        {{-- Low Priority --}}
+                        @if ( $low_todo->count() > 0 )
+                            <div class="accordion-item border-0 mb-3">
+                                <div class="row align-items-center mb-3 row-gap-3">
+                                    <div class="col-lg-4 col-sm-6">
+                                        <div class="accordion-header" id="headingFour">
+                                            <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-controls="collapseFour">
+                                                <div class="d-flex align-items-center w-100">
+                                                    <div class="me-2">
+                                                        <a href="javascript:void(0);">
+                                                            <span><i class="fas fa-chevron-down"></i></span>
+                                                        </a>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-info me-3">Social</span>
-                                                        <span class="badge badge-soft-secondary badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Pending</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-28.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-29.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-24.jpg" alt="img">
-                                                                </span>
-                                                            </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
+                                                    <div class="d-flex align-items-center">
+                                                        <span><i class="ti ti-square-rounded text-success me-2"></i></span>
+                                                        <h5 class="fw-semibold">Low</h5>
+                                                        <span class="badge bg-light rounded-pill ms-2">{{ $low_todo->count() }}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+                                    @if(auth("admin")->user()->can("create.todo"))
+                                        <div class="col-lg-8 col-sm-6">
+                                            <div class="d-flex align-items-center justify-content-sm-end">
+                                                <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-2"></i>Add New</a>
+                                            </div>
+                                        </div>
+                                     @endif
+
+                                </div>
+                                <div id="collapseFour" class="accordion-collapse collapse show" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="list-group list-group-flush">
+                                            @foreach ($low_todo as $row)
+                                                <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
+                                                    <div class="row align-items-center row-gap-3">
+                                                        <div class="col-lg-6 col-md-7">
+                                                            <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3 
+                                                            @if( $row->todo_cross == 1 ) todo-strike-content @endif
+                                                            ">
+                                                                <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
+                                                                
+                                                                <div class="form-check form-check-md me-2">
+                                                                    <input class="form-check-input todo-cross-input" 
+                                                                        type="checkbox"
+                                                                        data-id={{ $row->id }}
+                                                                        data-cross="{{ $row->todo_cross }}"
+                                                                        @if ( $row->todo_cross == 1 )
+                                                                            checked       
+                                                                        @endif
+                                                                    >
+                                                                </div>
+
+                                                                @if ( $row->important == 1 )
+                                                                    <a href="javascript:void(0);" 
+
+                                                                    @if(auth("admin")->user()->can("important.todo"))
+                                                                        data-id="{{ $row->id }}" 
+                                                                        data-important="{{ $row->important }}"
+                                                                    @endif
+
+                                                                    class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled filled"></i></a>
+                                                                @else
+                                                                    <a href="javascript:void(0);"
+
+                                                                    @if(auth("admin")->user()->can("important.todo"))
+                                                                        data-id="{{ $row->id }}" 
+                                                                        data-important="{{ $row->important }}"
+                                                                    @endif
+
+                                                                    class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled"></i></a>
+                                                                @endif
+                                                                
+
+                                                                <div class="strike-info">
+                                                                    <h4 class="fs-14">{{ $row->title }}</h4>
+                                                                </div>
+
+                                                                <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>{{ \Carbon\Carbon::parse($row->created_at)->format('d M Y') }}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-6 col-md-5">
+                                                            <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
+
+                                                                @if ( $row->tag === 'social' )
+                                                                    <span class="badge badge-info me-3">Social</span>
+                                                                @elseif ( $row->tag === 'meeting' )
+                                                                    <span class="badge badge-purple me-3">Meeting</span>
+                                                                @elseif ( $row->tag === 'internal' )
+                                                                    <span class="badge badge-danger me-3">Internal</span>
+                                                                @elseif ( $row->tag === 'projects' )
+                                                                    <span class="badge badge-success me-3">Projects</span>
+                                                                @elseif ( $row->tag === 'research' )
+                                                                    <span class="badge badge-pink me-3">Research</span>
+                                                                @elseif ( $row->tag === 'reminder' )
+                                                                    <span class="badge badge-secondary me-3">Reminder</span>
+                                                                @endif
+
+
+                                                                @if ( $row->priority_status == 1 )
+
+                                                                    <span class="badge badge-soft-success badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Completed</span>
+
+                                                                @elseif ( $row->priority_status == 2 )
+
+                                                                    <span class="badge badge-soft-secondary badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Pending</span>
+
+                                                                @elseif ( $row->priority_status == 3 )
+
+                                                                    <span class="badge badge-soft-pink shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Onhold</span>
+
+                                                                @elseif ( $row->priority_status == 4 )
+
+                                                                    <span class="badge badge-soft-indigo shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Inprogress</span>
+                                                                    
+                                                                @endif
+
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="avatar-list-stacked avatar-group-sm">
+
+                                                                        @if ( !empty($row->image) && $row->image )
+                                                                            <span class="avatar avatar-rounded">
+                                                                                <img class="border border-white" src="{{ asset($row->image) }}" alt="img">
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="avatar avatar-rounded">
+                                                                                <img class="border border-white" src="{{ asset('public/admin/assets/img/profiles/avatar-13.jpg') }}" alt="img">
+                                                                            </span>
+                                                                        @endif
+                                                                        
+                                                                    </div>
+
+
+                                                                    <div class="dropdown ms-2">
+                                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                                                            <i class="ti ti-dots-vertical"></i>
+                                                                        </a>
+                                                                        <ul class="dropdown-menu dropdown-menu-end p-3">
+                                                                            @if(auth("admin")->user()->can("update.todo"))
+                                                                                <li>
+                                                                                    <a href="javascript:void(0);" class="dropdown-item rounded-1" id="editButton"
+                                                                                    data-id="{{ $row->id }}"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#editModal"><i class="ti ti-edit me-2"></i>Edit</a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            @if(auth("admin")->user()->can("delete.todo"))
+                                                                                <li>
+                                                                                    <a href="javascript:void(0);" class="dropdown-item rounded-1" 
+                                                                                    data-id="{{ $row->id }}" 
+                                                                                    id="deleteBtn"><i class="ti ti-trash me-2"></i>Delete</a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            <li>
+                                                                                <a href="javascript:void(0);" class="dropdown-item rounded-1" id="viewButton"
+                                                                                data-id="{{ $row->id }}" data-bs-toggle="modal" data-bs-target="#viewModal"><i class="ti ti-eye me-2"></i>View</a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
 
                 {{-- High Priority --}}
-                <div class="tab-pane fade" id="pills-contact" role="tabpanel">
-                    <div class="accordion todo-accordion">
-                        <div class="accordion-item border-0 mb-3">
-                            <div class="row align-items-center mb-3 row-gap-3">
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="accordion-header" id="headingSix">
-                                        <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-controls="collapseSix">
-                                            <div class="d-flex align-items-center w-100">
-                                                <div class="me-2">
-                                                    <a href="javascript:void(0);">
-                                                        <span><i class="fas fa-chevron-down"></i></span>
-                                                    </a>
-                                                </div>
-                                                <div class="d-flex align-items-center">
-                                                    <span><i class="ti ti-square-rounded text-purple me-2"></i></span>
-                                                    <h5 class="fw-semibold">High</h5>
-                                                    <span class="badge bg-light rounded-pill ms-2">15</span>
+                @if ( $high_todo->count() > 0 )
+                    <div class="tab-pane fade" id="pills-contact" role="tabpanel">
+                        <div class="accordion todo-accordion">
+                            <div class="accordion-item border-0 mb-3">
+                                <div class="row align-items-center mb-3 row-gap-3">
+                                    <div class="col-lg-4 col-sm-6">
+                                        <div class="accordion-header" id="headingSix">
+                                            <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-controls="collapseSix">
+                                                <div class="d-flex align-items-center w-100">
+                                                    <div class="me-2">
+                                                        <a href="javascript:void(0);">
+                                                            <span><i class="fas fa-chevron-down"></i></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="d-flex align-items-center">
+                                                        <span><i class="ti ti-square-rounded text-purple me-2"></i></span>
+                                                        <h5 class="fw-semibold">High</h5>
+                                                        <span class="badge bg-light rounded-pill ms-2">{{ $high_todo->count() }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-8 col-sm-6">
-                                    <div class="d-flex align-items-center justify-content-sm-end">
-                                        <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#add_todo"><i class="ti ti-circle-plus me-2"></i>Add New</a>
-                                        <a href="#" class="btn btn-outline-light border">See All <i class="ti ti-arrow-right ms-2"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="collapseSix" class="accordion-collapse collapse show" aria-labelledby="headingSix">
-                                <div class="accordion-body">
-                                    <div class="list-group list-group-flush">
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-6 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox">
-                                                        </div>
-                                                        <span class="me-2 rating-select d-flex align-items-center"><i class="ti ti-star-filled filled"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Finalize project proposal</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>15 Jan 2025</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-success me-3">Projects</span>
-                                                        <span class="badge bg-soft-pink d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Onhold</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-13.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-14.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-15.jpg" alt="img">
-                                                                </span>
-                                                            </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+
+                                    @if(auth("admin")->user()->can("create.todo"))
+                                        <div class="col-lg-8 col-sm-6">
+                                            <div class="d-flex align-items-center justify-content-sm-end">
+                                                <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-2"></i>Add New</a>
                                             </div>
                                         </div>
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-6 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox">
-                                                        </div>
-                                                        <span class="me-2 rating-select d-flex align-items-center"><i class="ti ti-star"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Submit to supervisor by EOD</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>25 May 2024</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-danger me-3">Internal</span>
-                                                        <span class="badge bg-transparent-purple d-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Inprogress</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-20.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-21.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-22.jpg" alt="img">
-                                                                </span>
-                                                            </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-6 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3 todo-strike-content">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox" checked>
-                                                        </div>
-                                                        <span class="me-2 rating-select d-flex align-items-center"><i class="ti ti-star"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Prepare presentation slides</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>15 Jan 2025</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-secondary me-3">Reminder</span>
-                                                        <span class="badge badge-secondary-transparent d-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Pending</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-23.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-24.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-25.jpg" alt="img">
-                                                                </span>
-                                                            </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
+                                    @endif
+                                </div>
+
+
+                                <div id="collapseSix" class="accordion-collapse collapse show" aria-labelledby="headingSix">
+                                    <div class="accordion-body">
+                                        <div class="list-group list-group-flush">
+                                            @foreach ($high_todo as $row)
+                                                <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
+                                                    <div class="row align-items-center row-gap-3">
+                                                        <div class="col-lg-6 col-md-7">
+                                                            <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3 
+                                                            @if( $row->todo_cross == 1 ) todo-strike-content @endif
+                                                            ">
+                                                                <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
+                                                                
+                                                                <div class="form-check form-check-md me-2">
+                                                                    <input class="form-check-input todo-cross-input" 
+                                                                        type="checkbox"
+                                                                        data-id={{ $row->id }}
+                                                                        data-cross="{{ $row->todo_cross }}"
+                                                                        @if ( $row->todo_cross == 1 )
+                                                                            checked       
+                                                                        @endif
+                                                                    >
+                                                                </div>
+
+                                                                @if ( $row->important == 1 )
+                                                                    <a href="javascript:void(0);" 
+
+                                                                    @if(auth("admin")->user()->can("important.todo"))
+                                                                        data-id="{{ $row->id }}" 
+                                                                        data-important="{{ $row->important }}"
+                                                                    @endif
+
+                                                                    class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled filled"></i></a>
+                                                                @else
+                                                                    <a href="javascript:void(0);"
+
+                                                                    @if(auth("admin")->user()->can("important.todo"))
+                                                                        data-id="{{ $row->id }}" 
+                                                                        data-important="{{ $row->important }}"
+                                                                    @endif
+
+                                                                    class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled"></i></a>
+                                                                @endif
+                                                                
+
+                                                                <div class="strike-info">
+                                                                    <h4 class="fs-14">{{ $row->title }}</h4>
+                                                                </div>
+
+                                                                <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>{{ \Carbon\Carbon::parse($row->created_at)->format('d M Y') }}</span>
                                                             </div>
                                                         </div>
+
+                                                        <div class="col-lg-6 col-md-5">
+                                                            <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
+
+                                                                @if ( $row->tag === 'social' )
+                                                                    <span class="badge badge-info me-3">Social</span>
+                                                                @elseif ( $row->tag === 'meeting' )
+                                                                    <span class="badge badge-purple me-3">Meeting</span>
+                                                                @elseif ( $row->tag === 'internal' )
+                                                                    <span class="badge badge-danger me-3">Internal</span>
+                                                                @elseif ( $row->tag === 'projects' )
+                                                                    <span class="badge badge-success me-3">Projects</span>
+                                                                @elseif ( $row->tag === 'research' )
+                                                                    <span class="badge badge-pink me-3">Research</span>
+                                                                @elseif ( $row->tag === 'reminder' )
+                                                                    <span class="badge badge-secondary me-3">Reminder</span>
+                                                                @endif
+
+
+                                                                @if ( $row->priority_status == 1 )
+
+                                                                    <span class="badge badge-soft-success badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Completed</span>
+
+                                                                @elseif ( $row->priority_status == 2 )
+
+                                                                    <span class="badge badge-soft-secondary badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Pending</span>
+
+                                                                @elseif ( $row->priority_status == 3 )
+
+                                                                    <span class="badge badge-soft-pink shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Onhold</span>
+
+                                                                @elseif ( $row->priority_status == 4 )
+
+                                                                    <span class="badge badge-soft-indigo shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Inprogress</span>
+                                                                    
+                                                                @endif
+
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="avatar-list-stacked avatar-group-sm">
+
+                                                                        @if ( !empty($row->image) && $row->image )
+                                                                            <span class="avatar avatar-rounded">
+                                                                                <img class="border border-white" src="{{ asset($row->image) }}" alt="img">
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="avatar avatar-rounded">
+                                                                                <img class="border border-white" src="{{ asset('public/admin/assets/img/profiles/avatar-13.jpg') }}" alt="img">
+                                                                            </span>
+                                                                        @endif
+                                                                        
+                                                                    </div>
+
+
+                                                                    <div class="dropdown ms-2">
+                                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                                                            <i class="ti ti-dots-vertical"></i>
+                                                                        </a>
+                                                                        <ul class="dropdown-menu dropdown-menu-end p-3">
+                                                                            @if(auth("admin")->user()->can("update.todo"))
+                                                                                <li>
+                                                                                    <a href="javascript:void(0);" class="dropdown-item rounded-1" id="editButton"
+                                                                                    data-id="{{ $row->id }}"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#editModal"><i class="ti ti-edit me-2"></i>Edit</a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            @if(auth("admin")->user()->can("delete.todo"))
+                                                                                <li>
+                                                                                    <a href="javascript:void(0);" class="dropdown-item rounded-1" 
+                                                                                    data-id="{{ $row->id }}" 
+                                                                                    id="deleteBtn"><i class="ti ti-trash me-2"></i>Delete</a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            <li>
+                                                                                <a href="javascript:void(0);" class="dropdown-item rounded-1" id="viewButton"
+                                                                                data-id="{{ $row->id }}" data-bs-toggle="modal" data-bs-target="#viewModal"><i class="ti ti-eye me-2"></i>View</a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
 
                 {{-- Medium Priority --}}
-                <div class="tab-pane fade" id="pills-medium" role="tabpanel">
-                    <div class="accordion todo-accordion">
-                        <div class="accordion-item border-0 mb-3">
-                            <div class="row align-items-center mb-3 row-gap-3">
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="accordion-header" id="headingSeven">
-                                        <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-controls="collapseSeven">
-                                            <div class="d-flex align-items-center w-100">
-                                                <div class="me-2">
-                                                    <a href="javascript:void(0);">
-                                                        <span><i class="fas fa-chevron-down"></i></span>
-                                                    </a>
-                                                </div>
-                                                <div class="d-flex align-items-center">
-                                                    <span><i class="ti ti-square-rounded text-warning me-2"></i></span>
-                                                    <h5 class="fw-semibold">Medium</h5>
-                                                    <span class="badge bg-light rounded-pill ms-2">05</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-8 col-sm-6">
-                                    <div class="d-flex align-items-center justify-content-sm-end">
-                                        <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#add_todo"><i class="ti ti-circle-plus me-2"></i>Add New</a>
-                                        <a href="#" class="btn btn-outline-light border">See All <i class="ti ti-arrow-right ms-2"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="collapseSeven" class="accordion-collapse collapse show" aria-labelledby="headingSeven">
-                                <div class="accordion-body">
-                                    <div class="list-group list-group-flush">
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-6 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox">
-                                                        </div>
-                                                        <span class="me-2 rating-select d-flex align-items-center"><i class="ti ti-star"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Check and respond to emails</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>Tomorrow</span>
+                @if ( $medium_todo->count() > 0 )
+                    <div class="tab-pane fade" id="pills-medium" role="tabpanel">
+                        <div class="accordion todo-accordion">
+                            <div class="accordion-item border-0 mb-3">
+                                <div class="row align-items-center mb-3 row-gap-3">
+                                    <div class="col-lg-4 col-sm-6">
+                                        <div class="accordion-header" id="headingSeven">
+                                            <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-controls="collapseSeven">
+                                                <div class="d-flex align-items-center w-100">
+                                                    <div class="me-2">
+                                                        <a href="javascript:void(0);">
+                                                            <span><i class="fas fa-chevron-down"></i></span>
+                                                        </a>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-secondary me-3">Reminder</span>
-                                                        <span class="badge badge-soft-success align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Completed</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-28.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-29.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-24.jpg" alt="img">
-                                                                </span>
-                                                            </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
+                                                    <div class="d-flex align-items-center">
+                                                        <span><i class="ti ti-square-rounded text-warning me-2"></i></span>
+                                                        <h5 class="fw-semibold">Medium</h5>
+                                                        <span class="badge bg-light rounded-pill ms-2">{{ $medium_todo->count() }}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-6 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox">
-                                                        </div>
-                                                        <span class="me-2 rating-select d-flex align-items-center"><i class="ti ti-star"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Coordinate with department head on progress</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>25 May 2024</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-danger me-3">Internal</span>
-                                                        <span class="badge bg-transparent-purple d-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Inprogress</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-06.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-09.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-14.jpg" alt="img">
-                                                                </span>
-                                                            </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                    </div>
+
+                                    @if(auth("admin")->user()->can("create.todo"))
+                                        <div class="col-lg-8 col-sm-6">
+                                            <div class="d-flex align-items-center justify-content-sm-end">
+                                                <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-2"></i>Add New</a>
                                             </div>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div id="collapseSeven" class="accordion-collapse collapse show" aria-labelledby="headingSeven">
+                                    <div class="accordion-body">
+                                        <div class="list-group list-group-flush">
+                                            @foreach ($medium_todo as $row)
+                                                <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
+                                                    <div class="row align-items-center row-gap-3">
+                                                        <div class="col-lg-6 col-md-7">
+                                                            <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3 
+                                                            @if( $row->todo_cross == 1 ) todo-strike-content @endif
+                                                            ">
+                                                                <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
+                                                                
+                                                                <div class="form-check form-check-md me-2">
+                                                                    <input class="form-check-input todo-cross-input" 
+                                                                        type="checkbox"
+                                                                        data-id={{ $row->id }}
+                                                                        data-cross="{{ $row->todo_cross }}"
+                                                                        @if ( $row->todo_cross == 1 )
+                                                                            checked       
+                                                                        @endif
+                                                                    >
+                                                                </div>
+
+                                                                @if ( $row->important == 1 )
+                                                                    <a href="javascript:void(0);" 
+
+                                                                    @if(auth("admin")->user()->can("important.todo"))
+                                                                        data-id="{{ $row->id }}" 
+                                                                        data-important="{{ $row->important }}"
+                                                                    @endif
+
+                                                                    class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled filled"></i></a>
+                                                                @else
+                                                                    <a href="javascript:void(0);"
+
+                                                                    @if(auth("admin")->user()->can("important.todo"))
+                                                                        data-id="{{ $row->id }}" 
+                                                                        data-important="{{ $row->important }}"
+                                                                    @endif
+
+                                                                    class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled"></i></a>
+                                                                @endif
+                                                                
+
+                                                                <div class="strike-info">
+                                                                    <h4 class="fs-14">{{ $row->title }}</h4>
+                                                                </div>
+
+                                                                <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>{{ \Carbon\Carbon::parse($row->created_at)->format('d M Y') }}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-6 col-md-5">
+                                                            <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
+
+                                                                @if ( $row->tag === 'social' )
+                                                                    <span class="badge badge-info me-3">Social</span>
+                                                                @elseif ( $row->tag === 'meeting' )
+                                                                    <span class="badge badge-purple me-3">Meeting</span>
+                                                                @elseif ( $row->tag === 'internal' )
+                                                                    <span class="badge badge-danger me-3">Internal</span>
+                                                                @elseif ( $row->tag === 'projects' )
+                                                                    <span class="badge badge-success me-3">Projects</span>
+                                                                @elseif ( $row->tag === 'research' )
+                                                                    <span class="badge badge-pink me-3">Research</span>
+                                                                @elseif ( $row->tag === 'reminder' )
+                                                                    <span class="badge badge-secondary me-3">Reminder</span>
+                                                                @endif
+
+
+                                                                @if ( $row->priority_status == 1 )
+
+                                                                    <span class="badge badge-soft-success badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Completed</span>
+
+                                                                @elseif ( $row->priority_status == 2 )
+
+                                                                    <span class="badge badge-soft-secondary badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Pending</span>
+
+                                                                @elseif ( $row->priority_status == 3 )
+
+                                                                    <span class="badge badge-soft-pink shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Onhold</span>
+
+                                                                @elseif ( $row->priority_status == 4 )
+
+                                                                    <span class="badge badge-soft-indigo shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Inprogress</span>
+                                                                    
+                                                                @endif
+
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="avatar-list-stacked avatar-group-sm">
+
+                                                                        @if ( !empty($row->image) && $row->image )
+                                                                            <span class="avatar avatar-rounded">
+                                                                                <img class="border border-white" src="{{ asset($row->image) }}" alt="img">
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="avatar avatar-rounded">
+                                                                                <img class="border border-white" src="{{ asset('public/admin/assets/img/profiles/avatar-13.jpg') }}" alt="img">
+                                                                            </span>
+                                                                        @endif
+                                                                        
+                                                                    </div>
+
+
+                                                                    <div class="dropdown ms-2">
+                                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                                                            <i class="ti ti-dots-vertical"></i>
+                                                                        </a>
+                                                                        <ul class="dropdown-menu dropdown-menu-end p-3">
+                                                                            @if(auth("admin")->user()->can("update.todo"))
+                                                                                <li>
+                                                                                    <a href="javascript:void(0);" class="dropdown-item rounded-1" id="editButton"
+                                                                                    data-id="{{ $row->id }}"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#editModal"><i class="ti ti-edit me-2"></i>Edit</a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            @if(auth("admin")->user()->can("delete.todo"))
+                                                                                <li>
+                                                                                    <a href="javascript:void(0);" class="dropdown-item rounded-1" 
+                                                                                    data-id="{{ $row->id }}" 
+                                                                                    id="deleteBtn"><i class="ti ti-trash me-2"></i>Delete</a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            <li>
+                                                                                <a href="javascript:void(0);" class="dropdown-item rounded-1" id="viewButton"
+                                                                                data-id="{{ $row->id }}" data-bs-toggle="modal" data-bs-target="#viewModal"><i class="ti ti-eye me-2"></i>View</a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
 
                  {{-- Low Priority --}}
-                <div class="tab-pane fade" id="pills-low" role="tabpanel">
-                    <div class="accordion todo-accordion">
-                        <div class="accordion-item border-0 mb-3">
-                            <div class="row align-items-center mb-3 row-gap-3">
-                                <div class="col-lg-4 col-sm-6">
-                                    <div class="accordion-header" id="headingEight">
-                                        <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-controls="collapseEight">
-                                            <div class="d-flex align-items-center w-100">
-                                                <div class="me-2">
-                                                    <a href="javascript:void(0);">
-                                                        <span><i class="fas fa-chevron-down"></i></span>
-                                                    </a>
-                                                </div>
-                                                <div class="d-flex align-items-center">
-                                                    <span><i class="ti ti-square-rounded text-success me-2"></i></span>
-                                                    <h5 class="fw-semibold">Low</h5>
-                                                    <span class="badge bg-light rounded-pill ms-2">24</span>
+                 @if ( $low_todo->count() > 0 )
+                    <div class="tab-pane fade" id="pills-low" role="tabpanel">
+                        <div class="accordion todo-accordion">
+                            <div class="accordion-item border-0 mb-3">
+                                <div class="row align-items-center mb-3 row-gap-3">
+                                    <div class="col-lg-4 col-sm-6">
+                                        <div class="accordion-header" id="headingEight">
+                                            <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-controls="collapseEight">
+                                                <div class="d-flex align-items-center w-100">
+                                                    <div class="me-2">
+                                                        <a href="javascript:void(0);">
+                                                            <span><i class="fas fa-chevron-down"></i></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="d-flex align-items-center">
+                                                        <span><i class="ti ti-square-rounded text-success me-2"></i></span>
+                                                        <h5 class="fw-semibold">Low</h5>
+                                                        <span class="badge bg-light rounded-pill ms-2">{{ $low_todo->count() }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-8 col-sm-6">
-                                    <div class="d-flex align-items-center justify-content-sm-end">
-                                        <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#add_todo"><i class="ti ti-circle-plus me-2"></i>Add New</a>
-                                        <a href="#" class="btn btn-outline-light border">See All <i class="ti ti-arrow-right ms-2"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="collapseEight" class="accordion-collapse collapse show" aria-labelledby="headingEight">
-                                <div class="accordion-body">
-                                    <div class="list-group list-group-flush">
-                                        <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
-                                            <div class="row align-items-center row-gap-3">
-                                                <div class="col-lg-6 col-md-7">
-                                                    <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3">
-                                                        <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
-                                                        <div class="form-check form-check-md me-2">
-                                                            <input class="form-check-input" type="checkbox">
-                                                        </div>
-                                                        <span class="me-2 rating-select d-flex align-items-center"><i class="ti ti-star"></i></span>
-                                                        <div class="strike-info">
-                                                            <h4 class="fs-14">Plan tasks for the next day</h4>
-                                                        </div>
-                                                        <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>Today</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-5">
-                                                    <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
-                                                        <span class="badge badge-info me-3">Social</span>
-                                                        <span class="badge badge-soft-secondary d-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Pending</span>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-list-stacked avatar-group-sm">
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-28.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-29.jpg" alt="img">
-                                                                </span>
-                                                                <span class="avatar avatar-rounded">
-                                                                    <img class="border border-white" src="assets/img/profiles/avatar-24.jpg" alt="img">
-                                                                </span>
-                                                            </div>
-                                                            <div class="dropdown ms-2">
-                                                                <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end p-3">
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#edit_todo"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete-note-units"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:void(0);" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#view-note-units"><i class="ti ti-eye me-2"></i>View</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+
+                                    @if(auth("admin")->user()->can("create.todo"))
+                                        <div class="col-lg-8 col-sm-6">
+                                            <div class="d-flex align-items-center justify-content-sm-end">
+                                                <a href="#" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-2"></i>Add New</a>
                                             </div>
+                                        </div>
+                                    @endif
+                                </div>  
+                                <div id="collapseEight" class="accordion-collapse collapse show" aria-labelledby="headingEight">
+                                    <div class="accordion-body">
+                                        <div class="list-group list-group-flush">
+                                            @foreach ($low_todo as $row)
+                                                <div class=" list-item-hover shadow-sm rounded mb-2 p-3">
+                                                    <div class="row align-items-center row-gap-3">
+                                                        <div class="col-lg-6 col-md-7">
+                                                            <div class="todo-inbox-check d-flex align-items-center flex-wrap row-gap-3 
+                                                            @if( $row->todo_cross == 1 ) todo-strike-content @endif
+                                                            ">
+                                                                <span class="me-2 d-flex align-items-center"><i class="ti ti-grid-dots text-dark"></i></span>
+                                                                
+                                                                <div class="form-check form-check-md me-2">
+                                                                    <input class="form-check-input todo-cross-input" 
+                                                                        type="checkbox"
+                                                                        data-id={{ $row->id }}
+                                                                        data-cross="{{ $row->todo_cross }}"
+                                                                        @if ( $row->todo_cross == 1 )
+                                                                            checked       
+                                                                        @endif
+                                                                    >
+                                                                </div>
+
+                                                                @if ( $row->important == 1 )
+                                                                    <a href="javascript:void(0);" 
+
+                                                                    @if(auth("admin")->user()->can("important.todo"))
+                                                                        data-id="{{ $row->id }}" 
+                                                                        data-important="{{ $row->important }}"
+                                                                    @endif
+
+                                                                    class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled filled"></i></a>
+                                                                @else
+                                                                    <a href="javascript:void(0);"
+
+                                                                    @if(auth("admin")->user()->can("important.todo"))
+                                                                        data-id="{{ $row->id }}" 
+                                                                        data-important="{{ $row->important }}"
+                                                                    @endif
+
+                                                                    class="me-2 important d-flex align-items-center rating-select"><i class="ti ti-star-filled"></i></a>
+                                                                @endif
+                                                                
+
+                                                                <div class="strike-info">
+                                                                    <h4 class="fs-14">{{ $row->title }}</h4>
+                                                                </div>
+
+                                                                <span class="badge bg-transparent-dark text-dark border border-dark rounded ms-2"><i class="ti ti-calendar me-1"></i>{{ \Carbon\Carbon::parse($row->created_at)->format('d M Y') }}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-6 col-md-5">
+                                                            <div class="d-flex align-items-center justify-content-md-end flex-wrap row-gap-3">
+
+                                                                @if ( $row->tag === 'social' )
+                                                                    <span class="badge badge-info me-3">Social</span>
+                                                                @elseif ( $row->tag === 'meeting' )
+                                                                    <span class="badge badge-purple me-3">Meeting</span>
+                                                                @elseif ( $row->tag === 'internal' )
+                                                                    <span class="badge badge-danger me-3">Internal</span>
+                                                                @elseif ( $row->tag === 'projects' )
+                                                                    <span class="badge badge-success me-3">Projects</span>
+                                                                @elseif ( $row->tag === 'research' )
+                                                                    <span class="badge badge-pink me-3">Research</span>
+                                                                @elseif ( $row->tag === 'reminder' )
+                                                                    <span class="badge badge-secondary me-3">Reminder</span>
+                                                                @endif
+
+
+                                                                @if ( $row->priority_status == 1 )
+
+                                                                    <span class="badge badge-soft-success badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Completed</span>
+
+                                                                @elseif ( $row->priority_status == 2 )
+
+                                                                    <span class="badge badge-soft-secondary badge-xs shadow-none d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Pending</span>
+
+                                                                @elseif ( $row->priority_status == 3 )
+
+                                                                    <span class="badge badge-soft-pink shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Onhold</span>
+
+                                                                @elseif ( $row->priority_status == 4 )
+
+                                                                    <span class="badge badge-soft-indigo shadow-none badge-xs d-inline-flex align-items-center me-3"><i class="fas fa-circle fs-6 me-1"></i>Inprogress</span>
+                                                                    
+                                                                @endif
+
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="avatar-list-stacked avatar-group-sm">
+
+                                                                        @if ( !empty($row->image) && $row->image )
+                                                                            <span class="avatar avatar-rounded">
+                                                                                <img class="border border-white" src="{{ asset($row->image) }}" alt="img">
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="avatar avatar-rounded">
+                                                                                <img class="border border-white" src="{{ asset('public/admin/assets/img/profiles/avatar-13.jpg') }}" alt="img">
+                                                                            </span>
+                                                                        @endif
+                                                                        
+                                                                    </div>
+
+
+                                                                    <div class="dropdown ms-2">
+                                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                                                            <i class="ti ti-dots-vertical"></i>
+                                                                        </a>
+                                                                        <ul class="dropdown-menu dropdown-menu-end p-3">
+                                                                            @if(auth("admin")->user()->can("update.todo"))
+                                                                                <li>
+                                                                                    <a href="javascript:void(0);" class="dropdown-item rounded-1" id="editButton"
+                                                                                    data-id="{{ $row->id }}"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#editModal"><i class="ti ti-edit me-2"></i>Edit</a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            @if(auth("admin")->user()->can("delete.todo"))
+                                                                                <li>
+                                                                                    <a href="javascript:void(0);" class="dropdown-item rounded-1" 
+                                                                                    data-id="{{ $row->id }}" 
+                                                                                    id="deleteBtn"><i class="ti ti-trash me-2"></i>Delete</a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            <li>
+                                                                                <a href="javascript:void(0);" class="dropdown-item rounded-1" id="viewButton"
+                                                                                data-id="{{ $row->id }}" data-bs-toggle="modal" data-bs-target="#viewModal"><i class="ti ti-eye me-2"></i>View</a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
 
-
-            <div class="text-center">
-                <a href="#" class="btn btn-primary"><i class="ti ti-loader me-2"></i>Load More</a>
-            </div>
         </div>
     </div>
 
@@ -1597,6 +1912,11 @@
                 var important = $(this).data('important');
                 // console.log(id, important);
 
+               // Only proceed if both values exist
+                if (!id || typeof important === "undefined") {
+                    return; // stop execution, no ajax call
+                }
+
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.todo.important') }}",
@@ -1633,6 +1953,32 @@
 
                 })
             })
+
+
+            // Todo Cross Updates
+            document.querySelectorAll('.todo-cross-input').forEach((checkbox) => {
+                checkbox.addEventListener('change', function () {
+                    let id = this.getAttribute('data-id');
+                    let cross = this.getAttribute('data-cross');
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url('admin/todo/cross') }}/" + id ,
+                        data: {
+                            // '_token': token,
+                            id: id,
+                            cross: cross
+                        },
+                        success: function (res) {
+                            console.log(res);
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+
+                    })
+                })
+            });
 
 
             // View Data

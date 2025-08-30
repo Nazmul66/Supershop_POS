@@ -36,21 +36,23 @@ class TodoController extends Controller
 
         $high_todo = Todo::leftJoin('admins', 'admins.id', 'todos.assign_user_id')
                      ->select('todos.*', 'admins.image')
-                     ->where('todos.important', 1)
-                     ->where('todos.status', 1)
+                     ->where('todos.priority', '=', 'high')
                      ->get();
 
         $low_todo  = Todo::leftJoin('admins', 'admins.id', 'todos.assign_user_id')
                       ->select('todos.*', 'admins.image')
-                      ->where('todos.status', 0)
+                      ->where('todos.priority', '=', 'low')
                       ->get();
 
         $medium_todo = Todo::leftJoin('admins', 'admins.id', 'todos.assign_user_id')
                      ->select('todos.*', 'admins.image')
-                     ->where('todos.status', 0)
+                     ->where('todos.priority', '=', 'medium')
                      ->get();
 
-        $admin_list = Admin::where('email', '!=', 'mainAdmin@gmail.com')->get();
+        $admin_list      = Admin::where('email', '!=', 'mainAdmin@gmail.com')->get();
+        $pending_todo    = Todo::where('priority_status', '2')->count();
+        $complete_todo   = Todo::where('priority_status', '1')->count();
+        $all_todo        = Todo::all();
 
         return view('admin.pages.todo_list.index',[
             'admin_list'       =>  $admin_list,
@@ -58,13 +60,16 @@ class TodoController extends Controller
             'high_todo'        =>  $high_todo,
             'medium_todo'      =>  $medium_todo,
             'low_todo'         =>  $low_todo,
+            'pending_todo'     =>  $pending_todo,
+            'complete_todo'    =>  $complete_todo,
+            'all_todo'         =>  $all_todo,
         ]);
     }
 
     public function changeImportantStatus(Request $request)
     {
-        if (!$this->user || !$this->user->can('important.note')) {
-            throw UnauthorizedException::forPermissions(['important.note']);
+        if (!$this->user || !$this->user->can('important.todo')) {
+            throw UnauthorizedException::forPermissions(['important.todo']);
         }
 
         $id = $request->id;
@@ -83,13 +88,33 @@ class TodoController extends Controller
         return response()->json(['message' => 'success', 'status' => $status, 'id' => $id]);
     }
 
+    
+    public function todoCross(Request $request)
+    {
+        // dd($request->all());
+        $id = $request->id;
+        $todo_cross = $request->cross;
+
+        if ($todo_cross == 1) {
+            $status = 0;
+        } else {
+            $status = 1;
+        }
+
+        $page = Todo::findOrFail($id);
+        $page->todo_cross = $status;
+        $page->save();
+
+        return response()->json(['message' => 'success', 'status' => $status, 'id' => $id]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(CreateTodoRequest $request)
     {
-        if (!$this->user || !$this->user->can('create.note')) {
-            throw UnauthorizedException::forPermissions(['create.note']);
+        if (!$this->user || !$this->user->can('create.todo')) {
+            throw UnauthorizedException::forPermissions(['create.todo']);
         }
   
         // dd($request->all());
@@ -135,8 +160,8 @@ class TodoController extends Controller
      */
     public function edit(Todo $todo)
     {
-        if (!$this->user || !$this->user->can('update.note')) {
-            throw UnauthorizedException::forPermissions(['update.note']);
+        if (!$this->user || !$this->user->can('update.todo')) {
+            throw UnauthorizedException::forPermissions(['update.todo']);
         }
 
         // dd($todo);
@@ -148,8 +173,8 @@ class TodoController extends Controller
      */
     public function update(UpdateTodoRequest $request, $id)
     {
-        if (!$this->user || !$this->user->can('update.note')) {
-            throw UnauthorizedException::forPermissions(['update.note']);
+        if (!$this->user || !$this->user->can('update.todo')) {
+            throw UnauthorizedException::forPermissions(['update.todo']);
         }
   
         // dd($request->all());
@@ -185,8 +210,8 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        if (!$this->user || !$this->user->can('delete.note')) {
-            throw UnauthorizedException::forPermissions(['delete.note']);
+        if (!$this->user || !$this->user->can('delete.todo')) {
+            throw UnauthorizedException::forPermissions(['delete.todo']);
         }
 
         $todo->delete();
@@ -201,13 +226,20 @@ class TodoController extends Controller
         // dd($todo);
 
         $tag = '';
-        if ($todo->tag === 'personal') {
-            $tag = 'Personal';
-        } elseif( $todo->tag === 'social' ) {
-            $tag = 'Social';
-        } elseif( $todo->tag === 'work' ) {
-            $tag = 'Work';
+        if ($todo->tag === 'social') {
+            $tag = '<span class="badge badge-info me-3">Social</span>';
+        } elseif( $todo->tag === 'meeting' ) {
+            $tag = '<span class="badge badge-purple me-3">Meeting</span>';
+        } elseif( $todo->tag === 'projects' ) {
+            $tag = '<span class="badge badge-success me-3">Projects</span>';
+        } elseif( $todo->tag === 'research' ) {
+            $tag = '<span class="badge badge-pink me-3">Research</span>';
+        } elseif( $todo->tag === 'internal' ) {
+            $tag = '<span class="badge badge-danger me-3">Internal</span>';
+        } elseif( $todo->tag === 'reminder' ) {
+            $tag = '<span class="badge badge-secondary me-3">Reminder</span>';
         }
+
 
         $priority = '';
         if ($todo->priority === 'low') {

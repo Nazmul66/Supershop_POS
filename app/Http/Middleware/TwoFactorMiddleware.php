@@ -4,11 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
-class Admin
+class TwoFactorMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,17 +16,16 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::guard('admin')->check()) {
-            return redirect()->route('admin.login');
-        }
-    
         $admin = Auth::guard('admin')->user();
-    
-        // If still has a 2FA code pending → force verify
-        if ($admin->two_factor_code) {
-            return redirect()->route('verify');
+
+        // If logged in but not verified with 2FA
+        if ($admin && $admin->two_factor_code) {
+            // Prevent access to all admin routes except verification routes
+            if (!$request->routeIs('verify')) {
+                return redirect()->route('verify');
+            }
         }
-    
+
         return $next($request);
     }
 }

@@ -42,9 +42,10 @@ use Illuminate\Support\Facades\Session;
 
 
 Route::get('/admin/logout', [AdminController::class, "logout"])->name('admin.logout');
-Route::match(["get", "post"], '/admin/login', [AdminController::class, "login"])->name('admin.login'); // login page
+Route::match(["get", "post"], '/admin/login', [AdminController::class, "login"])->name('admin.login')->middleware('guest:admin'); // login page
+Route::get('/verify', [AdminController::class, "verify"])->name('verify');
 
-Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admin', 'role:SuperAdmin|Admin']], function () {
+Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admin', 'twoFactor', 'role:SuperAdmin|Admin']], function () {
     
     Route::get('/cc', [AdminController::class, "cacheClear"])->name('cacheClear');
     Route::get('/dashboard', [AdminController::class, "dashboard"])->name('dashboard');

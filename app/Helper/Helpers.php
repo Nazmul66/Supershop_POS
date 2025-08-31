@@ -32,6 +32,17 @@ if (!function_exists('getSetting')) {
       }
   }
 
+
+  function maskEmail($email) {
+      [$name, $domain] = explode('@', $email);
+
+      // Show only the last 3 characters of the name
+      $maskedName = str_repeat('*', max(0, strlen($name) - 3)) . substr($name, -3);
+
+      return $maskedName . '@' . $domain;
+  }
+
+
   if (!function_exists('isActive')) {
     function isActive($routeName)
     {

@@ -113,9 +113,20 @@ class AdminController extends Controller
 
            $request->validate($rules, $customMessage);
 
-           if( $admin = Auth::guard('admin')->attempt(["email" => $data['email'], "password" => $data['password']]) ){
-                Toastr::success('Login Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-                return redirect('/admin/dashboard');
+           if( Auth::guard('admin')->attempt(["email" => $data['email'], "password" => $data['password']]) ){
+ 
+                $admin = Auth::guard('admin')->user();
+
+                $admin->two_factor_code       = rand(1000, 9999);
+                $admin->two_factor_expire_at  = now()->addMinutes(10);
+                $admin->save();
+
+                // Force user to verify before dashboard
+                Toastr::info('Please verify your account', 'Verification Required', ["positionClass" => "toast-top-right"]);
+                return redirect()->route('verify'); // <- send to verify page
+
+                // Toastr::success('Login Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+                // return redirect('/admin/dashboard');
            }
            else{
                 Toastr::error('Invalid Email or Password', 'Error', ["positionClass" => "toast-top-right"]);
@@ -257,5 +268,10 @@ class AdminController extends Controller
         return response()->json([
             'match' => Hash::check($request->current_password, Auth::guard('admin')->user()->password)
         ]);
+    }
+
+    public function verify()
+    {
+        return view('admin.pages.auth.two_step_authentication');
     }
 }

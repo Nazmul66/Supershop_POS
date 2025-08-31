@@ -14,12 +14,14 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("type");
+            $table->string("type")->nullable();
             $table->string("phone");
             $table->string("email")->unique();
             $table->string("password");
             $table->string("image")->nullable();
-            $table->tinyInteger("status");
+            $table->tinyInteger("status")->default(1)->nullable();
+            $table->string("two_factor_code")->nullable();
+            $table->dateTime("two_factor_expire_at")->nullable();
             $table->timestamps();
         });
     }

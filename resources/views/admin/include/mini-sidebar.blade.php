@@ -15,9 +15,9 @@
                                 <li><a href="general-settings.html">Profile</a></li>
                                 <li><a href="security-settings.html">Security</a></li>
                                 <li><a href="notification.html">Notifications</a></li>
-                                <li><a href="connected-apps.html">Connected Apps</a></li>
                             </ul>
                         </li>
+
                         <li class="submenu">
                             <a href="javascript:void(0);">
                                 <i class="ti ti-world fs-18"></i>
@@ -29,10 +29,57 @@
                                 <li><a href="company-settings.html">Company Settings </a></li>
                                 <li><a href="localization-settings.html">Localization</a></li>
                                 <li><a href="prefixes.html">Prefixes</a></li>
-                                <li><a href="preference.html">Preference</a></li>
-                                <li><a href="appearance.html">Appearance</a></li>
-                                <li><a href="social-authentication.html">Social Authentication</a></li>
                                 <li><a href="language-settings.html">Language</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="javascript:void(0);">
+                                <i class="ti ti-device-mobile fs-18"></i>
+                                <span class="fs-14 fw-medium ms-2">App Settings</span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul>
+                                <li><a href="invoice-settings.html">Invoice Settings</a></li>
+                                <li><a href="invoice-templates.html">Invoice Templates</a></li>
+                                <li><a href="printer-settings.html">Printer </a></li>
+                                <li><a href="pos-settings.html">POS</a></li>
+                                <li><a href="signatures.html">Signatures</a></li>
+                                <li><a href="custom-fields.html">Custom Fields</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="javascript:void(0);" class="active">
+                                <i class="ti ti-device-desktop fs-18"></i>
+                                <span class="fs-14 fw-medium ms-2">System Settings</span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul style="display: none;">
+                                <li class="submenu submenu-two"><a href="javascript:void(0);" class="active">Email<span class="menu-arrow inside-submenu"></span></a>
+                                    <ul style="display: none;">
+                                        <li><a href="email-settings.html" class="active">Email Settings</a></li>
+                                        <li><a href="email-templates.html">Email Templates</a></li>
+                                    </ul>
+                                </li>
+                                <li class="submenu submenu-two"><a href="javascript:void(0);">SMS<span class="menu-arrow inside-submenu"></span></a>
+                                    <ul>
+                                        <li><a href="sms-settings.html">SMS Settings</a></li>
+                                        <li><a href="sms-templates.html">SMS Templates</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="otp-settings.html">OTP</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="javascript:void(0);" class="">
+                                <i class="ti ti-settings-dollar fs-18"></i>
+                                <span class="fs-14 fw-medium ms-2">Financial Settings</span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul style="display: none;">
+                                <li><a href="tax-rates.html">Tax Rates</a></li>
                             </ul>
                         </li>
 

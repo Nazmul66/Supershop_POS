@@ -13,7 +13,7 @@
 		@stack('add-title')
 	</title>
 
-	<script src="{{ asset('public/admin/assets/js/theme-script.js') }}"></script>	
+	{{-- <script src="{{ asset('public/admin/assets/js/theme-script.js') }}"></script>	 --}}
 
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('public/admin/assets/img/favicon.png') }}">

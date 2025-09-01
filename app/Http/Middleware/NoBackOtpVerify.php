@@ -18,7 +18,7 @@ class NoBackOtpVerify
     {
         $admin = Auth::guard('admin')->user();
         if ( $admin->two_factor_code === null ) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->back();
         }
 
         return $next($request);

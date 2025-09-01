@@ -92,5 +92,9 @@
 
 @push('add-js')
 
+    <!-- Sticky-sidebar -->
+    <script src="{{ asset('public/admin/assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
+
 @endpush
 

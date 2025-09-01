@@ -164,9 +164,9 @@
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         console.log(res);
-                        if (res.status === true) {
-                            $('#confirmVerify')[0].reset();
+                        $('#confirmVerify')[0].reset();
 
+                        if (res.status === true) {
                             window.location.href = "{{ route('admin.dashboard') }}";
                         }
                         else{
@@ -197,6 +197,7 @@
                     url: "{{ route('verify.resend') }}",
                     success: function (res) {
                         verifyOtpCountDown(res.remainingSeconds);
+                        $('#confirmVerify')[0].reset();
 
                         if (res.status === true) {
                             toastr.info(res.message, "Success", {

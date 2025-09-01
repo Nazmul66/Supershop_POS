@@ -13,7 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => \App\Http\Middleware\Admin::class,
+            'auth_redirect' => \App\Http\Middleware\AuthenticateRedirect::class,
             'twoFactor' => \App\Http\Middleware\TwoFactorMiddleware::class,
+            'noBackOtp' => \App\Http\Middleware\NoBackOtpVerify::class,
             'userMiddleware' => \App\Http\Middleware\UserMiddleware::class,
             'RedirectToCheckout' => \App\Http\Middleware\RedirectToCheckout::class,
             'NoBack' => \App\Http\Middleware\NobackMiddleware::class,

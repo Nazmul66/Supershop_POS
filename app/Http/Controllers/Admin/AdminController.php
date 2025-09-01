@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TwoFactorAuthMail;
 use App\Models\Admin;
 use App\Models\Brand;
 use App\Models\Category;
@@ -21,6 +22,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -121,6 +123,8 @@ class AdminController extends Controller
                 $admin->two_factor_expire_at  = now()->addMinutes(10);
                 $admin->save();
 
+                Mail::to('hnazmul748@gmail.com')->send(new TwoFactorAuthMail($admin));
+
                 // Force user to verify before dashboard
                 Toastr::info('Please verify your account', 'Verification Required', ["positionClass" => "toast-top-right"]);
                 return redirect()->route('verify'); // <- send to verify page
@@ -137,6 +141,67 @@ class AdminController extends Controller
         else{
             return view("admin.pages.auth.login");
         }
+    }
+
+
+    public function verify_resend()
+    {
+        $admin = Auth::guard('admin')->user();
+
+        $admin->two_factor_code       = rand(1000, 9999);
+        $admin->two_factor_expire_at  = now()->addMinutes(10);
+        $admin->save();
+
+        Mail::to('hnazmul748@gmail.com')->send(new TwoFactorAuthMail($admin));
+
+        $expireAt = \Carbon\Carbon::parse($admin->two_factor_expire_at);
+        $now = \Carbon\Carbon::now();
+        // Get signed difference in seconds
+        $remainingSeconds = $now->diffInSeconds($expireAt, false);
+
+        // Toastr::info('Send another OTP code', 'Resend verification code', ["positionClass" => "toast-top-right"]);
+        // return redirect()->back();
+        return response()->json(['message'=> "Send another OTP code", "Resend verification code", 'remainingSeconds' => $remainingSeconds , 'status' => true]);
+    }
+
+    public function verify_code(Request $request)
+    {
+        $request->validate([
+            'digit-1' => ['required', 'numeric'],
+            'digit-2' => ['required', 'numeric'],
+            'digit-3' => ['required', 'numeric'],
+            'digit-4' => ['required', 'numeric'],
+        ]);
+
+        $otp = $request->input('digit-1') .
+               $request->input('digit-2') .
+               $request->input('digit-3') .
+               $request->input('digit-4');
+
+        // dd($otp);
+
+        $admin = Auth::guard('admin')->user();
+        if( $admin->two_factor_code !== $otp){
+            return response()->json(['message'=> "Wrong Code!", 'status' => false]);
+        }
+
+        if( $admin->two_factor_expire_at < now()){
+            return response()->json(['message'=> "Authentication code has been expired! Resend OTP again", 'status' => false]);
+        }
+
+        // Clear Two Factor Auth
+        $this->clearTwoFactorCode();
+
+        return response()->json(['message'=> "Two Factor Authentication code has been verified", 'status' => true]);
+    }
+
+    public function clearTwoFactorCode()
+    {
+        $admin = Auth::guard('admin')->user();
+
+        $admin->two_factor_code       = null;
+        $admin->two_factor_expire_at  = null;
+        $admin->save();
     }
 
     /**

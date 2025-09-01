@@ -42,8 +42,15 @@ use Illuminate\Support\Facades\Session;
 
 
 Route::get('/admin/logout', [AdminController::class, "logout"])->name('admin.logout');
-Route::match(["get", "post"], '/admin/login', [AdminController::class, "login"])->name('admin.login')->middleware('guest:admin'); // login page
-Route::get('/verify', [AdminController::class, "verify"])->name('verify');
+Route::match(["get", "post"], '/admin/login', [AdminController::class, "login"])->name('admin.login')->middleware('auth_redirect'); // login page
+
+// Two Step Authentication
+Route::middleware(['noBackOtp'])->group(function () {
+    Route::get('/verify', [AdminController::class, "verify"])->name('verify');
+    Route::get('/verify-resend', [AdminController::class, "verify_resend"])->name('verify.resend');
+    Route::post('verify-code', [AdminController::class, "verify_code"])->name('verify.code');
+});
+
 
 Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admin', 'twoFactor', 'role:SuperAdmin|Admin']], function () {
     

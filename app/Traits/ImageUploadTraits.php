@@ -11,8 +11,10 @@ trait ImageUploadTraits {
         if( $request->file($fileName) ){
             $images = $request->file($fileName);
 
-            $imageName          = $request->slug . rand(1, 99999999) . '.' . $images->getClientOriginalExtension();
-            $imagePath          = 'public/backend/images/' . $path . '/';
+            $imageName = now()->format('Ymd_His')   // timestamp
+                        . '_' . uniqid()           // unique ID
+                        . '.' . $images->getClientOriginalExtension();
+            $imagePath          = 'public/admin/images/' . $path . '/';
             $images->move($imagePath, $imageName);
 
             return $imagePath . $imageName;
@@ -32,8 +34,11 @@ trait ImageUploadTraits {
                     @unlink($existingImg); 
             }
 
-            $imageName          = ($request->slug ?? 'default') . rand(1, 99999999) . '.' . $images->getClientOriginalExtension();
-            $imagePath          = 'public/backend/images/' . $path . '/';
+            $imageName = now()->format('Ymd_His')   // timestamp
+                    . '_' . uniqid()           // unique ID
+                    . '.' . $images->getClientOriginalExtension();
+
+            $imagePath          = 'public/admin/images/' . $path . '/';
             $images->move($imagePath, $imageName);
 
             return $imagePath . $imageName;

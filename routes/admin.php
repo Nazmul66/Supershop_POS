@@ -159,7 +159,11 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::group(["as" => 'website-settings.',"prefix" => '/website-settings'], function () {
         
         Route::get('/system-settings', [WebsiteSetController::class, 'system_settings'])->name('system');
+
         Route::get('/company-settings', [WebsiteSetController::class, 'company_settings'])->name('company');
+        Route::put('/company-settings-update', [WebsiteSetController::class, 'company_update'])->name('company.update');
+
+
         Route::get('/localization', [WebsiteSetController::class, 'localization'])->name('localization');
         Route::get('/prefixes', [WebsiteSetController::class, 'prefixes'])->name('prefixes');
         Route::get('/language', [WebsiteSetController::class, 'language'])->name('language');

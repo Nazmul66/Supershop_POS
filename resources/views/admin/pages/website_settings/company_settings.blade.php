@@ -5,7 +5,23 @@
 @endpush
 
 @push('add-css')
-  
+  	<!-- Select2 CSS -->
+	<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/select2/css/select2.min.css') }}">
+
+	<style>
+		.select2-container .select2-selection--single {
+			height: calc(2.25rem + 2px); /* Same as .form-control */
+			padding: 0.375rem 0.75rem;   /* Same as input padding */
+			border: 1px solid #ced4da;   /* Bootstrap border */
+			border-radius: 0.375rem;     /* Bootstrap rounded corners */
+		}
+
+		/* Fix the arrow alignment */
+		.select2-container--default .select2-selection--single .select2-selection__arrow {
+			height: 100%;
+			right: 10px;
+		}
+	</style>
 @endpush
 
 {{-- Active sidebar --}}
@@ -44,7 +60,10 @@
 					<h4 class="fs-18 fw-bold">Company Settings</h4>
 				</div>
 				<div class="card-body">
-					<form action="company-settings.html">
+					<form action="{{ route('admin.website-settings.company.update') }}" method="POST" enctype="multipart/form-data">
+						@csrf
+						@method('PUT')
+						
 						<div class="border-bottom mb-3">
 							<div class="card-title-head">
 								<h6 class="fs-16 fw-bold mb-2">
@@ -58,7 +77,7 @@
 										<label class="form-label">
 											Company Name  <span class="text-danger">*</span>
 										</label>
-										<input type="text" class="form-control">
+										<input type="text" name="site_name" value="{{ old('site_name', $setting->site_name) }}" class="form-control">
 									</div>
 								</div>
 								<div class="col-xl-4 col-lg-6 col-md-4">
@@ -66,7 +85,7 @@
 										<label class="form-label">
 											Company Email Address  <span class="text-danger">*</span>
 										</label>
-										<input type="email" class="form-control">
+										<input type="email" name="email" value="{{ old('email', $setting->email) }}" class="form-control">
 									</div>
 								</div>
 								<div class="col-md-4">
@@ -74,7 +93,7 @@
 										<label class="form-label">
 											Phone Number <span class="text-danger">*</span>
 										</label>
-										<input type="text" class="form-control">
+										<input type="text" name="phone" value="{{ old('phone', $setting->phone) }}" class="form-control">
 									</div>
 								</div>
 								<div class="col-md-4">
@@ -82,7 +101,7 @@
 										<label class="form-label">
 											Fax <span class="text-danger">*</span>
 										</label>
-										<input type="text" class="form-control">
+										<input type="text" name="fax" value="{{ old('fax', $setting->fax) }}" class="form-control">
 									</div>
 								</div>
 								<div class="col-md-4">
@@ -90,11 +109,12 @@
 										<label class="form-label">
 											Website <span class="text-danger">*</span>
 										</label>
-										<input type="text" class="form-control">
+										<input type="link" name="website" value="{{ old('website', $setting->website) }}" class="form-control">
 									</div>
 								</div>
 							</div>
 						</div>
+
 						<div class="border-bottom mb-3 pb-3">
 							<div class="card-title-head">
 								<h6 class="fs-16 fw-bold mb-2">
@@ -116,7 +136,7 @@
 												<div class="new-employee-field">
 													<div class="mb-0">
 														<div class="image-upload mb-0">
-															<input type="file">
+															<input type="file" name="icon" id="iconInput" accept="image/png, image/jpeg, image/jpg, image/webp">
 															<div class="image-uploads">
 																<h4><i class="ti ti-upload me-1"></i>Upload Image</h4>
 															</div>
@@ -128,14 +148,21 @@
 										</div>
 									</div>
 								</div>
+
 								<div class="col-xl-3">
 									<div class="new-logo ms-xl-auto">
-										<a href="#">
-											<img src="assets/img/logo-small.png" alt="Logo">
-											<span><i class="ti ti-x"></i></span>
+										<a  href="javascript:void();" data-input="iconInput" data-preview="iconPreview" data-default="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}">
+											@if ( !empty($setting->icon) )
+												<img id="iconPreview" src="{{ asset($setting->icon) }}" alt="Logo">
+
+												
+											@else
+												<img id="iconPreview" src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" alt="Logo">
+											@endif
 										</a>
 									</div>
 								</div>
+
 								<div class="col-xl-9">
 									<div class="row gy-3 align-items-center">
 										<div class="col-lg-4">
@@ -149,7 +176,7 @@
 												<div class="new-employee-field">
 													<div class="mb-0">
 														<div class="image-upload mb-0">
-															<input type="file">
+															<input type="file" name="favicon" id="faviconInput"  accept="image/png, image/jpeg, image/jpg, image/webp">
 															<div class="image-uploads">
 																<h4><i class="ti ti-upload me-1"></i>Upload Image</h4>
 															</div>
@@ -161,14 +188,20 @@
 										</div>
 									</div>
 								</div>
+								
 								<div class="col-xl-3">
 									<div class="new-logo ms-xl-auto">
-										<a href="#">
-											<img src="assets/img/logo-small.png" alt="Logo">
-											<span><i class="ti ti-x"></i></span>
+										<a href="javascript:void(0);" data-input="faviconInput" data-preview="faviconPreview" data-default="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}">
+											@if ( !empty($setting->favicon) )
+												<img id="faviconPreview" src="{{ asset($setting->favicon) }}" alt="Logo">
+												
+											@else
+												<img id="faviconPreview" src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" alt="Logo">
+											@endif
 										</a>
 									</div>
 								</div>
+
 								<div class="col-xl-9">
 									<div class="row gy-3 align-items-center">
 										<div class="col-lg-4">
@@ -182,7 +215,7 @@
 												<div class="new-employee-field">
 													<div class="mb-0">
 														<div class="image-upload mb-0">
-															<input type="file">
+															<input type="file" name="logo" id="logoIcon"  accept="image/png, image/jpeg, image/jpg, image/webp">
 															<div class="image-uploads">
 																<h4><i class="ti ti-upload me-1"></i>Upload Image</h4>
 															</div>
@@ -193,16 +226,21 @@
 											</div>
 										</div>
 									</div>
-									
 								</div>
+
 								<div class="col-xl-3">
 									<div class="new-logo ms-xl-auto">
-										<a href="#">
-											<img src="assets/img/products/company-logo.svg" alt="Logo">
-											<span><i class="ti ti-x"></i></span>
+										<a href="javascript:void(0);" class="remove-image" data-input="logoIcon" data-preview="logoPreview" data-default="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}">
+											@if ( !empty($setting->logo) )
+												<img id="logoPreview" src="{{ asset($setting->logo) }}" alt="Logo">
+												
+										    @else
+												<img id="logoPreview" src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" alt="Logo">
+											@endif
 										</a>
 									</div>
 								</div>
+
 								<div class="col-xl-9">
 									<div class="row gy-3 align-items-center">
 										<div class="col-lg-4">
@@ -216,7 +254,7 @@
 												<div class="new-employee-field">
 													<div class="mb-0">
 														<div class="image-upload mb-0">
-															<input type="file">
+															<input type="file" name="dark_logo" id="darkLogoIcon"  accept="image/png, image/jpeg, image/jpg, image/webp">
 															<div class="image-uploads">
 																<h4><i class="ti ti-upload me-1"></i>Upload Image</h4>
 															</div>
@@ -229,16 +267,22 @@
 									</div>
 									
 								</div>
+
 								<div class="col-xl-3">
 									<div class="new-logo ms-xl-auto">
-										<a href="#" class="bg-secondary">
-											<img src="assets/img/products/white-logo.svg" alt="Logo">
-											<span><i class="ti ti-x"></i></span>
+										<a href="javascript:void(0);" class="remove-image" data-input="darkLogoIcon" data-preview="darkLogoPreview" data-default="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}">
+											@if ( !empty($setting->dark_logo) )
+												<img id="darkLogoPreview" src="{{ asset($setting->dark_logo) }}" alt="Logo">
+												
+										    @else
+												<img id="darkLogoPreview" src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" alt="Logo">
+											@endif
 										</a>
 									</div>
 								</div>
 							</div>
 						</div>
+
 						<div class="company-address">
 							<div class="card-title-head">
 								<h6 class="fs-16 fw-bold mb-2">
@@ -252,7 +296,7 @@
 										<label class="form-label">
 											Address <span class="text-danger">*</span>
 										</label>
-										<input type="text" class="form-control">
+										<input type="text" name="address" value="{{ old('address', $setting->address) }}" class="form-control">
 									</div>
 								</div>
 								<div class="col-md-6">
@@ -260,13 +304,13 @@
 										<label class="form-label">
 											Country <span class="text-danger">*</span>
 										</label>
-										<select class="select select2-hidden-accessible" data-select2-id="select2-data-1-aqku" tabindex="-1" aria-hidden="true">
-											<option data-select2-id="select2-data-3-qbh7">Select</option>
-											<option>USA</option>
-											<option>India</option>
-											<option>French</option>
-											<option>Australia</option>
-										</select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-2-7umj" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-7ma2-container" aria-controls="select2-7ma2-container"><span class="select2-selection__rendered" id="select2-7ma2-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+										<select class="form-control select2" name="country">
+											<option value="" disabled selected>Select</option>
+											<option value="usa">USA</option>
+											<option value="bangladesh">Bangladesh</option>
+											<option value="french">French</option>
+											<option value="australia">Australia</option>
+										</select>
 									</div>
 								</div>
 								<div class="col-md-6">
@@ -274,12 +318,12 @@
 										<label class="form-label">
 											State <span class="text-danger">*</span>
 										</label>
-										<select class="select select2-hidden-accessible" data-select2-id="select2-data-4-fv91" tabindex="-1" aria-hidden="true">
-											<option data-select2-id="select2-data-6-3m74">Select</option>
+										<select class="form-control select2" name="state">
+											<option value="" disabled selected>Select</option>
 											<option>Alaska</option>
 											<option>Mexico</option>
 											<option>Tasmania</option>
-										</select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-5-au57" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-llbl-container" aria-controls="select2-llbl-container"><span class="select2-selection__rendered" id="select2-llbl-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+										</select>
 									</div>
 								</div>
 								<div class="col-md-6">
@@ -287,12 +331,12 @@
 										<label class="form-label">
 											City <span class="text-danger">*</span>
 										</label>
-										<select class="select select2-hidden-accessible" data-select2-id="select2-data-7-h92z" tabindex="-1" aria-hidden="true">
-											<option data-select2-id="select2-data-9-8siz">Select</option>
+										<select class="form-control select2" name="city">
+											<option value="" disabled selected>Select</option>
 											<option>Anchorage</option>
 											<option>Tijuana</option>
 											<option>Hobart</option>
-										</select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-8-4p4m" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-1fxd-container" aria-controls="select2-1fxd-container"><span class="select2-selection__rendered" id="select2-1fxd-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+										</select>
 									</div>
 								</div>
 								<div class="col-md-6">
@@ -300,7 +344,7 @@
 										<label class="form-label">
 											Postal Code <span class="text-danger">*</span>
 										</label>
-										<input type="text" class="form-control">
+										<input type="text" class="form-control" value="{{ old('postal_code', $setting->postal_code) }}" name="postal_code">
 									</div>
 								</div>
 							</div>
@@ -321,10 +365,68 @@
 @endsection
 
 @push('add-js')
-
+	<!-- Select2 Js -->
+	<script src="{{ asset('public/admin/assets/plugins/select2/js/select2.min.js') }}"></script>
     <!-- Sticky-sidebar -->
     <script src="{{ asset('public/admin/assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
     <script src="{{ asset('public/admin/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
+
+
+	<script>
+		$(document).ready(function() {
+			$('.select2').select2();
+		});
+
+		// Function to handle image preview
+		function previewImage(input, previewId) {
+			const file = input.files[0];
+			const preview = document.getElementById(previewId);
+
+			if (file) {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					preview.src = e.target.result; // set preview image
+				}
+				reader.readAsDataURL(file);
+			}
+		}
+
+		// Attach event listeners
+		document.getElementById('iconInput').addEventListener('change', function() {
+			previewImage(this, 'iconPreview');
+		});
+
+		document.getElementById('faviconInput').addEventListener('change', function() {
+			previewImage(this, 'faviconPreview');
+		});
+
+		document.getElementById('logoIcon').addEventListener('change', function() {
+			previewImage(this, 'logoPreview');
+		});
+
+		document.getElementById('darkLogoIcon').addEventListener('change', function() {
+			previewImage(this, 'darkLogoPreview');
+		});
+
+
+		// Reset image when cross button clicked
+		document.querySelectorAll('.remove-image').forEach(function(el) {
+			el.addEventListener('click', function() {
+				const inputId = this.dataset.input;       // id of file input
+				const previewId = this.dataset.preview;   // id of preview image
+				const defaultSrc = this.dataset.default;  // default image path
+
+				// Reset the input
+				const input = document.getElementById(inputId);
+				input.value = ''; 
+
+				// Set the preview image to default
+				const preview = document.getElementById(previewId);
+				preview.src = defaultSrc;
+			});
+		});
+		
+	</script>
 
 @endpush
 

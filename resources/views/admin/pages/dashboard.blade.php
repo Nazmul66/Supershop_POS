@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @push('add-title')
-    Dreams POS - Inventory Management & Admin Dashboard Template.
+    Dreams POS - Inventory Management & Admin Dashboard Template
 @endpush
 
 @push('add-css')

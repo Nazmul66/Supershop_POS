@@ -4,11 +4,16 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\AttributeNameController;
+use App\Http\Controllers\Admin\GeneralSettingController;
+use App\Http\Controllers\Admin\SystemSettingController;
+use App\Http\Controllers\Admin\FinancialSettingController;
+use App\Http\Controllers\Admin\WebsiteSetController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\AttributeValueController;
 use App\Http\Controllers\Admin\AdminRoleController;
 use App\Http\Controllers\Admin\ShippingRuleController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AppSettingsController;
 use App\Http\Controllers\Admin\BrandsController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubcategoryController;
@@ -134,6 +139,56 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
         Route::get('/list-backup', [DBbackupController::class, 'list_backup'])->name('list.backup');
         Route::get('/backup-download/{path}', [DBbackupController::class, 'backup_download'])->name('backup.download');
         Route::get('/backup-delete/{path}', [DBbackupController::class, 'backup_delete'])->name('backup.delete');
+
+
+        //______ Ban Ip Address _____//
+        Route::get('/ban-ip-address', [OtherSettingController::class, 'ban_ip_address'])->name('banIp.setting');
+    });
+
+
+       //______ General Settings  _____//
+       Route::group(["as" => 'general-settings.',"prefix" => '/general-settings'], function () {
+        
+        Route::get('/profile', [GeneralSettingController::class, 'profile'])->name('profile');
+        Route::get('/security', [GeneralSettingController::class, 'security'])->name('security');
+        Route::get('/notification', [GeneralSettingController::class, 'notification'])->name('notification');
+    });
+    
+    
+    //______ Website Settings  _____//
+    Route::group(["as" => 'website-settings.',"prefix" => '/website-settings'], function () {
+        
+        Route::get('/system-settings', [WebsiteSetController::class, 'system_settings'])->name('system');
+        Route::get('/company-settings', [WebsiteSetController::class, 'company_settings'])->name('company');
+        Route::get('/localization', [WebsiteSetController::class, 'localization'])->name('localization');
+        Route::get('/prefixes', [WebsiteSetController::class, 'prefixes'])->name('prefixes');
+        Route::get('/language', [WebsiteSetController::class, 'language'])->name('language');
+    });
+
+
+    //______ App Settings  _____//
+    Route::group(["as" => 'app-settings.',"prefix" => '/app-settings'], function () {
+    
+        Route::get('/invoice-settings', [AppSettingsController::class, 'invoice_settings'])->name('invoice');
+        Route::get('/invoice-template', [AppSettingsController::class, 'invoice_template'])->name('invoice.template');
+        Route::get('/printer', [AppSettingsController::class, 'printer'])->name('printer');
+        Route::get('/pos-setting', [AppSettingsController::class, 'pos_setting'])->name('pos.setting');
+        Route::get('/signature', [AppSettingsController::class, 'signature'])->name('signature');
+    });
+
+
+    //______ System Settings  _____//
+    Route::group(["as" => 'system-settings.',"prefix" => '/system-settings'], function () {
+
+        Route::get('/email-settings', [SystemSettingController::class, 'email_settings'])->name('email.settings');
+        Route::get('/email-template', [SystemSettingController::class, 'email_template'])->name('email.template');
+        Route::get('/otp', [SystemSettingController::class, 'otp_setting'])->name('otp.setting');
+    });
+
+    //______ Financial Settings  _____//
+    Route::group(["as" => 'financial-settings.',"prefix" => '/financial-settings'], function () {
+
+        Route::get('/taxRate-settings', [FinancialSettingController::class, 'taxRate_settings'])->name('taxRate.settings');
     });
    
 

@@ -140,69 +140,61 @@
                     <h6 class="submenu-hdr">Settings</h6>
                     <ul>
                         <li class="submenu">
-                            <a href="javascript:void(0);" class="active"><i class="ti ti-settings fs-16 me-2"></i><span>General Settings</span><span class="menu-arrow"></span></a>
+                            <a href="javascript:void(0);" class="@yield('general-setting')"><i class="ti ti-settings fs-16 me-2"></i><span>General Settings</span><span class="menu-arrow"></span></a>
                             <ul style="display: none;">
-                                <li><a href="general-settings.html" class="active">Profile</a></li>
-                                <li><a href="security-settings.html">Security</a></li>
-                                <li><a href="notification.html">Notifications</a></li>
+                                <li><a href="{{ route('admin.general-settings.profile') }}" class="@yield('profile-setting')">Profile</a></li>
+                                <li><a href="{{ route('admin.general-settings.security') }}" class="@yield('security-setting')">Security</a></li>
+                                <li><a href="{{ route('admin.general-settings.notification') }}" class="@yield('notification-setting')">Notifications</a></li>
                             </ul>
                         </li>
 
                         <li class="submenu">
-                            <a href="javascript:void(0);" class=""><i class="ti ti-world fs-16 me-2"></i><span>Website Settings</span><span class="menu-arrow"></span></a>
+                            <a href="javascript:void(0);" class="@yield('website-setting')"><i class="ti ti-world fs-16 me-2"></i><span>Website Settings</span><span class="menu-arrow"></span></a>
                             <ul style="display: none;">
-                                <li><a href="system-settings.html">System Settings</a></li>
-                                <li><a href="company-settings.html">Company Settings </a></li>
-                                <li><a href="localization-settings.html">Localization</a></li>
-                                <li><a href="prefixes.html">Prefixes</a></li>
-                                <li><a href="language-settings.html">Language</a></li>
+                                <li><a href="{{ route('admin.website-settings.system') }}" class="@yield('system-setting')">System Settings</a></li>
+                                
+                                <li><a href="{{ route('admin.website-settings.company') }}" class="@yield('company-setting')">Company Settings </a></li>
+                                
+                                <li><a href="{{ route('admin.website-settings.localization') }}" class="@yield('localization-setting')">Localization</a></li>
+                                
+                                <li><a href="{{ route('admin.website-settings.prefixes') }}" class="@yield('prefixes-setting')">Prefixes</a></li>
                             </ul>
                         </li>
 
                         <li class="submenu">
-                            <a href="javascript:void(0);" class=""><i class="ti ti-device-mobile fs-16 me-2"></i>
+                            <a href="javascript:void(0);" class="@yield('app-setting')"><i class="ti ti-device-mobile fs-16 me-2"></i>
                                 <span>App Settings</span><span class="menu-arrow"></span>
                             </a>
                             <ul style="display: none;">
-                                <li class="submenu submenu-two"><a href="javascript:void(0);" class="">Invoice<span class="menu-arrow inside-submenu"></span></a>
-                                    <ul style="display: none;">
-                                        <li><a href="invoice-settings.html">Invoice Settings</a></li>
-                                        <li><a href="invoice-template.html">Invoice Template</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="printer-settings.html">Printer</a></li>
-                                <li><a href="pos-settings.html">POS</a></li>
-                                <li><a href="custom-fields.html">Custom Fields</a></li>
+                                <li><a href="{{ route('admin.app-settings.invoice') }}" class="@yield('invoice-setting')">Invoice Settings</a></li>
+                                <li><a href="{{ route('admin.app-settings.invoice.template') }}" class="@yield('invoice-template')">Invoice Template</a></li>
+                                <li><a href="{{ route('admin.app-settings.printer') }}" class="@yield('printer-setting')">Printer</a></li>
+                                <li><a href="{{ route('admin.app-settings.pos.setting') }}" class="@yield('pos-setting')">POS</a></li>
+                                <li><a href="{{ route('admin.app-settings.signature') }}" class="@yield('signature-setting')">Signature</a></li>
                             </ul>
                         </li>
 
                         <li class="submenu">
-                            <a href="javascript:void(0);" class=""><i class="ti ti-device-desktop fs-16 me-2"></i>
+                            <a href="javascript:void(0);" class="@yield('system-setting')"><i class="ti ti-device-desktop fs-16 me-2"></i>
                                 <span>System Settings</span><span class="menu-arrow"></span>
                             </a>
                             <ul style="display: none;">
-                                <li class="submenu submenu-two"><a href="javascript:void(0);">Email<span class="menu-arrow inside-submenu"></span></a>
+                                <li class="submenu submenu-two"><a href="javascript:void(0);" class="@yield('system-setting')">Email<span class="menu-arrow inside-submenu"></span></a>
                                     <ul>
-                                        <li><a href="email-settings.html">Email Settings</a></li>
-                                        <li><a href="email-template.html">Email Template</a></li>
+                                        <li><a href="{{ route('admin.system-settings.email.settings') }}" class="@yield('email-setting')">Email Settings</a></li>
+                                        <li><a href="{{ route('admin.system-settings.email.template') }}" class="@yield('email-template')">Email Template</a></li>
                                     </ul>
                                 </li>
-                                <li class="submenu submenu-two"><a href="javascript:void(0);">SMS<span class="menu-arrow inside-submenu"></span></a>
-                                    <ul>
-                                        <li><a href="sms-settings.html">SMS Settings</a></li>
-                                        <li><a href="sms-template.html">SMS Template</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="otp-settings.html">OTP</a></li>
+                                <li><a href="{{ route('admin.system-settings.otp.setting') }}" class="@yield('otp-setting')">OTP</a></li>
                             </ul>
                         </li>
 
                         <li class="submenu">
-                            <a href="javascript:void(0);"><i class="ti ti-settings-dollar fs-16 me-2"></i>
+                            <a href="javascript:void(0);" class="@yield('financial-setting')"><i class="ti ti-settings-dollar fs-16 me-2"></i>
                                 <span>Financial Settings</span><span class="menu-arrow"></span>
                             </a>
                             <ul>
-                                <li><a href="tax-rates.html">Tax Rates</a></li>
+                                <li><a href="{{ route('admin.financial-settings.taxRate.settings') }}" class="@yield('taxRate-setting')">Tax Rates</a></li>
                             </ul>
                         </li>
 
@@ -215,7 +207,7 @@
                                     <li><a href="{{ route('admin.other-settings.list.backup') }}" class="@yield('backup-setting')">DB Backup</a></li>
                                 @endif
 
-                                <li><a href="ban-ip-address.html">Ban IP Address</a></li>
+                                <li><a href="{{ route('admin.other-settings.banIp.setting') }}" class="@yield('ban-ip-setting')">Ban IP Address</a></li>
                             </ul>
                         </li>
 

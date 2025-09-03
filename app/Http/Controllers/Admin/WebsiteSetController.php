@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CompanyUpdateRequest;
+use App\Http\Requests\Admin\LocalizationUpdateRequest;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,6 @@ class WebsiteSetController extends Controller
     public function company_update(CompanyUpdateRequest $request)
     {
       // dd($request->all());
-
         DB::beginTransaction();
         try {
           // Find existing setting (first row only)
@@ -111,13 +111,97 @@ class WebsiteSetController extends Controller
     
      public function localization()
     {
-      return view('admin.pages.website_settings.localization_settings');
+      $setting = Setting::first();
+      return view('admin.pages.website_settings.localization_settings', compact('setting'));
+    }
+
+    public function localization_update(LocalizationUpdateRequest $request)
+    {
+      // dd($request->all());
+        DB::beginTransaction();
+        try {
+          // Find existing setting (first row only)
+          $setting = Setting::first();
+
+          // Now save with updateOrCreate
+          $data = Setting::updateOrCreate(
+              ['id' => $setting->id ?? null], // if id exists update, else create
+              [
+                  'timeZone'         => $request->timeZone,
+                  'date_format'      => $request->date_format,
+                  'time_format'      => $request->time_format,
+                  'month_format'     => $request->month_format,
+                  'currency_name'    => $request->currency_name,
+                  'currency_symbol'  => $request->currency_symbol,
+                  'restrict_country' => $request->restrict_country,
+                  'allow_files'      => $request->allow_files,
+                  'file_size'        => $request->file_size,
+              ]
+          );
+
+          // dd($data);
+        }
+        catch(\Exception $ex){
+            DB::rollBack();
+            // throw $ex;
+            // dd($ex->getMessage());
+            Toastr::error('There is something wrong', 'Error', ["positionClass" => "toast-top-right"]);
+            return redirect()->back();
+        }
+
+        DB::commit();
+        Toastr::success('Settings data updated', 'Success', ["positionClass" => "toast-top-right"]);
+        return redirect()->back();
     }
 
      public function prefixes()
     {
-      return view('admin.pages.website_settings.prefixes_settings');
+      $setting = Setting::first();
+      return view('admin.pages.website_settings.prefixes_settings', compact('setting'));
     }
+    
+    public function prefixes_update(Request $request)
+    {
+      // dd($request->all());
+        DB::beginTransaction();
+        try {
+          $setting = Setting::first();
+
+          // Now save with updateOrCreate
+          Setting::updateOrCreate(
+              ['id' => $setting->id ?? null], // if id exists update, else create
+              [
+                  'product_prefix'                 => $request->product_prefix,
+                  'supplier_prefix'                => $request->supplier_prefix,
+                  'purchase_prefix'                => $request->purchase_prefix,
+                  'purchase_return_prefix'         => $request->purchase_return_prefix,
+                  'sales_return_prefix'            => $request->sales_return_prefix,
+                  'sales_prefix'                   => $request->sales_prefix,
+                  'customer_prefix'                => $request->customer_prefix,
+                  'expense_prefix'                 => $request->expense_prefix,
+                  'stock_transfer_prefix'          => $request->stock_transfer_prefix,
+                  'stock_adjustment_prefix'        => $request->stock_adjustment_prefix,
+                  'pos_invoice_prefix'             => $request->pos_invoice_prefix,
+                  'sales_order_prefix'             => $request->sales_order_prefix,
+                  'estimate_prefix'                => $request->estimate_prefix,
+                  'transaction_prefix'             => $request->transaction_prefix,
+                  'employee_prefix'                => $request->employee_prefix,
+              ]
+          );
+        }
+        catch(\Exception $ex){
+            DB::rollBack();
+            // throw $ex;
+            // dd($ex->getMessage());
+            Toastr::error('There is something wrong', 'Error', ["positionClass" => "toast-top-right"]);
+            return redirect()->back();
+        }
+
+        DB::commit();
+        Toastr::success('Settings data updated', 'Success', ["positionClass" => "toast-top-right"]);
+        return redirect()->back();
+    }
+    
 
 
     public function language()

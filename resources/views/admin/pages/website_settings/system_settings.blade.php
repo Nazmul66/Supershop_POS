@@ -51,7 +51,7 @@
 									<div class="d-flex align-items-center justify-content-between mb-2">
 										<div class="d-flex align-items-center">
 											<span class="system-app-icon">
-												<img src="assets/img/icons/app-icon-07.svg" alt="Img">
+												<img src="{{ asset('public/admin/assets/img/icons/app-icon-07.svg') }}" alt="Img">
 											</span>
 											<div class="security-title">
 												<h5 class="fs-16 fw-medium">Google Captcha</h5>
@@ -75,7 +75,7 @@
 									<div class="d-flex align-items-center justify-content-between mb-2">
 										<div class="d-flex align-items-center">
 											<span class="system-app-icon">
-												<img src="assets/img/icons/app-icon-08.svg" alt="Img">
+												<img src="{{ asset('public/admin/assets/img/icons/app-icon-08.svg') }}" alt="Img">
 											</span>
 											<div class="security-title">
 												<h5 class="fs-16 fw-medium">Google Analytics</h5>
@@ -99,7 +99,7 @@
 									<div class="d-flex align-items-center justify-content-between mb-2">
 										<div class="d-flex align-items-center">
 											<span class="system-app-icon">
-												<img src="assets/img/icons/app-icon-09.svg" alt="Img">
+												<img src="{{ asset('public/admin/assets/img/icons/app-icon-09.svg') }}" alt="Img">
 											</span>
 											<div class="security-title">
 												<h5 class="fs-16 fw-medium">Google Adsense Code</h5>
@@ -123,7 +123,7 @@
 									<div class="d-flex align-items-center justify-content-between mb-2">
 										<div class="d-flex align-items-center">
 											<span class="system-app-icon">
-												<img src="assets/img/icons/app-icon-10.svg" alt="Img">
+												<img src="{{ asset('public/admin/assets/img/icons/app-icon-10.svg') }}" alt="Img">
 											</span>
 											<div class="security-title">
 												<h5 class="fs-16 fw-medium">Google Map</h5>

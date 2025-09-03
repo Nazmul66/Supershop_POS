@@ -150,6 +150,8 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
        Route::group(["as" => 'general-settings.',"prefix" => '/general-settings'], function () {
         
         Route::get('/profile', [GeneralSettingController::class, 'profile'])->name('profile');
+        Route::put('/profile-update/{id}', [GeneralSettingController::class, 'profile_update'])->name('profile.update');
+
         Route::get('/security', [GeneralSettingController::class, 'security'])->name('security');
         Route::get('/notification', [GeneralSettingController::class, 'notification'])->name('notification');
     });

@@ -12,6 +12,9 @@
 @section('general-setting', 'subdrop active')
 @section('profile-setting', 'active')
 
+@php
+	$admin = auth()->guard('admin')->user();
+@endphp
 
 @section('body-content')
 
@@ -50,7 +53,10 @@
 					<h4 class="fs-18 fw-bold">Profile</h4>
 				</div>
 				<div class="card-body">
-					<form action="general-settings.html">
+					<form action="{{ route('admin.general-settings.profile.update', $admin->id) }}" method="POST" enctype="multipart/form-data">
+						@csrf
+						@method('PUT')
+
 						<div class="card-title-head">
 							<h6 class="fs-16 fw-bold mb-3">
 								<span class="fs-16 me-2"><i class="ti ti-user"></i></span> 
@@ -59,14 +65,21 @@
 						</div>
 						<div class="profile-pic-upload">
 							<div class="profile-pic">
-								<span>
-									<i class="ti ti-circle-plus mb-1 fs-16"></i> Add Image
-								</span>
+								@if ( !empty($setting->image) )
+									<span id="imagePreview">
+										<img src="{{ asset($setting->image) }}" alt="Preview" style="max-width:60px; display:block; border-radius: 50px;">
+									</span>
+								@else
+									<span id="imagePreview">
+										<i class="ti ti-circle-plus mb-1 fs-16"></i> Add Image
+									</span>
+								@endif
+								
 							</div>
 							<div class="new-employee-field">
 								<div class="mb-0">
 									<div class="image-upload mb-0">
-										<input type="file">
+										<input type="file" name="image" id="imageInput" accept="image/png, image/jpeg, image/jpg, image/webp">
 										<div class="image-uploads">
 											<h4>Upload Image</h4>
 										</div>
@@ -78,44 +91,36 @@
 							</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-md-4">
+							<div class="col-md-6">
 								<div class="mb-3">
 									<label class="form-label">
-										First Name <span class="text-danger">*</span>
+										Full Name <span class="text-danger">*</span>
 									</label>
-									<input type="text" class="form-control">
+									<input type="text" name="name" value="{{ old('name', $setting->name) }}" class="form-control">
 								</div>
 							</div>
-							<div class="col-md-4">
-								<div class="mb-3">
-									<label class="form-label">
-										Last Name <span class="text-danger">*</span>
-									</label>
-									<input type="text" class="form-control">
-								</div>
-							</div>
-							<div class="col-md-4">
+							<div class="col-md-6">
 								<div class="mb-3">
 									<label class="form-label">
 										User Name <span class="text-danger">*</span>
 									</label>
-									<input type="text" class="form-control">
+									<input type="text" name="username" value="{{ old('username', $setting->username) }}" class="form-control">
 								</div>
 							</div>
-							<div class="col-md-4">
+							<div class="col-md-6">
 								<div class="mb-3">
 									<label class="form-label">
 										Phone Number <span class="text-danger">*</span>
 									</label>
-									<input type="text" class="form-control">
+									<input type="text" name="phone" value="{{ old('phone', $setting->phone) }}" class="form-control">
 								</div>
 							</div>
-							<div class="col-md-4">
+							<div class="col-md-6">
 								<div class="mb-3">
 									<label class="form-label">
 										Email <span class="text-danger">*</span>
 									</label>
-									<input type="email" class="form-control">
+									<input type="email" name="email" value="{{ old('email', $setting->email) }}" disabled class="form-control">
 								</div>
 							</div>
 						</div>
@@ -125,67 +130,73 @@
 								Address Information
 							</h6>
 						</div>
+
+
 						<div class="row">
 							<div class="col-md-12">
 								<div class="mb-3">
 									<label class="form-label">
 										Address <span class="text-danger">*</span>
 									</label>
-									<input type="email" class="form-control">
+									<input type="text" name="address" value="{{ old('address', $setting->address) }}" class="form-control">
 								</div>
 							</div>
+
 							<div class="col-md-6">
 								<div class="mb-3">
 									<label class="form-label">
 										Country <span class="text-danger">*</span>
 									</label>
-									<select class="select select2-hidden-accessible" data-select2-id="select2-data-1-zt49" tabindex="-1" aria-hidden="true">
-										<option data-select2-id="select2-data-3-npp9">Select</option>
-										<option>USA</option>
-										<option>India</option>
-										<option>French</option>
-										<option>Australia</option>
-									</select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-2-r4e5" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-921y-container" aria-controls="select2-921y-container"><span class="select2-selection__rendered" id="select2-921y-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+									<select class="form-control select2" name="country">
+										<option value="" disabled selected>Select</option>
+										<option value="usa">USA</option>
+										<option value="bangladesh">Bangladesh</option>
+										<option value="french">French</option>
+										<option value="australia">Australia</option>
+									</select>
 								</div>
 							</div>
+
 							<div class="col-md-6">
 								<div class="mb-3">
 									<label class="form-label">
 										State <span class="text-danger">*</span>
 									</label>
-									<select class="select select2-hidden-accessible" data-select2-id="select2-data-4-x1cg" tabindex="-1" aria-hidden="true">
-										<option data-select2-id="select2-data-6-tem2">Select</option>
+									<select class="form-control select2" name="state">
+										<option value="" disabled selected>Select</option>
 										<option>Alaska</option>
 										<option>Mexico</option>
 										<option>Tasmania</option>
-									</select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-5-4sq2" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-ytxd-container" aria-controls="select2-ytxd-container"><span class="select2-selection__rendered" id="select2-ytxd-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+									</select>
 								</div>
 							</div>
+
 							<div class="col-md-6">
 								<div class="mb-3">
 									<label class="form-label">
 										City <span class="text-danger">*</span>
 									</label>
-									<select class="select select2-hidden-accessible" data-select2-id="select2-data-7-uv0y" tabindex="-1" aria-hidden="true">
-										<option data-select2-id="select2-data-9-k79l">Select</option>
+									<select class="form-control select2" name="city">
+										<option value="" disabled selected>Select</option>
 										<option>Anchorage</option>
 										<option>Tijuana</option>
 										<option>Hobart</option>
-									</select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-8-ymv0" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-hcfe-container" aria-controls="select2-hcfe-container"><span class="select2-selection__rendered" id="select2-hcfe-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+									</select>
 								</div>
 							</div>
+
 							<div class="col-md-6">
 								<div class="mb-3">
 									<label class="form-label">
 										Postal Code <span class="text-danger">*</span>
 									</label>
-									<input type="text" class="form-control">
+									<input type="number" class="form-control" value="{{ old('postal_code', $setting->postal_code) }}" name="postal_code">
 								</div>
 							</div>
 						</div>
+
 						<div class="text-end settings-bottom-btn mt-0">
-							<button type="button" class="btn btn-secondary me-2">Cancel</button>
-							<button type="submit" class="btn btn-primary">Save Changes</button>
+							<button type="submit" class="btn btn-primary">Update</button>
 						</div>
 					</form>
 				</div>
@@ -202,5 +213,26 @@
     <!-- Sticky-sidebar -->
     <script src="{{ asset('public/admin/assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
     <script src="{{ asset('public/admin/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
+
+	<script>
+		// Function to handle image preview
+		function previewImage(input, previewId) {
+			const file = input.files[0];
+			const preview = document.getElementById(previewId);
+
+			if (file) {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					preview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-width:60px; display:block; border-radius: 50px;">`;
+				}
+				reader.readAsDataURL(file);
+			}
+		}
+
+		// Attach event listeners
+		document.getElementById('imageInput').addEventListener('change', function() {
+			previewImage(this, 'imagePreview');
+		});
+	</script>
 
 @endpush

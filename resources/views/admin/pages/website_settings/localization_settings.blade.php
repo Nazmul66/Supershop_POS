@@ -23,45 +23,6 @@
 			height: 100%;
 			right: 10px;
 		}
-		
-* Hide the checkbox */
-    .toggle-checkbox {
-      display: none;
-    }
-
-    /* Toggle label */
-    .toggle-label {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 25px;
-      background-color: #ccc;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    /* Circle knob */
-    .toggle-label::before {
-      content: "";
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 21px;
-      height: 21px;
-      background: #fff;
-      border-radius: 50%;
-      transition: transform 0.3s ease;
-    }
-
-    /* Checked state */
-    .toggle-checkbox:checked + .toggle-label {
-      background-color: #fca03c; /* orange */
-    }
-
-    .toggle-checkbox:checked + .toggle-label::before {
-      transform: translateX(25px);
-    }
 	</style>
 @endpush
 
@@ -88,11 +49,6 @@
 		</li>
 	</ul>
 </div>
-
-
-<!-- Checkbox + Label -->
-  <input type="checkbox" id="toggle" class="toggle-checkbox" hidden>
-  <label for="toggle" class="toggle-label"></label>
 
 
 <div class="row">

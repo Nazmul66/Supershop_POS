@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CompanyUpdateRequest;
 use App\Http\Requests\Admin\LocalizationUpdateRequest;
+use App\Models\CredentialSetting;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,54 @@ class WebsiteSetController extends Controller
 
     public function system_settings()
     {
-      return view('admin.pages.website_settings.system_settings');
+      $setting = CredentialSetting::first();
+      return view('admin.pages.website_settings.system_settings', compact('setting'));
+    }
+
+    public function system_update(Request $request)
+    {
+      //  dd($request->all());
+      $request->validate([
+          'rechaptcha_secrect_key'     => ['nullable'],
+          'rechaptcha_site_key'        => ['nullable'],
+          'google_map_id'              => ['nullable'],
+          'google_tag_manager'         => ['nullable'],
+          'facebook_pixel_id'          => ['nullable'],
+      ]);
+      
+       DB::beginTransaction();
+        try {
+          $setting = CredentialSetting::first();
+
+          $rechaptcha_secrect_key = $request->rechaptcha_secrect_key ?? $setting->rechaptcha_secrect_key;
+          $rechaptcha_site_key    = $request->rechaptcha_site_key ?? $setting->rechaptcha_site_key;
+          $google_map_id          = $request->google_map_id ?? $setting->google_map_id;
+          $google_tag_manager     = $request->google_tag_manager ?? $setting->google_tag_manager;
+          $facebook_pixel_id      = $request->facebook_pixel_id ?? $setting->facebook_pixel_id;    
+
+          // Now save with updateOrCreate
+          CredentialSetting::updateOrCreate(
+              ['id' => $setting->id ?? null], // if id exists update, else create
+              [
+                  'rechaptcha_secrect_key'        => $rechaptcha_secrect_key,
+                  'rechaptcha_site_key'           => $rechaptcha_site_key,
+                  'google_map_id'                 => $google_map_id,
+                  'google_tag_manager'            => $google_tag_manager,
+                  'facebook_pixel_id'             => $facebook_pixel_id,
+              ]
+          );
+        }
+        catch(\Exception $ex){
+            DB::rollBack();
+            // throw $ex;
+            // dd($ex->getMessage());
+            Toastr::error('There is something wrong', 'Error', ["positionClass" => "toast-top-right"]);
+            return redirect()->back();
+        }
+
+        DB::commit();
+        Toastr::success('Settings data updated', 'Success', ["positionClass" => "toast-top-right"]);
+        return redirect()->back();
     }
 
     public function company_settings()

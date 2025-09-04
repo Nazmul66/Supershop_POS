@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\EmailConfiguration;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,10 +23,56 @@ class SystemSettingController extends Controller
 
     public function email_settings()
     {
-      return view('admin.pages.system_settings.email_setting');
+      $email_setting = EmailConfiguration::first();
+      return view('admin.pages.system_settings.email_setting', compact('email_setting'));
     }
 
-      public function email_template()
+    public function email_update(Request $request)
+    {
+      // dd($request->all());
+      $request->validate([
+          'email'       => ['required', 'email'],
+          'host'        => ['required', 'max: 200'],
+          'username'    => ['required', 'max: 200'],
+          'password'    => ['required', 'max: 200'],
+          'port'        => ['required', 'max: 200'],
+          'encryption'  => ['required', 'max: 200'],
+      ]);
+
+        DB::beginTransaction();
+        try {
+          // Find existing setting (first row only)
+            $email_setting = EmailConfiguration::first();
+
+          // Now save with updateOrCreate
+          EmailConfiguration::updateOrCreate(
+              ['id' => $email_setting->id ?? null], // if id exists update, else create
+              [
+                  'email'         => $request->email,
+                  'host'          => $request->host,
+                  'username'      => $request->username,
+                  'password'      => $request->password,
+                  'port'          => $request->port,
+                  'encryption'    => $request->encryption,
+                  'created_at'    => now(),
+                  'updated_at'    => now(),
+              ]
+          );
+        }
+        catch(\Exception $ex){
+            DB::rollBack();
+            // throw $ex;
+            // dd($ex->getMessage());
+            Toastr::error('There is something wrong', 'Error', ["positionClass" => "toast-top-right"]);
+            return redirect()->back();
+        }
+
+        DB::commit();
+        Toastr::success('Email Setting data updated', 'Success', ["positionClass" => "toast-top-right"]);
+        return redirect()->back();
+    }
+
+    public function email_template()
     {
       return view('admin.pages.system_settings.email_template');
     }

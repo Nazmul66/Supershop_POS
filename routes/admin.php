@@ -189,6 +189,8 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::group(["as" => 'system-settings.',"prefix" => '/system-settings'], function () {
 
         Route::get('/email-settings', [SystemSettingController::class, 'email_settings'])->name('email.settings');
+        Route::put('/email-update', [SystemSettingController::class, 'email_update'])->name('email.update');
+
         Route::get('/email-template', [SystemSettingController::class, 'email_template'])->name('email.template');
         
         Route::get('/otp', [SystemSettingController::class, 'otp_setting'])->name('otp.setting');

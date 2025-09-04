@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helper\MailHelper;
 use App\Http\Controllers\Controller;
 use App\Mail\TwoFactorAuthMail;
 use App\Models\Admin;
@@ -123,6 +124,9 @@ class AdminController extends Controller
                 $admin->two_factor_expire_at  = now()->addMinutes(10);
                 $admin->save();
 
+                // set mail config
+                MailHelper::setMailConfig();
+
                 Mail::to('hnazmul748@gmail.com')->send(new TwoFactorAuthMail($admin));
 
                 // Force user to verify before dashboard
@@ -151,6 +155,9 @@ class AdminController extends Controller
         $admin->two_factor_code       = rand(1000, 9999);
         $admin->two_factor_expire_at  = now()->addMinutes(10);
         $admin->save();
+
+        // set mail config
+        MailHelper::setMailConfig();
 
         Mail::to('hnazmul748@gmail.com')->send(new TwoFactorAuthMail($admin));
 

@@ -38,7 +38,6 @@
 </div>
 
 
-
 <div class="row">
 	<div class="col-xl-12">
 		 <div class="settings-wrapper d-flex">
@@ -47,85 +46,70 @@
 			<div class="card flex-fill mb-0">
 				<div class="card-header d-flex align-items-center justify-content-between">
 					<h4>Email Settings</h4>
-					<a href="javascript:void(0);" class="btn btn-primary">
-						Send test email
-					</a>
+
 				</div>
 				<div class="card-body pb-0">
-					<div class="row">
-						<div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6 d-flex">
-							<div class="card">
-								<div class="card-body">
-									<div class="flex-column align-items-start">
-										<div class="d-flex align-items-center justify-content-between w-100 mb-3">
-											<h5>PHP Mailer</h5>
-											<span class="badge bg-outline-success">Connected</span>
-										</div>
-										<p class="mb-3">Used to send emails safely and easily via PHP code from a web server.</p>
-									</div>
-									<div class="d-flex align-items-center justify-content-between">
-										<div>
-											<a href="#" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#php-mail">
-												<i class="ti ti-tool me-2"></i>View Integration
-											</a>
-										</div>
-										<div class="status-toggle modal-status d-flex justify-content-between align-items-center ms-2">
-											<input type="checkbox" id="user1" class="check" checked="">
-											<label for="user1" class="checktoggle">	</label>
-										</div>
-									</div>
+					<form action="{{ route('admin.system-settings.email.update') }}" method="POST">
+						@csrf
+						@method('PUT')
+						
+						<div class="row">
+							<div class="col-12 col-md-6 col-lg-6">
+								<div class="mb-3">
+									<label class="form-label" for="email">
+										Email <span class="text-danger">*</span>
+									</label>
+									<input type="email" name="email" id="email" value="{{ $email_setting->email }}" class="form-control">
 								</div>
 							</div>
-						</div>
-						<div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6 d-flex">
-							<div class="card">
-								<div class="card-body">
-									<div class="flex-column align-items-start">
-										<div class="d-flex align-items-center justify-content-between w-100 mb-3">
-											<h5>SMTP</h5>
-											<span class="badge bg-outline-success">Connected</span>
-										</div>
-										<p class="mb-3">SMTP is used to send, relay or forward messages from a mail client.</p>
-									</div>
-									<div class="d-flex align-items-center justify-content-between">
-										<div>
-											<a href="#" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#smtp-mail">
-												<i class="ti ti-tool me-2"></i>View Integration
-											</a>
-										</div>
-										<div class="status-toggle modal-status d-flex justify-content-between align-items-center ms-2">
-											<input type="checkbox" id="user2" class="check" checked="">
-											<label for="user2" class="checktoggle">	</label>
-										</div>
-									</div>
+	
+							<div class="col-12 col-md-6 col-lg-6">
+								<div class="mb-3">
+									<label class="form-label" for="mail_host">
+										Mail Host <span class="text-danger">*</span>
+									</label>
+									<input type="text" value="{{ $email_setting->host }}" id="mail_host" name="host" class="form-control">
 								</div>
 							</div>
-						</div>
-						<div class="col-xxl-4 col-xl-6 col-lg-12 col-md-6 d-flex">
-							<div class="card">
-								<div class="card-body">
-									<div class="flex-column align-items-start">
-										<div class="d-flex align-items-center justify-content-between w-100 mb-3">
-											<h5>SendGrid</h5>
-											<span class="badge bg-outline-success">Connected</span>
-										</div>
-										<p class="mb-3">Cloud-based email marketing tool that assists marketers and developers .</p>
-									</div>
-									<div class="d-flex align-items-center justify-content-between">
-										<div>
-											<a href="#" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#test-mail">
-												<i class="ti ti-tool me-2"></i>Connect
-											</a>
-										</div>
-										<div class="status-toggle modal-status d-flex justify-content-between align-items-center ms-2">
-											<input type="checkbox" id="user3" class="check" checked="">
-											<label for="user3" class="checktoggle">	</label>
-										</div>
-									</div>
+							
+							<div class="col-12 col-md-6 col-lg-6">
+								<div class="mb-3">
+									<label class="form-label" for="username">
+										Username <span class="text-danger">*</span>
+									</label>
+									<input type="text" class="form-control" value="{{ $email_setting->username }}" id="username" name="username">
 								</div>
 							</div>
+	
+							<div class="col-12 col-md-6 col-lg-6">
+								<div class="mb-3">
+									<label class="form-label" for="password">Smtp password <span class="text-danger"> *</span></label>
+									<input type="text" class="form-control" value="{{ $email_setting->password }}" id="password" name="password">
+								</div>
+							</div>
+	
+							<div class="col-12 col-md-6 col-lg-6">
+								<div class="mb-3">
+									<label for="mail_port" class="form-label">Mail Port <span class="text-danger"> *</span></label>
+									<input type="text" class="form-control" value="{{ $email_setting->port }}" id="mail_port" name="port">
+								</div>
+							</div>
+	
+							<div class="col-12 col-md-6 col-lg-6">
+								<div class="mb-3">
+									<label class="form-label" for="mail_encryption">Mail Encryption <span class="text-danger"> *</span></label>
+									<select name="encryption" class="form-control" id="mail_encryption">
+										<option value="tls" @if( $email_setting->encryption === 'tls' ) selected @endif>TLS</option>
+										<option value="ssl" @if( $email_setting->encryption === 'ssl' ) selected @endif>SSL</option>
+									</select>
+								</div>
+							</div>
+	
+							<div class="d-flex align-items-center justify-content-end mb-3">
+								<button type="submit" class="btn btn-primary">Save Changes</button>
+							</div>
 						</div>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>

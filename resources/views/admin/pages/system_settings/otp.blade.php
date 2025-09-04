@@ -54,7 +54,7 @@
                             <div class="row align-items-center">
                                 <div class="col-sm-4">
                                     <div class="setting-info">
-                                        <h6>OTP Type</h6>
+                                        <h6>OTP Types</h6>
                                         <p>Your can configure the type</p>
                                     </div>
                                 </div>

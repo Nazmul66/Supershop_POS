@@ -190,7 +190,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
 
         Route::get('/email-settings', [SystemSettingController::class, 'email_settings'])->name('email.settings');
         Route::get('/email-template', [SystemSettingController::class, 'email_template'])->name('email.template');
+        
         Route::get('/otp', [SystemSettingController::class, 'otp_setting'])->name('otp.setting');
+        Route::put('/otp-update', [SystemSettingController::class, 'otp_update'])->name('otp.update');
     });
 
     //______ Financial Settings  _____//

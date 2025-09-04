@@ -1,11 +1,26 @@
 @extends('admin.layout.master')
 
 @push('add-title')
-    Admin Profile
+    OTP Setting
 @endpush
 
 @push('add-css')
-  
+      	<!-- Select2 CSS -->
+	<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/select2/css/select2.min.css') }}">
+
+	<style>
+		.select2-container .select2-selection--single {
+			height: calc(2.25rem + 2px); /* Same as .form-control */
+			padding: 0.375rem 0.75rem;   /* Same as input padding */
+			border: 1px solid #ced4da;   /* Bootstrap border */
+			border-radius: 0.375rem;     /* Bootstrap rounded corners */
+		}
+		/* Fix the arrow alignment */
+		.select2-container--default .select2-selection--single .select2-selection__arrow {
+			height: 100%;
+			right: 10px;
+		}
+	</style>
 @endpush
 
 {{-- Active sidebar --}}
@@ -45,25 +60,30 @@
 
             
             <div class="card flex-fill mb-0">
-                <form action="otp-settings.html">
+                <form action="{{ route('admin.system-settings.otp.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
                     <div class="card-header">
                         <h4>OTP</h4>
                     </div>
+
                     <div class="card-body">
                         <div class="localization-info">
                             <div class="row align-items-center">
                                 <div class="col-sm-4">
                                     <div class="setting-info">
-                                        <h6>OTP Typess</h6>
+                                        <h6>OTP Type</h6>
                                         <p>Your can configure the type</p>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="localization-select">
-                                        <select class="select select2-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="3">SMS</option>
-                                            <option>Email</option>
-                                        </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="2" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-4cba-container"><span class="select2-selection__rendered" id="select2-4cba-container" role="textbox" aria-readonly="true" title="SMS">SMS</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                        <select class="form-control select2" name="otp_type">
+											<option value="" disabled selected>Select</option>
+											<option value="sms" {{ old('otp_type', $setting->otp_type) === 'sms' ? 'selected' : '' }}>SMS</option>
+											<option value="email" {{ old('otp_type', $setting->otp_type) === 'email' ? 'selected' : '' }}>Email</option>
+										</select>
                                     </div>
                                 </div>
                             </div>
@@ -76,10 +96,11 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="localization-select">
-                                        <select class="select select2-hidden-accessible" data-select2-id="4" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="6">4</option>
-                                            <option>5</option>
-                                        </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="5" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-pdgv-container"><span class="select2-selection__rendered" id="select2-pdgv-container" role="textbox" aria-readonly="true" title="4">4</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                        <select class="form-control select2" name="otp_digit_limit">
+											<option value="" disabled selected>Select</option>
+											<option value="4" {{ old('otp_digit_limit', $setting->otp_digit_limit) == 4 ? 'selected' : '' }}>4</option>
+											<option value="5" {{ old('otp_digit_limit', $setting->otp_digit_limit) == 5 ? 'selected' : '' }}>5</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -92,14 +113,16 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="localization-select">
-                                        <select class="select select2-hidden-accessible" data-select2-id="7" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="9">5 Mins</option>
-                                            <option>10 Mins</option>
-                                        </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="8" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-jkqv-container"><span class="select2-selection__rendered" id="select2-jkqv-container" role="textbox" aria-readonly="true" title="5 Mins">5 Mins</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                        <select class="form-control select2" name="otp_exp_time">
+											<option value="" disabled selected>Select</option>
+											<option value="5" {{ old('otp_exp_time', $setting->otp_exp_time) == 5 ? 'selected' : '' }}>5 Minutes</option>
+											<option value="10" {{ old('otp_exp_time', $setting->otp_exp_time) == 10 ? 'selected' : '' }}>10 Minutes</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="d-flex align-items-center justify-content-end">
                             <button type="button" class="btn btn-secondary me-2">Cancel</button>
                             <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -116,9 +139,17 @@
 @endsection
 
 @push('add-js')
-
+    <!-- Select2 Js -->
+	<script src="{{ asset('public/admin/assets/plugins/select2/js/select2.min.js') }}"></script> 
+	
     <!-- Sticky-sidebar -->
     <script src="{{ asset('public/admin/assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
     <script src="{{ asset('public/admin/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
+    
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2(); 
+        });
+  </script>
 
 @endpush

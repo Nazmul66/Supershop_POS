@@ -65,7 +65,7 @@
 			   passwordStrength.classList.remove("heavy-active");
 			   passwordInfo.style.display = "flex";
 			   passwordInfo.style.color = "#FF0000";
-			   passwordInfo.innerHTML  = '<img src="assets/img/icons/angry.svg" class="me-2">' + "Weak. Must contain at least 8 characters";
+			   passwordInfo.innerHTML  = '😠 ' + " Weak. Must contain at least 8 characters";
 				  
 			}
 		}
@@ -80,7 +80,7 @@
 			   passwordStrength.classList.remove("heavy-active");
 			   passwordInfo.style.display = "flex";
 			   passwordInfo.style.color = "#FFB54A";
-			   passwordInfo.innerHTML = '<img src="assets/img/icons/anguish.svg" class="me-2">' + "Average. Must contain at least 1 letter or number";
+			   passwordInfo.innerHTML = '🤕 ' + " Average. Must contain at least 1 letter or number";
 				  
 			}else{
 			 weak.classList.remove("active");
@@ -96,7 +96,7 @@
 			 passwordStrength.classList.remove("poor-active");
 			 passwordStrength.classList.add("strong-active");
 			 passwordStrength.classList.remove("heavy-active");
-			 passwordInfo.innerHTML = '<img src="assets/img/icons/smile.svg" class="me-2">' + "Almost. Must contain special symbol";
+			 passwordInfo.innerHTML = '😊 ' + " Almost. Must contain special symbol";
 			 passwordInfo.style.color = "#1D9CFD";
 		   
 		   }else{
@@ -114,7 +114,7 @@
 			 passwordStrength.classList.remove("strong-active");
 			 passwordStrength.classList.add("heavy-active");
 			 passcheck.classList.add("active");
-			 passwordInfo.innerHTML = '<img src="assets/img/icons/smile.svg" class="me-2">' + "Awesome! You have a secure password.";
+			 passwordInfo.innerHTML = '☺️ ' + " Awesome! You have a secure password.";
 			 passwordInfo.style.color = "#159F46";
 		   }else{
 			 heavy.classList.remove("active");
@@ -205,7 +205,7 @@
 			   passwordStrength1.classList.remove("heavy-active");
 			   passwordInfos.style.display = "block";
 			   passwordInfos.style.color = "#FFB54A";
-			   passwordInfos.innerHTML = '<img src="assets/img/icons/anguish.svg" class="me-2">' + "Average. Must contain at least 1 letter or number";
+			   passwordInfos.innerHTML = '🤕 ' + " Average. Must contain at least 1 letter or number";
 				  
 			}else{
 			 weak1.classList.remove("active");
@@ -221,7 +221,7 @@
 			 passwordStrength1.classList.remove("poor-active");
 			 passwordStrength1.classList.add("strong-active");
 			 passwordStrength1.classList.remove("heavy-active");
-			 passwordInfos.innerHTML = '<img src="assets/img/icons/smile.svg" class="me-2">' + "Almost. Must contain special symbol";
+			 passwordInfos.innerHTML = '😊 ' + " Almost. Must contain special symbol";
 			 passwordInfos.style.color = "#1D9CFD";
 		   
 		   }else{
@@ -239,7 +239,7 @@
 			 passwordStrength1.classList.remove("strong-active");
 			 passwordStrength1.classList.add("heavy-active");
 			 passcheck1.classList.add("active");
-			 passwordInfos.innerHTML = '<img src="assets/img/icons/smile.svg" class="me-2">' + "Awesome! You have a secure password.";
+			 passwordInfos.innerHTML = '☺️ ' + " Awesome! You have a secure password.";
 			 passwordInfos.style.color = "#159F46";
 		   }else{
 			 heavy1.classList.remove("active");

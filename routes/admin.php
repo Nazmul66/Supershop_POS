@@ -155,10 +155,14 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
        //______ General Settings  _____//
        Route::group(["as" => 'general-settings.',"prefix" => '/general-settings'], function () {
         
+        //______ Profile Setting  _____//
         Route::get('/profile', [GeneralSettingController::class, 'profile'])->name('profile');
         Route::put('/profile-update/{id}', [GeneralSettingController::class, 'profile_update'])->name('profile.update');
 
+        //______ Security Setting  _____//
         Route::get('/security', [GeneralSettingController::class, 'security'])->name('security');
+
+        //______ Notification Setting  _____//
         Route::get('/notification', [GeneralSettingController::class, 'notification'])->name('notification');
     });
     
@@ -166,15 +170,19 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     //______ Website Settings  _____//
     Route::group(["as" => 'website-settings.',"prefix" => '/website-settings'], function () {
         
+        //______ System Setting  _____//
         Route::get('/system-settings', [WebsiteSetController::class, 'system_settings'])->name('system');
          Route::put('/system-settings-update', [WebsiteSetController::class, 'system_update'])->name('system.update');
 
+        //______ Company Setting  _____//
         Route::get('/company-settings', [WebsiteSetController::class, 'company_settings'])->name('company');
         Route::put('/company-settings-update', [WebsiteSetController::class, 'company_update'])->name('company.update');
 
+        //______ Localization Setting  _____//
         Route::get('/localization', [WebsiteSetController::class, 'localization'])->name('localization');
         Route::put('/localization-update', [WebsiteSetController::class, 'localization_update'])->name('localization.update');
         
+        //______ Prefixes Setting  _____//
         Route::get('/prefixes', [WebsiteSetController::class, 'prefixes'])->name('prefixes');
         Route::put('/prefixes-update', [WebsiteSetController::class, 'prefixes_update'])->name('prefixes.update');
     });
@@ -183,16 +191,18 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     //______ App Settings  _____//
     Route::group(["as" => 'app-settings.',"prefix" => '/app-settings'], function () {
     
+        //______ Invoice Setting  _____//
         Route::get('/invoice-settings', [AppSettingsController::class, 'invoice_settings'])->name('invoice');
         Route::put('/invoice-settings-update', [AppSettingsController::class, 'invoice_settings_update'])->name('invoice.setting.update');
 
         Route::get('/invoice-template', [AppSettingsController::class, 'invoice_template'])->name('invoice.template');
 
-        // Route::get('/printer', [AppSettingsController::class, 'printer'])->name('printer');
+        //______ Printer Setting  _____//
         Route::resource('/printer', PrinterController::class)->names('printer')->except('show');
         Route::get('/printer-data', [PrinterController::class, 'getData'])->name('printer-data');
         Route::post('/change-printer-status', [PrinterController::class, 'changePrinterStatus'])->name('printer.status');
 
+        //______ POS Setting  _____//
         Route::get('/pos-setting', [AppSettingsController::class, 'pos_setting'])->name('pos.setting');
         Route::put('/pos-setting-update', [AppSettingsController::class, 'pos_setting_update'])->name('pos.setting.update');
 
@@ -206,17 +216,21 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     //______ System Settings  _____//
     Route::group(["as" => 'system-settings.',"prefix" => '/system-settings'], function () {
 
+        //______ Email Setting  _____//
         Route::get('/email-settings', [SystemSettingController::class, 'email_settings'])->name('email.settings');
         Route::put('/email-update', [SystemSettingController::class, 'email_update'])->name('email.update');
 
+         //______ Email Template  _____//
         Route::get('/email-template', [SystemSettingController::class, 'email_template'])->name('email.template');
         
+        //______ Otp Setting  _____//
         Route::get('/otp', [SystemSettingController::class, 'otp_setting'])->name('otp.setting');
         Route::put('/otp-update', [SystemSettingController::class, 'otp_update'])->name('otp.update');
     });
 
     //______ Financial Settings _____//
     Route::group(["as" => 'financial-settings.',"prefix" => '/financial-settings'], function () {
+        //______Tax Rate Setting  _____//
         Route::get('/taxRate-settings', [FinancialSettingController::class, 'taxRate_settings'])->name('taxRate.settings');
     });
    

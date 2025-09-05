@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AdminRoleController;
 use App\Http\Controllers\Admin\ShippingRuleController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AppSettingsController;
+use App\Http\Controllers\Admin\BannedIpController;
 use App\Http\Controllers\Admin\BrandsController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubcategoryController;
@@ -40,6 +41,7 @@ use App\Http\Controllers\Admin\Hrms\ExpenseController;
 use App\Http\Controllers\Admin\OtherSettingController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\NotesController;
+use App\Http\Controllers\Admin\TaxRateController;
 use App\Http\Controllers\Admin\TodoController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
@@ -142,7 +144,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
 
 
         //______ Ban Ip Address _____//
-        Route::get('/ban-ip-address', [OtherSettingController::class, 'ban_ip_address'])->name('banIp.setting');
+        Route::resource('/banIp', BannedIpController::class)->names('banIp')->except('show');
+        Route::get('/banIp-data', [BannedIpController::class, 'getData'])->name('banIp-data');
+        Route::post('/change-banIp-status', [BannedIpController::class, 'changeBanIpStatus'])->name('banIp.status');
     });
 
 
@@ -199,7 +203,6 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
 
     //______ Financial Settings  _____//
     Route::group(["as" => 'financial-settings.',"prefix" => '/financial-settings'], function () {
-
         Route::get('/taxRate-settings', [FinancialSettingController::class, 'taxRate_settings'])->name('taxRate.settings');
     });
    

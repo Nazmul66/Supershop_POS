@@ -207,7 +207,7 @@
                                     <li><a href="{{ route('admin.other-settings.list.backup') }}" class="@yield('backup-setting')">DB Backup</a></li>
                                 @endif
 
-                                <li><a href="{{ route('admin.other-settings.banIp.setting') }}" class="@yield('ban-ip-setting')">Ban IP Address</a></li>
+                                <li><a href="{{ route('admin.other-settings.banIp.index') }}" class="@yield('ban-ip-setting')">Ban IP Address</a></li>
                             </ul>
                         </li>
 

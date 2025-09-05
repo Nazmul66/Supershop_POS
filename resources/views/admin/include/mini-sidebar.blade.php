@@ -1,5 +1,5 @@
 <div class="settings-sidebar" id="sidebar2">
-    <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: 100%; height: 639px;"><div class="sidebar-inner slimscroll" style="overflow: hidden; width: 100%; height: 291px;">
+    <div class="sidebar-inner slimscroll">
         <div id="sidebar-menu5" class="sidebar-menu">
             <h4 class="fw-bold fs-18 mb-2 pb-2">Settings</h4>
             <ul>
@@ -86,7 +86,7 @@
                                     <li><a href="{{ route('admin.other-settings.list.backup') }}" class="@yield('backup-setting')">DB Backup</a></li>
                                 @endif
 
-                                <li><a href="{{ route('admin.other-settings.banIp.setting') }}" class="@yield('ban-ip-setting')">Ban IP Address</a></li>
+                                <li><a href="{{ route('admin.other-settings.banIp.index') }}" class="@yield('ban-ip-setting')">Ban IP Address</a></li>
                             </ul>
                         </li>
                     </ul>								
@@ -94,6 +94,4 @@
             </ul>
         </div>
     </div>
-    
-    <div class="slimScrollBar" style="background: rgb(204, 204, 204); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 217.131px;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
 </div>	

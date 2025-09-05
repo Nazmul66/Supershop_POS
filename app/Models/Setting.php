@@ -21,7 +21,9 @@ class Setting extends Model
         'sales_return_prefix','sales_prefix','customer_prefix', 'expense_prefix',
         'stock_transfer_prefix','stock_adjustment_prefix','pos_invoice_prefix',
         'sales_order_prefix','estimate_prefix','transaction_prefix', 'employee_prefix',
-        'otp_type','otp_digit_limit','otp_exp_time','printer_paper','enable_sound'
+        'otp_type','otp_digit_limit','otp_exp_time','printer_paper','enable_sound',
+        'inv_prefix','invoice_due','company_details','inv_round_off','invoice_logo',
+        'inv_header_term','inv_footer_term'
     ];
     
 }

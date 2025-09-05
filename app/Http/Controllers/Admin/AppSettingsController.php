@@ -22,7 +22,51 @@ class AppSettingsController extends Controller
 
     public function invoice_settings()
     {
-      return view('admin.pages.app_settings.invoice_setting');
+      $setting = Setting::first();
+      return view('admin.pages.app_settings.invoice_setting', compact('setting'));
+    }
+
+    public function invoice_settings_update(Request $request)
+    {
+      // dd($request->all());
+      DB::beginTransaction();
+      try {
+        $setting = Setting::first();
+
+          // Handle logo upload
+          if ($setting && $request->hasFile('invoice_logo')) {
+            $logoPath = $this->deleteImageAndUpload($request, 'invoice_logo', 'settings', $setting->invoice_logo);
+          } elseif (!$setting && $request->hasFile('invoice_logo')) {
+              $logoPath = $this->imageUpload($request, 'invoice_logo', 'inv_logo');
+          } else {
+              $logoPath = $setting->invoice_logo ?? null;
+          }
+
+          // Now save with updateOrCreate
+          Setting::updateOrCreate(
+              ['id' => $setting->id ?? null], 
+              [
+                  'inv_prefix'           => $request->inv_prefix,
+                  'invoice_due'          => $request->invoice_due,
+                  'company_details'      => $request->company_details ? 1 : 0,
+                  'inv_round_off'        => $request->inv_round_off ? 1 : 0,
+                  'invoice_logo'         => $logoPath,
+                  'inv_header_term'      => $request->inv_header_term,
+                  'inv_footer_term'      => $request->inv_footer_term,
+              ]
+          );
+        }
+        catch(\Exception $ex){
+            DB::rollBack();
+            // throw $ex;
+            // dd($ex->getMessage());
+            Toastr::error('There is something wrong', 'Error', ["positionClass" => "toast-top-right"]);
+            return redirect()->back();
+        }
+
+        DB::commit();
+        Toastr::success('Invoice Setting Data updated', 'Success', ["positionClass" => "toast-top-right"]);
+        return redirect()->back();
     }
 
       public function invoice_template()
@@ -44,7 +88,6 @@ class AppSettingsController extends Controller
     public function pos_setting_update(Request $request)
     {
       // dd($request->all());
-
       $request->validate([
           'printer_paper' => ['nullable', 'string', 'max:20'],
           'enable_sound'  => ['nullable']

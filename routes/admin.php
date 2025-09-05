@@ -184,6 +184,8 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::group(["as" => 'app-settings.',"prefix" => '/app-settings'], function () {
     
         Route::get('/invoice-settings', [AppSettingsController::class, 'invoice_settings'])->name('invoice');
+        Route::put('/invoice-settings-update', [AppSettingsController::class, 'invoice_settings_update'])->name('invoice.setting.update');
+
         Route::get('/invoice-template', [AppSettingsController::class, 'invoice_template'])->name('invoice.template');
 
         // Route::get('/printer', [AppSettingsController::class, 'printer'])->name('printer');

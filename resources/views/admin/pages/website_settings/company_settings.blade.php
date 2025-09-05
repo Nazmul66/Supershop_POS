@@ -151,11 +151,9 @@
 
 								<div class="col-xl-3">
 									<div class="new-logo ms-xl-auto">
-										<a  href="javascript:void();" data-input="iconInput" data-preview="iconPreview" data-default="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}">
+										<a href="javascript:void();" data-input="iconInput" data-preview="iconPreview" data-default="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}">
 											@if ( !empty($setting->icon) )
 												<img id="iconPreview" src="{{ asset($setting->icon) }}" alt="Logo">
-
-												
 											@else
 												<img id="iconPreview" src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" alt="Logo">
 											@endif

@@ -50,9 +50,12 @@
 				<div class="card flex-fill mb-0 w-50">
 					<div class="card-header d-flex align-items-center">
 						<h5 class="card-title flex-grow-1 mb-0">Ban IP Address</h5>
-						<div class="flex-shrink-0">
-							<button class="btn btn-primary add-btn" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Ban IP Address</button>
-						</div>
+
+						@if(auth("admin")->user()->can("create.banip"))
+							<div class="flex-shrink-0">
+								<button class="btn btn-primary add-btn" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Ban IP Address</button>
+							</div>
+						@endif
 					</div>
 					<div class="card-body">												
 						<div class="table-responsive" style="overflow: auto;">

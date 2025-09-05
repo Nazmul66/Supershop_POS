@@ -45,7 +45,7 @@ class BannedIpController extends Controller
         return DataTables::of($banIps)
             ->addIndexColumn()
             ->addColumn('status', function ($banIp) {
-                if(auth("admin")->user()->can("status.brand"))
+                if(auth("admin")->user()->can("status.banip"))
                     if ($banIp->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$banIp->id.'" data-status="'.$banIp->status.'"> <i
@@ -75,13 +75,13 @@ class BannedIpController extends Controller
                         </button>
 
                         <div class="dropdown-menu dropdownmenu-primary" style="">
-                            @if(auth("admin")->user()->can("update.brand"))
+                            @if(auth("admin")->user()->can("update.banip"))
                                 <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$banIp->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
-                            @if(auth("admin")->user()->can("delete.brand"))
+                            @if(auth("admin")->user()->can("delete.banip"))
                                 <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$banIp->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
@@ -97,8 +97,8 @@ class BannedIpController extends Controller
 
     public function changeBanIpStatus(Request $request)
     {
-        if (!$this->user || !$this->user->can('status.brand')) {
-            throw UnauthorizedException::forPermissions(['status.brand']);
+        if (!$this->user || !$this->user->can('status.banip')) {
+            throw UnauthorizedException::forPermissions(['status.banip']);
         }
 
         $id = $request->id;
@@ -122,8 +122,8 @@ class BannedIpController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$this->user || !$this->user->can('create.brand')) {
-            throw UnauthorizedException::forPermissions(['create.brand']);
+        if (!$this->user || !$this->user->can('create.banip')) {
+            throw UnauthorizedException::forPermissions(['create.banip']);
         }
 
         $request->validate([
@@ -158,8 +158,8 @@ class BannedIpController extends Controller
      */
     public function edit(BanIp $banIp)
     {
-        if (!$this->user || !$this->user->can('update.brand')) {
-            throw UnauthorizedException::forPermissions(['update.brand']);
+        if (!$this->user || !$this->user->can('update.banip')) {
+            throw UnauthorizedException::forPermissions(['update.banip']);
         }
 
         // dd($category);
@@ -171,8 +171,8 @@ class BannedIpController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (!$this->user || !$this->user->can('update.brand')) {
-            throw UnauthorizedException::forPermissions(['update.brand']);
+        if (!$this->user || !$this->user->can('update.banip')) {
+            throw UnauthorizedException::forPermissions(['update.banip']);
         }
 
         $request->validate([
@@ -205,8 +205,8 @@ class BannedIpController extends Controller
      */
     public function destroy(BanIp $banIp)
     {
-        if (!$this->user || !$this->user->can('delete.brand')) {
-            throw UnauthorizedException::forPermissions(['delete.brand']);
+        if (!$this->user || !$this->user->can('delete.banip')) {
+            throw UnauthorizedException::forPermissions(['delete.banip']);
         }
 
         $banIp->delete();

@@ -41,6 +41,7 @@ use App\Http\Controllers\Admin\Hrms\ExpenseController;
 use App\Http\Controllers\Admin\OtherSettingController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\NotesController;
+use App\Http\Controllers\Admin\SignatureController;
 use App\Http\Controllers\Admin\TaxRateController;
 use App\Http\Controllers\Admin\TodoController;
 use Illuminate\Support\Facades\App;
@@ -185,7 +186,11 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
         Route::get('/invoice-template', [AppSettingsController::class, 'invoice_template'])->name('invoice.template');
         Route::get('/printer', [AppSettingsController::class, 'printer'])->name('printer');
         Route::get('/pos-setting', [AppSettingsController::class, 'pos_setting'])->name('pos.setting');
-        Route::get('/signature', [AppSettingsController::class, 'signature'])->name('signature');
+
+        //______ Signature  _____//
+        Route::resource('/signature', SignatureController::class)->names('signature')->except('show');
+        Route::get('/signature-data', [SignatureController::class, 'getData'])->name('signature-data');
+        Route::post('/change-signature-status', [SignatureController::class, 'changeSignatureStatus'])->name('signature.status');
     });
 
 
@@ -201,7 +206,7 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
         Route::put('/otp-update', [SystemSettingController::class, 'otp_update'])->name('otp.update');
     });
 
-    //______ Financial Settings  _____//
+    //______ Financial Settings _____//
     Route::group(["as" => 'financial-settings.',"prefix" => '/financial-settings'], function () {
         Route::get('/taxRate-settings', [FinancialSettingController::class, 'taxRate_settings'])->name('taxRate.settings');
     });

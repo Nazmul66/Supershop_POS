@@ -6,9 +6,6 @@
 
 @push('add-css')
 	<link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css">
-
-	<!-- Summernote CSS -->
-	<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/summernote/summernote-bs4.min.css') }}">
 @endpush
 
 {{-- Active sidebar --}}

@@ -95,8 +95,8 @@ class SignatureController extends Controller
 
     public function changeSignatureStatus(Request $request)
     {
-        if (!$this->user || !$this->user->can('status.banip')) {
-            throw UnauthorizedException::forPermissions(['status.banip']);
+        if (!$this->user || !$this->user->can('status.signature')) {
+            throw UnauthorizedException::forPermissions(['status.signature']);
         }
 
         $id = $request->id;
@@ -121,8 +121,8 @@ class SignatureController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-        if (!$this->user || !$this->user->can('create.banip')) {
-            throw UnauthorizedException::forPermissions(['create.banip']);
+        if (!$this->user || !$this->user->can('create.signature')) {
+            throw UnauthorizedException::forPermissions(['create.signature']);
         }
 
         $request->validate([
@@ -160,8 +160,8 @@ class SignatureController extends Controller
      */
     public function edit(Signature $signature)
     {
-        if (!$this->user || !$this->user->can('update.banip')) {
-            throw UnauthorizedException::forPermissions(['update.banip']);
+        if (!$this->user || !$this->user->can('update.signature')) {
+            throw UnauthorizedException::forPermissions(['update.signature']);
         }
 
         // dd($category);
@@ -173,8 +173,8 @@ class SignatureController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (!$this->user || !$this->user->can('update.banip')) {
-            throw UnauthorizedException::forPermissions(['update.banip']);
+        if (!$this->user || !$this->user->can('update.signature')) {
+            throw UnauthorizedException::forPermissions(['update.signature']);
         }
 
         $request->validate([
@@ -211,8 +211,8 @@ class SignatureController extends Controller
      */
     public function destroy(Signature $signature)
     {
-        if (!$this->user || !$this->user->can('delete.banip')) {
-            throw UnauthorizedException::forPermissions(['delete.banip']);
+        if (!$this->user || !$this->user->can('delete.signature')) {
+            throw UnauthorizedException::forPermissions(['delete.signature']);
         }
 
         if ($signature->image) {

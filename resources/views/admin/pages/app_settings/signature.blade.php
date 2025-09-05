@@ -47,7 +47,7 @@
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h4>Signatures</h4>
 
-                    @if(auth("admin")->user()->can("create.banip"))
+                    @if(auth("admin")->user()->can("create.signature"))
                         <div class="page-btn">
                             <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Signature</a>
                         </div>

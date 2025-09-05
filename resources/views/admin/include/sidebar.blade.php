@@ -168,7 +168,7 @@
                             <ul style="display: none;">
                                 <li><a href="{{ route('admin.app-settings.invoice') }}" class="@yield('invoice-setting')">Invoice Settings</a></li>
                                 <li><a href="{{ route('admin.app-settings.invoice.template') }}" class="@yield('invoice-template')">Invoice Template</a></li>
-                                <li><a href="{{ route('admin.app-settings.printer') }}" class="@yield('printer-setting')">Printer</a></li>
+                                <li><a href="{{ route('admin.app-settings.printer.index') }}" class="@yield('printer-setting')">Printer</a></li>
                                 <li><a href="{{ route('admin.app-settings.pos.setting') }}" class="@yield('pos-setting')">POS</a></li>
                                 <li><a href="{{ route('admin.app-settings.signature.index') }}" class="@yield('signature-setting')">Signature</a></li>
                             </ul>

@@ -41,6 +41,7 @@ use App\Http\Controllers\Admin\Hrms\ExpenseController;
 use App\Http\Controllers\Admin\OtherSettingController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\NotesController;
+use App\Http\Controllers\Admin\PrinterController;
 use App\Http\Controllers\Admin\SignatureController;
 use App\Http\Controllers\Admin\TaxRateController;
 use App\Http\Controllers\Admin\TodoController;
@@ -184,7 +185,11 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     
         Route::get('/invoice-settings', [AppSettingsController::class, 'invoice_settings'])->name('invoice');
         Route::get('/invoice-template', [AppSettingsController::class, 'invoice_template'])->name('invoice.template');
-        Route::get('/printer', [AppSettingsController::class, 'printer'])->name('printer');
+
+        // Route::get('/printer', [AppSettingsController::class, 'printer'])->name('printer');
+        Route::resource('/printer', PrinterController::class)->names('printer')->except('show');
+        Route::get('/printer-data', [PrinterController::class, 'getData'])->name('printer-data');
+        Route::post('/change-printer-status', [PrinterController::class, 'changePrinterStatus'])->name('printer.status');
 
         Route::get('/pos-setting', [AppSettingsController::class, 'pos_setting'])->name('pos.setting');
         Route::put('/pos-setting-update', [AppSettingsController::class, 'pos_setting_update'])->name('pos.setting.update');

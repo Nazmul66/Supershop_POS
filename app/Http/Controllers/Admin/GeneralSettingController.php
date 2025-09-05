@@ -71,7 +71,7 @@ class GeneralSettingController extends Controller
           DB::commit();
           Toastr::success('Data updated', 'Success', ["positionClass" => "toast-top-right"]);
           return redirect()->back();
-      }
+    }
 
     public function security()
     {

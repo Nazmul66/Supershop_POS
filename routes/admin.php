@@ -185,7 +185,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
         Route::get('/invoice-settings', [AppSettingsController::class, 'invoice_settings'])->name('invoice');
         Route::get('/invoice-template', [AppSettingsController::class, 'invoice_template'])->name('invoice.template');
         Route::get('/printer', [AppSettingsController::class, 'printer'])->name('printer');
+
         Route::get('/pos-setting', [AppSettingsController::class, 'pos_setting'])->name('pos.setting');
+        Route::put('/pos-setting-update', [AppSettingsController::class, 'pos_setting_update'])->name('pos.setting.update');
 
         //______ Signature  _____//
         Route::resource('/signature', SignatureController::class)->names('signature')->except('show');

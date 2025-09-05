@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @push('add-title')
-    Admin Profile
+    POS Setting
 @endpush
 
 @push('add-css')
@@ -45,10 +45,14 @@
 
             
             <div class="card flex-fill mb-0">
-                <form action="pos-settings.html">
+                <form action="{{ route('admin.app-settings.pos.setting.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
                     <div class="card-header">
                         <h4>POS Settings</h4>
                     </div>
+
                     <div class="card-body">
                         <div class="localization-info">
                             <div class="row align-items-center">
@@ -59,15 +63,16 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="localization-select">
-                                        <select class="select select2-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="3">A4</option>
-                                            <option>A4</option>
-                                            <option>A4</option>
-                                        </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="2" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-69hq-container"><span class="select2-selection__rendered" id="select2-69hq-container" role="textbox" aria-readonly="true" title="A4">A4</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                        <select class="select form-control" name="printer_paper">
+                                            <option value="a4" @if( $setting->printer_paper === 'a4' ) selected @endif>A4</option>
+                                            <option value="a3" @if( $setting->printer_paper === 'a3' ) selected @endif>A3</option>
+                                            <option value="b4" @if( $setting->printer_paper === 'b4' ) selected @endif>B4</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>	
-                            <div class="row align-items-center">
+
+                            {{-- <div class="row align-items-center">
                                 <div class="col-sm-4">
                                     <div class="setting-info">
                                         <h6>Payment Method</h6>
@@ -113,26 +118,34 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>	
+                            </div>	 --}}
+
                             <div class="row align-items-center">
                                 <div class="col-sm-4">
-                                    <div class="setting-info">
+                                    <div class="setting-info mb-0">
                                         <h6>Enable Sound Effect </h6>
                                     </div>
                                 </div>
+
+                            @php
+                                $checked = '';
+                                $active = '';
+                                if( $setting->enable_sound == 1 ){
+                                    $checked = 'checked';
+                                    $active = 'active';
+                                }
+                            @endphp
+
                                 <div class="col-sm-4">
-                                    <div class="localization-select d-flex align-items-center">
-                                        <div class="status-toggle modal-status d-flex justify-content-between align-items-center me-3">
-                                            <input type="checkbox" id="user4" class="check" checked="">
-                                            <label for="user4" class="checktoggle"></label>
-                                        </div>
-                                    </div>
+                                    <input type="checkbox" id="desktop_push" class="toggle-checkbox" name="enable_sound" {{ $checked }} hidden>
+                                    <label for="desktop_push" class="toggle_label {{$active}}">
+                                        <span class="toggle-ball"></span>
+                                    </label>
                                 </div>
                             </div>									
                         </div>
                         <div class="d-flex align-items-center justify-content-end">
-                            <button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-submit">Save Changes</button>
+                            <button type="submit" class="btn btn-secondary">Save Changes</button>
                         </div>
                     </div>
                 </form>
@@ -150,5 +163,21 @@
     <!-- Sticky-sidebar -->
     <script src="{{ asset('public/admin/assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
     <script src="{{ asset('public/admin/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
+
+    <script>
+		document.querySelectorAll(".toggle-checkbox").forEach((checkbox) => {
+			checkbox.addEventListener("change", function () {
+				if (this.checked) {
+					console.log("✅ Active for", this.id);
+					this.setAttribute("checked", "checked");
+					this.nextElementSibling.classList.add("active");
+				} else {
+					console.log("❌ Inactive for", this.id);
+					this.removeAttribute("checked", "");
+					this.nextElementSibling.classList.remove("active");
+				}
+			});
+		});
+	</script>
 
 @endpush

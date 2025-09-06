@@ -109,7 +109,8 @@
                                         </label>
 							</div>
 						</div>
-						<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 border-bottom mb-3 pb-3">
+
+						{{-- <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 border-bottom mb-3 pb-3">
 							<div class="d-flex align-items-center">
 								<span class="avatar avatar-lg border bg-light fs-24 me-2">
 									<i class="ti ti-brand-google text-gray-900 fs-18"></i>
@@ -128,8 +129,9 @@
                                             </label>
 								</div>
 							</div>
-						</div>
-						<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 border-bottom mb-3 pb-3">
+						</div> --}}
+
+						{{-- <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 border-bottom mb-3 pb-3">
 							<div class="d-flex align-items-center">
 								<span class="avatar avatar-lg border bg-light fs-24 me-2">
 									<i class="ti ti-phone text-gray-900 fs-18"></i>
@@ -147,6 +149,7 @@
 								<a href="javascript:void(0);" class="btn btn-secondary ms-3">Remove</a>
 							</div>
 						</div>
+
 						<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 border-bottom mb-3 pb-3">
 							<div class="d-flex align-items-center">
 								<span class="avatar avatar-lg border bg-light fs-24 me-2">
@@ -164,7 +167,8 @@
 								<a href="javascript:void(0);" class="btn btn-primary mt-0" data-bs-toggle="modal" data-bs-target="#change_email">Change</a>
 								<a href="javascript:void(0);" class="btn btn-secondary ms-3">Remove</a>
 							</div>
-						</div>
+						</div> --}}
+
 						<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 border-bottom mb-3 pb-3">
 							<div class="d-flex align-items-center">
 								<span class="avatar avatar-lg border bg-light fs-24 me-2">
@@ -233,23 +237,26 @@ style="display: none;" aria-hidden="true">
 			</div>
 
 			<div class="modal-body">
-				<form action="" method="POST">
+				<form id="passwordChangeForm" enctype="multipart/form-data">
+					@csrf
 
 					<div class="row">
 							<div class="col-lg-12">
 								<div class="input-blocks">
 									<label class="fw-medium">Current Password <span class="text-danger">*</span></label>
 									<div class="pass-group">
-									   <input type="password form-control" class="form-control settings-pass-input">
+									   <input type="password form-control" name="current_pass" id="current_pass" class="form-control settings-pass-input">
 									   <span class="toggle-password ti ti-eye-off"></span>
 								   </div>
+
+								   <span id="current_pass_validate" class="text-danger validation-error mt-1"></span>
 								</div>
 							</div>
 							<div class="col-lg-12">
 								<div class="input-blocks">
 									<label class="fw-medium">New Password <span class="text-danger">*</span></label>
 									<div class="pass-group" id="passwordInput">
-										<input type="password" class="form-control settings-pass-inputs">
+										<input type="password" class="form-control settings-pass-inputs" name="new_pass" id="new_pass">
 										<span class="toggle-passwords ti ti-eye-off"></span>
 										<span class="pass-checked"></span>
 									</div>
@@ -260,15 +267,19 @@ style="display: none;" aria-hidden="true">
 										<span id="heavy"></span>
 									</div>
 									<div id="passwordInfo"></div>
+
+									<span id="new_pass_validate" class="text-danger validation-error mt-1"></span>
 								</div>
 							</div>
 							<div class="col-lg-12">
 								<div class="input-blocks mb-0">
 									<label class="fw-medium">Confirm Password <span class="text-danger">*</span></label>
 									<div class="pass-group">
-									   <input type="password" class="form-control settings-pass-inputa">
+									   <input type="password" class="form-control settings-pass-inputa" name="confirm_pass" id="confirm_pass">
 									   <span class="toggle-passworda ti ti-eye-off"></span>
 								   </div>
+
+								   <span id="confirm_pass_validate" class="text-danger validation-error mt-1"></span>
 								</div>
 							</div>
 						</div>
@@ -612,6 +623,101 @@ style="display: none;" aria-hidden="true">
 				}
 			});
 		});
+
+		// Password Change
+		$('#passwordChangeForm').submit(function (e) {
+			e.preventDefault();
+			let formData = new FormData(this);
+
+			$.ajax({
+				type: "POST",
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url: "{{ route('admin.general-settings.password-change') }}",
+				data: formData,
+				processData: false,  // Prevent jQuery from processing the data
+				contentType: false,  // Prevent jQuery from setting contentType
+				success: function (res) {
+					console.log(res);
+					if (res.status == 1) {
+						$('#change_password').modal('hide');
+						$('#passwordChangeForm')[0].reset();
+						$('.validation-error').html('');
+
+						swal.fire({
+							title: "Success",
+							text: `${res.message}`,
+							icon: "success"
+						})
+					}
+					else if(res.status == 2){
+						$('#new_pass_validate').empty().html('Your New password not matched');
+						$('#confirm_pass_validate').empty().html('Your Confirm password not matched');
+
+						swal.fire({
+							title: "Error",
+							text: `${res.message}`,
+							icon: "error"
+						})
+					}
+					else{
+						$('#current_pass_validate').empty().html(res.message);
+
+						swal.fire({
+							title: "Error",
+							text: `${res.message}`,
+							icon: "error"
+						})
+					}
+				},
+				error: function (err) {
+					console.log(err);
+					let error = err.responseJSON.errors;
+
+					$('#current_pass_validate').empty().html(error.current_pass);
+					$('#new_pass_validate').empty().html(error.new_pass);
+					$('#confirm_pass_validate').empty().html(error.confirm_pass);
+
+					swal.fire({
+						title: "Failed",
+						text: "Something Went Wrong !",
+						icon: "error"
+					})
+				}
+			});
+		})
+
+		// Current Change Check
+		$('#current_pass').on('input', function(e){
+                var currentPassword = $(this).val();
+                // console.log($(this).val());
+
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{ route('admin.general-settings.current.password.check') }}",
+                    data: { current_password: currentPassword },
+                    success: function (res) {
+                        console.log(res);
+                        if (res.match === true) {
+                          $('#current_pass_validate').html(`
+                               <span class="text-success"><strong>Current Password is Correct</strong><i class='bx bx-check'></i></span> 
+                          `);
+                        }
+                        else{
+                            $('#current_pass_validate').html(`
+                               <span class="text-danger"><strong>Current Password is Incorrect</strong><i class='bx bx-x'></i></span> 
+                          `); 
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                });
+            });
 	</script>
 
 @endpush

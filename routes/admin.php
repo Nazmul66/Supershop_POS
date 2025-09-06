@@ -152,8 +152,8 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     });
 
 
-       //______ General Settings  _____//
-       Route::group(["as" => 'general-settings.',"prefix" => '/general-settings'], function () {
+    //______ General Settings  _____//
+    Route::group(["as" => 'general-settings.',"prefix" => '/general-settings'], function () {
         
         //______ Profile Setting  _____//
         Route::get('/profile', [GeneralSettingController::class, 'profile'])->name('profile');
@@ -161,6 +161,8 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
 
         //______ Security Setting  _____//
         Route::get('/security', [GeneralSettingController::class, 'security'])->name('security');
+        Route::post('/password-change', [GeneralSettingController::class, 'password_change'])->name('password-change');
+        Route::post('/current-password-check', [GeneralSettingController::class, 'checkCurrentPassword'])->name('current.password.check');
 
         //______ Notification Setting  _____//
         Route::get('/notification', [GeneralSettingController::class, 'notification'])->name('notification');

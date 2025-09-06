@@ -114,6 +114,23 @@
                 </li>
 
 
+                {{-- Content (CMS) --}}
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Content (CMS)</h6>
+                    <ul>
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><i class="ti ti-map-pin fs-16 me-2"></i><span>Location</span><span class="menu-arrow"></span></a>
+                            <ul>
+                                <li><a href="countries.html">Countries</a></li>
+                                <li><a href="states.html">States</a></li>
+                                <li><a href="cities.html">Cities</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="faq.html"><i class="ti ti-help-circle fs-16 me-2"></i><span>FAQ</span></a></li>
+                    </ul>
+                </li>
+
+
                 {{-- Role & Permission --}}
                 @if(auth("admin")->user()->can("main-admin-access"))
                     <li class="submenu-open">

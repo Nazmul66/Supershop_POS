@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helper\MailHelper;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendLoginEmailJob;
 use App\Mail\TwoFactorAuthMail;
+use App\Models\AccountActivity;
 use App\Models\Admin;
 use App\Models\Brand;
 use App\Models\Category;
@@ -24,6 +26,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Stevebauman\Location\Facades\Location;
+use Jenssegers\Agent\Agent;
 
 class AdminController extends Controller
 {
@@ -118,23 +122,31 @@ class AdminController extends Controller
 
            if( Auth::guard('admin')->attempt(["email" => $data['email'], "password" => $data['password']]) ){
  
-                $admin = Auth::guard('admin')->user();
+                if ( Auth::guard('admin')->user()->enable_two_factor == 1 ) {
+                    $admin = Auth::guard('admin')->user();
 
-                $admin->two_factor_code       = rand(1000, 9999);
-                $admin->two_factor_expire_at  = now()->addMinutes(10);
-                $admin->save();
+                    $admin->two_factor_code       = rand(1000, 9999);
+                    $admin->two_factor_expire_at  = now()->addMinutes(10);
+                    $admin->save();
 
-                // set mail config
-                MailHelper::setMailConfig();
+                    // set mail config
+                    MailHelper::setMailConfig();
 
-                Mail::to('hnazmul748@gmail.com')->send(new TwoFactorAuthMail($admin));
+                    Mail::to('hnazmul748@gmail.com')->send(new TwoFactorAuthMail($admin));
+                    // dispatch(new SendLoginEmailJob($admin));
 
-                // Force user to verify before dashboard
-                Toastr::info('Please verify your account', 'Verification Required', ["positionClass" => "toast-top-right"]);
-                return redirect()->route('verify'); // <- send to verify page
+                    $this->account_activities($request, $admin->id);
 
-                // Toastr::success('Login Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-                // return redirect('/admin/dashboard');
+                    // Force user to verify before dashboard
+                    Toastr::info('Please verify your account', 'Verification Required', ["positionClass" => "toast-top-right"]);
+                    return redirect()->route('verify'); // <- send to verify page
+
+                } else {
+                    $admin = Auth::guard('admin')->user();
+                    $this->account_activities($request, $admin->id);
+                    Toastr::success('Login Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+                    return redirect('/admin/dashboard');
+                }
            }
            else{
                 Toastr::error('Invalid Email or Password', 'Error', ["positionClass" => "toast-top-right"]);
@@ -147,6 +159,27 @@ class AdminController extends Controller
         }
     }
 
+    public function account_activities($request, $id)
+    {
+        $ip = $request->ip();
+        $location = Location::get($ip);
+        $locationName = $location ? $location->city . ', ' . $location->countryName : 'Unknown';
+
+        $agent = new Agent();
+        // Browser name
+        $browser = $agent->browser();
+        // Operating system
+        $platform = $agent->platform();
+
+        $activity = new AccountActivity();
+        $activity->admin_id     =  $id;
+        $activity->device       =  $browser . ' - ' . $platform;
+        $activity->location     =  $locationName;
+        $activity->ip_address   =  $ip;
+        $activity->created_at   =  now();
+        $activity->updated_at   =  now();
+        $activity->save();
+    }
 
     public function verify_resend()
     {
@@ -157,7 +190,7 @@ class AdminController extends Controller
         $admin->save();
 
         // set mail config
-        MailHelper::setMailConfig();
+        // MailHelper::setMailConfig();
 
         Mail::to('hnazmul748@gmail.com')->send(new TwoFactorAuthMail($admin));
 

@@ -10,6 +10,7 @@
         "anayarojo/shoppingcart": "^4.2",
         "barryvdh/laravel-dompdf": "^3.1",
         "brian2694/laravel-toastr": "^5.59",
+        "jenssegers/agent": "^2.6",
         "jorenvanhocht/laravel-share": "^4.2",
         "laravel/breeze": "^2.3",
         "laravel/framework": "^12.0",

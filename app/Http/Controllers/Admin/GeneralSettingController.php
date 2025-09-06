@@ -81,25 +81,25 @@ class GeneralSettingController extends Controller
 
     public function password_change(PasswordChangeRequest $request)
     {
-      // dd($request->all());
-    // Password Update
-    if( Hash::check($request->current_pass, Auth::guard('admin')->user()->password) ){
-        if( $request->new_pass === $request->confirm_pass ){
-            Admin::where('id', Auth::guard('admin')->user()->id)->update([
-                'password' => bcrypt($request->new_pass)
-            ]);
+         // dd($request->all());
+        // Password Update
+        if( Hash::check($request->current_pass, Auth::guard('admin')->user()->password) ){
+            if( $request->new_pass === $request->confirm_pass ){
+                Admin::where('id', Auth::guard('admin')->user()->id)->update([
+                    'password' => bcrypt($request->new_pass)
+                ]);
 
-            return response()->json(['message'=> "Profile updated successfully!", 'status' => 1]);
+                return response()->json(['message'=> "Profile updated successfully!", 'status' => 1]);
+            }
+
+            else{
+                return response()->json(['message'=> "Your New password & Confirm Password not matched!", 'status' => 2]);
+            }
         }
 
         else{
-            return response()->json(['message'=> "Your New password & Confirm Password not matched!", 'status' => 2]);
+            return response()->json(['message'=> "Your Current password is incorrect!", 'status' => 3]);
         }
-    }
-
-    else{
-        return response()->json(['message'=> "Your Current password is incorrect!", 'status' => 3]);
-    }
         
     }
 
@@ -109,6 +109,22 @@ class GeneralSettingController extends Controller
         return response()->json([
             'match' => Hash::check($request->current_password, Auth::guard('admin')->user()->password)
         ]);
+    }
+
+    public function twoFactorStatus(Request $request)
+    {
+        // dd($request->all());
+        $admin = Auth::guard('admin')->user();
+        $admin->enable_two_factor = $request->twoFactor;
+        $admin->save();
+
+        // dd($admin->enable_two_factor);
+        if( $admin->enable_two_factor == 1 ){
+            return response()->json(['message' => "Two Factor Auth Status Enable", 'status' => true]);
+        }
+        else{
+            return response()->json(['message' => "Two Factor Auth Status Disable", 'status' => false]);
+        }
     }
     
      public function notification()

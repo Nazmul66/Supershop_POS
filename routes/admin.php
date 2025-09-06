@@ -163,6 +163,7 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
         Route::get('/security', [GeneralSettingController::class, 'security'])->name('security');
         Route::post('/password-change', [GeneralSettingController::class, 'password_change'])->name('password-change');
         Route::post('/current-password-check', [GeneralSettingController::class, 'checkCurrentPassword'])->name('current.password.check');
+        Route::post('/two-factor-status', [GeneralSettingController::class, 'twoFactorStatus'])->name('two.factor.status');
 
         //______ Notification Setting  _____//
         Route::get('/notification', [GeneralSettingController::class, 'notification'])->name('notification');

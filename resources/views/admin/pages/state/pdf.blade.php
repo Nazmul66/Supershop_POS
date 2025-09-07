@@ -96,7 +96,7 @@
 <body>
     
     <header>
-        <h2>Country List</h2>
+        <h2>States List</h2>
         <p>Generated on: {{ date('d-m-Y H:i:A') }}</p>
     </header>
 
@@ -110,17 +110,17 @@
                 <tr>
                     <th>SL.</th>
                     <th>Country Name</th>
-                    <th>Country Code</th>
+                    <th>State Name</th>
                     <th>Create Date</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($country as $index => $row)
+                @foreach ($states as $index => $row)
                     <tr>
                         <td>{{ $index+1 }}</td>
                         <td>{{ $row->country_name }}</td>
-                        <td>{{ $row->country_code }}</td>
+                        <td>{{ $row->state_name }}</td>
                         <td>{{ $row->created_at }}</td>
                         <td>
                             @if ( $row->status == 1 )

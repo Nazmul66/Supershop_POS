@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CreateBrandRequest;
-use App\Http\Requests\Admin\UpdateBrandRequest;
 use App\Traits\ImageUploadTraits;
 use App\Models\Country;
+use App\Models\State;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -40,20 +39,22 @@ class StateController extends Controller
     public function getData()
     {
         // get all data
-        $countries = Country::all();
+        $states = State::leftJoin('countries', 'countries.id', 'states.country_id')
+                ->select('states.*', 'countries.country_name')
+                ->get();
 
-        return DataTables::of($countries)
+        return DataTables::of($states)
             ->addIndexColumn()
-            ->addColumn('status', function ($country) {
+            ->addColumn('status', function ($state) {
                 if(auth("admin")->user()->can("status.brand"))
-                    if ($country->status == 1) {
+                    if ($state->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
-                            data-id="'.$country->id.'" data-status="'.$country->status.'"> <i
+                            data-id="'.$state->id.'" data-status="'.$state->status.'"> <i
                                 class="fa-solid fa-toggle-on fa-2x text-success"></i>
                         </a>';
                     } else {
                         return '<a class="status" id="status" href="javascript:void(0)"
-                            data-id="'.$country->id.'" data-status="'.$country->status.'"> <i
+                            data-id="'.$state->id.'" data-status="'.$state->status.'"> <i
                                 class="fa-solid fa-toggle-off fa-2x text-danger"></i>
                         </a>';
                     }
@@ -61,31 +62,31 @@ class StateController extends Controller
                     return '<span class="badge bg-info">N/A</span>'; 
                 }
             })
-            ->addColumn('action', function ($country) {
+            ->addColumn('action', function ($state) {
                 $actionHtml = Blade::render('
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Actions <i class="mdi mdi-chevron-down"></i>
                         </button>
 
                         <div class="dropdown-menu dropdownmenu-primary" style="">
-                            <a class="dropdown-item text-info" id="viewButton" href="javascript:void(0)" data-id="'.$country->id.'" data-bs-toggle="modal" data-bs-target="#viewModal">
+                            <a class="dropdown-item text-info" id="viewButton" href="javascript:void(0)" data-id="'.$state->id.'" data-bs-toggle="modal" data-bs-target="#viewModal">
                                 <i class="fas fa-eye"></i> View
                             </a>
 
                             @if(auth("admin")->user()->can("update.brand"))
-                                <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$country->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
+                                <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$state->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
                             @if(auth("admin")->user()->can("delete.brand"))
-                                <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$country->id.'" id="deleteBtn">
+                                <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$state->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
                             @endif
                         </div>
                     </div>
-                ', ['country' => $country]);
+                ', ['state' => $state]);
                 return $actionHtml;
             })
             ->rawColumns(['status', 'action'])
@@ -107,7 +108,7 @@ class StateController extends Controller
             $status = 1;
         }
 
-        $page = Country::findOrFail($id);
+        $page = State::findOrFail($id);
         $page->status = $status;
         $page->save();
 
@@ -124,21 +125,21 @@ class StateController extends Controller
         }
         
         $request->validate([
-            'country_name' => 'required|string|unique:countries,country_name|max:150',
-            'country_code' => 'required|string|max:150',
+            'country_id' => 'required|integer',
+            'state_name'  => 'required|string|max:150',
         ]);
 
         DB::beginTransaction();
         try {
-            $country = new Country();
-            $country->country_name           = Str::title($request->country_name);
-            $country->country_code           = Str::upper($request->country_code);
-            $country->status                 = $request->status;
-            $country->created_at             = now();
-            $country->updated_at             = now();
+            $state  = new State();
+            $state->country_id           = $request->country_id;
+            $state->state_name             = Str::title($request->state_name);
+            $state->status                 = $request->status;
+            $state->created_at             = now();
+            $state->updated_at             = now();
 
-            // dd($country);
-            $country->save();
+            // dd($state);
+            $state->save();
         }
         catch(\Exception $ex){
             DB::rollBack();
@@ -147,20 +148,20 @@ class StateController extends Controller
         }
 
         DB::commit();
-        return response()->json(['message'=> "Successfully Country Created!", 'status' => true]);
+        return response()->json(['message'=> "Successfully State Created!", 'status' => true]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Country $country)
+    public function edit(State $state)
     {
         if (!$this->user || !$this->user->can('update.brand')) {
             throw UnauthorizedException::forPermissions(['update.brand']);
         }
 
-        // dd($country);
-        return response()->json(['success' => $brand]);
+        // dd($state);
+        return response()->json(['success' => $state]);
     }
 
     /**
@@ -171,23 +172,21 @@ class StateController extends Controller
         if (!$this->user || !$this->user->can('update.brand')) {
             throw UnauthorizedException::forPermissions(['update.brand']);
         }
-        
+
         $request->validate([
-            'country_name' => 'required|string|max:150|unique:countries,country_name,' .$id,
-            'country_code' => 'required|string|max:150',
+            'country_id' => 'required|integer',
+            'state_name'  => 'required|string|max:150',
         ]);
 
-        $country  = Country::find($id);
+        $state  = State::find($id);
 
         DB::beginTransaction();
         try {
-            $country = new Country();
-            $country->country_name           = Str::title($request->country_name);
-            $country->country_code           = Str::upper($request->country_code);
-            $country->status                 = $request->status;
-            $country->updated_at             = now();
-
-            $country->save();
+            $state->country_id             = $request->country_id;
+            $state->state_name             = Str::title($request->state_name);
+            $state->status                 = $request->status;
+            $state->updated_at             = now();
+            $state->save();
         }
         catch(\Exception $ex){
             DB::rollBack();
@@ -202,33 +201,36 @@ class StateController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Country $country)
+    public function destroy(State $state)
     {
         if (!$this->user || !$this->user->can('delete.brand')) {
             throw UnauthorizedException::forPermissions(['delete.brand']);
         }
-        $country->delete();
-        return response()->json(['message' => 'Country has been deleted.'], 200);
+        $state->delete();
+        return response()->json(['message' => 'State has been deleted.'], 200);
     }
 
 
     public function stateView($id)
     {
-        $country  = Country::find($id);
-        // dd($country);
+        $state = State::leftJoin('countries', 'countries.id', 'states.country_id')
+                ->where('states.id', $id)
+                ->select('states.*', 'countries.country_name')
+                ->first();
+        // dd($state);
 
         $statusHtml = '';
-        if ($country->status == 1) {
+        if ($state->status == 1) {
             $statusHtml = '<span class="text-success">Active</span>';
         } else {
             $statusHtml = '<span class="text-danger">Inactive</span>';
         }
 
-        $created_date = date('d F, Y', strtotime($country->created_at));
-        $updated_date = date('d F, Y', strtotime($country->updated_at));
+        $created_date = date('d F, Y', strtotime($state->created_at));
+        $updated_date = date('d F, Y', strtotime($state->updated_at));
 
         return response()->json([
-            'success'           => $country,
+            'success'           => $state,
             'statusHtml'        => $statusHtml,
             'created_date'      => $created_date,
             'updated_date'      => $updated_date,
@@ -243,9 +245,11 @@ class StateController extends Controller
             throw UnauthorizedException::forPermissions(['pdf.brand']);
         }
         
-        $country = State::get();
+        $states = State::leftJoin('countries', 'countries.id', 'states.country_id')
+                ->select('states.*', 'countries.country_name')
+                ->get();
 
-        $pdf = Pdf::loadView('admin.pages.country.pdf', compact('country'))
+        $pdf = Pdf::loadView('admin.pages.state.pdf', compact('states'))
             ->setPaper('a4', 'portrait');
 
         return $pdf->download('State.pdf');

@@ -46,7 +46,7 @@
         </ul>
         <div class="page-btn">
             @if(auth("admin")->user()->can("create.brand"))
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Country</button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add State</button>
              @endif
         </div>
     </div>
@@ -89,10 +89,9 @@
 
                             <div class="mb-3">
                                 <label for="country_name" class="form-label">Country Name <span class="text-danger">*</span></label>
-                                <select class="form-select" id="country_name" name="country_name">
-                                    <option value="" selected disabled>Active</option>
+                                <select class="form-select" id="country_name" name="country_id">
                                     @foreach ($countries as $row)
-                                        <option value="{{ $row->id }}">{{ $row->country_code }}</option>
+                                        <option value="{{ $row->id }}">{{ $row->country_name }}</option>
                                     @endforeach
                                 </select>
 
@@ -150,10 +149,9 @@
 
                               <div class="mb-3">
                                 <label for="up_country_name" class="form-label">Country Name <span class="text-danger">*</span></label>
-                                <select class="form-select" id="up_country_name" name="country_name">
-                                    <option value="" selected disabled>Active</option>
+                                <select class="form-select" id="up_country_name" name="country_id">
                                     @foreach ($countries as $row)
-                                        <option value="{{ $row->id }}">{{ $row->country_code }}</option>
+                                        <option value="{{ $row->id }}">{{ $row->country_name }}</option>
                                     @endforeach
                                 </select>
 
@@ -380,7 +378,7 @@
                         let data = res.success;
 
                         $('#id').val(data.id);
-                        $('#up_country_name').val(data.country_name);
+                        $('#up_country_name').val(data.country_id);
                         $('#up_state_name').val(data.state_name);
                         $('#up_status').val(data.status);
                     },
@@ -424,7 +422,7 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#up_country_name_validate').empty().html(error.country_name);
+                        $('#up_country_name_validate').empty().html(error.country_id);
                         $('#up_state_name_validate').empty().html(error.state_name);
 
                         swal.fire({

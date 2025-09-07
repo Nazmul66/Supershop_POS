@@ -126,7 +126,7 @@
                                 <li><a href="{{ route('admin.city.index') }}" class="@yield('city')">Cities</a></li>
                             </ul>
                         </li>
-                        <li><a href="faq.html"><i class="ti ti-help-circle fs-16 me-2"></i><span>FAQ</span></a></li>
+                        <li><a href="{{ route('admin.faq.index') }}" class="@yield('faq')"><i class="ti ti-help-circle fs-16 me-2"></i><span>FAQ</span></a></li>
                     </ul>
                 </li>
 

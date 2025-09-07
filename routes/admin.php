@@ -127,6 +127,14 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/city/pdf', [CityController::class, 'allCityPdf'])->name('city.pdf');
 
 
+    //______ Faq _____//
+    Route::resource('/faq', FaqController::class)->names('faq')->except('show');
+    Route::get('/faq-data', [FaqController::class, 'getData'])->name('faq-data');
+    Route::post('/change-faq-status', [FaqController::class, 'changeFaqStatus'])->name('faq.status');
+    Route::get('/faq/view/{id}', [FaqController::class, 'faqView'])->name('faq.view');
+    Route::get('/faq/pdf', [FaqController::class, 'allFaqPdf'])->name('faq.pdf');
+
+
     //______ Units _____//
     Route::resource('/units', UnitController::class)->names('unit')->except('show');
     Route::get('/unit-data', [UnitController::class, 'getData'])->name('unit-data');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -28,7 +29,7 @@ class FaqController extends Controller
      */
     public function index()
     {
-        return view('backend.pages.faq.index');
+        return view('admin.pages.faq.index');
     }
 
     public function getData()
@@ -39,23 +40,27 @@ class FaqController extends Controller
         return DataTables::of($faqs)
             ->addIndexColumn()
             ->addColumn('status', function ($faq) {
-                if(auth("admin")->user()->can("status.faq"))
-                {
+                if(auth("admin")->user()->can("status.brand"))
                     if ($faq->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$faq->id.'" data-status="'.$faq->status.'"> <i
-                                class="fa-solid fa-toggle-on fa-2x"></i>
+                                class="fa-solid fa-toggle-on fa-2x text-success"></i>
                         </a>';
                     } else {
                         return '<a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$faq->id.'" data-status="'.$faq->status.'"> <i
-                                class="fa-solid fa-toggle-off fa-2x" style="color: grey"></i>
+                                class="fa-solid fa-toggle-off fa-2x text-danger"></i>
                         </a>';
                     }
-                }
                 else{
                     return '<span class="badge bg-info">N/A</span>'; 
                 }
+            })
+            ->addColumn('question', function ($faq) {
+                return Str::limit($faq->question, 40) . '....';
+            })
+            ->addColumn('answer', function ($faq) {
+                return Str::limit($faq->answer, 60) . '....';
             })
             ->addColumn('action', function ($faq) {
                 $actionHtml = Blade::render('
@@ -130,6 +135,8 @@ class FaqController extends Controller
             $faq->question          = $request->question;
             $faq->answer            = $request->answer;
             $faq->status            = $request->status;
+            $faq->created_at        = now();
+            $faq->updated_at        = now();
             $faq->save();
         }
         catch(\Exception $ex){
@@ -173,6 +180,7 @@ class FaqController extends Controller
             $faq->question          = $request->question;
             $faq->answer            = $request->answer;
             $faq->status            = $request->status;
+            $faq->updated_at        = now();
             $faq->save();
         }
         catch(\Exception $ex){
@@ -219,5 +227,21 @@ class FaqController extends Controller
             'created_date'      => $created_date,
             'updated_date'      => $updated_date,
         ]);
+    }
+
+
+    public function allFaqPdf()
+    {
+        if (!$this->user || !$this->user->can('pdf.brand')) {
+            throw UnauthorizedException::forPermissions(['pdf.brand']);
+        }
+        
+        $faqs = Faq::get();
+
+        $pdf = Pdf::loadView('admin.pages.faq.pdf', compact('faqs'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('Faq.pdf');
+        // return view('admin.pages.brands.pdf', compact('categories'));
     }
 }

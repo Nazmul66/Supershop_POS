@@ -5,7 +5,23 @@
 @endpush
 
 @push('add-css')
-  
+      <!-- Select2 CSS -->
+	<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/select2/css/select2.min.css') }}">
+
+	<style>
+		.select2-container .select2-selection--single {
+			height: calc(2.25rem + 2px); /* Same as .form-control */
+			padding: 0.375rem 0.75rem;   /* Same as input padding */
+			border: 1px solid #ced4da;   /* Bootstrap border */
+			border-radius: 0.375rem;     /* Bootstrap rounded corners */
+		}
+
+		/* Fix the arrow alignment */
+		.select2-container--default .select2-selection--single .select2-selection__arrow {
+			height: 100%;
+			right: 10px;
+		}
+	</style>
 @endpush
 
 {{-- Active sidebar --}}
@@ -147,12 +163,14 @@
 									<label class="form-label">
 										Country <span class="text-danger">*</span>
 									</label>
-									<select class="form-control select2" name="country">
+									<select class="form-control select2" name="country_id">
 										<option value="" disabled selected>Select</option>
-										<option value="usa">USA</option>
-										<option value="bangladesh">Bangladesh</option>
-										<option value="french">French</option>
-										<option value="australia">Australia</option>
+										@foreach ($countries as $row)
+											<option value="{{ $row->id }}"
+											@if( $row->id == $setting->country_id ) selected @endif	
+											>{{ $row->country_name }}</option>	
+										@endforeach
+
 									</select>
 								</div>
 							</div>
@@ -162,11 +180,14 @@
 									<label class="form-label">
 										State <span class="text-danger">*</span>
 									</label>
-									<select class="form-control select2" name="state">
+									<select class="form-control select2" name="state_id">
 										<option value="" disabled selected>Select</option>
-										<option>Alaska</option>
-										<option>Mexico</option>
-										<option>Tasmania</option>
+										@foreach ($states as $row)
+											<option 
+											value="{{ $row->id }}"
+											@if( $row->id == $setting->state_id ) selected @endif
+											>{{ $row->state_name }}</option>	
+										@endforeach
 									</select>
 								</div>
 							</div>
@@ -176,11 +197,13 @@
 									<label class="form-label">
 										City <span class="text-danger">*</span>
 									</label>
-									<select class="form-control select2" name="city">
+									<select class="form-control select2" name="city_id">
 										<option value="" disabled selected>Select</option>
-										<option>Anchorage</option>
-										<option>Tijuana</option>
-										<option>Hobart</option>
+										@foreach ($cities as $row)
+											<option value="{{ $row->id }}"
+											@if( $row->id == $setting->city_id ) selected @endif		
+											>{{ $row->city_name }}</option>	
+										@endforeach
 									</select>
 								</div>
 							</div>
@@ -210,11 +233,17 @@
 
 @push('add-js')
 
+	<!-- Select2 Js -->
+	<script src="{{ asset('public/admin/assets/plugins/select2/js/select2.min.js') }}"></script>
     <!-- Sticky-sidebar -->
     <script src="{{ asset('public/admin/assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
     <script src="{{ asset('public/admin/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
 
 	<script>
+		$(document).ready(function () {
+			$('.select2').select2();
+		});
+
 		// Function to handle image preview
 		function previewImage(input, previewId) {
 			const file = input.files[0];

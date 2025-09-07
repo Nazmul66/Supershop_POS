@@ -17,7 +17,8 @@ class Admin extends Authenticatable // must added Authenticatable and remove Mod
 
     protected $fillable = [
         'name', 'type', 'phone', 'email', 'password','image','status',
-        'username', 'address', 'city', 'state', 'country','postal_code','email_verified_at',
+        'username', 'address', 'postal_code','email_verified_at',
+        'country_id', 'state_id', 'city_id'
     ];
 
     protected $hidden = [

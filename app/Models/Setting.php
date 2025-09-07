@@ -12,7 +12,7 @@ class Setting extends Model
     protected $fillable = [
         'logo','favicon','icon','dark_logo','site_name','fax',
         'website','whatsapp','phone','email','phone_optional','address_optional',
-        'email_optional','address','country','state','city','postal_code',
+        'email_optional','address','country_id','state_id','city_id','postal_code',
         'currency_symbol', 'currency_name','timeZone','date_format',
         'google_map', 'facebook','twitter','youtube','linkedin','instagram','pinterest',
         'reddit', 'quora','thread','facebook_pixel','google_analytics','tax',

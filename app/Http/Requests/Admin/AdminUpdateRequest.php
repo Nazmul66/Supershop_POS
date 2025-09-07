@@ -27,9 +27,9 @@ class AdminUpdateRequest extends FormRequest
             'phone'       => ['required', 'string', 'max:20'],
             'image'       => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
             'address'     => ['nullable', 'string'],
-            'country'     => ['nullable', 'string', 'max:100'],
-            'state'       => ['nullable', 'string', 'max:100'],
-            'city'        => ['nullable', 'string', 'max:100'],
+            'country_id'  => ['nullable', 'integer'],
+            'state_id'    => ['nullable', 'integer'],
+            'city_id'     => ['nullable', 'integer'],
             'postal_code' => ['nullable', 'integer'],
         ];
     }

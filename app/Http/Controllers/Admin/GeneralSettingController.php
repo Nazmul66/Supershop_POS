@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AdminUpdateRequest;
 use App\Http\Requests\Admin\PasswordChangeRequest;
 use App\Models\Admin;
+use App\Models\City;
+use App\Models\State;
+use App\Models\Country;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,8 +28,11 @@ class GeneralSettingController extends Controller
 
     public function profile()
     {
-      $setting = Admin::first();
-      return view('admin.pages.general_settings.adminProfile', compact('setting'));
+      $setting    = Admin::first();
+      $countries  = Country::where('status', 1)->get();
+      $cities     = City::where('status', 1)->get();
+      $states     = State::where('status', 1)->get();
+      return view('admin.pages.general_settings.adminProfile', compact('setting', 'countries', 'cities', 'states'));
     }
 
     public function profile_update(AdminUpdateRequest $request, $id)
@@ -53,9 +59,9 @@ class GeneralSettingController extends Controller
                     'username'         => Str::lower($request->username),
                     'phone'            => $request->phone,
                     'address'          => $request->address,
-                    'country'          => $request->country,
-                    'state'            => $request->state,
-                    'city'             => $request->city,
+                    'country_id'       => $request->country_id,
+                    'state_id'         => $request->state_id,
+                    'city_id'          => $request->city_id,
                     'postal_code'      => $request->postal_code,
                     'image'            => $imagePath,
                 ]

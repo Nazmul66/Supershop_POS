@@ -7,6 +7,9 @@ use App\Http\Requests\Admin\CompanyUpdateRequest;
 use App\Http\Requests\Admin\LocalizationUpdateRequest;
 use App\Models\CredentialSetting;
 use App\Models\Setting;
+use App\Models\City;
+use App\Models\State;
+use App\Models\Country;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ImageUploadTraits;
@@ -72,8 +75,11 @@ class WebsiteSetController extends Controller
 
     public function company_settings()
     {
-      $setting = Setting::first();
-      return view('admin.pages.website_settings.company_settings', compact('setting'));
+      $setting    = Setting::first();
+      $countries  = Country::where('status', 1)->get();
+      $cities     = City::where('status', 1)->get();
+      $states     = State::where('status', 1)->get();
+      return view('admin.pages.website_settings.company_settings', compact('setting', 'countries', 'cities', 'states'));
     }
 
     public function company_update(CompanyUpdateRequest $request)
@@ -133,9 +139,9 @@ class WebsiteSetController extends Controller
                   'fax'              => $request->fax,
                   'address'          => $request->address,
                   'website'          => $request->website,
-                  'country'          => $request->country,
-                  'state'            => $request->state,
-                  'city'             => $request->city,
+                  'country_id'       => $request->country_id,
+                  'state_id'         => $request->state_id,
+                  'city_id'          => $request->city_id,
                   'postal_code'      => $request->postal_code,
                   'logo'             => $logoPath,
                   'icon'             => $iconPath,

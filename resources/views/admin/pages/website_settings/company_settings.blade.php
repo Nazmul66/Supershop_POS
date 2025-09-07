@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @push('add-title')
-    Database Backup
+    Company Setting
 @endpush
 
 @push('add-css')
@@ -302,12 +302,13 @@
 										<label class="form-label">
 											Country <span class="text-danger">*</span>
 										</label>
-										<select class="form-control select2" name="country">
+										<select class="form-control select2" name="country_id">
 											<option value="" disabled selected>Select</option>
-											<option value="usa">USA</option>
-											<option value="bangladesh">Bangladesh</option>
-											<option value="french">French</option>
-											<option value="australia">Australia</option>
+											@foreach ($countries as $row)
+												<option value="{{ $row->id }}"
+												@if( $row->id == $setting->country_id ) selected @endif	
+												>{{ $row->country_name }}</option>	
+											@endforeach
 										</select>
 									</div>
 								</div>
@@ -316,11 +317,14 @@
 										<label class="form-label">
 											State <span class="text-danger">*</span>
 										</label>
-										<select class="form-control select2" name="state">
+										<select class="form-control select2" name="state_id">
 											<option value="" disabled selected>Select</option>
-											<option>Alaska</option>
-											<option>Mexico</option>
-											<option>Tasmania</option>
+											@foreach ($states as $row)
+												<option 
+												value="{{ $row->id }}"
+												@if( $row->id == $setting->state_id ) selected @endif
+												>{{ $row->state_name }}</option>	
+											@endforeach
 										</select>
 									</div>
 								</div>
@@ -329,11 +333,13 @@
 										<label class="form-label">
 											City <span class="text-danger">*</span>
 										</label>
-										<select class="form-control select2" name="city">
+										<select class="form-control select2" name="city_id">
 											<option value="" disabled selected>Select</option>
-											<option>Anchorage</option>
-											<option>Tijuana</option>
-											<option>Hobart</option>
+											@foreach ($cities as $row)
+												<option value="{{ $row->id }}"
+												@if( $row->id == $setting->city_id ) selected @endif		
+												>{{ $row->city_name }}</option>	
+											@endforeach
 										</select>
 									</div>
 								</div>

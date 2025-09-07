@@ -34,9 +34,9 @@ class CompanyUpdateRequest extends FormRequest
             'dark_logo'   => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
         
             'address'     => ['nullable', 'string', 'max:500'],
-            'country'     => ['nullable', 'string', 'max:100'],
-            'state'       => ['nullable', 'string', 'max:100'],
-            'city'        => ['nullable', 'string', 'max:100'],
+            'country_id'  => ['nullable', 'integer'],
+            'state_id'    => ['nullable', 'integer'],
+            'city_id'     => ['nullable', 'integer'],
             'postal_code' => ['nullable', 'string', 'max:20'],
         ];
     }

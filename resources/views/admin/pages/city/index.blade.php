@@ -283,9 +283,9 @@
 
     <script>
         $(document).ready(function () {
-            $(document).ready(function() {
-                $('.select2').select2();
-            });
+            // select2
+            $('.select2').select2();
+            
 
             // Show Data through Datatable
             let datatables = $('#datatables').DataTable({

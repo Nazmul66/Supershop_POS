@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\AttributeNameController;
 use App\Http\Controllers\Admin\GeneralSettingController;
 use App\Http\Controllers\Admin\SystemSettingController;
+use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Admin\FinancialSettingController;
 use App\Http\Controllers\Admin\WebsiteSetController;
 use App\Http\Controllers\Admin\SettingController;
@@ -98,6 +100,22 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::post('/change-brand-status', [BrandsController::class, 'changeBrandStatus'])->name('brand.status');
     Route::get('/brands/view/{id}', [BrandsController::class, 'brandView'])->name('brand.view');
     Route::get('/brands/pdf', [BrandsController::class, 'allBrandsPdf'])->name('brand.pdf');
+
+
+       //______ Country _____//
+    Route::resource('/country', CountryController::class)->names('country')->except('show');
+    Route::get('/country-data', [CountryController::class, 'getData'])->name('country-data');
+    Route::post('/change-country-status', [CountryController::class, 'changeCountryStatus'])->name('country.status');
+    Route::get('/country/view/{id}', [CountryController::class, 'countryView'])->name('country.view');
+    Route::get('/country/pdf', [CountryController::class, 'allCountryPdf'])->name('country.pdf');
+    
+    
+        //______ State _____//
+    Route::resource('/state', StateController::class)->names('state')->except('show');
+    Route::get('/state-data', [StateController::class, 'getData'])->name('state-data');
+    Route::post('/change-state-status', [StateController::class, 'changeStateStatus'])->name('state.status');
+    Route::get('/state/view/{id}', [StateController::class, 'stateView'])->name('state.view');
+    Route::get('/state/pdf', [StateController::class, 'allStatePdf'])->name('state.pdf');
 
 
     //______ Units _____//

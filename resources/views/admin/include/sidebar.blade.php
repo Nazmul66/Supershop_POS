@@ -119,10 +119,10 @@
                     <h6 class="submenu-hdr">Content (CMS)</h6>
                     <ul>
                         <li class="submenu">
-                            <a href="javascript:void(0);"><i class="ti ti-map-pin fs-16 me-2"></i><span>Location</span><span class="menu-arrow"></span></a>
+                            <a href="javascript:void(0);" class="@yield('content-cms')"><i class="ti ti-map-pin fs-16 me-2"></i><span>Location</span><span class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="countries.html">Countries</a></li>
-                                <li><a href="states.html">States</a></li>
+                                <li><a href="{{ route('admin.country.index') }}" class="@yield('country')">Countries</a></li>
+                                <li><a href="{{ route('admin.state.index') }}" class="@yield('state')">States</a></li>
                                 <li><a href="cities.html">Cities</a></li>
                             </ul>
                         </li>

@@ -7,6 +7,24 @@
 
 @push('add-css')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css">
+
+    <!-- Select2 CSS -->
+	<link rel="stylesheet" href="{{ asset('public/admin/assets/plugins/select2/css/select2.min.css') }}">
+
+	<style>
+		.select2-container .select2-selection--single {
+			height: calc(2.25rem + 2px); /* Same as .form-control */
+			padding: 0.375rem 0.75rem;   /* Same as input padding */
+			border: 1px solid #ced4da;   /* Bootstrap border */
+			border-radius: 0.375rem;     /* Bootstrap rounded corners */
+		}
+
+		/* Fix the arrow alignment */
+		.select2-container--default .select2-selection--single .select2-selection__arrow {
+			height: 100%;
+			right: 10px;
+		}
+	</style>
 @endpush
 
 {{-- Active sidebar --}}
@@ -89,7 +107,7 @@
 
                             <div class="mb-3">
                                 <label for="country_name" class="form-label">Country Name <span class="text-danger">*</span></label>
-                                <select class="form-select" id="country_name" name="country_id">
+                                <select class="form-select select2" id="country_name" name="country_id">
                                     @foreach ($countries as $row)
                                         <option value="{{ $row->id }}">{{ $row->country_name }}</option>
                                     @endforeach
@@ -149,7 +167,7 @@
 
                               <div class="mb-3">
                                 <label for="up_country_name" class="form-label">Country Name <span class="text-danger">*</span></label>
-                                <select class="form-select" id="up_country_name" name="country_id">
+                                <select class="form-select select2" id="up_country_name" name="country_id">
                                     @foreach ($countries as $row)
                                         <option value="{{ $row->id }}">{{ $row->country_name }}</option>
                                     @endforeach
@@ -231,10 +249,15 @@
 @endsection
 
 @push('add-js')
+    <!-- Select2 Js -->
+    <script src="{{ asset('public/admin/assets/plugins/select2/js/select2.min.js') }}"></script>
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
 
     <script>
         $(document).ready(function () {
+            $(document).ready(function() {
+                $('.select2').select2();
+            });
 
             // Show Data through Datatable
             let datatables = $('#datatables').DataTable({

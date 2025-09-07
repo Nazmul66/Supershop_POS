@@ -126,7 +126,7 @@ class StateController extends Controller
         
         $request->validate([
             'country_id' => 'required|integer',
-            'state_name'  => 'required|string|max:150',
+            'state_name'  => 'required|string|max:150|unique:states,state_name',
         ]);
 
         DB::beginTransaction();
@@ -175,7 +175,7 @@ class StateController extends Controller
 
         $request->validate([
             'country_id' => 'required|integer',
-            'state_name'  => 'required|string|max:150',
+            'state_name'  => 'required|string|max:150|unique:states,state_name,' .$id,
         ]);
 
         $state  = State::find($id);

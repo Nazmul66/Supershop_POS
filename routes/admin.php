@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\BrandsController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\ChildCategoryController;
+use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FlashSaleController;
 use App\Http\Controllers\Admin\CouponController;
@@ -102,7 +103,7 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/brands/pdf', [BrandsController::class, 'allBrandsPdf'])->name('brand.pdf');
 
 
-       //______ Country _____//
+    //______ Country _____//
     Route::resource('/country', CountryController::class)->names('country')->except('show');
     Route::get('/country-data', [CountryController::class, 'getData'])->name('country-data');
     Route::post('/change-country-status', [CountryController::class, 'changeCountryStatus'])->name('country.status');
@@ -110,12 +111,20 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/country/pdf', [CountryController::class, 'allCountryPdf'])->name('country.pdf');
     
     
-        //______ State _____//
+    //______ State _____//
     Route::resource('/state', StateController::class)->names('state')->except('show');
     Route::get('/state-data', [StateController::class, 'getData'])->name('state-data');
     Route::post('/change-state-status', [StateController::class, 'changeStateStatus'])->name('state.status');
     Route::get('/state/view/{id}', [StateController::class, 'stateView'])->name('state.view');
     Route::get('/state/pdf', [StateController::class, 'allStatePdf'])->name('state.pdf');
+
+
+    //______ City _____//
+    Route::resource('/city', CityController::class)->names('city')->except('show');
+    Route::get('/city-data', [CityController::class, 'getData'])->name('city-data');
+    Route::post('/change-city-status', [CityController::class, 'changeCityStatus'])->name('city.status');
+    Route::get('/city/view/{id}', [CityController::class, 'cityView'])->name('city.view');
+    Route::get('/city/pdf', [CityController::class, 'allCityPdf'])->name('city.pdf');
 
 
     //______ Units _____//

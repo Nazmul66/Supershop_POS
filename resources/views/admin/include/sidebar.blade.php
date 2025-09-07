@@ -122,8 +122,8 @@
                             <a href="javascript:void(0);" class="@yield('content-cms')"><i class="ti ti-map-pin fs-16 me-2"></i><span>Location</span><span class="menu-arrow"></span></a>
                             <ul>
                                 <li><a href="{{ route('admin.country.index') }}" class="@yield('country')">Countries</a></li>
-                                <li><a href="{{ route('admin.state.index') }}" class="@yield('state')">States</a></li>
-                                <li><a href="cities.html">Cities</a></li>
+                                <li><a href="{{ route('admin.state.index') }}" class="@yield('state')">States / Division</a></li>
+                                <li><a href="{{ route('admin.city.index') }}" class="@yield('city')">Cities</a></li>
                             </ul>
                         </li>
                         <li><a href="faq.html"><i class="ti ti-help-circle fs-16 me-2"></i><span>FAQ</span></a></li>

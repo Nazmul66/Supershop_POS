@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CreateBrandRequest;
-use App\Http\Requests\Admin\UpdateBrandRequest;
 use App\Traits\ImageUploadTraits;
 use App\Models\Country;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -44,7 +42,7 @@ class CountryController extends Controller
         return DataTables::of($countries)
             ->addIndexColumn()
             ->addColumn('status', function ($country) {
-                if(auth("admin")->user()->can("status.brand"))
+                if(auth("admin")->user()->can("status.country"))
                     if ($country->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$country->id.'" data-status="'.$country->status.'"> <i
@@ -71,13 +69,13 @@ class CountryController extends Controller
                                 <i class="fas fa-eye"></i> View
                             </a>
 
-                            @if(auth("admin")->user()->can("update.brand"))
+                            @if(auth("admin")->user()->can("update.country"))
                                 <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$country->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
-                            @if(auth("admin")->user()->can("delete.brand"))
+                            @if(auth("admin")->user()->can("delete.country"))
                                 <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$country->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
@@ -93,8 +91,8 @@ class CountryController extends Controller
 
     public function changeCountryStatus(Request $request)
     {
-        if (!$this->user || !$this->user->can('status.brand')) {
-            throw UnauthorizedException::forPermissions(['status.brand']);
+        if (!$this->user || !$this->user->can('status.country')) {
+            throw UnauthorizedException::forPermissions(['status.country']);
         }
 
         $id = $request->id;
@@ -118,8 +116,8 @@ class CountryController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$this->user || !$this->user->can('create.brand')) {
-            throw UnauthorizedException::forPermissions(['create.brand']);
+        if (!$this->user || !$this->user->can('create.country')) {
+            throw UnauthorizedException::forPermissions(['create.country']);
         }
         
         $request->validate([
@@ -154,8 +152,8 @@ class CountryController extends Controller
      */
     public function edit(Country $country)
     {
-        if (!$this->user || !$this->user->can('update.brand')) {
-            throw UnauthorizedException::forPermissions(['update.brand']);
+        if (!$this->user || !$this->user->can('update.country')) {
+            throw UnauthorizedException::forPermissions(['update.country']);
         }
 
         // dd($country);
@@ -167,8 +165,8 @@ class CountryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (!$this->user || !$this->user->can('update.brand')) {
-            throw UnauthorizedException::forPermissions(['update.brand']);
+        if (!$this->user || !$this->user->can('update.country')) {
+            throw UnauthorizedException::forPermissions(['update.country']);
         }
         
         $request->validate([
@@ -202,8 +200,8 @@ class CountryController extends Controller
      */
     public function destroy(Country $country)
     {
-        if (!$this->user || !$this->user->can('delete.brand')) {
-            throw UnauthorizedException::forPermissions(['delete.brand']);
+        if (!$this->user || !$this->user->can('delete.country')) {
+            throw UnauthorizedException::forPermissions(['delete.country']);
         }
         $country->delete();
         return response()->json(['message' => 'Country has been deleted.'], 200);
@@ -237,8 +235,8 @@ class CountryController extends Controller
 
     public function allCountryPdf()
     {
-        if (!$this->user || !$this->user->can('pdf.brand')) {
-            throw UnauthorizedException::forPermissions(['pdf.brand']);
+        if (!$this->user || !$this->user->can('pdf.country')) {
+            throw UnauthorizedException::forPermissions(['pdf.country']);
         }
         
         $country = Country::get();

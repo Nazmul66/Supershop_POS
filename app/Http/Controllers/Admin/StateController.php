@@ -46,7 +46,7 @@ class StateController extends Controller
         return DataTables::of($states)
             ->addIndexColumn()
             ->addColumn('status', function ($state) {
-                if(auth("admin")->user()->can("status.brand"))
+                if(auth("admin")->user()->can("status.state"))
                     if ($state->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$state->id.'" data-status="'.$state->status.'"> <i
@@ -73,13 +73,13 @@ class StateController extends Controller
                                 <i class="fas fa-eye"></i> View
                             </a>
 
-                            @if(auth("admin")->user()->can("update.brand"))
+                            @if(auth("admin")->user()->can("update.state"))
                                 <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$state->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
-                            @if(auth("admin")->user()->can("delete.brand"))
+                            @if(auth("admin")->user()->can("delete.state"))
                                 <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$state->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
@@ -95,8 +95,8 @@ class StateController extends Controller
 
     public function changeStateStatus(Request $request)
     {
-        if (!$this->user || !$this->user->can('status.brand')) {
-            throw UnauthorizedException::forPermissions(['status.brand']);
+        if (!$this->user || !$this->user->can('status.state')) {
+            throw UnauthorizedException::forPermissions(['status.state']);
         }
 
         $id = $request->id;
@@ -120,8 +120,8 @@ class StateController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$this->user || !$this->user->can('create.brand')) {
-            throw UnauthorizedException::forPermissions(['create.brand']);
+        if (!$this->user || !$this->user->can('create.state')) {
+            throw UnauthorizedException::forPermissions(['create.state']);
         }
         
         $request->validate([
@@ -156,8 +156,8 @@ class StateController extends Controller
      */
     public function edit(State $state)
     {
-        if (!$this->user || !$this->user->can('update.brand')) {
-            throw UnauthorizedException::forPermissions(['update.brand']);
+        if (!$this->user || !$this->user->can('update.state')) {
+            throw UnauthorizedException::forPermissions(['update.state']);
         }
 
         // dd($state);
@@ -169,8 +169,8 @@ class StateController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (!$this->user || !$this->user->can('update.brand')) {
-            throw UnauthorizedException::forPermissions(['update.brand']);
+        if (!$this->user || !$this->user->can('update.state')) {
+            throw UnauthorizedException::forPermissions(['update.state']);
         }
 
         $request->validate([
@@ -203,8 +203,8 @@ class StateController extends Controller
      */
     public function destroy(State $state)
     {
-        if (!$this->user || !$this->user->can('delete.brand')) {
-            throw UnauthorizedException::forPermissions(['delete.brand']);
+        if (!$this->user || !$this->user->can('delete.state')) {
+            throw UnauthorizedException::forPermissions(['delete.state']);
         }
         $state->delete();
         return response()->json(['message' => 'State has been deleted.'], 200);
@@ -241,8 +241,8 @@ class StateController extends Controller
 
     public function allStatePdf()
     {
-        if (!$this->user || !$this->user->can('pdf.brand')) {
-            throw UnauthorizedException::forPermissions(['pdf.brand']);
+        if (!$this->user || !$this->user->can('pdf.state')) {
+            throw UnauthorizedException::forPermissions(['pdf.state']);
         }
         
         $states = State::leftJoin('countries', 'countries.id', 'states.country_id')

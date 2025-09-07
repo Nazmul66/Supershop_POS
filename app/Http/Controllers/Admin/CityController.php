@@ -49,7 +49,7 @@ class CityController extends Controller
         return DataTables::of($cities)
             ->addIndexColumn()
             ->addColumn('status', function ($city) {
-                if(auth("admin")->user()->can("status.brand"))
+                if(auth("admin")->user()->can("status.city"))
                     if ($city->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$city->id.'" data-status="'.$city->status.'"> <i
@@ -76,13 +76,13 @@ class CityController extends Controller
                                 <i class="fas fa-eye"></i> View
                             </a>
 
-                            @if(auth("admin")->user()->can("update.brand"))
+                            @if(auth("admin")->user()->can("update.city"))
                                 <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$city->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
-                            @if(auth("admin")->user()->can("delete.brand"))
+                            @if(auth("admin")->user()->can("delete.city"))
                                 <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$city->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
@@ -98,8 +98,8 @@ class CityController extends Controller
 
     public function changeCityStatus(Request $request)
     {
-        if (!$this->user || !$this->user->can('status.brand')) {
-            throw UnauthorizedException::forPermissions(['status.brand']);
+        if (!$this->user || !$this->user->can('status.city')) {
+            throw UnauthorizedException::forPermissions(['status.city']);
         }
 
         $id = $request->id;
@@ -123,8 +123,8 @@ class CityController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$this->user || !$this->user->can('create.brand')) {
-            throw UnauthorizedException::forPermissions(['create.brand']);
+        if (!$this->user || !$this->user->can('create.city')) {
+            throw UnauthorizedException::forPermissions(['create.city']);
         }
         
         $request->validate([
@@ -161,8 +161,8 @@ class CityController extends Controller
      */
     public function edit(City $city)
     {
-        if (!$this->user || !$this->user->can('update.brand')) {
-            throw UnauthorizedException::forPermissions(['update.brand']);
+        if (!$this->user || !$this->user->can('update.city')) {
+            throw UnauthorizedException::forPermissions(['update.city']);
         }
 
         // dd($city);
@@ -174,8 +174,8 @@ class CityController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (!$this->user || !$this->user->can('update.brand')) {
-            throw UnauthorizedException::forPermissions(['update.brand']);
+        if (!$this->user || !$this->user->can('update.city')) {
+            throw UnauthorizedException::forPermissions(['update.city']);
         }
 
         $request->validate([
@@ -210,8 +210,8 @@ class CityController extends Controller
      */
     public function destroy(City $city)
     {
-        if (!$this->user || !$this->user->can('delete.brand')) {
-            throw UnauthorizedException::forPermissions(['delete.brand']);
+        if (!$this->user || !$this->user->can('delete.city')) {
+            throw UnauthorizedException::forPermissions(['delete.city']);
         }
         $city->delete();
         return response()->json(['message' => 'City has been deleted.'], 200);
@@ -249,8 +249,8 @@ class CityController extends Controller
 
     public function allCityPdf()
     {
-        if (!$this->user || !$this->user->can('pdf.brand')) {
-            throw UnauthorizedException::forPermissions(['pdf.brand']);
+        if (!$this->user || !$this->user->can('pdf.city')) {
+            throw UnauthorizedException::forPermissions(['pdf.city']);
         }
         
         $cities = City::leftJoin('countries', 'countries.id', 'cities.country_id')

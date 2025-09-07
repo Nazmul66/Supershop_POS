@@ -43,13 +43,13 @@
             </div>
         </div>
         <ul class="table-top-head">
-            @if(auth("admin")->user()->can("pdf.brand"))
+            @if(auth("admin")->user()->can("pdf.city"))
                 <li>
                     <a data-bs-toggle="tooltip" data-bs-placement="top" href="{{ route('admin.city.pdf') }}" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
                 </li>
             @endif
 
-            @if(auth("admin")->user()->can("excel.brand"))
+            @if(auth("admin")->user()->can("excel.city"))
                 <li>
                     <a data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Excel" data-bs-original-title="Excel"><img src="{{ asset('public/admin/assets/img/icons/excel.svg') }}" alt="img"></a>
                 </li>
@@ -63,7 +63,7 @@
             </li>
         </ul>
         <div class="page-btn">
-            @if(auth("admin")->user()->can("create.brand"))
+            @if(auth("admin")->user()->can("create.city"))
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add City</button>
              @endif
         </div>

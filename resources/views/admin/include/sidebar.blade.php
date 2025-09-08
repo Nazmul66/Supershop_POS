@@ -110,6 +110,8 @@
                         <li class="@yield('brand')"><a href="{{ route('admin.brand.index') }}"><i class="ti ti-triangles fs-16 me-2"></i><span>Brand</span></a></li>
 
                         <li class="@yield('unit')"><a href="{{ route('admin.unit.index') }}"><i class="ti ti-brand-unity fs-16 me-2"></i><span>Unit</span></a></li>
+
+                        <li class="@yield('warranty')"><a href="{{ route('admin.warranties.index') }}"><i class="ti ti-certificate fs-16 me-2"></i><span>Warranties</span></a></li>
                     </ul>
                 </li>
 

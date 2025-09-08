@@ -48,6 +48,7 @@ use App\Http\Controllers\Admin\PrinterController;
 use App\Http\Controllers\Admin\SignatureController;
 use App\Http\Controllers\Admin\TaxRateController;
 use App\Http\Controllers\Admin\TodoController;
+use App\Http\Controllers\Admin\WarrantiesController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
@@ -93,6 +94,14 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/childCategories/view/{id}', [ChildCategoryController::class, 'childSubCategoryView'])->name('childCategory.view');
     Route::get('/childCategories/pdf', [ChildCategoryController::class, 'allChildCategoryPdf'])->name('childCategory.pdf');
     Route::post('/get/subCategory-data', [ChildCategoryController::class, 'get_subCategory_data'])->name('childCategory.subCategory.data');
+
+
+    //______ Warranties _____//
+    Route::resource('/warranties', WarrantiesController::class)->names('warranties')->except('show');
+    Route::get('/warranties-data', [WarrantiesController::class, 'getData'])->name('warranties-data');
+    Route::post('/warranties/status', [WarrantiesController::class, 'changeWarrantiesStatus'])->name('warranties.status');
+    Route::get('/warranties/view/{id}', [WarrantiesController::class, 'warrantiesView'])->name('warranties.view');
+    Route::get('/warranties/pdf', [WarrantiesController::class, 'allWarrantiesPdf'])->name('warranties.pdf');
 
 
     //______ Brand _____//

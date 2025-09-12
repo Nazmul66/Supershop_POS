@@ -48,6 +48,7 @@ use App\Http\Controllers\Admin\PrinterController;
 use App\Http\Controllers\Admin\SignatureController;
 use App\Http\Controllers\Admin\TaxRateController;
 use App\Http\Controllers\Admin\TodoController;
+use App\Http\Controllers\Admin\WarehouseController;
 use App\Http\Controllers\Admin\WarrantiesController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
@@ -163,6 +164,14 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::resource('/notes', NotesController::class)->names('note')->except('show');
     Route::post('/change-important-note', [NotesController::class, 'changeImportantStatus'])->name('note.important');
     Route::get('/notes/view/{id}', [NotesController::class, 'noteView'])->name('note.view');
+
+
+    //______ Warehouse _____//
+    Route::resource('/warehouse', WarehouseController::class)->names('warehouse')->except('show');
+    Route::get('/warehouse-data', [WarehouseController::class, 'getData'])->name('warehouse-data');
+    Route::post('/change-warehouse-status', [WarehouseController::class, 'changeWarehouseStatus'])->name('warehouse.status');
+    Route::get('/warehouse/view/{id}', [WarehouseController::class, 'warehouseView'])->name('warehouse.view');
+    Route::get('/warehouse/pdf', [WarehouseController::class, 'allWarehousePdf'])->name('warehouse.pdf');
 
 
     //______ Role & Permission _____//

@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('warehouse');
             $table->integer('employee_id');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('phone');
             $table->string('phone_work')->nullable();
             $table->text('address');
-            $table->integer('city');
-            $table->integer('state');
-            $table->integer('country');
+            $table->integer('city_id');
+            $table->integer('state_id');
+            $table->integer('country_id');
             $table->string('postal_code');
             $table->boolean('status')->default(1)->comment('1=active, 0=deactive');
             $table->timestamps();

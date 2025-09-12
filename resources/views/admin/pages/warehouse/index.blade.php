@@ -43,13 +43,13 @@
             </div>
         </div>
         <ul class="table-top-head">
-            @if(auth("admin")->user()->can("pdf.state"))
+            @if(auth("admin")->user()->can("pdf.warehouse"))
                 <li>
-                    <a data-bs-toggle="tooltip" data-bs-placement="top" href="{{ route('admin.state.pdf') }}" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" href="{{ route('admin.warehouse.pdf') }}" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
                 </li>
             @endif
 
-            @if(auth("admin")->user()->can("excel.state"))
+            @if(auth("admin")->user()->can("excel.warehouse"))
                 <li>
                     <a data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Excel" data-bs-original-title="Excel"><img src="{{ asset('public/admin/assets/img/icons/excel.svg') }}" alt="img"></a>
                 </li>
@@ -63,8 +63,8 @@
             </li>
         </ul>
         <div class="page-btn">
-            @if(auth("admin")->user()->can("create.state"))
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add State</button>
+            @if(auth("admin")->user()->can("create.warehouse"))
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Warehouse</button>
              @endif
         </div>
     </div>
@@ -73,13 +73,19 @@
     <!-- Content part Start -->
     <div class="card">
         <div class="card-body">
-            <div class="">
+            <div class="table-responsive" style="overflow: auto;">
                 <table class="table table-bordered mb-0" id="datatables">
                     <thead class="bg-primary text-white">
                         <tr>
                             <th>#SL.</th>
-                            <th>Country Name</th>
-                            <th>State Name</th>
+                            <th>Warehouse</th>
+                            <th>Contact Person</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Phone Work</th>
+                            <th>Country</th>
+                            <th>State</th>
+                            <th>City</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -118,9 +124,10 @@
 									<div class="mb-3" >
 										<label class="form-label" for="employee_id">Contact Person <span class="text-danger">*</span></label>
 										<select class="select2 form-control" name="employee_id" id="employee_id">
-											<option>Select</option>
-											<option>Steven</option3>
-											<option>Gravely</option>
+											<option value="" disabled selected>Select</option>
+											<option value="1">Herver</option>
+											<option value="2">Steven</option3>
+											<option value="3">Gravely</option>
 										</select>
 
                                         <span id="employee_id_validate" class="text-danger validation-error mt-1"></span>
@@ -133,11 +140,12 @@
 
                                         <span id="email_validate" class="text-danger validation-error mt-1"></span>
 									</div>
-								</div>								
+								</div>		
+
 								<div class="col-lg-6">
 									<div class="mb-3">
-										<label class="form-label" for="phone">Phone <span class="text-danger">*</span></label>
-										<input type="text" class="form-control" id="phone" name="phone">
+										<label class="form-label" for="phones">Phone <span class="text-danger">*</span></label>
+										<input type="text" class="form-control" id="phones" name="phone">
 
                                         <span id="phone_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -162,10 +170,12 @@
 									<div class="mb-3">
 										<label class="form-label" for="city">City <span class="text-danger">*</span></label>
 										<select class="select2 form-control" name="city_id" id="city">
-											<option >Select</option>
-											<option>Varrel</option>
-											<option>Los Angels</option>
-											<option>Munich</option>											
+											<option value="" disabled selected>Select</option>
+
+                                            @foreach ($cities as $row)
+                                                <option value="{{ $row->id }}">{{ $row->city_name }}</option>	
+                                            @endforeach
+									
 										</select>
 
                                         <span id="city_id_validate" class="text-danger validation-error mt-1"></span>
@@ -175,10 +185,10 @@
 									<div class="mb-3">
 										<label class="form-label" for="state">State <span class="text-danger">*</span></label>
 										<select class="select2 form-control" name="state_id" id="state">
-											<option value="">Select</option>
-											<option value="">Bavaria</option>
-											<option value="">New York City</option>
-											<option value="">California</option>											
+											<option value="" disabled selected>Select</option>
+											@foreach ($states as $row)
+                                                <option value="{{ $row->id }}">{{ $row->state_name }}</option>	
+                                            @endforeach										
 										</select>
 
                                         <span id="state_id_validate" class="text-danger validation-error mt-1"></span>
@@ -188,10 +198,10 @@
 									<div class="mb-3" data-select2-id="39">
 										<label class="form-label" for="country">Country <span class="text-danger">*</span></label>
 										<select class="select2 form-control" name="country_id" id="country">
-											<option value="">Select</option>
-											<option value="">Germany</option>
-											<option value="">Mexico</option>
-											<option value="">United States</option>											
+											<option value="" disabled selected>Select</option>
+											@foreach ($countries as $row)
+                                                <option value="{{ $row->id }}">{{ $row->country_name }}</option>	
+                                            @endforeach											
 										</select>
 
                                         <span id="country_id_validate" class="text-danger validation-error mt-1"></span>
@@ -209,7 +219,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label" for="">Status <span class="text-danger">*</span></label>
-                                <select class="form-select" name="status">
+                                <select class="form-select" name="status" >
                                     <option value="1" selected>Active</option>
                                     <option value="0">Deactive</option>
                                 </select>
@@ -238,7 +248,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Update State</h5>
+                        <h5 class="modal-title" id="myModalLabel">Update Warehouse</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
@@ -249,23 +259,110 @@
 
                             <input type="text" name="id" id="id" hidden>
 
-                              <div class="mb-3">
-                                <label for="up_country_name" class="form-label">Country Name <span class="text-danger">*</span></label>
-                                <select class="form-select select2" id="up_country_name" name="country_id">
-                                    @foreach ($countries as $row)
-                                        <option value="{{ $row->id }}">{{ $row->country_name }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="row" >
+								<div class="col-lg-12">
+									<div class="mb-3">
+										<label class="form-label" for="up_warehouse">Warehouse <span class="text-danger">*</span></label>
+										<input type="text" name="warehouse" id="up_warehouse" class="form-control">
 
-                                <span id="up_country_name_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
+                                        <span id="up_warehouse_validate" class="text-danger validation-error mt-1"></span>
+									</div>
+								</div>
+								<div class="col-lg-12">
+									<div class="mb-3" >
+										<label class="form-label" for="up_employee_id">Contact Person <span class="text-danger">*</span></label>
+										<select class="select2 form-control" name="employee_id" id="up_employee_id">
+											<option value="" disabled selected>Select</option>
+											<option value="1">Herver</option>
+											<option value="2">Steven</option3>
+											<option value="3">Gravely</option>
+										</select>
 
-                            <div class="mb-3">
-                                <label for="up_state_name" class="form-label">State Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="up_state_name" name="state_name">
+                                        <span id="up_employee_id_validate" class="text-danger validation-error mt-1"></span>
+									</div>
+								</div>	
+								<div class="col-lg-12">
+									<div class="mb-3">
+										<label class="form-label" for="up_email">Email <span class="text-danger">*</span></label>
+										<input type="email" class="form-control" id="up_email" name="email">
 
-                                <span id="up_state_name_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
+                                        <span id="up_email_validate" class="text-danger validation-error mt-1"></span>
+									</div>
+								</div>								
+								<div class="col-lg-6">
+									<div class="mb-3">
+										<label class="form-label" for="up_phone">Phone <span class="text-danger">*</span></label>
+										<input type="text" class="form-control" id="up_phone" name="phone">
+
+                                        <span id="up_phone_validate" class="text-danger validation-error mt-1"></span>
+									</div>
+								</div>	
+								<div class="col-lg-6">
+									<div class="mb-3">
+										<label class="form-label" for="up_phone_work">Phone(Work)</label>
+										<input type="text" class="form-control" id="up_phone_work" name="phone_work">
+
+                                        <span id="up_phone_work_validate" class="text-danger validation-error mt-1"></span>
+									</div>
+								</div>								
+								<div class="col-lg-12">
+									<div class="mb-3">
+										<label class="form-label" for="up_address">Address <span class="text-danger">*</span></label>
+										<input type="text" class="form-control" id="up_address" name="address">
+
+                                        <span id="up_address_validate" class="text-danger validation-error mt-1"></span>
+									</div>
+								</div>
+								<div class="col-lg-6 col-sm-10 col-10">
+									<div class="mb-3">
+										<label class="form-label" for="up_city">City <span class="text-danger">*</span></label>
+										<select class="select2 form-control" name="city_id" id="up_city">
+											<option value="" disabled selected>Select</option>
+
+                                            @foreach ($cities as $row)
+                                                <option value="{{ $row->id }}">{{ $row->city_name }}</option>	
+                                            @endforeach
+									
+										</select>
+
+                                        <span id="up_city_id_validate" class="text-danger validation-error mt-1"></span>
+									</div>
+								</div>
+								<div class="col-lg-6 col-sm-10 col-10">
+									<div class="mb-3">
+										<label class="form-label" for="up_state">State <span class="text-danger">*</span></label>
+										<select class="select2 form-control" name="state_id" id="up_state">
+											<option value="" disabled selected>Select</option>
+											@foreach ($states as $row)
+                                                <option value="{{ $row->id }}">{{ $row->state_name }}</option>	
+                                            @endforeach										
+										</select>
+
+                                        <span id="up_state_id_validate" class="text-danger validation-error mt-1"></span>
+									</div>
+								</div>
+								<div class="col-lg-6 col-sm-10 col-10" data-select2-id="40">
+									<div class="mb-3" data-select2-id="39">
+										<label class="form-label" for="up_country">Country <span class="text-danger">*</span></label>
+										<select class="select2 form-control" name="country_id" id="up_country">
+											<option value="" disabled selected>Select</option>
+											@foreach ($countries as $row)
+                                                <option value="{{ $row->id }}">{{ $row->country_name }}</option>	
+                                            @endforeach											
+										</select>
+
+                                        <span id="up_country_id_validate" class="text-danger validation-error mt-1"></span>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="mb-3">
+										<label class="form-label" for="up_postal_code">Postal Code <span class="text-danger">*</span></label>
+										<input type="text" class="form-control" id="up_postal_code" name="postal_code">
+
+                                        <span id="up_postal_code_validate" class="text-danger validation-error mt-1"></span>
+									</div>
+								</div>
+							</div>
 
                             <div class="mb-3">
                                 <label class="form-label">Status <span class="text-danger">*</span></label>
@@ -294,20 +391,60 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">View State List</h5>
+                        <h5 class="modal-title" id="myModalLabel">View Warehouse List</h5>
 
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
                     <div class="modal-body">
                         <div class="view_modal_content">
-                            <label>Country Name : </label>
-                            <span class="text-dark" id="view_country_name"></span>
+                            <label>Warehouse : </label>
+                            <span class="text-dark" id="view_warehouse"></span>
                         </div>
 
                         <div class="view_modal_content">
-                            <label>State Name : </label>
-                            <span class="text-dark" id="view_state_name"></span>
+                            <label>Contact Person : </label>
+                            <span class="text-dark" id="view_contact_person"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Email : </label>
+                            <span class="text-dark" id="view_email"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Phone : </label>
+                            <span class="text-dark" id="view_phone"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Phone Work : </label>
+                            <span class="text-dark" id="view_phone_work"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Country : </label>
+                            <span class="text-dark" id="view_country"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>State : </label>
+                            <span class="text-dark" id="view_state"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>City : </label>
+                            <span class="text-dark" id="view_city"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Postal Code : </label>
+                            <span class="text-dark" id="view_postal_code"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Address : </label>
+                            <span class="text-dark" id="view_address"></span>
                         </div>
 
                         <div class="view_modal_content">
@@ -351,7 +488,7 @@
                 processing: true,
                 serverSide: true,
 
-                ajax: "{{ route('admin.state-data') }}",
+                ajax: "{{ route('admin.warehouse-data') }}",
                 // pageLength: 30,
 
                 columns: [
@@ -362,10 +499,28 @@
                         searchable: false 
                     },
                     {
+                        data: 'warehouse',
+                    },
+                    {
+                        data: 'employee_id',
+                    },
+                    {
+                        data: 'email',
+                    },
+                    {
+                        data: 'phone',
+                    },
+                    {
+                        data: 'phone_work',
+                    },
+                    {
                         data: 'country_name',
                     },
-                     {
+                    {
                         data: 'state_name',
+                    },
+                    {
+                        data: 'city_name',
                     },
                     {
                         data: 'status',
@@ -390,7 +545,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('admin.state.status') }}",
+                    url: "{{ route('admin.warehouse.status') }}",
                     data: {
                         // '_token': token,
                         id: id,
@@ -432,7 +587,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ route('admin.state.store') }}",
+                    url: "{{ route('admin.warehouse.store') }}",
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
@@ -454,8 +609,16 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#country_name_validate').empty().html(error.country_name);
-                        $('#state_name_validate').empty().html(error.state_name);
+                        $('#warehouse_validate').empty().html(error.warehouse);
+                        $('#employee_id_validate').empty().html(error.employee_id);
+                        $('#email_validate').empty().html(error.email);
+                        $('#phone_validate').empty().html(error.phone);
+                        $('#phone_work_validate').empty().html(error.phone_work);
+                        $('#address_validate').empty().html(error.address);
+                        $('#city_id_validate').empty().html(error.city_id);
+                        $('#state_id_validate').empty().html(error.state_id);
+                        $('#country_id_validate').empty().html(error.country_id);
+                        $('#postal_code_validate').empty().html(error.postal_code);
                         $('#featured_validate').empty().html(error.is_featured);
 
                         swal.fire({
@@ -478,15 +641,23 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/state') }}/" + id + "/edit",
+                    url: "{{ url('admin/warehouse') }}/" + id + "/edit",
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
 
                         $('#id').val(data.id);
-                        $('#up_country_name').val(data.country_id);
-                        $('#up_state_name').val(data.state_name);
+                        $('#up_warehouse').empty().html(data.warehouse);
+                        $('#up_employee_id').empty().html(data.employee_id);
+                        $('#up_email').empty().html(data.email);
+                        $('#up_phone').empty().html(data.phone);
+                        $('#up_phone_work').empty().html(data.phone_work);
+                        $('#up_address').empty().html(data.address);
+                        $('#up_city_id').empty().html(data.city_id);
+                        $('#up_state_id').empty().html(data.state_id);
+                        $('#up_country_id').empty().html(data.country_id);
+                        $('#up_postal_code').empty().html(data.postal_code);
                         $('#up_status').val(data.status);
                     },
                     error: function (error) {
@@ -509,7 +680,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ url('admin/state') }}/" + id,
+                    url: "{{ url('admin/warehouse') }}/" + id,
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
@@ -517,7 +688,7 @@
 
                         swal.fire({
                             title: "Success",
-                            text: "State Updated Successfully",
+                            text: "Warehouse Updated Successfully",
                             icon: "success"
                         })
 
@@ -529,7 +700,16 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#up_country_name_validate').empty().html(error.country_id);
+                        $('#up_warehouse_validate').empty().html(error.warehouse);
+                        $('#up_employee_id_validate').empty().html(error.employee_id);
+                        $('#up_email_validate').empty().html(error.email);
+                        $('#up_phone_validate').empty().html(error.phone);
+                        $('#up_phone_work_validate').empty().html(error.phone_work);
+                        $('#up_address_validate').empty().html(error.address);
+                        $('#up_city_id_validate').empty().html(error.city_id);
+                        $('#up_state_id_validate').empty().html(error.state_id);
+                        $('#up_country_id_validate').empty().html(error.country_id);
+                        $('#up_postal_code_validate').empty().html(error.postal_code);
                         $('#up_state_name_validate').empty().html(error.state_name);
 
                         swal.fire({
@@ -561,7 +741,7 @@
                         $.ajax({
                             type: 'DELETE',
 
-                            url: "{{ url('admin/state') }}/" + id,
+                            url: "{{ url('admin/warehouse') }}/" + id,
                             data: {
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -598,14 +778,22 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/state/view') }}/" + id,
+                    url: "{{ url('admin/warehouse/view') }}/" + id,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
 
-                        $('#view_country_name').html(data.country_name);
-                        $('#view_state_name').html(data.state_name);
+                        $('#view_warehouse').html(data.warehouse);
+                        $('#view_contact_person').html(data.employee_id);
+                        $('#view_email').html(data.email);
+                        $('#view_phone').html(data.phone);
+                        $('#view_phone_work').html(data.phone_work);
+                        $('#view_country').html(data.country_name);
+                        $('#view_state').html(data.state_name);
+                        $('#view_city').html(data.city_name);
+                        $('#view_postal_code').html(data.postal_code);
+                        $('#view_address').html(data.address);
                         $('#created_date').html(res.created_date);
                         $('#updated_date').html(res.updated_date);
                         $('#view_status').html(res.statusHtml);

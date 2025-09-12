@@ -79,7 +79,7 @@
                                 <td>
                                     <div class="permission-container">
                                         @foreach ($role->permissions as $item)
-                                            <span class="badge bg-success mb-2" style="font-size: 14px; padding: 10px 10px;">{{ $item->name }}</span>
+                                            <span class="badge bg-success mb-2" style="font-size: 11px; padding: 10px 10px;">{{ $item->name }}</span>
                                         @endforeach
                                     </div>
                                 </td>

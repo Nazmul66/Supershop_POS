@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CreateWarehouseRequest;
+use App\Http\Requests\Admin\UpdateWarehouseRequest;
 use App\Models\City;
 use App\Traits\ImageUploadTraits;
 use App\Models\Country;
 use App\Models\State;
+use App\Models\Warehouse;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -46,22 +49,24 @@ class WarehouseController extends Controller
     public function getData()
     {
         // get all data
-        $states = State::leftJoin('countries', 'countries.id', 'states.country_id')
-                ->select('states.*', 'countries.country_name')
+        $warehouses = Warehouse::leftJoin('countries', 'countries.id', 'warehouses.country_id')
+                ->leftJoin('states', 'states.id', 'warehouses.state_id')
+                ->leftJoin('cities', 'cities.id', 'warehouses.city_id')
+                ->select('warehouses.*', 'countries.country_name', 'states.state_name', 'cities.city_name')
                 ->get();
 
-        return DataTables::of($states)
+        return DataTables::of($warehouses)
             ->addIndexColumn()
-            ->addColumn('status', function ($state) {
-                if(auth("admin")->user()->can("status.state"))
-                    if ($state->status == 1) {
+            ->addColumn('status', function ($warehouse) {
+                if(auth("admin")->user()->can("status.warehouse"))
+                    if ($warehouse->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
-                            data-id="'.$state->id.'" data-status="'.$state->status.'"> <i
+                            data-id="'.$warehouse->id.'" data-status="'.$warehouse->status.'"> <i
                                 class="fa-solid fa-toggle-on fa-2x text-success"></i>
                         </a>';
                     } else {
                         return '<a class="status" id="status" href="javascript:void(0)"
-                            data-id="'.$state->id.'" data-status="'.$state->status.'"> <i
+                            data-id="'.$warehouse->id.'" data-status="'.$warehouse->status.'"> <i
                                 class="fa-solid fa-toggle-off fa-2x text-danger"></i>
                         </a>';
                     }
@@ -69,41 +74,41 @@ class WarehouseController extends Controller
                     return '<span class="badge bg-info">N/A</span>'; 
                 }
             })
-            ->addColumn('action', function ($state) {
+            ->addColumn('action', function ($warehouse) {
                 $actionHtml = Blade::render('
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Actions <i class="mdi mdi-chevron-down"></i>
                         </button>
 
                         <div class="dropdown-menu dropdownmenu-primary" style="">
-                            <a class="dropdown-item text-info" id="viewButton" href="javascript:void(0)" data-id="'.$state->id.'" data-bs-toggle="modal" data-bs-target="#viewModal">
+                            <a class="dropdown-item text-info" id="viewButton" href="javascript:void(0)" data-id="'.$warehouse->id.'" data-bs-toggle="modal" data-bs-target="#viewModal">
                                 <i class="fas fa-eye"></i> View
                             </a>
 
-                            @if(auth("admin")->user()->can("update.state"))
-                                <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$state->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
+                            @if(auth("admin")->user()->can("update.warehouse"))
+                                <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$warehouse->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
-                            @if(auth("admin")->user()->can("delete.state"))
-                                <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$state->id.'" id="deleteBtn">
+                            @if(auth("admin")->user()->can("delete.warehouse"))
+                                <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$warehouse->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
                             @endif
                         </div>
                     </div>
-                ', ['state' => $state]);
+                ', ['warehouse' => $warehouse]);
                 return $actionHtml;
             })
             ->rawColumns(['status', 'action'])
             ->make(true);
     }
 
-    public function changeStateStatus(Request $request)
+    public function changeWarehouseStatus(Request $request)
     {
-        if (!$this->user || !$this->user->can('status.state')) {
-            throw UnauthorizedException::forPermissions(['status.state']);
+        if (!$this->user || !$this->user->can('status.warehouse')) {
+            throw UnauthorizedException::forPermissions(['status.warehouse']);
         }
 
         $id = $request->id;
@@ -115,7 +120,7 @@ class WarehouseController extends Controller
             $status = 1;
         }
 
-        $page = State::findOrFail($id);
+        $page = Warehouse::findOrFail($id);
         $page->status = $status;
         $page->save();
 
@@ -125,28 +130,31 @@ class WarehouseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateWarehouseRequest $request)
     {
-        if (!$this->user || !$this->user->can('create.state')) {
-            throw UnauthorizedException::forPermissions(['create.state']);
+        if (!$this->user || !$this->user->can('create.warehouse')) {
+            throw UnauthorizedException::forPermissions(['create.warehouse']);
         }
-        
-        $request->validate([
-            'country_id' => 'required|integer',
-            'state_name'  => 'required|string|max:150|unique:states,state_name',
-        ]);
 
         DB::beginTransaction();
         try {
-            $state  = new State();
-            $state->country_id           = $request->country_id;
-            $state->state_name             = Str::title($request->state_name);
-            $state->status                 = $request->status;
-            $state->created_at             = now();
-            $state->updated_at             = now();
+            $warehouse  = new Warehouse();
+            $warehouse->warehouse              = $request->warehouse;
+            $warehouse->employee_id            = $request->employee_id;
+            $warehouse->email                  = $request->email;
+            $warehouse->phone                  = $request->phone;
+            $warehouse->phone_work             = $request->phone_work;
+            $warehouse->address                = $request->address;
+            $warehouse->city_id                = $request->city_id;
+            $warehouse->state_id               = $request->state_id;
+            $warehouse->country_id             = $request->country_id;
+            $warehouse->postal_code            = $request->postal_code;
+            $warehouse->status                 = $request->status;
+            $warehouse->created_at             = now();
+            $warehouse->updated_at             = now();
 
-            // dd($state);
-            $state->save();
+            // dd($warehouse);
+            $warehouse->save();
         }
         catch(\Exception $ex){
             DB::rollBack();
@@ -161,39 +169,42 @@ class WarehouseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(State $state)
+    public function edit(Warehouse $warehouse)
     {
-        if (!$this->user || !$this->user->can('update.state')) {
-            throw UnauthorizedException::forPermissions(['update.state']);
+        if (!$this->user || !$this->user->can('update.warehouse')) {
+            throw UnauthorizedException::forPermissions(['update.warehouse']);
         }
 
-        // dd($state);
-        return response()->json(['success' => $state]);
+        // dd($warehouse);
+        return response()->json(['success' => $warehouse]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateWarehouseRequest $request, string $id)
     {
-        if (!$this->user || !$this->user->can('update.state')) {
-            throw UnauthorizedException::forPermissions(['update.state']);
+        if (!$this->user || !$this->user->can('update.warehouse')) {
+            throw UnauthorizedException::forPermissions(['update.warehouse']);
         }
 
-        $request->validate([
-            'country_id' => 'required|integer',
-            'state_name'  => 'required|string|max:150|unique:states,state_name,' .$id,
-        ]);
-
-        $state  = State::find($id);
+        $warehouse  = Warehouse::find($id);
 
         DB::beginTransaction();
         try {
-            $state->country_id             = $request->country_id;
-            $state->state_name             = Str::title($request->state_name);
-            $state->status                 = $request->status;
-            $state->updated_at             = now();
-            $state->save();
+            $warehouse->warehouse              = $request->warehouse;
+            $warehouse->employee_id            = $request->employee_id;
+            $warehouse->email                  = $request->email;
+            $warehouse->phone                  = $request->phone;
+            $warehouse->phone_work             = $request->phone_work;
+            $warehouse->address                = $request->address;
+            $warehouse->city_id                = $request->city_id;
+            $warehouse->state_id               = $request->state_id;
+            $warehouse->country_id             = $request->country_id;
+            $warehouse->postal_code            = $request->postal_code;
+            $warehouse->status                 = $request->status;
+            $warehouse->updated_at             = now();
+            $warehouse->save();
         }
         catch(\Exception $ex){
             DB::rollBack();
@@ -208,36 +219,38 @@ class WarehouseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(State $state)
+    public function destroy(Warehouse $warehouse)
     {
-        if (!$this->user || !$this->user->can('delete.state')) {
-            throw UnauthorizedException::forPermissions(['delete.state']);
+        if (!$this->user || !$this->user->can('delete.warehouse')) {
+            throw UnauthorizedException::forPermissions(['delete.warehouse']);
         }
-        $state->delete();
-        return response()->json(['message' => 'State has been deleted.'], 200);
+        $warehouse->delete();
+        return response()->json(['message' => 'Warehouse has been deleted.'], 200);
     }
 
 
-    public function stateView($id)
+    public function warehouseView($id)
     {
-        $state = State::leftJoin('countries', 'countries.id', 'states.country_id')
-                ->where('states.id', $id)
-                ->select('states.*', 'countries.country_name')
+        $warehouse = Warehouse::leftJoin('countries', 'countries.id', 'warehouses.country_id')
+                ->leftJoin('states', 'states.id', 'warehouses.state_id')
+                ->leftJoin('cities', 'cities.id', 'warehouses.city_id')
+                ->where('warehouses.id', $id)
+                ->select('warehouses.*', 'countries.country_name', 'states.state_name', 'cities.city_name')
                 ->first();
         // dd($state);
 
         $statusHtml = '';
-        if ($state->status == 1) {
+        if ($warehouse->status == 1) {
             $statusHtml = '<span class="text-success">Active</span>';
         } else {
             $statusHtml = '<span class="text-danger">Inactive</span>';
         }
 
-        $created_date = date('d F, Y', strtotime($state->created_at));
-        $updated_date = date('d F, Y', strtotime($state->updated_at));
+        $created_date = date('d F, Y', strtotime($warehouse->created_at));
+        $updated_date = date('d F, Y', strtotime($warehouse->updated_at));
 
         return response()->json([
-            'success'           => $state,
+            'success'           => $warehouse,
             'statusHtml'        => $statusHtml,
             'created_date'      => $created_date,
             'updated_date'      => $updated_date,
@@ -246,21 +259,24 @@ class WarehouseController extends Controller
 
 
 
-    public function allStatePdf()
+    public function allWarehousePdf()
     {
-        if (!$this->user || !$this->user->can('pdf.state')) {
-            throw UnauthorizedException::forPermissions(['pdf.state']);
+        if (!$this->user || !$this->user->can('pdf.warehouse')) {
+            throw UnauthorizedException::forPermissions(['pdf.warehouse']);
         }
         
-        $states = State::leftJoin('countries', 'countries.id', 'states.country_id')
-                ->select('states.*', 'countries.country_name')
+        $warehouses = Warehouse::leftJoin('countries', 'countries.id', 'warehouses.country_id')
+                ->leftJoin('states', 'states.id', 'warehouses.state_id')
+                ->leftJoin('cities', 'cities.id', 'warehouses.city_id')
+                ->select('warehouses.*', 'countries.country_name', 'states.state_name', 'cities.city_name')
                 ->get();
+                
 
-        $pdf = Pdf::loadView('admin.pages.state.pdf', compact('states'))
-            ->setPaper('a4', 'portrait');
+        $pdf = Pdf::loadView('admin.pages.warehouse.pdf', compact('warehouses'))
+            ->setPaper('a4', 'landscape');
 
-        return $pdf->download('State.pdf');
-        // return view('admin.pages.brands.pdf', compact('categories'));
+        return $pdf->download('Warehouse.pdf');
+        // return view('admin.pages.warehouse.pdf', compact('warehouses'));
     }
 
 }

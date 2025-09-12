@@ -96,7 +96,7 @@
 <body>
     
     <header>
-        <h2>States List</h2>
+        <h2>Warehouses List</h2>
         <p>Generated on: {{ date('d-m-Y H:i:A') }}</p>
     </header>
 
@@ -109,18 +109,30 @@
             <thead>
                 <tr>
                     <th>SL.</th>
-                    <th>Country Name</th>
-                    <th>State Name</th>
+                    <th>Warehouse</th>
+                    <th>Contact Person</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Phone Work</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>City</th>
                     <th>Create Date</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($states as $index => $row)
+                @foreach ($warehouses as $index => $row)
                     <tr>
                         <td>{{ $index+1 }}</td>
+                        <td>{{ $row->warehouse }}</td>
+                        <td>{{ $row->employee_id }}</td>
+                        <td>{{ $row->email }}</td>
+                        <td>{{ $row->phone }}</td>
+                        <td>{{ $row->phone_work }}</td>
                         <td>{{ $row->country_name }}</td>
                         <td>{{ $row->state_name }}</td>
+                        <td>{{ $row->city_name }}</td>
                         <td>{{ $row->created_at }}</td>
                         <td>
                             @if ( $row->status == 1 )

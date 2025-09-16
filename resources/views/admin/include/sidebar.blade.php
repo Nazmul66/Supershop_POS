@@ -147,6 +147,43 @@
                 </li>
 
 
+                {{-- HRM --}}
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">HRM</h6>
+                    <ul>
+                        <li class="active"><a href="{{ route('admin.hrm.employee.create') }}"><i class="ti ti-user fs-16 me-2"></i><span>Employees</span></a></li>
+
+                        <li><a href="department-grid.html"><i class="ti ti-compass fs-16 me-2"></i><span>Departments</span></a></li>
+                        <li><a href="designation.html"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>
+                        <li><a href="shift.html"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Shifts</span></a></li>
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendence</span><span class="menu-arrow"></span></a>
+                            <ul>
+                                <li><a href="attendance-employee.html">Employee</a></li>
+                                <li><a href="attendance-admin.html">Admin</a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><i class="ti ti-calendar fs-16 me-2"></i><span>Leaves</span><span class="menu-arrow"></span></a>
+                            <ul>
+                                <li><a href="leaves-admin.html">Admin Leaves</a></li>
+                                <li><a href="leaves-employee.html">Employee Leaves</a></li>
+                                <li><a href="leave-types.html">Leave Types</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="holidays.html"><i class="ti ti-calendar-share fs-16 me-2"></i><span>Holidays</span></a>
+                        </li>
+                        <li class="submenu">
+                            <a href="employee-salary.html"><i class="ti ti-file-dollar fs-16 me-2"></i><span>Payroll</span><span class="menu-arrow"></span></a>
+                            <ul>
+                                <li><a href="employee-salary.html">Employee Salary</a></li>
+                                <li><a href="payslip.html">Payslip</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+
                 {{-- Role & Permission --}}
                 @if(auth("admin")->user()->can("main-admin-access"))
                     <li class="submenu-open">

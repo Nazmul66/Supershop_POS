@@ -28,7 +28,6 @@
 @endpush
 
 {{-- Active sidebar --}}
-@section('peoples', 'active subdrop')
 @section('warehouse', 'active')
 
 
@@ -38,8 +37,8 @@
     <div class="page-header">
         <div class="add-item d-flex">
             <div class="page-title">
-                <h4 class="fw-bold">State</h4>
-                <h6>Manage your states</h6>
+                <h4 class="fw-bold">Warehouse</h4>
+                <h6>Manage your warehouses ssss</h6>
             </div>
         </div>
         <ul class="table-top-head">

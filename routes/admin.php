@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DBbackupController;
+use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\HomeSettingController;
 use App\Http\Controllers\Admin\EssentialSettingController;
@@ -172,6 +173,17 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::post('/change-warehouse-status', [WarehouseController::class, 'changeWarehouseStatus'])->name('warehouse.status');
     Route::get('/warehouse/view/{id}', [WarehouseController::class, 'warehouseView'])->name('warehouse.view');
     Route::get('/warehouse/pdf', [WarehouseController::class, 'allWarehousePdf'])->name('warehouse.pdf');
+
+
+    //______ HRM System _____//
+    Route::group(["as" => 'hrm.',"prefix" => '/hrm'], function () {
+        //______ Employee _____//
+        Route::resource('/employee', EmployeeController::class)->names('employee')->except('show');
+        Route::get('/employee-data', [EmployeeController::class, 'getData'])->name('employee-data');
+        Route::post('/change-employee-status', [EmployeeController::class, 'changeEmployeeStatus'])->name('employee.status');
+        Route::get('/employee/view/{id}', [EmployeeController::class, 'employeeView'])->name('employee.view');
+        Route::get('/employee/pdf', [EmployeeController::class, 'allEmployeePdf'])->name('employee.pdf');
+    });
 
 
     //______ Role & Permission _____//

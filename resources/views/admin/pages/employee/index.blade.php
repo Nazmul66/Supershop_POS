@@ -10,7 +10,7 @@
 @endpush
 
 {{-- Active sidebar --}}
-@section('faq', 'active')
+@section('employee', 'active')
 
 
 @section('body-content')
@@ -19,14 +19,14 @@
     <div class="page-header">
         <div class="add-item d-flex">
             <div class="page-title">
-                <h4 class="fw-bold">FAQ</h4>
-                <h6>Manage your Faqs</h6>
+                <h4 class="fw-bold">Employee</h4>
+                <h6>Manage your Employees</h6>
             </div>
         </div>
         <ul class="table-top-head">
             @if(auth("admin")->user()->can("pdf.brand"))
                 <li>
-                    <a data-bs-toggle="tooltip" data-bs-placement="top" href="{{ route('admin.faq.pdf') }}" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" href="{{ route('admin.hrm.employee.pdf') }}" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
                 </li>
             @endif
 
@@ -45,8 +45,63 @@
         </ul>
         <div class="page-btn">
             @if(auth("admin")->user()->can("create.brand"))
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add FAQ</button>
+                <a href="{{ route('admin.hrm.employee.create') }}" class="btn btn-primary"><i class="ti ti-circle-plus me-1"></i>Add Employee</a>
              @endif
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-purple border-0">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="mb-1 text-white">Total Employee</p>
+                        <h4 class="text-white">1007</h4>
+                    </div>
+                    <div>
+                        <span class="avatar avatar-lg bg-purple-900"><i class="ti ti-users-group"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-teal border-0">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="mb-1 text-white">Active</p>
+                        <h4 class="text-white">1007</h4>
+                    </div>
+                    <div>
+                        <span class="avatar avatar-lg bg-teal-900"><i class="ti ti-user-star"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-secondary border-0">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="mb-1 text-white">Inactive</p>
+                        <h4 class="text-white">1007</h4>
+                    </div>
+                    <div>
+                        <span class="avatar avatar-lg bg-secondary-900"><i class="ti ti-user-exclamation"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-info border-0">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <p class="mb-1 text-white">New Joiners</p>
+                        <h4 class="text-white">67</h4>
+                    </div>
+                    <div>
+                        <span class="avatar avatar-lg bg-info-900"><i class="ti ti-user-check"></i></span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -58,9 +113,12 @@
                 <table class="table table-bordered mb-0" id="datatables">
                     <thead class="bg-primary text-white">
                         <tr>
-                            <th>#SL.</th>
-                            <th>Question</th>
-                            <th>Answer</th>
+                            <th>ID.</th>
+                            <th>Employee</th>
+                            <th>Designation</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Shift</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -70,110 +128,6 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-
-        <!-- Create Modal -->
-        <div id="createModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-             style="display: none;" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Create FAQ</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <form id="createForm" enctype="multipart/form-data">
-                            @csrf
-
-                            <div class="mb-3">
-                                <label for="question" class="form-label">Question <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="question" name="question">
-
-                                <span id="question_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="answer" class="form-label">Answer <span class="text-danger">*</span></label>
-                                <textarea id="answer" class="form-control" name="answer" cols="30" rows="5"></textarea>
-
-                                <span id="answer_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Status <span class="text-danger">*</span></label>
-                                <select class="form-select" name="status">
-                                    <option value="1" selected>Active</option>
-                                    <option value="0">Deactive</option>
-                                </select>
-
-                                <span id="featured_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn btn-secondary waves-effect me-3"
-                                    data-bs-dismiss="modal">Close </button>
-
-                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save changes</button>
-                            </div>
-                        </form>
-                    </div>
-
-
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div>
-
-
-        <!-- Edit Modal -->
-        <div id="editModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-             style="display: none;" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Update FAQ</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <form id="EditForm" enctype="multipart/form-data">
-                            @csrf
-                            @method("PUT")
-
-                            <input type="text" name="id" id="id" hidden>
-
-                            <div class="mb-3">
-                                <label for="up_question" class="form-label">Question <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="up_question" name="question">
-
-                                <span id="up_question_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="up_answer" class="form-label">Answer <span class="text-danger">*</span></label>
-                                <textarea id="up_answer" class="form-control" name="answer" cols="30" rows="5"></textarea>
-
-                                <span id="up_answer_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label" for="up_status">Status <span class="text-danger">*</span></label>
-                                <select class="form-select" id="up_status" name="status">
-                                    <option value="1" selected>Active</option>
-                                    <option value="0">Deactive</option>
-                                </select>
-                            </div>
-
-                            <div class="d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn btn-secondary waves-effect me-3"
-                                    data-bs-dismiss="modal">Close</button>
-
-                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Update </button>
-                            </div>
-                        </form>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
         </div>
 
 
@@ -235,21 +189,30 @@
                 processing: true,
                 serverSide: true,
 
-                ajax: "{{ route('admin.faq-data') }}",
+                ajax: "{{ route('admin.hrm.employee-data') }}",
                 // pageLength: 30,
 
                 columns: [
                     { 
-                        data: 'DT_RowIndex', 
-                        name: 'DT_RowIndex', 
+                        data: 'employee_code', 
+                        name: 'employee_code', 
                         orderable: false, 
                         searchable: false 
                     },
                     {
-                        data: 'question',
+                        data: 'first_name',
                     },
                     {
-                        data: 'answer',
+                        data: 'designation',
+                    },
+                    {
+                        data: 'email',
+                    },
+                    {
+                        data: 'contact_number',
+                    },
+                    {
+                        data: 'shift',
                     },
                     {
                         data: 'status',
@@ -274,7 +237,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('admin.faq.status') }}",
+                    url: "{{ route('admin.hrm.employee.status') }}",
                     data: {
                         // '_token': token,
                         id: id,

@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateCategoryRequest;
 use App\Http\Requests\Admin\UpdateCategoryRequest;
+use App\Models\City;
+use App\Models\Country;
 use App\Traits\ImageUploadTraits;
 use App\Models\Employee;
+use App\Models\State;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -33,31 +36,32 @@ class EmployeeController extends Controller
      */
     public function index()
     {
+
         return view('admin.pages.employee.index');
     }
 
     public function getData()
     {
         // get all data
-        $categories= Category::all();
+        $employees = Employee::all();
 
-        return DataTables::of($categories)
+        return DataTables::of($employees)
             ->addIndexColumn()
-            ->addColumn('categoryImg', function ($category) {
-                return '<a href="'.asset( $category->category_img ).'" target="__target">
-                     <img src="'.asset( $category->category_img ).'" width="50px" height="50px" >
-                </a>';
-            })
-            ->addColumn('status', function ($category) {
+            // ->addColumn('categoryImg', function ($employee) {
+            //     return '<a href="'.asset( $employee->image ).'" target="__target">
+            //          <img src="'.asset( $employee->image ).'" width="50px" height="50px" >
+            //     </a>';
+            // })
+            ->addColumn('status', function ($employee) {
                 if(auth("admin")->user()->can("status.category"))
-                    if ($category->status == 1) {
+                    if ($employee->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
-                            data-id="'.$category->id.'" data-status="'.$category->status.'"> <i
+                            data-id="'.$employee->id.'" data-status="'.$employee->status.'"> <i
                                 class="fa-solid fa-toggle-on fa-2x text-success"></i>
                         </a>';
                     } else {
                         return '<a class="status" id="status" href="javascript:void(0)"
-                            data-id="'.$category->id.'" data-status="'.$category->status.'"> <i
+                            data-id="'.$employee->id.'" data-status="'.$employee->status.'"> <i
                                 class="fa-solid fa-toggle-off fa-2x text-danger"></i>
                         </a>';
                     }
@@ -65,40 +69,43 @@ class EmployeeController extends Controller
                     return '<span class="badge bg-info">N/A</span>'; 
                 }
             })
-            ->addColumn('action', function ($category) {
+            ->addColumn('action', function ($employee) {
                 $actionHtml = Blade::render('
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Actions <i class="mdi mdi-chevron-down"></i>
                         </button>
 
                         <div class="dropdown-menu dropdownmenu-primary" style="">
-                            <a class="dropdown-item text-info" id="viewButton" href="javascript:void(0)" data-id="'.$category->id.'" data-bs-toggle="modal" data-bs-target="#viewModal">
+                            <a class="dropdown-item text-info" id="viewButton" href="javascript:void(0)" data-id="'.$employee->id.'" data-bs-toggle="modal" data-bs-target="#viewModal">
                                 <i class="fas fa-eye"></i> View
                             </a>
 
                             @if(auth("admin")->user()->can("update.category"))
-                                <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$category->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
+                                <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$employee->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
                             @if(auth("admin")->user()->can("delete.category"))
-                                <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$category->id.'" id="deleteBtn">
+                                <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$employee->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
                             @endif
                         </div>
                     </div>
-                ', ['category' => $category]);
+                ', ['employee' => $employee]);
                 return $actionHtml;
             })
-            ->rawColumns(['categoryImg', 'status', 'action'])
+            ->rawColumns(['status', 'action'])
             ->make(true);
     }
 
     public function create()
-    {
-        return view('admin.pages.employee.create');
+    {        
+        $countries  = Country::where('status', 1)->get();
+        $cities     = City::where('status', 1)->get();
+        $states     = State::where('status', 1)->get();
+        return view('admin.pages.employee.create',compact('countries','cities','states'));
     }
 
     public function changeEmployeeStatus(Request $request)

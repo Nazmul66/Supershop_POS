@@ -151,7 +151,7 @@
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">HRM</h6>
                     <ul>
-                        <li class="active"><a href="{{ route('admin.hrm.employee.create') }}"><i class="ti ti-user fs-16 me-2"></i><span>Employees</span></a></li>
+                        <li class="@yield('employee')"><a href="{{ route('admin.hrm.employee.index') }}"><i class="ti ti-user fs-16 me-2"></i><span>Employees</span></a></li>
 
                         <li><a href="department-grid.html"><i class="ti ti-compass fs-16 me-2"></i><span>Departments</span></a></li>
                         <li><a href="designation.html"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>

@@ -50,6 +50,7 @@
         </div>
     </div>
 
+
     <div class="row">
         <div class="col-xl-3 col-md-6">
             <div class="card bg-purple border-0">
@@ -106,70 +107,109 @@
     </div>
 
 
-    <!-- Content part Start -->
+    <!-- product list -->
     <div class="card">
         <div class="card-body">
-            <div class="table-responsive" style="overflow: auto;">
-                <table class="table table-bordered mb-0" id="datatables">
-                    <thead class="bg-primary text-white">
-                        <tr>
-                            <th>ID.</th>
-                            <th>Employee</th>
-                            <th>Designation</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Shift</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
+            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                <div class="search-set mb-0">
+                    <div class="search-input">
+                        <span class="btn-searchset"><i class="ti ti-search fs-14 feather-search"></i></span>
+                        <input type="search" class="form-control" placeholder="Search">
+                    </div>
+                    
+                </div>
+                <div class="d-flex table-dropdown my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+                    <div class="dropdown me-2">
+                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white btn-md d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                            Select Employees 
+                        </a>
+                        <ul class="dropdown-menu  dropdown-menu-end p-3">
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">Anthony Lewis</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">Brian Villalobos</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">Harvey Smith</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">Stephan Peralt</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white btn-md d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                            Designation
+                        </a>
+                        <ul class="dropdown-menu  dropdown-menu-end p-3">
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">System Admin</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">Designer</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">Tech Lead</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item rounded-1">Database administrator</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
 
-        <!-- View Modal -->
-        <div id="viewModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-        style="display: none;" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">View FAQ List</h5>
-
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+    <!-- product list -->
+    <div class="employee-grid-widget">
+        <div class="row">
+            <div class="col-xxl-3 col-xl-4 col-lg-6 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start justify-content-between mb-2">
+                            <div class="form-check form-check-md">
+                                <input class="form-check-input" type="checkbox">
+                            </div>
+                            <div>
+                                <a href="employee-details.html" class="avatar avatar-xl avatar-rounded border p-1 rounded-circle">
+                                    <img src="assets/img/users/user-32.jpg" class="img-fluid h-auto w-auto" alt="img">
+                                </a>
+                            </div>
+                            <div class="dropdown">
+                                <a href="#" class="action-icon border-0" data-bs-toggle="dropdown" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical feather-user"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></a>
+                                <ul class="dropdown-menu dropdown-menu-end" style="">
+                                    <li>
+                                        <a href="edit-employee.html" class="dropdown-item"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit me-2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>Edit</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);" class="dropdown-item confirm-text mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 me-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>Delete</a>
+                                    </li>								
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-primary mb-2">EMP ID : POS001</p>
+                        </div>
+                        <div class="text-center mb-3">
+                            <h6 class="mb-1"><a href="employee-details.html">Anthony Lewis</a></h6>
+                            <span class="badge bg-secondary-transparent text-gray-9 fs-10 fw-medium">System Admin</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between bg-light rounded p-3">
+                            <div class="text-start">
+                                <h6 class="mb-1">Joined</h6>
+                                <p>30 May 2023</p>
+                            </div>
+                            <div class="text-start">
+                                <h6 class="mb-1">Department</h6>
+                                <p>HR</p>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="modal-body">
-                        <div class="view_modal_content">
-                            <label>Question : </label>
-                            <span class="text-dark" id="view_question"></span>
-                        </div>
-
-                        <div class="view_modal_content">
-                            <label>Answer : </label>
-                            <span class="text-dark" id="view_answer"></span>
-                        </div>
-
-                        <div class="view_modal_content">
-                            <label>Created Date : </label>
-                            <div id="created_date"></div>
-                        </div>
-
-                        <div class="view_modal_content">
-                            <label>Updated Date : </label>
-                            <div id="updated_date"></div>
-                        </div>
-
-                        <div class="view_modal_content">
-                            <label>Status : </label>
-                            <div id="view_status"></div>
-                        </div>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
+                </div>
+            </div>
         </div>
     </div>
 

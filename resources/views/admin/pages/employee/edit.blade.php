@@ -64,7 +64,7 @@
 </div>
 
 
-<form action="{{ route('admin.hrm.employee.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.hrm.employee.update', $employee->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="accordions-items-seperate" id="accordionExample">
@@ -94,31 +94,56 @@
                             </div>
                         </div>
                     </div>
+
+                    @error('image')
+                        <span  class="text-danger d-block mb-3">{{ $message }}</span>
+                    @enderror
+
+
                     <div class="row">
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">First Name<span class="text-danger ms-1">*</span></label>
                                 <input type="text" name="first_name" class="form-control">
+
+                                @error('first_name')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Last Name<span class="text-danger ms-1">*</span></label>
                                 <input type="text" name="last_name" class="form-control">
+
+                                @error('last_name')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
                                 <input type="email" name="email" class="form-control">
+
+                                @error('email')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Contact Number<span class="text-danger ms-1">*</span></label>
                                 <input type="text" name="contact_number" class="form-control">
+
+                                @error('contact_number')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Blood Group<span class="text-danger ms-1">*</span></label>
@@ -133,6 +158,10 @@
                                     <option value="AB+">AB+</option>
                                     <option value="AB-">AB-</option>
                                 </select>
+
+                                @error('blood_group')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         {{-- <div class="col-lg-4 col-md-6">
@@ -149,7 +178,12 @@
                                     <input type="date" class="date_of_birth form-control" placeholder="Select Date" name="date_of_birth">
                                 </div>
                             </div>
+
+                            @error('date_of_birth')
+                                <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                            @enderror
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Gender<span class="text-danger ms-1">*</span></label>
@@ -158,6 +192,10 @@
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
                                 </select>
+
+                                @error('gender')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
 
@@ -170,6 +208,10 @@
                                         <option value="{{ $row->id }}">{{ $row->country_name }}</option>	
                                     @endforeach	
                                 </select>
+
+                                @error('nationality')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
 
@@ -181,55 +223,41 @@
                                     <input type="text" class="joining_date form-control" placeholder="Select Date" name="joining_date">
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-lg-4 col-md-6">
-                            <div class="mb-3">
-                                <div class="add-newplus">
-                                    <label class="form-label">Shift<span class="text-danger ms-1">*</span></label>
-                                </div>
-                                <select class="select2 form-control" name="shift">
-                                    <option value="" disabled selected>Select</option>
-                                    <option value="morning_shift">Morning Shift</option>
-                                    <option value="evening_shift">Evening Shift</option>
-                                    <option value="night_shift">Night Shift</option>
-                                </select>
-                            </div>
+                            @error('joining_date')
+                                <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Department<span class="text-danger ms-1">*</span></label>
-                                <select class="select2 form-control" name="department">
+                                <select class="select2 form-control" name="department_id">
                                     <option value="" disabled selected>Select</option>
-                                    <option value="sales">Sales</option>
-                                    <option value="inventory">Inventory</option>
-                                    <option value="finance">Finance</option>
-                                    <option value="hr">Human Resources</option>
-                                    <option value="marketing">Marketing</option>
-                                    <option value="it_support">IT Support</option>
-                                    <option value="qa">Quality Assurance</option>
-                                    <option value="social_media">Social Media</option>
-                                    <option value="content_creation">Content Creation</option>
+                                    @foreach ($departments as $row)
+                                        <option value="{{ $row->id }}">{{ $row->department }}</option>
+                                    @endforeach
                                 </select>
+
+                                @error('department_id')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
 
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Designation<span class="text-danger ms-1">*</span></label>
-                                <select class="select2 form-control" name="designation">
+                                <select class="select2 form-control" name="designation_id">
                                     <option value="" disabled selected>Select</option>
-                                    <option value="inventory_manager">Inventory Manager</option>
-                                    <option value="marketing_manager">Marketing Manager</option>
-                                    <option value="accountant">Accountant</option>
-                                    <option value="hrm">HR Manager</option>
-                                    <option value="support_engineer">Support Engineer</option>
-                                    <option value="manager">Manager</option>
-                                    <option value="supervisor">Supervisor</option>
-                                    <option value="sales_executive">Sales Executive</option>
-                                    <option value="sales_manager">Sales Manager</option>
+                                    @foreach ($designations as $row)
+                                        <option value="{{ $row->id }}">{{ $row->designation }}</option>
+                                    @endforeach
                                 </select>
+
+                                @error('designation_id')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -240,6 +268,10 @@
                             <label for="about">About</label>
 
                             <textarea class="form-control" id="about" name="about" rows="7">{{ old('about') }}</textarea>
+
+                            @error('about')
+                                <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <!-- /Editor -->
@@ -264,8 +296,13 @@
                             <div class="mb-3">
                                 <label class="form-label">Address</label>
                                 <input type="text" name="address" class="form-control">
+
+                                @error('address')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Country</label>
@@ -275,8 +312,13 @@
                                         <option value="{{ $row->id }}">{{ $row->country_name }}</option>	
                                     @endforeach				
                                 </select>
+
+                                @error('country_id')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">State</label>
@@ -286,8 +328,13 @@
                                         <option value="{{ $row->id }}">{{ $row->state_name }}</option>	
                                     @endforeach		
                                 </select>
+
+                                @error('state_id')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">City</label>
@@ -297,12 +344,21 @@
                                         <option value="{{ $row->id }}">{{ $row->city_name }}</option>	
                                     @endforeach				
                                 </select>
+
+                                @error('city_id')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Zipcode</label>
                                 <input type="text" name="zip_code" class="form-control">
+
+                                @error('zip_code')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -327,36 +383,65 @@
                             <div class="mb-3">
                                 <label class="form-label">Emergency Contact Number 1</label>
                                 <input type="text" name="emergency_number_1" class="form-control">
+
+                                @error('emergency_number_1')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Relation</label>
                                 <input type="text" name="emergency_relation_1" class="form-control">
+
+                                @error('emergency_relation_1')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Name</label>
                                 <input type="text" name="relation_name_1" class="form-control">
+
+                                @error('relation_name_1')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Emergency Contact Number 2</label>
                                 <input type="text" name="emergency_number_2" class="form-control">
+
+                                @error('emergency_number_2')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Relation</label>
                                 <input type="text" name="emergency_relation_2" class="form-control">
+
+                                @error('emergency_relation_2')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
+
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Name</label>
                                 <input type="text" name="relation_name_2" class="form-control">
+
+                                @error('relation_name_2')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         
@@ -382,24 +467,40 @@
                             <div class="mb-3">
                                 <label class="form-label">Bank Name</label>
                                 <input type="text" name="bank_name" class="form-control">
+
+                                @error('bank_name')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Account Number</label>
                                 <input type="text" name="account_number" class="form-control">
+
+                                @error('account_number')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">IFSC / Routing Number</label>
                                 <input type="text" name="routing_number" class="form-control">
+
+                                @error('routing_number')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Branch</label>
                                 <input type="text" name="branch_name" class="form-control">
+
+                                @error('branch_name')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>

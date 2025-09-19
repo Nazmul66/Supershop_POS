@@ -25,10 +25,10 @@ return new class extends Migration
             $table->string('religion');
             $table->string('joining_date');
             $table->string('shift');
-            $table->string('department');
-            $table->string('designation');
+            $table->integer('department_id');
+            $table->integer('designation_id');
             $table->string('blood_group');
-            $table->text('about');
+            $table->text('about')->nullable();
             $table->string('address');
             $table->integer('country_id');
             $table->integer('city_id');

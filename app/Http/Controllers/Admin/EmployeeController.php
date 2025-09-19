@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateCategoryRequest;
+use App\Http\Requests\Admin\CreateEmployeeRequest;
 use App\Http\Requests\Admin\UpdateCategoryRequest;
+use App\Http\Requests\Admin\UpdateEmployeeRequest;
 use App\Models\City;
 use App\Models\Country;
-use App\Traits\ImageUploadTraits;
 use App\Models\Employee;
 use App\Models\State;
+use App\Models\Department;
+use App\Models\Designation;
+use App\Traits\ImageUploadTraits;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -102,10 +106,12 @@ class EmployeeController extends Controller
 
     public function create()
     {        
-        $countries  = Country::where('status', 1)->get();
-        $cities     = City::where('status', 1)->get();
-        $states     = State::where('status', 1)->get();
-        return view('admin.pages.employee.create',compact('countries','cities','states'));
+        $departments  = Department::where('status', 1)->get();
+        $designations = Designation::where('status', 1)->get();
+        $countries    = Country::where('status', 1)->get();
+        $cities       = City::where('status', 1)->get();
+        $states       = State::where('status', 1)->get();
+        return view('admin.pages.employee.create',compact('countries','cities','states','departments','designations'));
     }
 
     public function changeEmployeeStatus(Request $request)
@@ -134,33 +140,67 @@ class EmployeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateCategoryRequest $request)
+    public function store(CreateEmployeeRequest $request)
     {
+        // dd($request->all());
         if (!$this->user || !$this->user->can('create.category')) {
             throw UnauthorizedException::forPermissions(['create.category']);
         }
 
-        DB::beginTransaction();
-        try {
+        // dd($request->all());
+        // DB::beginTransaction();
+        // try {
+            $lastId = Employee::max('id') ?? 1; 
+            // dd($request->all());
 
-            $category = new Employee();
-            $category->category_name          = $request->category_name;
-            $category->slug                   = Str::slug($request->category_name);
-            $category->status                 = $request->status;
+            $employee     = new Employee();
+            $employee->first_name             = $request->first_name;
+            $employee->last_name              = $request->last_name;
+            $employee->email                  = $request->email;
+            $employee->contact_number         = $request->contact_number;
+            $employee->employee_code          = getSetting()->employee_prefix . 1000 + $lastId;
+            $employee->date_of_birth          = $request->date_of_birth;
+            $employee->gender                 = $request->gender;
+            $employee->nationality            = $request->nationality;
+            $employee->religion               = $request->religion;
+            $employee->joining_date           = $request->joining_date;
+            $employee->department_id          = $request->department_id;
+            $employee->designation_id         = $request->designation_id;
+            $employee->blood_group            = $request->blood_group;
+            $employee->about                  = $request->about;
+            $employee->address                = $request->address;
+            $employee->country_id             = $request->country_id;
+            $employee->city_id                = $request->city_id;
+            $employee->state_id               = $request->state_id;
+            $employee->zip_code               = $request->zip_code;
+            $employee->emergency_number_1     = $request->emergency_number_1;
+            $employee->emergency_number_2     = $request->emergency_number_2;
+            $employee->emergency_relation_1   = $request->emergency_relation_1;
+            $employee->emergency_relation_2   = $request->emergency_relation_2;
+            $employee->relation_name_1        = $request->relation_name_1;
+            $employee->relation_name_2        = $request->relation_name_2;
+            $employee->bank_name              = $request->bank_name;
+            $employee->account_number         = $request->account_number;
+            $employee->routing_number         = $request->routing_number;
+            $employee->branch_name            = $request->branch_name;
+            $employee->status                 = $request->status;
+
 
             // Handle image with ImageUploadTraits function
-            $uploadImage                      = $this->imageUpload($request, 'category_img', 'category');
-            $category->category_img           =  $uploadImage;
-            $category->save();
-        }
-        catch(\Exception $ex){
-            DB::rollBack();
-            throw $ex;
-            // dd($ex->getMessage());
-        }
+            $uploadImage                      = $this->imageUpload($request, 'image', 'employee');
 
-        DB::commit();
-        return response()->json(['message'=> "Successfully Category Created!", 'status' => true]);
+            $employee->image           =  $uploadImage;
+            $employee->save();
+            dd($employee);
+        // }
+        // catch(\Exception $ex){
+        //     DB::rollBack();
+        //     throw $ex;
+        //     // dd($ex->getMessage());
+        // }
+
+        // DB::commit();
+        return redirect()->route('admin.hrm.employee.index');
     }
 
     /**
@@ -172,14 +212,18 @@ class EmployeeController extends Controller
             throw UnauthorizedException::forPermissions(['update.category']);
         }
 
-        // dd($employee);
-        return response()->json(['success' => $employee]);
+        $departments  = Department::where('status', 1)->get();
+        $designations = Designation::where('status', 1)->get();
+        $countries    = Country::where('status', 1)->get();
+        $cities       = City::where('status', 1)->get();
+        $states       = State::where('status', 1)->get();
+        return view('admin.pages.employee.edit',compact('countries','cities','states','departments','designations', 'employee'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoryRequest $request, $id)
+    public function update(UpdateEmployeeRequest $request, $id)
     {
         if (!$this->user || !$this->user->can('update.category')) {
             throw UnauthorizedException::forPermissions(['update.category']);

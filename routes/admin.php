@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DBbackupController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\DesignationController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\HomeSettingController;
@@ -184,6 +185,14 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
         Route::post('/change-employee-status', [EmployeeController::class, 'changeEmployeeStatus'])->name('employee.status');
         Route::get('/employee/view/{id}', [EmployeeController::class, 'employeeView'])->name('employee.view');
         Route::get('/employee/pdf', [EmployeeController::class, 'allEmployeePdf'])->name('employee.pdf');
+
+
+        //______ Designation _____//
+        Route::resource('/designation', DesignationController::class)->names('designation')->except('show');
+        Route::get('/designation-data', [DesignationController::class, 'getData'])->name('designation-data');
+        Route::post('/change-designation-status', [DesignationController::class, 'changeDesignationStatus'])->name('designation.status');
+        Route::get('/designation/view/{id}', [DesignationController::class, 'designationView'])->name('designation.view');
+        Route::get('/designation/pdf', [DesignationController::class, 'allDesignationPdf'])->name('designation.pdf');
 
 
         //______ Department _____//

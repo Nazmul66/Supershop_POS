@@ -153,8 +153,10 @@
                     <ul>
                         <li class="@yield('employee')"><a href="{{ route('admin.hrm.employee.index') }}"><i class="ti ti-user fs-16 me-2"></i><span>Employees</span></a></li>
 
-                        <li class="@yield('department')"><a href="{{ route('admin.hrm.department.index') }}""><i class="ti ti-compass fs-16 me-2"></i><span>Departments</span></a></li>
-                        <li><a href="designation.html"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>
+                        <li class="@yield('department')"><a href="{{ route('admin.hrm.department.index') }}"><i class="ti ti-compass fs-16 me-2"></i><span>Departments</span></a></li>
+
+                        <li class="@yield('designation')"><a href="{{ route('admin.hrm.designation.index') }}"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>
+                        
                         <li><a href="shift.html"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Shifts</span></a></li>
                         <li class="submenu">
                             <a href="javascript:void(0);"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendence</span><span class="menu-arrow"></span></a>

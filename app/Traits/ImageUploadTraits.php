@@ -8,7 +8,7 @@ trait ImageUploadTraits {
     // Upload new Image
      public function imageUpload(Request $request, $fileName, $path){
 
-        if( $request->file($fileName) ){
+        if( $request->hasFile($fileName) ){
             $images = $request->file($fileName);
 
             $imageName = now()->format('Ymd_His')   // timestamp
@@ -21,13 +21,15 @@ trait ImageUploadTraits {
             // $category->category_img        =  $imagePath . $imageName;
         }
 
+        return null;
+
      }
 
 
      // Delete & Upload new Image
      public function deleteImageAndUpload(Request $request, $fileName, $path, $existingImg = null){
 
-        if( $request->file($fileName) ){
+        if( $request->hasFile($fileName) ){
             $images = $request->file($fileName);
 
             if ( !empty($existingImg) && file_exists($existingImg))  {

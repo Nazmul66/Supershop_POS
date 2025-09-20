@@ -96,7 +96,7 @@
 <body>
     
     <header>
-        <h2>Country List</h2>
+        <h2>Employee List</h2>
         <p>Generated on: {{ date('d-m-Y H:i:A') }}</p>
     </header>
 
@@ -109,19 +109,41 @@
             <thead>
                 <tr>
                     <th>SL.</th>
-                    <th>Country Name</th>
-                    <th>Country Code</th>
-                    <th>Create Date</th>
+                    <th>Image</th>
+                    <th>Emp. ID</th>
+                    <th>Emp. Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th>Gender</th>
+                    <th>Country</th>
+                    <th>City</th>
+                    <th>Date Of Birth</th>
+                    <th>Joining Date</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($country as $index => $row)
+                @foreach ($employees as $index => $row)
                     <tr>
                         <td>{{ $index+1 }}</td>
+                        <td>
+                            @if ( !empty($row->image) )
+                                <img src="{{ url($row->image) }}" alt="" style="width: 70px;">
+                            @endif
+                        </td>
+                        <td>{{ $row->employee_code }}</td>
+                        <td>{{ $row->first_name . " " . $row->last_name }}</td>
+                        <td>{{ $row->email }}</td>
+                        <td>{{ $row->contact_number }}</td>
+                        <td>{{ $row->department }}</td>
+                        <td>{{ $row->designation }}</td>
+                        <td>{{ $row->gender }}</td>
                         <td>{{ $row->country_name }}</td>
-                        <td>{{ $row->country_code }}</td>
-                        <td>{{ $row->created_at }}</td>
+                        <td>{{ $row->city_name }}</td>
+                        <td>{{ $row->date_of_birth }}</td>
+                        <td>{{ $row->joining_date }}</td>
                         <td>
                             @if ( $row->status == 1 )
                                 <span class="badge bg-success fw-medium fs-10">Active</span>

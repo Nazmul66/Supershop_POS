@@ -18,13 +18,13 @@ class UpdateEmployeeRequest extends FormRequest
 
     public function rules(): array
     {
-        $id = $this->route('designation');
+        $id = $this->route('employee');
 
         return [
-            'image' => ['required', 'image', 'mimes:png,jpg,jpeg,webp', 'max:4096'],
-            'first_name' => ['required', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:4096'],
+            'first_name' => ['required', 'string', 'max:255', 'unique:employees,email,' .$id],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:employees,email,' .$id],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'contact_number' => ['required', 'string', 'max:255'],
             'blood_group' => ['required', 'string', 'max:255'],
             'date_of_birth' => ['required', 'date'],

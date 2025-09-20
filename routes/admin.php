@@ -181,8 +181,6 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::group(["as" => 'hrm.',"prefix" => '/hrm'], function () {
         //______ Employee _____//
         Route::resource('/employee', EmployeeController::class)->names('employee')->except('show');
-        Route::get('/employee-data', [EmployeeController::class, 'getData'])->name('employee-data');
-        Route::post('/change-employee-status', [EmployeeController::class, 'changeEmployeeStatus'])->name('employee.status');
         Route::get('/employee/view/{id}', [EmployeeController::class, 'employeeView'])->name('employee.view');
         Route::get('/employee/pdf', [EmployeeController::class, 'allEmployeePdf'])->name('employee.pdf');
 

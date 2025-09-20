@@ -52,7 +52,7 @@
     </div>
     <ul class="table-top-head">
         <li class="me-2">
-            <a data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i class="ti ti-refresh"></i></a>
+            <a href="{{ route('admin.cacheClear') }}" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Refresh" data-bs-original-title="Refresh"><i class="ti ti-refresh"></i></a>
         </li>
         <li class="me-2">
             <a data-bs-toggle="tooltip" data-bs-placement="top" id="collapse-header" aria-label="Collapse" data-bs-original-title="Collapse"><i class="ti ti-chevron-up"></i></a>
@@ -104,7 +104,7 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">First Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" name="first_name" class="form-control">
+                                <input type="text" name="first_name" value="{{ old('first_name') }}" class="form-control">
 
                                 @error('first_name')
                                     <span  class="text-danger d-block mt-2">{{ $message }}</span>
@@ -256,6 +256,20 @@
                                 </select>
 
                                 @error('designation_id')
+                                    <span  class="text-danger d-block mt-2">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Status<span class="text-danger ms-1">*</span></label>
+                                <select class="select2 form-control" name="status">
+                                    <option value="1" selected>Active</option>
+                                    <option value="0">Deactive</option>
+                                </select>
+
+                                @error('status')
                                     <span  class="text-danger d-block mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -556,13 +570,9 @@
 			$('.select2').select2();
 
             // Flatpicker Plugin
-            $(".date_of_birth").flatpickr({
-                minDate: "today"
-            });
+            $(".date_of_birth").flatpickr();
 
-            $(".joining_date").flatpickr({
-                minDate: "today"
-            });
+            $(".joining_date").flatpickr();
 
             // Ckeditor 5 plugin
             let jReq;

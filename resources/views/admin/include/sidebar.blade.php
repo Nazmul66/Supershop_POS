@@ -178,7 +178,7 @@
                         <li class="submenu">
                             <a href="employee-salary.html"><i class="ti ti-file-dollar fs-16 me-2"></i><span>Payroll</span><span class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="employee-salary.html">Employee Salary</a></li>
+                                <li><a href="{{ route('admin.hrm.payroll.index') }}">Employee Salary</a></li>
                                 <li><a href="payslip.html">Payslip</a></li>
                             </ul>
                         </li>

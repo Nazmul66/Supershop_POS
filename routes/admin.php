@@ -47,6 +47,7 @@ use App\Http\Controllers\Admin\Hrms\ExpenseController;
 use App\Http\Controllers\Admin\OtherSettingController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\NotesController;
+use App\Http\Controllers\Admin\PayrollController;
 use App\Http\Controllers\Admin\PrinterController;
 use App\Http\Controllers\Admin\SignatureController;
 use App\Http\Controllers\Admin\TaxRateController;
@@ -196,6 +197,14 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
         //______ Department _____//
         Route::resource('/department', DepartmentController::class)->names('department')->except('show');
         Route::get('/department/pdf', [DepartmentController::class, 'allDepartmentPdf'])->name('department.pdf');
+
+
+        //______ Payroll _____//
+        Route::resource('/payroll', PayrollController::class)->names('payroll')->except('show');
+        Route::get('/payroll-data', [PayrollController::class, 'getData'])->name('payroll-data');
+        Route::post('/change-payroll-status', [PayrollController::class, 'changePayrollStatus'])->name('payroll.status');
+        Route::get('/payroll/view/{id}', [PayrollController::class, 'payrollView'])->name('payroll.view');
+        Route::get('/payroll/pdf', [PayrollController::class, 'allPayrollPdf'])->name('payroll.pdf');
     });
 
 

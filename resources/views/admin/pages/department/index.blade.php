@@ -58,6 +58,11 @@
                 @if ( !empty($departments) && $departments->count() > 0 )
 
                     @foreach ($departments as $row)
+                        @php
+                            $total_members_count = \App\Models\Employee::where('department_id', $row->id)->get()->count();
+                            $total_members = \App\Models\Employee::where('department_id', $row->id)->get();
+                        @endphp
+
                         <div class="col-xxl-3 col-xl-4 col-lg-6 col-md-6">
                             <div class="card">
                                 <div class="card-body">
@@ -88,29 +93,41 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="bg-light rounded p-3 text-center mb-4" style="display: none;">
+                                    {{-- <div class="bg-light rounded p-3 text-center mb-4" style="display: none;">
                                         <div class="avatar avatar-lg mb-2">
                                             <img src="assets/img/users/user-01.jpg" alt="Img">
                                         </div>
                                         <h4>Mitchum Daniel</h4>
-                                    </div>
+                                    </div> --}}
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <p class="mb-0">Total Members: 08</p>
+                                        <p class="mb-0">Total Members: {{ $total_members_count }}</p>
+
                                         <div class="avatar-list-stacked avatar-group-sm">
-                                            <span class="avatar avatar-rounded">
-                                                <img class="border border-white" src="assets/img/profiles/avatar-15.jpg" alt="img">
-                                            </span>
-                                            <span class="avatar avatar-rounded">
-                                                <img class="border border-white" src="assets/img/profiles/avatar-16.jpg" alt="img">
-                                            </span>
-                                            <span class="avatar avatar-rounded">
-                                                <img class="border border-white" src="assets/img/profiles/avatar-18.jpg" alt="img">
-                                            </span>
-                                            <a class="avatar avatar-rounded text-fixed-white fs-10 fw-medium position-relative" href="javascript:void(0);">
-                                                <img src="assets/img/profiles/avatar-17.jpg" alt="img">
-                                                <span class="position-absolute top-50 start-50 translate-middle text-center">+2</span>
-                                            </a>
+                                            @if($total_members->count() <= 3)
+                                                @foreach ($total_members as $item)
+                                                    <span class="avatar avatar-rounded">
+                                                        <img class="border border-white" src="{{ asset($item->image) }}" alt="img">
+                                                    </span>
+                                                @endforeach
+                                            @else
+
+                                                @foreach ($total_members->take(4) as $item)
+                                                    <span class="avatar avatar-rounded">
+                                                        <img class="border border-white" src="{{ asset($item->image) }}" alt="img">
+                                                    </span>
+                                                @endforeach
+
+                                                {{-- Show remaining count with random image --}}
+                                                @php
+                                                    $randomImage = $total_members->random()->image ?? 'default.jpg';
+                                                @endphp
+                                                <a class="avatar avatar-rounded text-fixed-white fs-10 fw-medium position-relative" href="javascript:void(0);">
+                                                    <img src="{{ asset($randomImage) }}" alt="img">
+                                                    <span class="position-absolute top-50 start-50 translate-middle text-center">+{{ $total_members->count() - 4 }}</span>
+                                                </a>
+                                            @endif
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -134,112 +151,112 @@
             </div>
         </div>
 
-        <!-- Create Modal -->
-        <div id="createModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-             style="display: none;" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Create Department</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                    </div>
+    <!-- Create Modal -->
+    <div id="createModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+            style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Create Department</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                </div>
 
-                    <div class="modal-body">
-                        <form id="createForm" enctype="multipart/form-data">
-                            @csrf
+                <div class="modal-body">
+                    <form id="createForm" enctype="multipart/form-data">
+                        @csrf
 
-                            <div class="mb-3">
-                                <label for="department" class="form-label">Department <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="department" name="department">
+                        <div class="mb-3">
+                            <label for="department" class="form-label">Department <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="department" name="department">
 
-                                <span id="department_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea name="description" class="form-control" id="description" cols="30" rows="6"></textarea>
-
-                                <span id="description_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
+                            <span id="department_validate" class="text-danger validation-error mt-1"></span>
+                        </div>
 
 
-                            <div class="mb-3">
-                                <label class="form-label">Status <span class="text-danger">*</span></label>
-                                <select class="form-select" name="status">
-                                    <option value="1" selected>Active</option>
-                                    <option value="0">Deactive</option>
-                                </select>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea name="description" class="form-control" id="description" cols="30" rows="6"></textarea>
 
-                                <span id="featured_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn btn-secondary waves-effect me-3"
-                                    data-bs-dismiss="modal">Close </button>
-
-                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save changes</button>
-                            </div>
-                        </form>
-                    </div>
+                            <span id="description_validate" class="text-danger validation-error mt-1"></span>
+                        </div>
 
 
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status <span class="text-danger">*</span></label>
+                            <select class="form-select" name="status">
+                                <option value="1" selected>Active</option>
+                                <option value="0">Deactive</option>
+                            </select>
+
+                            <span id="featured_validate" class="text-danger validation-error mt-1"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-end align-items-center">
+                            <button type="button" class="btn btn-secondary waves-effect me-3"
+                                data-bs-dismiss="modal">Close </button>
+
+                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save changes</button>
+                        </div>
+                    </form>
+                </div>
 
 
-        <!-- Edit Modal -->
-        <div id="editModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-             style="display: none;" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Update Department</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <form id="EditForm" enctype="multipart/form-data">
-                            @csrf
-                            @method("PUT")
-
-                            <input type="text" name="id" id="id" hidden>
-
-                            <div class="mb-3">
-                                <label for="up_department" class="form-label">Department <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="up_department" name="department">
-
-                                <span id="up_department_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 
 
-                            <div class="mb-3">
-                                <label for="up_description" class="form-label">Description</label>
-                                <textarea name="description" class="form-control" id="up_description" cols="30" rows="6"></textarea>
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+            style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Update Department</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                </div>
 
-                                <span id="up_description_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
+                <div class="modal-body">
+                    <form id="EditForm" enctype="multipart/form-data">
+                        @csrf
+                        @method("PUT")
 
-                            <div class="mb-3">
-                                <label class="form-label">Status <span class="text-danger">*</span></label>
-                                <select class="form-select" id="up_status" name="status">
-                                    <option value="1" selected>Active</option>
-                                    <option value="0">Deactive</option>
-                                </select>
-                            </div>
+                        <input type="text" name="id" id="id" hidden>
 
-                            <div class="d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn btn-secondary waves-effect me-3"
-                                    data-bs-dismiss="modal">Close</button>
+                        <div class="mb-3">
+                            <label for="up_department" class="form-label">Department <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="up_department" name="department">
 
-                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Update </button>
-                            </div>
-                        </form>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div>
+                            <span id="up_department_validate" class="text-danger validation-error mt-1"></span>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="up_description" class="form-label">Description</label>
+                            <textarea name="description" class="form-control" id="up_description" cols="30" rows="6"></textarea>
+
+                            <span id="up_description_validate" class="text-danger validation-error mt-1"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Status <span class="text-danger">*</span></label>
+                            <select class="form-select" id="up_status" name="status">
+                                <option value="1" selected>Active</option>
+                                <option value="0">Deactive</option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex justify-content-end align-items-center">
+                            <button type="button" class="btn btn-secondary waves-effect me-3"
+                                data-bs-dismiss="modal">Close</button>
+
+                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Update </button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 
 @endsection
 

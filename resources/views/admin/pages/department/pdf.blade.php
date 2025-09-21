@@ -110,6 +110,7 @@
                 <tr>
                     <th>SL.</th>
                     <th>Department</th>
+                    <th>Total Member</th>
                     <th>Description</th>
                     <th>Create Date</th>
                     <th>Status</th>
@@ -117,9 +118,14 @@
             </thead>
             <tbody>
                 @foreach ($departments as $index => $row)
+                    @php
+                        $total_members_count = \App\Models\Employee::where('department_id', $row->id)->get()->count();
+                        $total_members = \App\Models\Employee::where('department_id', $row->id)->get();
+                    @endphp
                     <tr>
                         <td>{{ $index+1 }}</td>
                         <td>{{ $row->department }}</td>
+                        <td>{{ $total_members_count }}</td>
                         <td>
                             @if ( !is_null($row->description) )
                                 {{ $row->description }}

@@ -46,10 +46,39 @@ class DesignationController extends Controller
                  return $designation->department;
             })
             ->addColumn('members', function ($designation) {
-                 return 7;
+                $total_members = \App\Models\Employee::where('designation_id', $designation->id)->get();
+                $html = '<div class="avatar-list-stacked avatar-group-sm">';
+            
+                if ($total_members->count() <= 3) {
+                    foreach ($total_members as $item) {
+                        $html .= '<span class="avatar avatar-rounded">
+                                    <img class="border border-white" src="' . asset($item->image ?? 'default.jpg') . '" alt="img">
+                                  </span>';
+                    }
+                } else {
+                    foreach ($total_members->take(4) as $item) {
+                        $html .= '<span class="avatar avatar-rounded">
+                                    <img class="border border-white" src="' . asset($item->image ?? 'default.jpg') . '" alt="img">
+                                  </span>';
+                    }
+            
+                    // Random image for the "+X"
+                    $randomImage = $total_members->random()->image ?? 'default.jpg';
+                    $remaining   = $total_members->count() - 4;
+            
+                    $html .= '<a class="avatar avatar-rounded text-fixed-white fs-10 fw-medium position-relative" href="javascript:void(0);">
+                                <img src="' . asset($randomImage) . '" alt="img">
+                                <span class="position-absolute top-50 start-50 translate-middle text-center">+' . $remaining . '</span>
+                              </a>';
+                }
+            
+                $html .= '</div>';
+            
+                return $html;
             })
             ->addColumn('total_members', function ($designation) {
-                 return 7;
+                $total_members_count = \App\Models\Employee::where('designation_id', $designation->id)->get()->count();
+                return $total_members_count;
             })
             ->addColumn('status', function ($designation) {
                 if(auth("admin")->user()->can("status.brand"))
@@ -225,6 +254,8 @@ class DesignationController extends Controller
             ->first();
         // dd($designation);
 
+        $total_members_count = \App\Models\Employee::where('designation_id', $id)->get()->count();
+
         $statusHtml = '';
         if ($designation->status == 1) {
             $statusHtml = '<span class="text-success">Active</span>';
@@ -232,14 +263,44 @@ class DesignationController extends Controller
             $statusHtml = '<span class="text-danger">Inactive</span>';
         }
 
+        $total_members = \App\Models\Employee::where('designation_id', $designation->id)->get();
+        $html = '<div class="avatar-list-stacked avatar-group-sm">';
+    
+        if ($total_members->count() <= 3) {
+            foreach ($total_members as $item) {
+                $html .= '<span class="avatar avatar-rounded">
+                            <img class="border border-white" src="' . asset($item->image ?? 'default.jpg') . '" alt="img">
+                            </span>';
+            }
+        } else {
+            foreach ($total_members->take(4) as $item) {
+                $html .= '<span class="avatar avatar-rounded">
+                            <img class="border border-white" src="' . asset($item->image ?? 'default.jpg') . '" alt="img">
+                            </span>';
+            }
+    
+            // Random image for the "+X"
+            $randomImage = $total_members->random()->image ?? 'default.jpg';
+            $remaining   = $total_members->count() - 4;
+    
+            $html .= '<a class="avatar avatar-rounded text-fixed-white fs-10 fw-medium position-relative" href="javascript:void(0);">
+                        <img src="' . asset($randomImage) . '" alt="img">
+                        <span class="position-absolute top-50 start-50 translate-middle text-center">+' . $remaining . '</span>
+                        </a>';
+        }
+    
+        $html .= '</div>';
+
         $created_date = date('d F, Y', strtotime($designation->created_at));
         $updated_date = date('d F, Y', strtotime($designation->updated_at));
 
         return response()->json([
-            'success'           => $designation,
-            'statusHtml'        => $statusHtml,
-            'created_date'      => $created_date,
-            'updated_date'      => $updated_date,
+            'success'               => $designation,
+            'statusHtml'            => $statusHtml,
+            'members'               => $html,
+            'total_members_count'   => $total_members_count,
+            'created_date'          => $created_date,
+            'updated_date'          => $updated_date,
         ]);
     }
 

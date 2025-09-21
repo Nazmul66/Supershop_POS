@@ -544,8 +544,8 @@
 
                         $('#view_designation').html(data.designation);
                         $('#view_department').html(data.department);
-                        $('#view_members').html('7');
-                        $('#view_total_members').html('7');
+                        $('#view_members').html(res.members);
+                        $('#view_total_members').html(res.total_members_count);
                         $('#created_date').html(res.created_date);
                         $('#updated_date').html(res.updated_date);
                         $('#view_status').html(res.statusHtml);

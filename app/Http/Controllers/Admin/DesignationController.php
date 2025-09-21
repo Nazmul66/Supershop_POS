@@ -81,7 +81,7 @@ class DesignationController extends Controller
                 return $total_members_count;
             })
             ->addColumn('status', function ($designation) {
-                if(auth("admin")->user()->can("status.brand"))
+                if(auth("admin")->user()->can("status.designation"))
                     if ($designation->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$designation->id.'" data-status="'.$designation->status.'"> <i
@@ -108,13 +108,13 @@ class DesignationController extends Controller
                                 <i class="fas fa-eye"></i> View
                             </a>
 
-                            @if(auth("admin")->user()->can("update.brand"))
+                            @if(auth("admin")->user()->can("update.designation"))
                                 <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$designation->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
-                            @if(auth("admin")->user()->can("delete.brand"))
+                            @if(auth("admin")->user()->can("delete.designation"))
                                 <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$designation->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
@@ -130,8 +130,8 @@ class DesignationController extends Controller
 
     public function changeDesignationStatus(Request $request)
     {
-        if (!$this->user || !$this->user->can('status.brand')) {
-            throw UnauthorizedException::forPermissions(['status.brand']);
+        if (!$this->user || !$this->user->can('status.designation')) {
+            throw UnauthorizedException::forPermissions(['status.designation']);
         }
 
         $id = $request->id;
@@ -155,8 +155,8 @@ class DesignationController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$this->user || !$this->user->can('create.brand')) {
-            throw UnauthorizedException::forPermissions(['create.brand']);
+        if (!$this->user || !$this->user->can('create.designation')) {
+            throw UnauthorizedException::forPermissions(['create.designation']);
         }
 
         $request->validate([
@@ -190,8 +190,8 @@ class DesignationController extends Controller
      */
     public function edit(Designation $designation)
     {
-        if (!$this->user || !$this->user->can('update.brand')) {
-            throw UnauthorizedException::forPermissions(['update.brand']);
+        if (!$this->user || !$this->user->can('update.designation')) {
+            throw UnauthorizedException::forPermissions(['update.designation']);
         }
 
         // dd($designation);
@@ -203,8 +203,8 @@ class DesignationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (!$this->user || !$this->user->can('update.brand')) {
-            throw UnauthorizedException::forPermissions(['update.brand']);
+        if (!$this->user || !$this->user->can('update.designation')) {
+            throw UnauthorizedException::forPermissions(['update.designation']);
         }
 
         $request->validate([
@@ -237,8 +237,8 @@ class DesignationController extends Controller
      */
     public function destroy(Designation $designation)
     {
-        if (!$this->user || !$this->user->can('delete.brand')) {
-            throw UnauthorizedException::forPermissions(['delete.brand']);
+        if (!$this->user || !$this->user->can('delete.designation')) {
+            throw UnauthorizedException::forPermissions(['delete.designation']);
         }
 
         $designation->delete();
@@ -305,20 +305,21 @@ class DesignationController extends Controller
     }
 
 
-
-    public function allBrandsPdf()
+    public function allDesignationPdf()
     {
-        if (!$this->user || !$this->user->can('pdf.brand')) {
-            throw UnauthorizedException::forPermissions(['pdf.brand']);
+        if (!$this->user || !$this->user->can('pdf.designation')) {
+            throw UnauthorizedException::forPermissions(['pdf.designation']);
         }
         
-        $brands = Brand::get();
+        $designations = Designation::leftJoin('departments', 'departments.id', 'designations.department_id')
+                ->select('designations.*', 'departments.department')
+                ->get();
 
-        $pdf = Pdf::loadView('admin.pages.brands.pdf', compact('brands'))
+        $pdf = Pdf::loadView('admin.pages.designation.pdf', compact('designations'))
             ->setPaper('a4', 'portrait');
 
-        return $pdf->download('Brand.pdf');
-        // return view('admin.pages.brands.pdf', compact('categories'));
+        return $pdf->download('Designation.pdf');
+        // return view('admin.pages.designation.pdf', compact('designations'));
     }
 
 }

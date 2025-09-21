@@ -96,7 +96,7 @@
 <body>
     
     <header>
-        <h2>Brands List</h2>
+        <h2>Designations List</h2>
         <p>Generated on: {{ date('d-m-Y H:i:A') }}</p>
     </header>
 
@@ -109,24 +109,24 @@
             <thead>
                 <tr>
                     <th>SL.</th>
-                    <th>Image</th>
-                    <th>Brand Name</th>
-                    <th>Slug</th>
+                    <th>Designation</th>
+                    <th>Department</th>
+                    <th>Total Members</th>
                     <th>Create Date</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($brands as $index => $row)
+                @foreach ($designations as $index => $row)
+                    @php
+                        $total_members_count = \App\Models\Employee::where('designation_id', $row->id)->get()->count();
+                        $total_members = \App\Models\Employee::where('designation_id', $row->id)->get();
+                    @endphp
                     <tr>
                         <td>{{ $index+1 }}</td>
-                        <td>
-                            @if ( !empty($row->image) )
-                                <img src="{{ url($row->image) }}" alt="" style="width: 70px;">
-                            @endif
-                        </td>
-                        <td>{{ $row->brand_name }}</td>
-                        <td>{{ $row->slug }}</td>
+                        <td>{{ $row->designation }}</td>
+                        <td>{{ $row->department }}</td>
+                        <td>{{ $total_members_count }}</td>
                         <td>{{ $row->created_at }}</td>
                         <td>
                             @if ( $row->status == 1 )

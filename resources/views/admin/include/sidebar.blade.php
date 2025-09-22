@@ -176,10 +176,9 @@
                         <li><a href="holidays.html"><i class="ti ti-calendar-share fs-16 me-2"></i><span>Holidays</span></a>
                         </li>
                         <li class="submenu">
-                            <a href="employee-salary.html"><i class="ti ti-file-dollar fs-16 me-2"></i><span>Payroll</span><span class="menu-arrow"></span></a>
-                            <ul>
-                                <li><a href="{{ route('admin.hrm.payroll.index') }}">Employee Salary</a></li>
-                                <li><a href="payslip.html">Payslip</a></li>
+                            <a href="employee-salary.html" class="@yield('payroll-toggle')"><i class="ti ti-file-dollar fs-16 me-2"></i><span>Payroll</span><span class="menu-arrow"></span></a>
+                            <ul >
+                                <li class="@yield('payroll')"><a href="{{ route('admin.hrm.payroll.index') }}">Employee Salary</a></li>
                             </ul>
                         </li>
                     </ul>

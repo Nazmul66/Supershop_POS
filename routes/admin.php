@@ -205,6 +205,7 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
         Route::post('/change-payroll-status', [PayrollController::class, 'changePayrollStatus'])->name('payroll.status');
         Route::get('/payroll/view/{id}', [PayrollController::class, 'payrollView'])->name('payroll.view');
         Route::get('/payroll/pdf', [PayrollController::class, 'allPayrollPdf'])->name('payroll.pdf');
+        Route::get('/payroll-payslip/{id}', [PayrollController::class, 'payrollPayslip'])->name('payroll.payslip');
     });
 
 

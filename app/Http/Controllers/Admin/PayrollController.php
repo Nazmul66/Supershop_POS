@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CreateBrandRequest;
-use App\Http\Requests\Admin\UpdateBrandRequest;
+use App\Http\Requests\Admin\CreatePayrollRequest;
+use App\Http\Requests\Admin\UpdatePayrollRequest;
 use App\Traits\ImageUploadTraits;
-use App\Models\Brand;
 use App\Models\Employee;
+use App\Models\Payroll;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,25 +41,41 @@ class PayrollController extends Controller
     public function getData()
     {
         // get all data
-        $brands= Brand::all();
+        $payrolls = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
+                ->leftJoin('countries', 'countries.id', 'employees.country_id')
+                ->leftJoin('designations', 'designations.id', 'employees.designation_id')
+                ->select('payrolls.*', 'employees.first_name', 'employees.last_name', 'employees.email', 'employees.employee_code', 'employees.image', 'designations.designation', 'countries.country_name')
+                ->get();
 
-        return DataTables::of($brands)
+        return DataTables::of($payrolls)
             ->addIndexColumn()
-            ->addColumn('brandImage', function ($brand) {
-                return '<a href="'.asset( $brand->image ).'" target="__blank">
-                     <img src="'.asset( $brand->image ).'" width="50px" height="50px">
-                </a>';
+            ->addColumn('employee', function ($payroll) {
+                return '<div class="d-flex align-items-center">
+                    <a href="employee-details.html" class="avatar avatar-md"><img src="'. asset($payroll->image) .'" class="img-fluid" alt="img"></a>
+                    <div class="ms-2">
+                        <p class="text-dark mb-0"><a href="employee-details.html">'. $payroll->first_name . ' ' . $payroll->last_name .'</a></p>
+                        <p><a>'. $payroll->designation .'</a></p>
+                    </div>
+                </div>';
             })
-            ->addColumn('status', function ($brand) {
+            ->addColumn('salary', function ($payroll) {
+                $total_earnings = $payroll->basic_salary + $payroll->hra_allow + $payroll->conveyance + $payroll->medical_allow + $payroll->bonus;
+
+                $total_deductions = $payroll->provident_fund + $payroll->professional_tax + $payroll->tds + $payroll->loan_others;
+
+                $net_salary = $total_earnings - $total_deductions;
+                return '$' . $net_salary;
+            })
+            ->addColumn('status', function ($payroll) {
                 if(auth("admin")->user()->can("status.brand"))
-                    if ($brand->status == 1) {
+                    if ($payroll->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
-                            data-id="'.$brand->id.'" data-status="'.$brand->status.'"> <i
+                            data-id="'.$payroll->id.'" data-status="'.$payroll->status.'"> <i
                                 class="fa-solid fa-toggle-on fa-2x text-success"></i>
                         </a>';
                     } else {
                         return '<a class="status" id="status" href="javascript:void(0)"
-                            data-id="'.$brand->id.'" data-status="'.$brand->status.'"> <i
+                            data-id="'.$payroll->id.'" data-status="'.$payroll->status.'"> <i
                                 class="fa-solid fa-toggle-off fa-2x text-danger"></i>
                         </a>';
                     }
@@ -67,34 +83,34 @@ class PayrollController extends Controller
                     return '<span class="badge bg-info">N/A</span>'; 
                 }
             })
-            ->addColumn('action', function ($brand) {
+            ->addColumn('action', function ($payroll) {
                 $actionHtml = Blade::render('
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Actions <i class="mdi mdi-chevron-down"></i>
                         </button>
 
                         <div class="dropdown-menu dropdownmenu-primary" style="">
-                            <a class="dropdown-item text-info" id="viewButton" href="javascript:void(0)" data-id="'.$brand->id.'" data-bs-toggle="modal" data-bs-target="#viewModal">
+                            <a class="dropdown-item text-info" id="viewButton" href="'. route('admin.hrm.payroll.payslip', $payroll->id) .'">
                                 <i class="fas fa-eye"></i> View
-                            </a>
+                            </a> 
 
                             @if(auth("admin")->user()->can("update.brand"))
-                                <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$brand->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
+                                <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$payroll->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
                             @if(auth("admin")->user()->can("delete.brand"))
-                                <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$brand->id.'" id="deleteBtn">
+                                <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$payroll->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
                             @endif
                         </div>
                     </div>
-                ', ['brand' => $brand]);
+                ', ['payroll' => $payroll]);
                 return $actionHtml;
             })
-            ->rawColumns(['brandImage', 'status', 'action'])
+            ->rawColumns(['employee', 'salary', 'status', 'action'])
             ->make(true);
     }
 
@@ -113,7 +129,7 @@ class PayrollController extends Controller
             $status = 1;
         }
 
-        $page = Brand::findOrFail($id);
+        $page = Payroll::findOrFail($id);
         $page->status = $status;
         $page->save();
 
@@ -123,27 +139,32 @@ class PayrollController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateBrandRequest $request)
+    public function store(CreatePayrollRequest $request)
     {
+        // dd($request->all());
         if (!$this->user || !$this->user->can('create.brand')) {
             throw UnauthorizedException::forPermissions(['create.brand']);
         }
 
-        DB::beginTransaction();
+        // DB::beginTransaction();
         try {
-            $brand = new Brand();
-            $brand->brand_name             = Str::title($request->brand_name);
-            $brand->slug                   = Str::slug($request->brand_name);
-            $brand->status                 = $request->status;
-            $brand->created_at             = now();
-            $brand->updated_at             = now();
+            $payroll = new Payroll();
+            $payroll->employee_id            = $request->employee_id;
+            $payroll->basic_salary           = $request->basic_salary;
+            $payroll->hra_allow              = $request->hra_allow;
+            $payroll->conveyance             = $request->conveyance;
+            $payroll->medical_allow          = $request->medical_allow;
+            $payroll->bonus                  = $request->bonus;
+            $payroll->provident_fund         = $request->provident_fund;
+            $payroll->professional_tax       = $request->professional_tax;
+            $payroll->tds                    = $request->tds;
+            $payroll->loan_others            = $request->loan_others;
+            $payroll->status                 = $request->status;
+            $payroll->created_at             = now();
+            $payroll->updated_at             = now();
 
-            // Handle image with ImageUploadTraits function
-            $uploadImage                   = $this->imageUpload($request, 'image', 'brand');
-            $brand->image                  =  $uploadImage;
-
-            // dd($brand);
-            $brand->save();
+            // dd($payroll);
+            $payroll->save();
         }
         catch(\Exception $ex){
             DB::rollBack();
@@ -152,45 +173,47 @@ class PayrollController extends Controller
         }
 
         DB::commit();
-        return response()->json(['message'=> "Successfully Brand Created!", 'status' => true]);
+        return response()->json(['message'=> "Successfully Payroll Created!", 'status' => true]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Brand $brand)
+    public function edit(Payroll $payroll)
     {
         if (!$this->user || !$this->user->can('update.brand')) {
             throw UnauthorizedException::forPermissions(['update.brand']);
         }
 
-        // dd($category);
-        return response()->json(['success' => $brand]);
+        // dd($payroll);
+        return response()->json(['success' => $payroll]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBrandRequest $request, string $id)
+    public function update(UpdatePayrollRequest $request, string $id)
     {
         if (!$this->user || !$this->user->can('update.brand')) {
             throw UnauthorizedException::forPermissions(['update.brand']);
         }
 
-        $brand  = Brand::find($id);
+        $payroll  = Payroll::find($id);
 
         DB::beginTransaction();
         try {
-            $brand->brand_name             = Str::title($request->brand_name);
-            $brand->slug                   = Str::slug($request->brand_name);
-            $brand->status                 = $request->status;
-            $brand->updated_at             = now();
-
-            // Handle image with ImageUploadTraits function
-            $uploadImages                  = $this->deleteImageAndUpload($request, 'image', 'brand', $brand->image );
-            $brand->image                  =  $uploadImages;
-
-            $brand->save();
+            $payroll->employee_id            = $request->employee_id;
+            $payroll->basic_salary           = $request->basic_salary;
+            $payroll->hra_allow              = $request->hra_allow;
+            $payroll->conveyance             = $request->conveyance;
+            $payroll->medical_allow          = $request->medical_allow;
+            $payroll->bonus                  = $request->bonus;
+            $payroll->provident_fund         = $request->provident_fund;
+            $payroll->professional_tax       = $request->professional_tax;
+            $payroll->tds                    = $request->tds;
+            $payroll->loan_others            = $request->loan_others;
+            
+            $payroll->save();
         }
         catch(\Exception $ex){
             DB::rollBack();
@@ -205,44 +228,64 @@ class PayrollController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Brand $brand)
+    public function destroy(Payroll $payroll)
     {
         if (!$this->user || !$this->user->can('delete.brand')) {
             throw UnauthorizedException::forPermissions(['delete.brand']);
         }
 
-        if ($brand->image) {
-            if (file_exists($brand->image)) {
-                unlink($brand->image);
-            }
-        }
-        $brand->delete();
-        return response()->json(['message' => 'Brand has been deleted.'], 200);
+        $payroll->delete();
+        return response()->json(['message' => 'Payroll has been deleted.'], 200);
     }
 
 
-    public function payrollView($id)
-    {
-        $brand  = Brand::find($id);
-        // dd($brand);
+    // public function payrollView($id)
+    // {
+    //     // $payroll  = Payroll::find($id);
+    //     $payroll = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
+    //             ->leftJoin('countries', 'countries.id', 'employees.country_id')
+    //             ->leftJoin('designations', 'designations.id', 'employees.designation_id')
+    //             ->select('payrolls.*', 'employees.first_name', 'employees.last_name', 'employees.email', 'employees.employee_code', 'employees.image', 'designations.designation', 'countries.country_name')
+    //             ->where('payrolls.id', $id)
+    //             ->first();
+    //     // dd($payroll);
 
-        $statusHtml = '';
-        if ($brand->status == 1) {
-            $statusHtml = '<span class="text-success">Active</span>';
-        } else {
-            $statusHtml = '<span class="text-danger">Inactive</span>';
-        }
+    //     $statusHtml = '';
+    //     if ($payroll->status == 1) {
+    //         $statusHtml = '<span class="text-success">Active</span>';
+    //     } else {
+    //         $statusHtml = '<span class="text-danger">Inactive</span>';
+    //     }
 
-        $created_date = date('d F, Y', strtotime($brand->created_at));
-        $updated_date = date('d F, Y', strtotime($brand->updated_at));
+    //     $employee = '<div class="d-flex align-items-center">
+    //         <a href="employee-details.html" class="avatar avatar-md"><img src="'. asset($payroll->image) .'" class="img-fluid" alt="img"></a>
+    //         <div class="ms-2">
+    //             <p class="text-dark mb-0"><a href="employee-details.html">'. $payroll->first_name . ' ' . $payroll->last_name .'</a></p>
+    //             <p><a>'. $payroll->designation .'</a></p>
+    //         </div>
+    //     </div>';
 
-        return response()->json([
-            'success'           => $brand,
-            'statusHtml'        => $statusHtml,
-            'created_date'      => $created_date,
-            'updated_date'      => $updated_date,
-        ]);
-    }
+
+    //     $total_earnings = $payroll->basic_salary + $payroll->hra_allow + $payroll->conveyance + $payroll->medical_allow + $payroll->bonus;
+
+    //     $total_deductions = $payroll->provident_fund + $payroll->professional_tax + $payroll->tds + $payroll->loan_others;
+
+    //     $net_salary = $total_earnings - $total_deductions;
+
+
+
+    //     $created_date = date('d F, Y', strtotime($payroll->created_at));
+    //     $updated_date = date('d F, Y', strtotime($payroll->updated_at));
+
+    //     return response()->json([
+    //         'success'           => $payroll,
+    //         'statusHtml'        => $statusHtml,
+    //         'net_salary'        => $net_salary,
+    //         'employee'          => $employee,
+    //         'created_date'      => $created_date,
+    //         'updated_date'      => $updated_date,
+    //     ]);
+    // }
 
 
 
@@ -252,13 +295,34 @@ class PayrollController extends Controller
             throw UnauthorizedException::forPermissions(['pdf.brand']);
         }
         
-        $brands = Brand::get();
+        $payrolls = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
+                ->leftJoin('countries', 'countries.id', 'employees.country_id')
+                ->leftJoin('designations', 'designations.id', 'employees.designation_id')
+                ->select('payrolls.*', 'employees.first_name', 'employees.last_name', 'employees.email', 'employees.employee_code', 'employees.image', 'designations.designation', 'countries.country_name')
+                ->get();
 
-        $pdf = Pdf::loadView('admin.pages.payroll.pdf', compact('brands'))
+        $pdf = Pdf::loadView('admin.pages.payroll.pdf', compact('payrolls'))
             ->setPaper('a4', 'portrait');
 
         return $pdf->download('Payroll.pdf');
-        // return view('admin.pages.payroll.pdf', compact('categories'));
+        // return view('admin.pages.payroll.pdf', compact('payrolls'));
+    }
+    
+    public function payrollPayslip($id)
+    {
+        $payroll = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
+            ->leftJoin('countries', 'countries.id', 'employees.country_id')
+            ->leftJoin('designations', 'designations.id', 'employees.designation_id')
+            ->select('payrolls.*', 'employees.first_name', 'employees.last_name', 'employees.email', 'employees.employee_code', 'employees.image', 'designations.designation', 'countries.country_name')
+            ->where('payrolls.id', $id)
+            ->first();
+
+        $total_earnings = $payroll->basic_salary + $payroll->hra_allow + $payroll->conveyance + $payroll->medical_allow + $payroll->bonus;
+
+        $total_deductions = $payroll->provident_fund + $payroll->professional_tax + $payroll->tds + $payroll->loan_others;
+
+        $net_salary = $total_earnings - $total_deductions;
+        return view('admin.pages.payroll.payslip', compact('payroll', 'total_earnings', 'total_deductions', 'net_salary'));
     }
 
 }

@@ -80,8 +80,7 @@
         </div>
 
         <!-- Create Modal -->
-        <div id="createModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-             style="display: none;" aria-hidden="true">
+        <div id="createModal" class="modal fade"  style="display: none;">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -112,20 +111,23 @@
 								</div>
 								<div class="mb-3">
 									<label class="form-label">Basic Salary <span>*</span></label>
-										<input type="text" class="text-form form-control">
+										<input type="number" class="text-form form-control" name="basic_salary">
+
+                                    <span id="basic_salary_validate" class="text-danger validation-error mt-1"></span>
 								</div>
+
 								<div class="mb-3 pb-3 border-bottom">
 									<p class="fw-semibold text-gray-9 mb-2">Status</p>
 									<div class="d-flex align-items-center">
 										<div class="form-check me-3">
-											<input class="form-check-input" type="radio" value="paid" name="status" id="Radio-sm1" checked="">
+											<input class="form-check-input" type="radio" value="1" name="status" id="Radio-sm1" checked="">
 											<label class="form-check-label" for="Radio-sm1">
 												Paid
 											</label>
 										</div>
 
 										<div class="form-check">
-											<input class="form-check-input" type="radio" value="unpaid"  name="status" id="Radio-sm2">
+											<input class="form-check-input" type="radio" value="0"  name="status" id="Radio-sm2">
 											<label class="form-check-label" for="Radio-sm2">
 												Unpaid
 											</label>
@@ -143,7 +145,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="hra_allow">HRA Allowance <span>*</span></label>
-										<input type="text" class="form-control" name="hra_allow" id="hra_allow">
+										<input type="number" class="form-control" name="hra_allow" id="hra_allow">
 									</div>
 
                                     <span id="hra_allow_validate" class="text-danger validation-error mt-1"></span>
@@ -152,7 +154,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="conveyance">Conveyance <span>*</span></label>
-										<input type="text" class="form-control" name="conveyance" id="conveyance">
+										<input type="number" class="form-control" name="conveyance" id="conveyance">
 
                                         <span id="conveyance_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -161,7 +163,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="medical_allow">Medical Allowance <span>*</span></label>
-										<input type="text" class="form-control" name="medical_allow" id="medical_allow">
+										<input type="number" class="form-control" name="medical_allow" id="medical_allow">
 
                                         <span id="medical_allow_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -170,7 +172,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="bonus">Bonus <span>*</span></label>
-										<input type="text" class="form-control" name="bonus" id="bonus">
+										<input type="number" class="form-control" name="bonus" id="bonus">
 
                                         <span id="bonus_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -181,8 +183,8 @@
 								</div>
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
-										<label class="form-label" for="pf">PF <span>*</span></label>
-										<input type="text" class="form-control"  name="pf" id="pf">
+										<label class="form-label" for="pf">PF ( Provident Fund ) <span>*</span></label>
+										<input type="number" class="form-control"  name="provident_fund" id="pf">
 
                                         <span id="pf_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -191,7 +193,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="professional_tax">Professional Tax <span>*</span></label>
-										<input type="text" class="form-control" name="professional_tax" id="professional_tax">
+										<input type="number" class="form-control" name="professional_tax" id="professional_tax">
 
                                         <span id="professional_tax_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -199,8 +201,8 @@
 
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
-										<label class="form-label" for="tds">TDS <span>*</span></label>
-										<input type="text" class="form-control" name="tds" id="tds">
+										<label class="form-label" for="tds">TDS ( Tax Deducted at Source ) <span>*</span></label>
+										<input type="number" class="form-control" name="tds" id="tds">
 
                                         <span id="tds_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -209,7 +211,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="loan_others">Loans &amp; Others <span>*</span></label>
-										<input type="text" class="form-control" name="loan_others" id="loan_others">
+										<input type="number" class="form-control" name="loan_others" id="loan_others">
 
                                         <span id="loan_others_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -232,12 +234,11 @@
 
 
         <!-- Edit Modal -->
-        <div id="editModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-             style="display: none;" aria-hidden="true">
-            <div class="modal-dialog">
+        <div id="editModal" class="modal fade"  style="display: none;">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Update Brand</h5>
+                        <h5 class="modal-title" id="myModalLabel">Update Payroll</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
@@ -267,21 +268,21 @@
 								</div>
 								<div class="mb-3">
 									<label class="form-label">Basic Salary <span>*</span></label>
-										<input type="text" class="text-form form-control">
+										<input type="number" class="text-form form-control" name="basic_salary" id="up_basic_salary">
 								</div>
 								<div class="mb-3 pb-3 border-bottom">
 									<p class="fw-semibold text-gray-9 mb-2">Status</p>
 									<div class="d-flex align-items-center">
 										<div class="form-check me-3">
-											<input class="form-check-input" type="radio" value="paid" name="status" id="Radio-sm1" checked="">
-											<label class="form-check-label" for="Radio-sm1">
+											<input class="form-check-input" type="radio" value="1" name="status" id="radio-sm1" checked="">
+											<label class="form-check-label" for="radio-sm1">
 												Paid
 											</label>
 										</div>
 
 										<div class="form-check">
-											<input class="form-check-input" type="radio" value="unpaid"  name="status" id="Radio-sm2">
-											<label class="form-check-label" for="Radio-sm2">
+											<input class="form-check-input" type="radio" value="0"  name="status" id="radio-sm2">
+											<label class="form-check-label" for="radio-sm2">
 												Unpaid
 											</label>
 										</div>
@@ -298,7 +299,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="up_hra_allow">HRA Allowance <span>*</span></label>
-										<input type="text" class="form-control" name="hra_allow" id="up_hra_allow">
+										<input type="number" class="form-control" name="hra_allow" id="up_hra_allow">
 									</div>
 
                                     <span id="up_hra_allow_validate" class="text-danger validation-error mt-1"></span>
@@ -307,7 +308,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="up_conveyance">Conveyance <span>*</span></label>
-										<input type="text" class="form-control" name="conveyance" id="up_conveyance">
+										<input type="number" class="form-control" name="conveyance" id="up_conveyance">
 
                                         <span id="up_conveyance_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -316,7 +317,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="up_medical_allow">Medical Allowance <span>*</span></label>
-										<input type="text" class="form-control" name="medical_allow" id="up_medical_allow">
+										<input type="number" class="form-control" name="medical_allow" id="up_medical_allow">
 
                                         <span id="up_medical_allow_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -325,7 +326,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="up_bonus">Bonus <span>*</span></label>
-										<input type="text" class="form-control" name="bonus" id="up_bonus">
+										<input type="number" class="form-control" name="bonus" id="up_bonus">
 
                                         <span id="up_bonus_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -337,7 +338,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="up_pf">PF <span>*</span></label>
-										<input type="text" class="form-control"  name="pf" id="up_pf">
+										<input type="number" class="form-control"  name="provident_fund" id="up_pf">
 
                                         <span id="up_pf_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -346,7 +347,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="up_professional_tax">Professional Tax <span>*</span></label>
-										<input type="text" class="form-control" name="professional_tax" id="up_professional_tax">
+										<input type="number" class="form-control" name="professional_tax" id="up_professional_tax">
 
                                         <span id="up_professional_tax_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -355,7 +356,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="up_tds">TDS <span>*</span></label>
-										<input type="text" class="form-control" name="tds" id="up_tds">
+										<input type="number" class="form-control" name="tds" id="up_tds">
 
                                         <span id="up_tds_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -364,7 +365,7 @@
 								<div class="col-lg-3 col-sm-6 col-12">
 									<div class="mb-3">
 										<label class="form-label" for="up_loan_others">Loans &amp; Others <span>*</span></label>
-										<input type="text" class="form-control" name="loan_others" id="up_loan_others">
+										<input type="number" class="form-control" name="loan_others" id="up_loan_others">
 
                                         <span id="up_loan_others_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -385,25 +386,39 @@
 
 
         <!-- View Modal -->
-        <div id="viewModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-        style="display: none;" aria-hidden="true">
+        <div id="viewModal" class="modal fade"  style="display: none;">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">View Brand List</h5>
+                        <h5 class="modal-title" id="myModalLabel">View Payroll List</h5>
 
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
                     <div class="modal-body">
                         <div class="view_modal_content">
-                            <label>Name : </label>
-                            <span class="text-dark" id="view_brand_name"></span>
+                            <label>Employee Code : </label>
+                            <span class="text-dark" id="view_employee_code"></span>
+                        </div>
+
+                        {{-- <div class="view_modal_content">
+                            <label>Image : </label>
+                            <div id="viewImageShow"></div>
+                        </div> --}}
+
+                        <div class="view_modal_content">
+                            <label>Employee : </label>
+                            <div id="view_employee"></div>
                         </div>
 
                         <div class="view_modal_content">
-                            <label>Image : </label>
-                            <div id="viewImageShow"></div>
+                            <label>Email : </label>
+                            <div id="view_email"></div>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Salary : </label>
+                            <div id="view_salary"></div>
                         </div>
 
                         <div class="view_modal_content">
@@ -475,23 +490,21 @@
                 processing: true,
                 serverSide: true,
 
-                ajax: "{{ route('admin.brand-data') }}",
+                ajax: "{{ route('admin.hrm.payroll-data') }}",
                 // pageLength: 30,
 
                 columns: [
-                    { 
-                        data: 'DT_RowIndex', 
-                        name: 'DT_RowIndex', 
-                        orderable: false, 
-                        searchable: false 
+                    {
+                        data: 'employee_code',
                     },
                     {
-                        data: 'brandImage',
-                        orderable: false,
-                        searchable: false,
+                        data: 'employee',
                     },
                     {
-                        data: 'brand_name',
+                        data: 'email',
+                    },
+                    {
+                        data: 'salary',
                     },
                     {
                         data: 'status',
@@ -516,7 +529,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('admin.brand.status') }}",
+                    url: "{{ route('admin.hrm.payroll.status') }}",
                     data: {
                         // '_token': token,
                         id: id,
@@ -558,7 +571,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ route('admin.brand.store') }}",
+                    url: "{{ route('admin.hrm.payroll.store') }}",
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
@@ -579,10 +592,19 @@
                     },
                     error: function (err) {
                         let error = err.responseJSON.errors;
+                        // console.log(error);
 
-                        $('#name_validate').empty().html(error.brand_name);
-                        $('#image_validate').empty().html(error.image);
-                        $('#featured_validate').empty().html(error.is_featured);
+                        $('#employee_id_validate').empty().html(error.employee_id);
+                        $('#basic_salary_validate').empty().html(error.basic_salary);
+                        $('#status_validate').empty().html(error.status);
+                        $('#hra_allow_validate').empty().html(error.hra_allow);
+                        $('#conveyance_validate').empty().html(error.conveyance);
+                        $('#medical_allow_validate').empty().html(error.medical_allow);
+                        $('#bonus_validate').empty().html(error.bonus);
+                        $('#pf_validate').empty().html(error.provident_fund);
+                        $('#professional_tax_validate').empty().html(error.professional_tax);
+                        $('#tds_validate').empty().html(error.tds);
+                        $('#loan_others_validate').empty().html(error.loan_others);
 
                         swal.fire({
                             title: "Failed",
@@ -604,21 +626,27 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/brands') }}/" + id + "/edit",
+                    url: "{{ url('admin/hrm/payroll') }}/" + id + "/edit",
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
 
                         $('#id').val(data.id);
-                        $('#up_brand_name').val(data.brand_name);
-                        $('#imageShow').html('');
-                        $('#imageShow').append(`
-                            <a href="{{ asset("`+ data.image +`") }}" target="__blank">
-                                 <img src={{ asset("`+ data.image +`") }} alt="" style="width: 75px;">
-                            </a>
-                        `);
-                        $('#up_status').val(data.status);
+                        $('#up_employee_id').val(data.employee_id).trigger('change');
+                        $('#up_basic_salary').val(data.basic_salary);
+                        // $('#up_status').val(data.status);
+                        $('#up_hra_allow').val(data.hra_allow);
+                        $('#up_conveyance').val(data.conveyance);
+                        $('#up_medical_allow').val(data.medical_allow);
+                        $('#up_bonus').val(data.bonus);
+                        $('#up_pf').val(data.provident_fund);
+                        $('#up_professional_tax').val(data.professional_tax);
+                        $('#up_tds').val(data.tds);
+                        $('#up_loan_others').val(data.loan_others);
+
+                        // ✅ Select the radio button based on status
+                        $('input[name="status"][value="' + data.status + '"]').prop('checked', true);
                     },
                     error: function (error) {
                         console.log('error');
@@ -640,15 +668,16 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ url('admin/brands') }}/" + id,
+                    url: "{{ url('admin/hrm/payroll') }}/" + id,
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
+                        console.log(res.message, "daya")
 
                         swal.fire({
                             title: "Success",
-                            text: "Brand Updated Successfully",
+                            text: "Payroll Updated Successfully",
                             icon: "success"
                         })
 
@@ -660,7 +689,17 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#up_name_validate').empty().html(error.brand_name);
+                        $('#up_employee_id_validate').empty().html(error.employee_id);
+                        $('#up_basic_salary_validate').empty().html(error.basic_salary);
+                        $('#up_status_validate').empty().html(error.status);
+                        $('#up_hra_allow_validate').empty().html(error.hra_allow);
+                        $('#up_conveyance_validate').empty().html(error.conveyance);
+                        $('#up_medical_allow_validate').empty().html(error.medical_allow);
+                        $('#up_bonus_validate').empty().html(error.bonus);
+                        $('#up_pf_validate').empty().html(error.provident_fund);
+                        $('#up_professional_tax_validate').empty().html(error.professional_tax);
+                        $('#up_tds_validate').empty().html(error.tds);
+                        $('#up_loan_others_validate').empty().html(error.loan_others);
 
                         swal.fire({
                             title: "Failed",
@@ -691,7 +730,7 @@
                         $.ajax({
                             type: 'DELETE',
 
-                            url: "{{ url('admin/brands') }}/" + id,
+                            url: "{{ url('admin/hrm/payroll') }}/" + id,
                             data: {
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -728,20 +767,22 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/brands/view') }}/" + id,
+                    url: "{{ url('admin/hrm/payroll/view') }}/" + id,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
 
-                        $('#view_brand_name').html(data.brand_name);
+                        $('#view_employee_code').html(data.employee_code);
                         $('#viewImageShow').html('');
                         $('#viewImageShow').append(`
                           <a href="{{ asset("`+ data.image +`") }}" target="__blank">
                             <img src={{ asset("`+ data.image +`") }} alt="" style="width: 75px;">    
                           </a>
                        `);
-
+                        $('#view_employee').html(res.employee);
+                        $('#view_email').html(data.email);
+                        $('#view_salary').html(res.net_salary);
                         $('#created_date').html(res.created_date);
                         $('#updated_date').html(res.updated_date);
                         $('#view_status').html(res.statusHtml);

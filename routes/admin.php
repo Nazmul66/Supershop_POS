@@ -206,6 +206,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
         Route::get('/payroll/view/{id}', [PayrollController::class, 'payrollView'])->name('payroll.view');
         Route::get('/payroll/pdf', [PayrollController::class, 'allPayrollPdf'])->name('payroll.pdf');
         Route::get('/payroll-payslip/{id}', [PayrollController::class, 'payrollPayslip'])->name('payroll.payslip');
+        Route::get('/payroll-send-emails/{id}', [PayrollController::class, 'payslipSendEmails'])->name('payroll.send.email');
+        Route::get('/payslip-download/{id}', [PayrollController::class, 'payslipDownload'])->name('payslip.download');
+        Route::get('/payslip/print/{id}', [PayrollController::class, 'printPayslip'])->name('payslip.print');
     });
 
 

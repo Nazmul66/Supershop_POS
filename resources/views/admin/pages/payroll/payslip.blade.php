@@ -30,10 +30,10 @@
     </div>
     <ul class="table-top-head">
         <li>
-            <a data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
+            <a href="{{ route('admin.hrm.payslip.download', $payroll->id ) }}" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
         </li>
         <li>
-            <a data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Print" data-bs-original-title="Print"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer feather-rotate-ccw"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg></a>
+            <a href="{{ route('admin.hrm.payslip.print', $payroll->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Print" data-bs-original-title="Print"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer feather-rotate-ccw"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg></a>
         </li>
         <li class="me-2">
             <a data-bs-toggle="tooltip" data-bs-placement="top" id="collapse-header" aria-label="Collapse" data-bs-original-title="Collapse"><i class="ti ti-chevron-up"></i></a>
@@ -50,8 +50,8 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Payslip for the Month of {{ date('M Y', strtotime($payroll->updated_at)) }}</h4>
             <div class="d-flex align-items-center justify-content-end">
-                <button type="button" class="btn btn-primary me-2"><i class="ti ti-mail me-2"></i>Send Email</button>
-                <button type="button" class="btn btn-secondary me-2"><i class="ti ti-download me-2"></i>Download</button>
+                <button type="button" id="sendMail" data-id="{{ $payroll->id }}" class="btn btn-primary me-2"><i class="ti ti-mail me-2"></i>Send Email</button>
+                <a href="{{ route('admin.hrm.payslip.download', $payroll->id ) }}" class="btn btn-secondary me-2"><i class="ti ti-download me-2"></i>Download</a>
             </div>
         </div>
         <div class="row">
@@ -159,4 +159,38 @@
 @push('add-js')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
+
+    <script>
+         // Send Payslip Email
+         $(document).on("click", '#sendMail', function (e) {
+                let id = $(this).attr('data-id');
+                // alert(id);
+
+                $.ajax({
+                    type: 'GET',
+                    // headers: {
+                    //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    // },
+                    url: "{{ url('admin/hrm/payslip-send-emails') }}/" + id,
+                    processData: false,  // Prevent jQuery from processing the data
+                    contentType: false,  // Prevent jQuery from setting contentType
+                    success: function (res) {
+                        // let data = res.success;
+                        // console.log(data);
+
+                        if (res.status === true) {
+                            swal.fire({
+                                title: "Success",
+                                text: `${res.message}`,
+                                icon: "success"
+                            })
+                        }
+                    },
+                    error: function (error) {
+                        console.log('error');
+                    }
+
+                });
+            })
+    </script>
 @endpush

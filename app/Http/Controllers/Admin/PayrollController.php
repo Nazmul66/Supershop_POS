@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreatePayrollRequest;
 use App\Http\Requests\Admin\UpdatePayrollRequest;
+use App\Mail\PayslipEmailSend;
 use App\Traits\ImageUploadTraits;
 use App\Models\Employee;
 use App\Models\Payroll;
@@ -15,6 +16,7 @@ use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class PayrollController extends Controller
@@ -238,57 +240,6 @@ class PayrollController extends Controller
         return response()->json(['message' => 'Payroll has been deleted.'], 200);
     }
 
-
-    // public function payrollView($id)
-    // {
-    //     // $payroll  = Payroll::find($id);
-    //     $payroll = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
-    //             ->leftJoin('countries', 'countries.id', 'employees.country_id')
-    //             ->leftJoin('designations', 'designations.id', 'employees.designation_id')
-    //             ->select('payrolls.*', 'employees.first_name', 'employees.last_name', 'employees.email', 'employees.employee_code', 'employees.image', 'designations.designation', 'countries.country_name')
-    //             ->where('payrolls.id', $id)
-    //             ->first();
-    //     // dd($payroll);
-
-    //     $statusHtml = '';
-    //     if ($payroll->status == 1) {
-    //         $statusHtml = '<span class="text-success">Active</span>';
-    //     } else {
-    //         $statusHtml = '<span class="text-danger">Inactive</span>';
-    //     }
-
-    //     $employee = '<div class="d-flex align-items-center">
-    //         <a href="employee-details.html" class="avatar avatar-md"><img src="'. asset($payroll->image) .'" class="img-fluid" alt="img"></a>
-    //         <div class="ms-2">
-    //             <p class="text-dark mb-0"><a href="employee-details.html">'. $payroll->first_name . ' ' . $payroll->last_name .'</a></p>
-    //             <p><a>'. $payroll->designation .'</a></p>
-    //         </div>
-    //     </div>';
-
-
-    //     $total_earnings = $payroll->basic_salary + $payroll->hra_allow + $payroll->conveyance + $payroll->medical_allow + $payroll->bonus;
-
-    //     $total_deductions = $payroll->provident_fund + $payroll->professional_tax + $payroll->tds + $payroll->loan_others;
-
-    //     $net_salary = $total_earnings - $total_deductions;
-
-
-
-    //     $created_date = date('d F, Y', strtotime($payroll->created_at));
-    //     $updated_date = date('d F, Y', strtotime($payroll->updated_at));
-
-    //     return response()->json([
-    //         'success'           => $payroll,
-    //         'statusHtml'        => $statusHtml,
-    //         'net_salary'        => $net_salary,
-    //         'employee'          => $employee,
-    //         'created_date'      => $created_date,
-    //         'updated_date'      => $updated_date,
-    //     ]);
-    // }
-
-
-
     public function allPayrollPdf()
     {
         if (!$this->user || !$this->user->can('pdf.brand')) {
@@ -322,7 +273,84 @@ class PayrollController extends Controller
         $total_deductions = $payroll->provident_fund + $payroll->professional_tax + $payroll->tds + $payroll->loan_others;
 
         $net_salary = $total_earnings - $total_deductions;
+
         return view('admin.pages.payroll.payslip', compact('payroll', 'total_earnings', 'total_deductions', 'net_salary'));
     }
+
+    public function payslipSendEmails($id)
+    {
+        // dd($id);
+        $payroll = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
+            ->leftJoin('countries', 'countries.id', 'employees.country_id')
+            ->leftJoin('designations', 'designations.id', 'employees.designation_id')
+            ->select('payrolls.*', 'employees.first_name', 'employees.last_name', 'employees.email', 'employees.employee_code', 'employees.image', 'designations.designation', 'countries.country_name')
+            ->where('payrolls.id', $id)
+            ->first();
+
+        // dd($payroll);
+
+        $total_earnings = $payroll->basic_salary + $payroll->hra_allow + $payroll->conveyance + $payroll->medical_allow + $payroll->bonus;
+
+        $total_deductions = $payroll->provident_fund + $payroll->professional_tax + $payroll->tds + $payroll->loan_others;
+
+        $net_salary = $total_earnings - $total_deductions;
+
+        // dd($payroll, $total_earnings, $total_deductions, $net_salary);
+
+
+        // Mail::to('shawonhossain86662@gmail.com')->send(new PayslipEmailSend($payroll, $total_earnings, $total_deductions,  $net_salary));
+        Mail::to(env('MAIL_FROM_ADDRESS'))->send(new PayslipEmailSend($payroll, $total_earnings, $total_deductions,  $net_salary));
+
+        // dd("kaj kore mail");
+
+        return response()->json(['message' => "Message send to $payroll->email", 'status' => true]);
+    }
+
+
+    public function payslipDownload($id)
+    {
+        if (!$this->user || !$this->user->can('pdf.brand')) {
+            throw UnauthorizedException::forPermissions(['pdf.brand']);
+        }
+        
+        $payroll = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
+            ->leftJoin('countries', 'countries.id', 'employees.country_id')
+            ->leftJoin('designations', 'designations.id', 'employees.designation_id')
+            ->select('payrolls.*', 'employees.first_name', 'employees.last_name', 'employees.email', 'employees.employee_code', 'employees.image', 'designations.designation', 'countries.country_name')
+            ->where('payrolls.id', $id)
+            ->first();
+
+        $total_earnings = $payroll->basic_salary + $payroll->hra_allow + $payroll->conveyance + $payroll->medical_allow + $payroll->bonus;
+
+        $total_deductions = $payroll->provident_fund + $payroll->professional_tax + $payroll->tds + $payroll->loan_others;
+
+        $net_salary = $total_earnings - $total_deductions;
+
+        $pdf = Pdf::loadView('admin.pages.payroll.payslipPdf', compact('payroll', 'total_earnings', 'total_deductions', 'net_salary'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('PaySlip.pdf');
+        // return view('admin.pages.payroll.payslipPdf', compact('payroll', 'total_earnings', 'total_deductions', 'net_salary'));
+    }
+
+
+    public function printPayslip($id)
+    {
+        $payroll = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
+            ->leftJoin('countries', 'countries.id', 'employees.country_id')
+            ->leftJoin('designations', 'designations.id', 'employees.designation_id')
+            ->select('payrolls.*', 'employees.first_name', 'employees.last_name', 'employees.email', 'employees.employee_code', 'employees.image', 'designations.designation', 'countries.country_name')
+            ->where('payrolls.id', $id)
+            ->first();
+
+        $total_earnings = $payroll->basic_salary + $payroll->hra_allow + $payroll->conveyance + $payroll->medical_allow + $payroll->bonus;
+
+        $total_deductions = $payroll->provident_fund + $payroll->professional_tax + $payroll->tds + $payroll->loan_others;
+
+        $net_salary = $total_earnings - $total_deductions;
+
+        return view('admin.pages.payroll.print', compact('payroll', 'total_earnings', 'total_deductions', 'net_salary'));
+    }
+    
 
 }

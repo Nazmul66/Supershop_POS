@@ -299,7 +299,7 @@ class PayrollController extends Controller
 
 
         // Mail::to('shawonhossain86662@gmail.com')->send(new PayslipEmailSend($payroll, $total_earnings, $total_deductions,  $net_salary));
-        Mail::to(env('MAIL_FROM_ADDRESS'))->send(new PayslipEmailSend($payroll, $total_earnings, $total_deductions,  $net_salary));
+        Mail::to('hnazmul748@gmail.com')->send(new PayslipEmailSend($payroll, $total_earnings, $total_deductions,  $net_salary));
 
         // dd("kaj kore mail");
 

@@ -24,7 +24,7 @@
     <!-- Employee Info -->
     <tr>
       <td style="padding:20px; font-size:14px; color:#333;">
-        <p><strong>Employee Name:</strong>{{ $payroll->first_name Z $payroll->last_name }}</p>
+        <p><strong>Employee Name:</strong>{{ $payroll->first_name .' '. $payroll->last_name }}</p>
         <p><strong>Employee ID:</strong> {{ $payroll->employee_code }}</p>
         <p><strong>Location:</strong> {{ $payroll->country_name }}</p>
         <p><strong>Pay Period:</strong> {{ date('M Y', strtotime($payroll->updated_at)) }}  ({{ date('h:i A', strtotime($payroll->updated_at)) }})</p>

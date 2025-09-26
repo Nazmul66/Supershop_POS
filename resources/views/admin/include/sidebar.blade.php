@@ -158,23 +158,10 @@
                         <li class="@yield('designation')"><a href="{{ route('admin.hrm.designation.index') }}"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>
                         
                         <li><a href="shift.html"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Shifts</span></a></li>
-                        <li class="submenu">
-                            <a href="javascript:void(0);"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendence</span><span class="menu-arrow"></span></a>
-                            <ul>
-                                <li><a href="attendance-employee.html">Employee</a></li>
-                                <li><a href="attendance-admin.html">Admin</a></li>
-                            </ul>
+
+                        <li class="@yield('holidays')"><a href="{{ route('admin.hrm.holiday.index') }}"><i class="ti ti-calendar-share fs-16 me-2"></i><span>Holidays</span></a>
                         </li>
-                        <li class="submenu">
-                            <a href="javascript:void(0);"><i class="ti ti-calendar fs-16 me-2"></i><span>Leaves</span><span class="menu-arrow"></span></a>
-                            <ul>
-                                <li><a href="leaves-admin.html">Admin Leaves</a></li>
-                                <li><a href="leaves-employee.html">Employee Leaves</a></li>
-                                <li><a href="leave-types.html">Leave Types</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="holidays.html"><i class="ti ti-calendar-share fs-16 me-2"></i><span>Holidays</span></a>
-                        </li>
+
                         <li class="submenu">
                             <a href="employee-salary.html" class="@yield('payroll-toggle')"><i class="ti ti-file-dollar fs-16 me-2"></i><span>Payroll</span><span class="menu-arrow"></span></a>
                             <ul >

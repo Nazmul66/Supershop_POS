@@ -42,6 +42,7 @@ use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\HomeSettingController;
 use App\Http\Controllers\Admin\EssentialSettingController;
+use App\Http\Controllers\Admin\HolidaysController;
 use App\Http\Controllers\Admin\LandingPageController;
 use App\Http\Controllers\Admin\Hrms\ExpenseController;
 use App\Http\Controllers\Admin\OtherSettingController;
@@ -209,6 +210,14 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
         Route::get('/payroll-send-emails/{id}', [PayrollController::class, 'payslipSendEmails'])->name('payroll.send.email');
         Route::get('/payslip-download/{id}', [PayrollController::class, 'payslipDownload'])->name('payslip.download');
         Route::get('/payslip/print/{id}', [PayrollController::class, 'printPayslip'])->name('payslip.print');
+
+
+        //______ Holiday _____//
+        Route::resource('/holiday', HolidaysController::class)->names('holiday')->except('show');
+        Route::get('/holiday-data', [HolidaysController::class, 'getData'])->name('holiday-data');
+        Route::post('/change-holiday-status', [HolidaysController::class, 'changeHolidayStatus'])->name('holiday.status');
+        Route::get('/holiday/view/{id}', [HolidaysController::class, 'holidayView'])->name('holiday.view');
+        Route::get('/holiday/pdf', [HolidaysController::class, 'allHolidayPdf'])->name('holiday.pdf');
     });
 
 

@@ -70,7 +70,7 @@ class PayrollController extends Controller
                 return '$' . $net_salary;
             })
             ->addColumn('status', function ($payroll) {
-                if(auth("admin")->user()->can("status.brand"))
+                if(auth("admin")->user()->can("status.payroll"))
                     if ($payroll->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$payroll->id.'" data-status="'.$payroll->status.'"> <i
@@ -93,17 +93,19 @@ class PayrollController extends Controller
                         </button>
 
                         <div class="dropdown-menu dropdownmenu-primary" style="">
-                            <a class="dropdown-item text-info" id="viewButton" href="'. route('admin.hrm.payroll.payslip', $payroll->id) .'">
-                                <i class="fas fa-eye"></i> View
-                            </a> 
+                            @if(auth("admin")->user()->can("view.payroll"))
+                                <a class="dropdown-item text-info" id="viewButton" href="'. route('admin.hrm.payroll.payslip', $payroll->id) .'">
+                                    <i class="fas fa-eye"></i> View
+                                </a> 
+                            @endif
 
-                            @if(auth("admin")->user()->can("update.brand"))
+                            @if(auth("admin")->user()->can("update.payroll"))
                                 <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$payroll->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
-                            @if(auth("admin")->user()->can("delete.brand"))
+                            @if(auth("admin")->user()->can("delete.payroll"))
                                 <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$payroll->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
@@ -119,8 +121,8 @@ class PayrollController extends Controller
 
     public function changePayrollStatus(Request $request)
     {
-        if (!$this->user || !$this->user->can('status.brand')) {
-            throw UnauthorizedException::forPermissions(['status.brand']);
+        if (!$this->user || !$this->user->can('status.payroll')) {
+            throw UnauthorizedException::forPermissions(['status.payroll']);
         }
 
         $id = $request->id;
@@ -145,8 +147,8 @@ class PayrollController extends Controller
     public function store(CreatePayrollRequest $request)
     {
         // dd($request->all());
-        if (!$this->user || !$this->user->can('create.brand')) {
-            throw UnauthorizedException::forPermissions(['create.brand']);
+        if (!$this->user || !$this->user->can('create.payroll')) {
+            throw UnauthorizedException::forPermissions(['create.payroll']);
         }
 
         // DB::beginTransaction();
@@ -184,8 +186,8 @@ class PayrollController extends Controller
      */
     public function edit(Payroll $payroll)
     {
-        if (!$this->user || !$this->user->can('update.brand')) {
-            throw UnauthorizedException::forPermissions(['update.brand']);
+        if (!$this->user || !$this->user->can('update.payroll')) {
+            throw UnauthorizedException::forPermissions(['update.payroll']);
         }
 
         // dd($payroll);
@@ -197,8 +199,8 @@ class PayrollController extends Controller
      */
     public function update(UpdatePayrollRequest $request, string $id)
     {
-        if (!$this->user || !$this->user->can('update.brand')) {
-            throw UnauthorizedException::forPermissions(['update.brand']);
+        if (!$this->user || !$this->user->can('update.payroll')) {
+            throw UnauthorizedException::forPermissions(['update.payroll']);
         }
 
         $payroll  = Payroll::find($id);
@@ -233,8 +235,8 @@ class PayrollController extends Controller
      */
     public function destroy(Payroll $payroll)
     {
-        if (!$this->user || !$this->user->can('delete.brand')) {
-            throw UnauthorizedException::forPermissions(['delete.brand']);
+        if (!$this->user || !$this->user->can('delete.payroll')) {
+            throw UnauthorizedException::forPermissions(['delete.payroll']);
         }
 
         $payroll->delete();
@@ -243,8 +245,8 @@ class PayrollController extends Controller
 
     public function allPayrollPdf()
     {
-        if (!$this->user || !$this->user->can('pdf.brand')) {
-            throw UnauthorizedException::forPermissions(['pdf.brand']);
+        if (!$this->user || !$this->user->can('pdf.payroll')) {
+            throw UnauthorizedException::forPermissions(['pdf.payroll']);
         }
         
         $payrolls = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
@@ -262,6 +264,10 @@ class PayrollController extends Controller
     
     public function payrollPayslip($id)
     {
+        if (!$this->user || !$this->user->can('view.payroll')) {
+            throw UnauthorizedException::forPermissions(['view.payroll']);
+        }
+
         $payroll = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
             ->leftJoin('countries', 'countries.id', 'employees.country_id')
             ->leftJoin('designations', 'designations.id', 'employees.designation_id')
@@ -291,8 +297,8 @@ class PayrollController extends Controller
 
     public function payslipDownload($id)
     {
-        if (!$this->user || !$this->user->can('pdf.brand')) {
-            throw UnauthorizedException::forPermissions(['pdf.brand']);
+        if (!$this->user || !$this->user->can('pdf.payroll')) {
+            throw UnauthorizedException::forPermissions(['pdf.payroll']);
         }
         
         $payroll = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
@@ -318,6 +324,10 @@ class PayrollController extends Controller
 
     public function printPayslip($id)
     {
+        if (!$this->user || !$this->user->can('print.payroll')) {
+            throw UnauthorizedException::forPermissions(['print.payroll']);
+        }
+
         $payroll = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
             ->leftJoin('countries', 'countries.id', 'employees.country_id')
             ->leftJoin('designations', 'designations.id', 'employees.designation_id')

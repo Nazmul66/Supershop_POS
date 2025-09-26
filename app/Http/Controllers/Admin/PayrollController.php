@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreatePayrollRequest;
 use App\Http\Requests\Admin\UpdatePayrollRequest;
+use App\Jobs\PayslipEmailSendJob;
 use App\Mail\PayslipEmailSend;
 use App\Traits\ImageUploadTraits;
 use App\Models\Employee;
@@ -253,7 +254,7 @@ class PayrollController extends Controller
                 ->get();
 
         $pdf = Pdf::loadView('admin.pages.payroll.pdf', compact('payrolls'))
-            ->setPaper('a4', 'portrait');
+            ->setPaper('a4', 'landscape');
 
         return $pdf->download('Payroll.pdf');
         // return view('admin.pages.payroll.pdf', compact('payrolls'));
@@ -280,30 +281,11 @@ class PayrollController extends Controller
     public function payslipSendEmails($id)
     {
         // dd($id);
-        $payroll = Payroll::leftJoin('employees', 'employees.id', 'payrolls.employee_id')
-            ->leftJoin('countries', 'countries.id', 'employees.country_id')
-            ->leftJoin('designations', 'designations.id', 'employees.designation_id')
-            ->select('payrolls.*', 'employees.first_name', 'employees.last_name', 'employees.email', 'employees.employee_code', 'employees.image', 'designations.designation', 'countries.country_name')
-            ->where('payrolls.id', $id)
-            ->first();
 
-        // dd($payroll);
+        // Mail::to('hnazmul748@gmail.com')->send(new PayslipEmailSend($payroll, $total_earnings, $total_deductions,  $net_salary));
+        dispatch(new PayslipEmailSendJob($id));
 
-        $total_earnings = $payroll->basic_salary + $payroll->hra_allow + $payroll->conveyance + $payroll->medical_allow + $payroll->bonus;
-
-        $total_deductions = $payroll->provident_fund + $payroll->professional_tax + $payroll->tds + $payroll->loan_others;
-
-        $net_salary = $total_earnings - $total_deductions;
-
-        // dd($payroll, $total_earnings, $total_deductions, $net_salary);
-
-
-        // Mail::to('shawonhossain86662@gmail.com')->send(new PayslipEmailSend($payroll, $total_earnings, $total_deductions,  $net_salary));
-        Mail::to('hnazmul748@gmail.com')->send(new PayslipEmailSend($payroll, $total_earnings, $total_deductions,  $net_salary));
-
-        // dd("kaj kore mail");
-
-        return response()->json(['message' => "Message send to $payroll->email", 'status' => true]);
+        return response()->json(['message' => "Message send to", 'status' => true]);
     }
 
 

@@ -8,6 +8,29 @@
 @push('add-css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css">
+
+    <style>
+        .select2-container {
+            display: block !important;
+            width: 100% !important;
+        }
+        .select2-container .select2-selection--single {
+            height: 38px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 37px;
+        }
+        .select2-selection__arrow {
+            height: 37px !important;
+        }
+        .select2-search--dropdown .select2-search__field {
+            outline: none;
+        }
+        .select2-selection__rendered span{
+            display: flex;
+            align-items: center;
+        }
+    </style>
 @endpush
 
 {{-- Active sidebar --}}
@@ -28,7 +51,7 @@
         <ul class="table-top-head">
             @if(auth("admin")->user()->can("pdf.brand"))
                 <li>
-                    <a data-bs-toggle="tooltip" data-bs-placement="top" href="{{ route('admin.brand.pdf') }}" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" href="{{ route('admin.hrm.payroll.pdf') }}" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
                 </li>
             @endif
 

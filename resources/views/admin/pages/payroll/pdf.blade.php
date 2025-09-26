@@ -108,25 +108,38 @@
         <table>
             <thead>
                 <tr>
-                    <th>SL.</th>
+                    <th>Employee Code</th>
                     <th>Image</th>
-                    <th>Brand Name</th>
-                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Email</th>
+                    <th>Total Earnings</th>
+                    <th>Total Deductions</th>
+                    <th>Salary</th>
                     <th>Create Date</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($brands as $index => $row)
+                @foreach ($payrolls as $index => $row)
                     <tr>
-                        <td>{{ $index+1 }}</td>
+                        <td>{{ $row->employee_code }}</td>
                         <td>
                             @if ( !empty($row->image) )
                                 <img src="{{ url($row->image) }}" alt="" style="width: 70px;">
                             @endif
                         </td>
-                        <td>{{ $row->brand_name }}</td>
-                        <td>{{ $row->slug }}</td>
+                        <td>{{ $row->first_name . ' ' . $row->last_name }}</td>
+                        <td>{{ $row->designation }}</td>
+                        <td>{{ $row->email }}</td>
+                        @php
+                            $total_earnings = $row->basic_salary + $row->hra_allow + $row->conveyance + $row->medical_allow + $row->bonus;
+
+                            $total_deductions = $row->provident_fund + $row->professional_tax + $row->tds + $row->loan_others;
+                        @endphp
+                        <td>${{ $total_earnings }}</td>
+                        <td>${{ $total_deductions }}</td>
+                        <td>${{ $total_earnings - $total_deductions }}</td>
                         <td>{{ $row->created_at }}</td>
                         <td>
                             @if ( $row->status == 1 )

@@ -50,7 +50,7 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Payslip for the Month of {{ date('M Y', strtotime($payroll->updated_at)) }}</h4>
             <div class="d-flex align-items-center justify-content-end">
-                <button type="button" id="sendMail" data-id="{{ $payroll->id }}" class="btn btn-primary me-2"><i class="ti ti-mail me-2"></i>Send Email</button>
+                <button type="button" id="sendMail" data-id="{{ $payroll->id }}" class="btn btn-primary me-2 sendsMail"><i class="ti ti-mail me-2"></i>Send Email</button>
                 <a href="{{ route('admin.hrm.payslip.download', $payroll->id ) }}" class="btn btn-secondary me-2"><i class="ti ti-download me-2"></i>Download</a>
             </div>
         </div>
@@ -174,10 +174,13 @@
                     url: "{{ url('admin/hrm/payslip-send-emails') }}/" + id,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
+                    beforeSend: function (){
+                        $('.sendsMail').html('Mail sending...')
+                    },
                     success: function (res) {
                         // let data = res.success;
                         // console.log(data);
-
+                        $('.sendsMail').html('<i class="ti ti-mail me-2"></i>Send Email')
                         if (res.status === true) {
                             swal.fire({
                                 title: "Success",
@@ -189,7 +192,6 @@
                     error: function (error) {
                         console.log('error');
                     }
-
                 });
             })
     </script>

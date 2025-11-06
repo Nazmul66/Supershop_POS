@@ -11,6 +11,10 @@
 </head>
 
 <body>
+
+	{{-- Offline Template Show --}}
+	@include('global_view.offline')
+
 	
 	{{-- Loader Section Start --}}
 		@include('admin.include.loader')

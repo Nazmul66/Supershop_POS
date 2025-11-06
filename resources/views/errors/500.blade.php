@@ -37,6 +37,11 @@
         
     </head>
     <body class="error-page">
+
+        {{-- Offline Template Show --}}
+        @include('global_view.offline')
+        
+
         <div id="global-loader" >
             <div class="whirly-loader"> </div>
         </div>

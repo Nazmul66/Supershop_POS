@@ -36,6 +36,11 @@
         <link rel="stylesheet" href="{{ asset('public/admin/assets/css/style.css') }}">
         
     </head>
+
+    {{-- Offline Template Show --}}
+    @include('global_view.offline')
+
+
     <body class="error-page">
         <div id="global-loader" >
             <div class="whirly-loader"> </div>

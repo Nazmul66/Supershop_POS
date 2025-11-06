@@ -117,6 +117,12 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/brands/view/{id}', [BrandsController::class, 'brandView'])->name('brand.view');
     Route::get('/brands/pdf', [BrandsController::class, 'allBrandsPdf'])->name('brand.pdf');
 
+    //______ product _____//
+    Route::get('/product', function(){
+        return view('admin.pages.product.index');
+    })->name('product');
+
+
 
     //______ Country _____//
     Route::resource('/country', CountryController::class)->names('country')->except('show');

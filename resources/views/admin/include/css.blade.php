@@ -1,6 +1,13 @@
 	<!-- Meta Tags -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<meta charset="utf-8">
+
+	<!-- Laravel PWA  -->
+	<meta name="theme-color" content="#1B2850"/>
+	<link rel="apple-touch-icon" href="{{ asset('public/images/logo-small.png') }}">
+	<link rel="manifest" href="{{ asset('public/manifest.json') }}">
+
+
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">

@@ -105,8 +105,8 @@
                             <div class="mb-3">
                                 <label class="form-label">Status <span class="text-danger">*</span></label>
                                 <select class="form-select" name="status">
-                                    <option value="1" selected>Yes</option>
-                                    <option value="0">No</option>
+                                    <option value="1" selected>Active</option>
+                                    <option value="0">Deactive</option>
                                 </select>
 
                                 <span id="featured_validate" class="text-danger validation-error mt-1"></span>
@@ -163,8 +163,8 @@
                             <div class="mb-3">
                                 <label class="form-label">Status <span class="text-danger">*</span></label>
                                 <select class="form-select" id="up_status" name="status">
-                                    <option value="1" selected>Yes</option>
-                                    <option value="0">No</option>
+                                    <option value="1" selected>Active</option>
+                                    <option value="0">Deactive</option>
                                 </select>
                             </div>
 

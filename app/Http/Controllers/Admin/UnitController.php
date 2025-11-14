@@ -138,7 +138,15 @@ class UnitController extends Controller
         }
 
         DB::commit();
-        return response()->json(['message'=> "Successfully Unit Created!", 'status' => true]);
+        return response()->json([
+            'status' => true,
+            'message'=> "Successfully Unit Created!", 
+            'units' => [
+                'id'    => $unit->id,
+                'unit'  => $unit->unit,
+                'short_name'  => $unit->short_name,
+            ]
+        ]);
     }
 
     /**

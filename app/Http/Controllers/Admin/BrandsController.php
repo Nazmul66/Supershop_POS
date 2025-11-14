@@ -150,7 +150,15 @@ class BrandsController extends Controller
         }
 
         DB::commit();
-        return response()->json(['message'=> "Successfully Brand Created!", 'status' => true]);
+        return response()->json([
+            'status' => true,
+            'message' => 'Successfully Brand Created!',
+            'brand' => [
+                'id' => $brand->id,
+                'name' => $brand->brand_name ,
+                'image' => asset($brand->image),
+            ]
+        ]);
     }
 
     /**

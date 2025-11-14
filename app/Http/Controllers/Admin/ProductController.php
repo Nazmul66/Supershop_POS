@@ -13,9 +13,7 @@ use App\Models\Subcategory;
 use App\Models\ChildCategory;
 use App\Models\Product;
 use App\Models\Brand;
-use App\Models\ProductColor;
-use App\Models\ProductImage;
-use App\Models\ProductSize;
+use App\Models\Unit;
 use Brian2694\Toastr\Facades\Toastr;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -46,8 +44,9 @@ class ProductController extends Controller
         $categories           = Category::get_data();
         $subCategories        = Subcategory::get_data();
         $brands               = Brand::get_data();
+        $units                = Unit::get_data();
 
-        return view('admin.pages.product.index', compact('categories', 'subCategories', 'brands'));
+        return view('admin.pages.product.index', compact('categories', 'subCategories', 'brands', 'units'));
     }
 
     public function create()

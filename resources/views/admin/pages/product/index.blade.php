@@ -95,27 +95,22 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <div class="input-group mb-1">
-                        <label class="col-4" for="units"><b>Unit</b> <span class="text-danger">*</span></label>
+                        <label class="col-4" for="unit_id"><b>Unit</b> <span class="text-danger">*</span></label>
 
                         <div class="col-8">
                             <div class="d-flex">
                                 <div class="" style="width: 100%;">
-                                    <select class="form-select" id="units" name="unit">
+                                    <select class="form-select" id="unit_id" name="unit_id">
                                         <option value="" disabled selected>Select</option>
-                                        {{-- @foreach ($subCategories as $row)
-                                            <option value="{{ $row->id }}" 
-                                                data-image-url="{{ asset($row->subcategory_img) }}"
-                                                {{ old('subCategory_id', $product->subCategory_id ?? '') == $row->id ? 'selected' : '' }}
-                                                >{{ $row->subcategory_name }}</option>
-                                        @endforeach --}}
-                                        <option value="pcs">Pcs</option>
-                                        <option value="box">Box</option>
+                                        @foreach ($units as $row)
+                                            <option value="{{ $row->id }}">{{ $row->unit }} ( {{ $row->short_name }} )</option>
+                                        @endforeach
                                     </select>
 
                                 </div>
-                                <div class="add_input">
+                                <button class="add_input" data-bs-toggle="modal" data-bs-target="#unitModal">
                                     <i class="fas fa-plus input_i"></i>
-                                </div>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -217,9 +212,9 @@
                                     </select>
 
                                 </div>
-                                <div class="add_input">
+                                <button class="add_input" data-bs-toggle="modal" data-bs-target="#brandModal">
                                     <i class="fas fa-plus input_i"></i>
-                                </div>
+                                </button>
                             </div>
 
                         </div>
@@ -402,8 +397,121 @@
             </div>
             <!-- /End SubCategory Create Modal  -->
 
+
+            <!-- /End Brand Create Modal  -->
+            <div id="brandModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+            style="display: none;" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">Create Brand</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="brandForm" enctype="multipart/form-data">
+                                @csrf
+
+                                <div class="mb-3">
+                                    <label for="brand_name" class="form-label">Brand Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="brand_name" name="brand_name" placeholder="Brand name">
+
+                                    <span id="brand_name_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Brand Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
+                                    <input type="file" class="form-control" name="image" id="image"  accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'brand_image_preview')">
+
+                                    <span id="brand_image_validate" class="text-danger validation-error mt-1"></span>
+
+                                    <div id="brand_image_preview" class="mt-3">
+                                        <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Status <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="status">
+                                        <option value="1" selected>Active</option>
+                                        <option value="0">Deactive</option>
+                                    </select>
+
+                                    <span id="featured_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
+
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <button type="button" class="btn btn-secondary waves-effect me-3"
+                                        data-bs-dismiss="modal">Close </button>
+
+                                    <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+
+
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+             <!-- /End Brand Create Modal  -->
+
+
+             <!-- /End Unit Create Modal  -->
+             <div id="unitModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+                 style="display: none;" aria-hidden="true">
+                 <div class="modal-dialog">
+                     <div class="modal-content">
+                         <div class="modal-header">
+                             <h5 class="modal-title" id="myModalLabel">Create Unit</h5>
+                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                         </div>
+ 
+                         <div class="modal-body">
+                             <form id="unitForm" enctype="multipart/form-data">
+                                 @csrf
+ 
+                                 <div class="mb-3">
+                                     <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
+                                     <input type="text" class="form-control" id="unit" name="unit" placeholder="Unit">
+ 
+                                     <span id="units_validate" class="text-danger validation-error mt-1"></span>
+                                 </div>
+ 
+ 
+                                 <div class="mb-3">
+                                     <label for="short_name" class="form-label">Short Name <span class="text-danger">*</span></label>
+                                     <input type="text" class="form-control" id="short_name" name="short_name" placeholder="Short Name">
+ 
+                                     <span id="short_name_validate" class="text-danger validation-error mt-1"></span>
+                                 </div>
+ 
+ 
+                                 <div class="mb-3">
+                                     <label class="form-label">Status <span class="text-danger">*</span></label>
+                                     <select class="form-select" name="status">
+                                         <option value="1" selected>Active</option>
+                                         <option value="0">Deactive</option>
+                                     </select>
+ 
+                                     <span id="featured_validate" class="text-danger validation-error mt-1"></span>
+                                 </div>
+ 
+                                 <div class="d-flex justify-content-end align-items-center">
+                                     <button type="button" class="btn btn-secondary waves-effect me-3"
+                                         data-bs-dismiss="modal">Close </button>
+ 
+                                     <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save changes</button>
+                                 </div>
+                             </form>
+                         </div>
+                     </div><!-- /.modal-content -->
+                 </div><!-- /.modal-dialog -->
+             </div>
+            <!-- /End Unit Create Modal  -->
+
         </div>
     </div>
+
 
     <div class="card">
         <div class="card-body">
@@ -512,7 +620,7 @@
                     success: function (res) {
                         console.log(res);
                         if (res.status === true) {
-                            // Add new category to dropdown
+                            // Add new subCategory to dropdown
                             $('#subCategory_id').append(
                                 `<option value="${res.subCategory.id}" data-image-url="${res.subCategory.image}">
                                     ${res.subCategory.name}
@@ -544,6 +652,119 @@
                         $('#cats_name_validate').empty().html(error.category_id);
                         $('#subCats_name_validate').empty().html(error.subcategory_name);
                         $('#subCats_image_validate').empty().html(error.subcategory_img);
+
+                        swal.fire({
+                            title: "Failed",
+                            text: "Something Went Wrong !",
+                            icon: "error"
+                        })
+                    }
+                });
+            })
+
+            // Create Brand Data
+            $('#brandForm').submit(function (e) {
+                e.preventDefault();
+
+                let formData = new FormData(this);
+
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{ route('admin.brand.store') }}",
+                    data: formData,
+                    processData: false,  // Prevent jQuery from processing the data
+                    contentType: false,  // Prevent jQuery from setting contentType
+                    success: function (res) {
+                        console.log(res);
+                        if (res.status === true) {
+                             // Add new subCategory to dropdown
+                             $('#brand_id').append(
+                                `<option value="${res.brand.id}" data-image-url="${res.brand.image}">
+                                    ${res.brand.name}
+                                </option>`
+                            );
+
+                            // Optional: auto-select the newly added option
+                            $('#brand_id').val(res.brand.id).trigger('change');
+
+                            $('#brand_image_preview').html(`
+                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                            `);
+
+                            $('#brandModal').modal('hide');
+                            $('#brandForm')[0].reset();
+                            $('.validation-error').html('');
+
+                            swal.fire({
+                                title: "Success",
+                                text: `${res.message}`,
+                                icon: "success"
+                            })
+                        }
+                    },
+                    error: function (err) {
+                        let error = err.responseJSON.errors;
+
+                        $('#brand_name_validate').empty().html(error.brand_name);
+                        $('#brand_image_validate').empty().html(error.image);
+
+                        swal.fire({
+                            title: "Failed",
+                            text: "Something Went Wrong !",
+                            icon: "error"
+                        })
+                    }
+                });
+            })
+
+            // Create Unit Data
+            $('#unitForm').submit(function (e) {
+                e.preventDefault();
+
+                let formData = new FormData(this);
+
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{ route('admin.unit.store') }}",
+                    data: formData,
+                    processData: false,  // Prevent jQuery from processing the data
+                    contentType: false,  // Prevent jQuery from setting contentType
+                    success: function (res) {
+                        console.log(res);
+                        if (res.status === true) {
+                            // Add new brand to dropdown
+                            $('#unit_id').append(
+                                `<option value="${res.units.id}">
+                                    ${res.units.unit} (${res.units.short_name})
+                                </option>`
+                            );
+
+                            // Optional: auto-select the newly added option
+                            $('#unit_id').val(res.units.id).trigger('change');
+
+                            $('#unitModal').modal('hide');
+                            $('#unitForm')[0].reset();
+                            $('.validation-error').html('');
+
+                            swal.fire({
+                                title: "Success",
+                                text: `${res.message}`,
+                                icon: "success"
+                            })
+                        }
+                    },
+                    error: function (err) {
+                        let error = err.responseJSON.errors;
+                        console.log(error);
+
+                        $('#units_validate').empty().html(error.unit);
+                        $('#short_name_validate').empty().html(error.short_name);
 
                         swal.fire({
                             title: "Failed",

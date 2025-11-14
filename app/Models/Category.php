@@ -16,13 +16,4 @@ class Category extends Model
         return Self::where('status', 1)->get();
     }
 
-    public function subCategory()
-    {
-        return $this->belongsTo(Subcategory::class);
-    }
-
-    // public function subcategories()
-    // {
-    //     return $this->hasMany(Subcategory::class);
-    // }
 }

@@ -118,9 +118,12 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/brands/pdf', [BrandsController::class, 'allBrandsPdf'])->name('brand.pdf');
 
     //______ product _____//
-    Route::get('/product', function(){
-        return view('admin.pages.product.index');
-    })->name('product');
+    // Route::get('/product', function(){
+    //     return view('admin.pages.product.index');
+    // })->name('product');
+    Route::resource('/product', ProductController::class)->names('product');
+    Route::get('/product-data', [ProductController::class, 'getData'])->name('product-data');
+    Route::post('/change-product-status', [ProductController::class, 'changeProductStatus'])->name('product.status');
 
 
 

@@ -43,12 +43,11 @@ class ProductController extends Controller
 
     public function index()
     {
-        $categories        = Category::get_data();
-        $subCategories     = Subcategory::get_data();
-        $childCategories   = ChildCategory::get_data();
-        $brands            = Brand::get_data();
+        $categories           = Category::get_data();
+        $subCategories        = Subcategory::get_data();
+        $brands               = Brand::get_data();
 
-        return view('backend.pages.products.index', compact('categories', 'subCategories', 'childCategories', 'brands'));
+        return view('admin.pages.product.index', compact('categories', 'subCategories', 'brands'));
     }
 
     public function create()
@@ -384,38 +383,38 @@ class ProductController extends Controller
         return response()->json(['message' => 'Product has been deleted.'], 200);
     }
 
-    public function getSubCategories(Request $request, Category $category)
-    {
-        $subcats= SubCategory::where('category_id', $category->id)->get();
-        return response()->json(['message' => 'success', 'data' => $subcats], 200);
-    }
+    // public function getSubCategories(Request $request, Category $category)
+    // {
+    //     $subcats= SubCategory::where('category_id', $category->id)->get();
+    //     return response()->json(['message' => 'success', 'data' => $subcats], 200);
+    // }
 
 
-    public function get_product_subCategory_data(Request $request)
-    {
-        // dd($request->all());
-        $subCategories = Subcategory::where('category_id', $request->id)->where('status', 1)->get();
+    // public function get_product_subCategory_data(Request $request)
+    // {
+    //     // dd($request->all());
+    //     $subCategories = Subcategory::where('category_id', $request->id)->where('status', 1)->get();
 
-        // 'subcategory_img' is the column name where image filename is stored
-        foreach ($subCategories as $subCategory) {
-            $subCategory->image_url = asset($subCategory->subcategory_img); 
-        }
+    //     // 'subcategory_img' is the column name where image filename is stored
+    //     foreach ($subCategories as $subCategory) {
+    //         $subCategory->image_url = asset($subCategory->subcategory_img); 
+    //     }
 
-        return response()->json(['status' => true, 'data' => $subCategories]);
-    }
+    //     return response()->json(['status' => true, 'data' => $subCategories]);
+    // }
 
-    public function get_product_childCategory_data(Request $request)
-    {
-        // dd($request->all());
-        $childCategories = ChildCategory::where('subCategory_id', $request->id)->where('status', 1)->get();
+    // public function get_product_childCategory_data(Request $request)
+    // {
+    //     // dd($request->all());
+    //     $childCategories = ChildCategory::where('subCategory_id', $request->id)->where('status', 1)->get();
 
-        // 'subcategory_img' is the column name where image filename is stored
-        foreach ($childCategories as $childCategory) {
-            $childCategory->image_url = asset($childCategory->img); 
-        }
+    //     // 'subcategory_img' is the column name where image filename is stored
+    //     foreach ($childCategories as $childCategory) {
+    //         $childCategory->image_url = asset($childCategory->img); 
+    //     }
 
-        return response()->json(['status' => true, 'data' => $childCategories]);
-    }
+    //     return response()->json(['status' => true, 'data' => $childCategories]);
+    // }
 
 
     public function show($id)
@@ -432,164 +431,164 @@ class ProductController extends Controller
     }
 
 
-    public function product_variant($product_id)
-    {
-        if (!$this->user || !$this->user->can('variant.product')) {
-            throw UnauthorizedException::forPermissions(['variant.product']);
-        }
+    // public function product_variant($product_id)
+    // {
+    //     if (!$this->user || !$this->user->can('variant.product')) {
+    //         throw UnauthorizedException::forPermissions(['variant.product']);
+    //     }
 
-        // Product Color
-        $data['product_id']       = $product_id;
-        $data['size_value']       = AttributeValue::where('attribute', "size")->where('status', 1)->get();
-        $data['color_value']      = AttributeValue::where('attribute', "color")->where('status', 1)->get();
-        $data['productImages']    = ProductImage::where('product_id', $product_id)->orderBy('order_id', 'asc')->get();
-        $data['productSizes']     = ProductSize::where('product_id', $product_id)->get();
-        $data['productColors']    = ProductColor::where('product_id', $product_id)->get();
+    //     // Product Color
+    //     $data['product_id']       = $product_id;
+    //     $data['size_value']       = AttributeValue::where('attribute', "size")->where('status', 1)->get();
+    //     $data['color_value']      = AttributeValue::where('attribute', "color")->where('status', 1)->get();
+    //     $data['productImages']    = ProductImage::where('product_id', $product_id)->orderBy('order_id', 'asc')->get();
+    //     $data['productSizes']     = ProductSize::where('product_id', $product_id)->get();
+    //     $data['productColors']    = ProductColor::where('product_id', $product_id)->get();
 
-        return view('backend.pages.products.product_variant', $data);
-    }
+    //     return view('backend.pages.products.product_variant', $data);
+    // }
     
     
-    public function update_product_variant(Request $request, $id)
-    {
-        // Handle Product sizes
-        if ($request->has('size_name') && $request->has('size_price')) {
-            foreach ($request->size_name as $index => $sizeName) {
-                if (!empty($sizeName)) {
-                    // Find existing ProductSize by size_id, or create a new one
-                    ProductSize::updateOrCreate(
-                        [
-                            'product_id' => $id, 
-                            'size_id' => $request->size_id[$index] // Match on product_id and size_id
-                        ],
-                        [
-                            'size_name' => $sizeName, // Update or set size_name
-                            'size_price' => $request->size_price[$index], // Update or set size_price
-                            'stock' => $request->stock[$index] // Update or set stock
-                        ]
-                    );
-                }
-            }
-        }
+    // public function update_product_variant(Request $request, $id)
+    // {
+    //     // Handle Product sizes
+    //     if ($request->has('size_name') && $request->has('size_price')) {
+    //         foreach ($request->size_name as $index => $sizeName) {
+    //             if (!empty($sizeName)) {
+    //                 // Find existing ProductSize by size_id, or create a new one
+    //                 ProductSize::updateOrCreate(
+    //                     [
+    //                         'product_id' => $id, 
+    //                         'size_id' => $request->size_id[$index] // Match on product_id and size_id
+    //                     ],
+    //                     [
+    //                         'size_name' => $sizeName, // Update or set size_name
+    //                         'size_price' => $request->size_price[$index], // Update or set size_price
+    //                         'stock' => $request->stock[$index] // Update or set stock
+    //                     ]
+    //                 );
+    //             }
+    //         }
+    //     }
 
 
-        // Handle Product Colors
-        if ($request->has('color_name')) {
-            foreach ($request->color_name as $row => $colorName) {
-                if (!empty($colorName)) {
-                    // Find existing ProductColor by color_id, or create a new one
-                    $productColor = ProductColor::updateOrCreate(
-                        [
-                            'product_id' => $id, 
-                            'color_id' => $request->color_id[$row] // Match on product_id and color_id
-                        ],
-                        [
-                            'color_name' => $colorName, // Update or set color_name
-                            'color_price' => $request->color_price[$row], // Update or set color_price
-                            'color_code' => $request->color_code[$row] // Update or set color_code
-                        ]
-                    );
-                }
-            }
-        }
+    //     // Handle Product Colors
+    //     if ($request->has('color_name')) {
+    //         foreach ($request->color_name as $row => $colorName) {
+    //             if (!empty($colorName)) {
+    //                 // Find existing ProductColor by color_id, or create a new one
+    //                 $productColor = ProductColor::updateOrCreate(
+    //                     [
+    //                         'product_id' => $id, 
+    //                         'color_id' => $request->color_id[$row] // Match on product_id and color_id
+    //                     ],
+    //                     [
+    //                         'color_name' => $colorName, // Update or set color_name
+    //                         'color_price' => $request->color_price[$row], // Update or set color_price
+    //                         'color_code' => $request->color_code[$row] // Update or set color_code
+    //                     ]
+    //                 );
+    //             }
+    //         }
+    //     }
 
 
-        Toastr::success('Product variation successfully updated', 'Success', ["positionClass" => "toast-top-right"]);
-       return redirect()->back();
-    }
+    //     Toastr::success('Product variation successfully updated', 'Success', ["positionClass" => "toast-top-right"]);
+    //    return redirect()->back();
+    // }
 
-    public function product_images_store(Request $request, $id)
-    {
-        // Multiple images store
-        if($request->hasFile('images')) {
-            foreach($request->file('images') as $image) {
+    // public function product_images_store(Request $request, $id)
+    // {
+    //     // Multiple images store
+    //     if($request->hasFile('images')) {
+    //         foreach($request->file('images') as $image) {
 
-                $productImages = new ProductImage();
-                $productImages->product_id = $id;
+    //             $productImages = new ProductImage();
+    //             $productImages->product_id = $id;
     
-                // Generate unique image name
-                $imageName = $request->slug . rand(1, 99999999) . '.' . $image->getClientOriginalExtension();
-                $imagePath = 'public/backend/images/multiple-image/';
-                $image->move($imagePath, $imageName);
-                $productImages->images   =  $imagePath . $imageName;
+    //             // Generate unique image name
+    //             $imageName = $request->slug . rand(1, 99999999) . '.' . $image->getClientOriginalExtension();
+    //             $imagePath = 'public/backend/images/multiple-image/';
+    //             $image->move($imagePath, $imageName);
+    //             $productImages->images   =  $imagePath . $imageName;
 
-                $productImages->save();
-            }
-        }
+    //             $productImages->save();
+    //         }
+    //     }
 
-        Toastr::success('Product image successfully updated', 'Success', ["positionClass" => "toast-top-right"]);
-        return redirect()->back();
-    }
+    //     Toastr::success('Product image successfully updated', 'Success', ["positionClass" => "toast-top-right"]);
+    //     return redirect()->back();
+    // }
 
-    public function product_images_sortable(Request $request)
-    {
-        //  dd($request->photo_id);
-        if( !empty($request->photo_id) ){
-            $i = 1;
-            foreach( $request->photo_id as $image_id ){
-                $productImage = ProductImage::findOrFail($image_id);
+    // public function product_images_sortable(Request $request)
+    // {
+    //     //  dd($request->photo_id);
+    //     if( !empty($request->photo_id) ){
+    //         $i = 1;
+    //         foreach( $request->photo_id as $image_id ){
+    //             $productImage = ProductImage::findOrFail($image_id);
 
-                $productImage->order_id = $i;
-                $productImage->save();
+    //             $productImage->order_id = $i;
+    //             $productImage->save();
 
-                $i++;
-            }
-        }
-        return response()->json(['status' => 'success']);
-    }
+    //             $i++;
+    //         }
+    //     }
+    //     return response()->json(['status' => 'success']);
+    // }
 
-    // Delete Multiple Product images variants
-    public function delete_multiple_image($id)
-    {
-        try {
-            $productImg = ProductImage::findOrFail($id);
-            if( !is_null( $productImg ) ){
-                if( file_exists( $productImg->images )){
-                    unlink($productImg->images);
-                }
-                $productImg->delete();
-            }
+    // // Delete Multiple Product images variants
+    // public function delete_multiple_image($id)
+    // {
+    //     try {
+    //         $productImg = ProductImage::findOrFail($id);
+    //         if( !is_null( $productImg ) ){
+    //             if( file_exists( $productImg->images )){
+    //                 unlink($productImg->images);
+    //             }
+    //             $productImg->delete();
+    //         }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Image deleted successfully.',
-            ]);
-        } 
-        catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to delete the image.',
-            ]);
-        }
-    }
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Image deleted successfully.',
+    //         ]);
+    //     } 
+    //     catch (\Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Failed to delete the image.',
+    //         ]);
+    //     }
+    // }
 
-    // Delete Multiple Product size variants
-    public function delete_size_variants(Request $request)
-    {
-        // dd($request->all());
-        $productSize = ProductSize::findOrFail($request->id);
-        if( !is_null( $productSize ) ){
-            $productSize->delete();
-        }
+    // // Delete Multiple Product size variants
+    // public function delete_size_variants(Request $request)
+    // {
+    //     // dd($request->all());
+    //     $productSize = ProductSize::findOrFail($request->id);
+    //     if( !is_null( $productSize ) ){
+    //         $productSize->delete();
+    //     }
 
-       return response()->json([
-            'status' => true,
-            'message' => "Product Variant remove",
-       ]);
-    }
+    //    return response()->json([
+    //         'status' => true,
+    //         'message' => "Product Variant remove",
+    //    ]);
+    // }
 
 
-    // Delete Multiple Product color variants
-    public function delete_color_variants(Request $request)
-    {
-        $productColor = ProductColor::findOrFail($request->id);
-        if( !is_null( $productColor ) ){
-            $productColor->delete();
-        }
+    // // Delete Multiple Product color variants
+    // public function delete_color_variants(Request $request)
+    // {
+    //     $productColor = ProductColor::findOrFail($request->id);
+    //     if( !is_null( $productColor ) ){
+    //         $productColor->delete();
+    //     }
 
-       return response()->json([
-            'status' => true,
-            'message' => "Product Variant remove",
-       ]);
-    }
+    //    return response()->json([
+    //         'status' => true,
+    //         'message' => "Product Variant remove",
+    //    ]);
+    // }
 }

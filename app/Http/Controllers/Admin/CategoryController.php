@@ -148,7 +148,16 @@ class CategoryController extends Controller
         }
 
         DB::commit();
-        return response()->json(['message'=> "Successfully Category Created!", 'status' => true]);
+        
+        return response()->json([
+            'status' => true,
+            'message' => 'Successfully Category Created!',
+            'category' => [
+                'id' => $category->id,
+                'name' => $category->category_name,
+                'image' => asset($category->category_img),
+            ]
+        ]);
     }
 
     /**

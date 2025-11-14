@@ -135,7 +135,15 @@ class SubcategoryController extends Controller
         }
 
         DB::commit();
-        return response()->json(['message'=> "Successfully SubCategory Created!", 'status' => true]);
+        return response()->json([
+            'status' => true,
+            'message'=> "Successfully SubCategory Created!", 
+            'subCategory' => [
+                'id'    => $SubCategory->id,
+                'name'  => $SubCategory->subcategory_name,
+                'image' => asset($SubCategory->subcategory_img),
+            ]
+        ]);
     }
 
     /**

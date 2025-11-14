@@ -524,3 +524,59 @@ select > option:disabled{
   .toggle-checkbox:checked + .toggle_label .toggle-ball {
     transform: translateX(18px) !important;
   }
+
+
+
+  .select2-container .select2-selection--single {
+    height: 35px !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 35px !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    transform: rotate(0deg) translateY(-50%) !important;
+    -webkit-transform: rotate(0deg) translateY(-50%) !important;
+    -ms-transform: rotate(0deg) translateY(-50%) !important;
+}
+.select2-selection__rendered span{
+    display: flex;
+    align-items: center;
+}
+li.select2-results__option > span{
+    display: flex;
+    align-items: center;
+}
+.add_input{
+    height: 35px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    font-size: 0.7rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+}
+.form-control,
+.form-select {
+    border-color: #aaa;
+    height: 35px;
+}
+.form-control:focus,
+.form-select:focus {
+    border-color: #aaa;
+}
+.form-control::placeholder,
+.form-control::-webkit-input-placeholder,
+.form-control:-ms-input-placeholder,
+.form-control::-ms-input-placeholder,
+.form-select::placeholder,
+.form-select::-webkit-input-placeholder,
+.form-select:-ms-input-placeholder,
+.form-select::-ms-input-placeholder {
+    color: red !important;
+}

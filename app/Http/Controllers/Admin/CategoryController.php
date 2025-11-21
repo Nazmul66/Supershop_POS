@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\CreateCategoryRequest;
 use App\Http\Requests\Admin\UpdateCategoryRequest;
 use App\Traits\ImageUploadTraits;
 use App\Models\Category;
+use App\Models\Admin;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,6 +48,18 @@ class CategoryController extends Controller
                 return '<a href="'.asset( $category->category_img ).'" target="__target">
                      <img src="'.asset( $category->category_img ).'" width="50px" height="50px" >
                 </a>';
+            })
+            ->addColumn('created_by', function ($category) {
+                $adminName = \App\Models\Admin::find($category->created_by)?->name ?? 'Unknown';
+                $adminEmail = \App\Models\Admin::find($category->created_by)?->email ?? 'Unknown';
+                $adminImage = \App\Models\Admin::find($category->created_by)?->image ?? 'Unknown';
+                return '<div class="d-flex align-items-center">
+                      <img  class="rounded-circle me-2" width="40"  height="40" src="'.asset($adminImage) .'" />
+                      <div>
+                        <p class="mb-0">'. $adminName .'</p> 
+                        <p class="mb-0">'. $adminEmail .'</p>
+                      </div>
+                </div>';
             })
             ->addColumn('status', function ($category) {
                 if(auth("admin")->user()->can("status.category"))
@@ -92,7 +105,7 @@ class CategoryController extends Controller
                 ', ['category' => $category]);
                 return $actionHtml;
             })
-            ->rawColumns(['categoryImg', 'status', 'action'])
+            ->rawColumns(['categoryImg', 'created_by', 'status', 'action'])
             ->make(true);
     }
 
@@ -135,6 +148,9 @@ class CategoryController extends Controller
             $category->category_name          = $request->category_name;
             $category->slug                   = Str::slug($request->category_name);
             $category->status                 = $request->status;
+            $category->created_by             = Auth::guard('admin')->id();
+            $category->created_at             = now();
+            $category->updated_at             = now();
 
             // Handle image with ImageUploadTraits function
             $uploadImage                      = $this->imageUpload($request, 'category_img', 'category');
@@ -191,6 +207,8 @@ class CategoryController extends Controller
             $category->slug                   = Str::slug($request->category_name);
             $category->front_status           = $request->front_status;
             $category->status                 = $request->status;
+            $category->created_by             = Auth::guard('admin')->id();
+            $category->updated_at             = now();
 
             $uploadImages                     = $this->deleteImageAndUpload($request, 'category_img', 'category', $category->category_img );
             $category->category_img           =  $uploadImages;

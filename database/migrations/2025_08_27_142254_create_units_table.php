@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('unit');
             $table->string('short_name');
             $table->boolean('status')->default(1)->comment('1=active, 0=deactive');
+            $table->string('created_by')->null();
             $table->timestamps();
         });
     }

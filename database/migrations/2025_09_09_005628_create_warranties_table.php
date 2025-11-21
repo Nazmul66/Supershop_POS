@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('period');
             $table->text('description');
             $table->boolean('status')->default(1)->comment('1=Active, 0=Deactive');
+            $table->string('created_by')->null();
             $table->timestamps();
         });
     }

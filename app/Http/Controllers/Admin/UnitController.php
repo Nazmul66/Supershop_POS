@@ -57,6 +57,18 @@ class UnitController extends Controller
                     return '<span class="badge bg-info">N/A</span>'; 
                 }
             })
+            ->addColumn('created_by', function ($category) {
+                $adminName = \App\Models\Admin::find($category->created_by)?->name ?? 'Unknown';
+                $adminEmail = \App\Models\Admin::find($category->created_by)?->email ?? 'Unknown';
+                $adminImage = \App\Models\Admin::find($category->created_by)?->image ?? 'Unknown';
+                return '<div class="d-flex align-items-center">
+                      <img  class="rounded-circle me-2" width="40"  height="40" src="'.asset($adminImage) .'" />
+                      <div>
+                        <p class="mb-0">'. $adminName .'</p> 
+                        <p class="mb-0">'. $adminEmail .'</p>
+                      </div>
+                </div>';
+            })
             ->addColumn('action', function ($unit) {
                 $actionHtml = Blade::render('
                     <div class="btn-group">
@@ -84,7 +96,7 @@ class UnitController extends Controller
                 ', ['unit' => $unit]);
                 return $actionHtml;
             })
-            ->rawColumns(['status', 'action'])
+            ->rawColumns(['status', 'created_by', 'action'])
             ->make(true);
     }
 
@@ -125,6 +137,7 @@ class UnitController extends Controller
             $unit->unit                   = Str::title($request->unit);
             $unit->short_name             = $request->short_name;
             $unit->status                 = $request->status;
+            $unit->created_by             = Auth::guard('admin')->id();
             $unit->created_at             = now();
             $unit->updated_at             = now();
 
@@ -178,7 +191,7 @@ class UnitController extends Controller
             $unit->unit                   = Str::title($request->unit);
             $unit->short_name             = $request->short_name;
             $unit->status                 = $request->status;
-            $unit->created_at             = now();
+            $unit->created_by             = Auth::guard('admin')->id();
             $unit->updated_at             = now();
 
             $unit->save();

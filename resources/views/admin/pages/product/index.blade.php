@@ -765,7 +765,6 @@
 
     <script>
         $(document).ready(function () {
-
             // Create Category Data
             $('#categoryForm').submit(function (e) {
                 e.preventDefault();
@@ -884,7 +883,6 @@
                     }
                 });
             })
-
 
             // Create Data
             $('#childCategoryForm').submit(function (e) {

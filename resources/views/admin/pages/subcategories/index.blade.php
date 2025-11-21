@@ -67,6 +67,7 @@
                             <th>Category Name</th>
                             <th>SubCategory Name</th>
                             <th>Status</th>
+                            <th>Created By</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -362,6 +363,9 @@
                         data: 'status',
                         orderable: false,
                         searchable: false,
+                    },
+                    {
+                        data: 'created_by',
                     },
                     {
                         data: 'action',

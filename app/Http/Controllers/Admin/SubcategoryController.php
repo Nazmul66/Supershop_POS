@@ -54,6 +54,18 @@ class SubcategoryController extends Controller
                     <img src="'.asset( $subCategory->subcategory_img ).'" width="50px" height="50px">
                 </a>';
             })
+            ->addColumn('created_by', function ($category) {
+                $adminName = \App\Models\Admin::find($category->created_by)?->name ?? 'Unknown';
+                $adminEmail = \App\Models\Admin::find($category->created_by)?->email ?? 'Unknown';
+                $adminImage = \App\Models\Admin::find($category->created_by)?->image ?? 'Unknown';
+                return '<div class="d-flex align-items-center">
+                      <img  class="rounded-circle me-2" width="40"  height="40" src="'.asset($adminImage) .'" />
+                      <div>
+                        <p class="mb-0">'. $adminName .'</p> 
+                        <p class="mb-0">'. $adminEmail .'</p>
+                      </div>
+                </div>';
+            })
             ->addColumn('status', function ($subCategory) {
                 if(auth("admin")->user()->can("status.subcategory"))
                     if ($subCategory->status == 1) {
@@ -99,7 +111,7 @@ class SubcategoryController extends Controller
                 ', ['subCategory' => $subCategory]);
                 return $actionHtml;
             })
-            ->rawColumns(['subCategoryImg','status','action'])
+            ->rawColumns(['subCategoryImg', 'created_by', 'status','action'])
             ->make(true);
     }
 
@@ -120,6 +132,7 @@ class SubcategoryController extends Controller
             $SubCategory->subcategory_name       = $request->subcategory_name;
             $SubCategory->slug                   = Str::slug($request->subcategory_name);
             $SubCategory->status                 = $request->status;
+            $SubCategory->created_by             = Auth::guard('admin')->id();
             $SubCategory->created_at             = now();
             $SubCategory->updated_at             = now();
 
@@ -200,6 +213,7 @@ class SubcategoryController extends Controller
             $subcategory->subcategory_name       = $request->subcategory_name;
             $subcategory->slug                   = Str::slug($request->subcategory_name);
             $subcategory->status                 = $request->status;
+            $SubCategory->created_by             = Auth::guard('admin')->id();
             $subcategory->updated_at             = now();
 
             // Handle image with ImageUploadTraits function

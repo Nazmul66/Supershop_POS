@@ -59,6 +59,18 @@ class ChildCategoryController extends Controller
                     <img src="'.asset( $childCategory->img ).'" width="50px" height="50px">
                 </a>';
             })
+            ->addColumn('created_by', function ($category) {
+                $adminName = \App\Models\Admin::find($category->created_by)?->name ?? 'Unknown';
+                $adminEmail = \App\Models\Admin::find($category->created_by)?->email ?? 'Unknown';
+                $adminImage = \App\Models\Admin::find($category->created_by)?->image ?? 'Unknown';
+                return '<div class="d-flex align-items-center">
+                      <img  class="rounded-circle me-2" width="40"  height="40" src="'.asset($adminImage) .'" />
+                      <div>
+                        <p class="mb-0">'. $adminName .'</p> 
+                        <p class="mb-0">'. $adminEmail .'</p>
+                      </div>
+                </div>';
+            })
             ->addColumn('status', function ($childCategory) {
                 if(auth("admin")->user()->can("status.childcategory"))
                     if ($childCategory->status == 1) {
@@ -104,7 +116,7 @@ class ChildCategoryController extends Controller
                 ', ['childCategory' => $childCategory]);
                 return $actionHtml;
             })
-            ->rawColumns(['childCategoryImg','status','action'])
+            ->rawColumns(['childCategoryImg', 'created_by', 'status','action'])
             ->make(true);
     }
 
@@ -126,6 +138,9 @@ class ChildCategoryController extends Controller
             $childCategory->name                   = $request->name;
             $childCategory->slug                   = Str::slug($request->name);
             $childCategory->status                 = $request->status;
+            $childCategory->created_by             = Auth::guard('admin')->id();
+            $childCategory->created_at             = now();
+            $childCategory->updated_at             = now();
 
             // Handle image with ImageUploadTraits function
             $uploadImage                           = $this->imageUpload($request, 'img', 'childCategory');
@@ -208,6 +223,8 @@ class ChildCategoryController extends Controller
             $childCategory->name                   = $request->name;
             $childCategory->slug                   = Str::slug($request->name);
             $childCategory->status                 = $request->status;
+            $childCategory->created_by             = Auth::guard('admin')->id();
+            $childCategory->updated_at             = now();
 
             // Handle image with ImageUploadTraits function
             $uploadImages                          = $this->deleteImageAndUpload($request, 'img', 'childCategory', $childCategory->img );

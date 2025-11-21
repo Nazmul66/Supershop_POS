@@ -62,6 +62,7 @@
                             <th>Unit</th>
                             <th>Short Name</th>
                             <th>Status</th>
+                            <th>Created By</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -259,6 +260,9 @@
                         data: 'status',
                         orderable: false,
                         searchable: false,
+                    },
+                    {
+                        data: 'created_by',
                     },
                     {
                         data: 'action',

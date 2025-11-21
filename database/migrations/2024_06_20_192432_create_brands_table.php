@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('slug');
             $table->integer('is_featured')->default(1)->comment('1 = yes, 0 = no');
             $table->tinyInteger('status')->default(1)->comment('1=active,0=inactive');
+            $table->string('created_by')->null();
             $table->timestamps();
         });
     }

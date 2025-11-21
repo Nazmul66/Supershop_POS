@@ -48,6 +48,18 @@ class BrandsController extends Controller
                      <img src="'.asset( $brand->image ).'" width="50px" height="50px">
                 </a>';
             })
+            ->addColumn('created_by', function ($category) {
+                $adminName = \App\Models\Admin::find($category->created_by)?->name ?? 'Unknown';
+                $adminEmail = \App\Models\Admin::find($category->created_by)?->email ?? 'Unknown';
+                $adminImage = \App\Models\Admin::find($category->created_by)?->image ?? 'Unknown';
+                return '<div class="d-flex align-items-center">
+                      <img  class="rounded-circle me-2" width="40"  height="40" src="'.asset($adminImage) .'" />
+                      <div>
+                        <p class="mb-0">'. $adminName .'</p> 
+                        <p class="mb-0">'. $adminEmail .'</p>
+                      </div>
+                </div>';
+            })
             ->addColumn('status', function ($brand) {
                 if(auth("admin")->user()->can("status.brand"))
                     if ($brand->status == 1) {
@@ -92,7 +104,7 @@ class BrandsController extends Controller
                 ', ['brand' => $brand]);
                 return $actionHtml;
             })
-            ->rawColumns(['brandImage', 'status', 'action'])
+            ->rawColumns(['brandImage', 'created_by', 'status', 'action'])
             ->make(true);
     }
 
@@ -133,6 +145,7 @@ class BrandsController extends Controller
             $brand->brand_name             = Str::title($request->brand_name);
             $brand->slug                   = Str::slug($request->brand_name);
             $brand->status                 = $request->status;
+            $brand->created_by             = Auth::guard('admin')->id();
             $brand->created_at             = now();
             $brand->updated_at             = now();
 
@@ -190,6 +203,7 @@ class BrandsController extends Controller
             $brand->brand_name             = Str::title($request->brand_name);
             $brand->slug                   = Str::slug($request->brand_name);
             $brand->status                 = $request->status;
+            $brand->created_by             = Auth::guard('admin')->id();
             $brand->updated_at             = now();
 
             // Handle image with ImageUploadTraits function

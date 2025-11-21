@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('subcategory_img')->nullable();
             $table->tinyInteger('status')->default(1)->comment('1=active,0=inactive');
+            $table->string('created_by')->null();
             $table->timestamps();
         });
     }

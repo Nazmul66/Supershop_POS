@@ -44,6 +44,18 @@ class WarrantiesController extends Controller
             ->addColumn('duration', function ($warranty) {
                 return ' <span> '. $warranty->duration . ' ' . Str::title($warranty->period) .' </span>';
             })
+            ->addColumn('created_by', function ($category) {
+                $adminName = \App\Models\Admin::find($category->created_by)?->name ?? 'Unknown';
+                $adminEmail = \App\Models\Admin::find($category->created_by)?->email ?? 'Unknown';
+                $adminImage = \App\Models\Admin::find($category->created_by)?->image ?? 'Unknown';
+                return '<div class="d-flex align-items-center">
+                      <img  class="rounded-circle me-2" width="40"  height="40" src="'.asset($adminImage) .'" />
+                      <div>
+                        <p class="mb-0">'. $adminName .'</p> 
+                        <p class="mb-0">'. $adminEmail .'</p>
+                      </div>
+                </div>';
+            })
             ->addColumn('status', function ($warranty) {
                 if(auth("admin")->user()->can("status.warranty"))
                     if ($warranty->status == 1) {
@@ -88,7 +100,7 @@ class WarrantiesController extends Controller
                 ', ['warranty' => $warranty]);
                 return $actionHtml;
             })
-            ->rawColumns(['duration', 'status', 'action'])
+            ->rawColumns(['duration', 'created_by', 'status', 'action'])
             ->make(true);
     }
 
@@ -140,6 +152,9 @@ class WarrantiesController extends Controller
             $warranty->period                 = $request->period;
             $warranty->description            = $request->description;
             $warranty->status                 = $request->status;
+            $warranty->created_by             = Auth::guard('admin')->id();
+            $warranty->created_at             = now();
+            $warranty->updated_at             = now();
             $warranty->save();
         }
         catch(\Exception $ex){
@@ -200,6 +215,8 @@ class WarrantiesController extends Controller
             $warranty->period                 = $request->period;
             $warranty->description            = $request->description;
             $warranty->status                 = $request->status;
+            $warranty->created_by             = Auth::guard('admin')->id();
+            $warranty->updated_at             = now();
             $warranty->save();
         }
         catch(\Exception $ex){

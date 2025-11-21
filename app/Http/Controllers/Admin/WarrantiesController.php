@@ -149,7 +149,16 @@ class WarrantiesController extends Controller
         }
 
         DB::commit();
-        return response()->json(['message'=> "Successfully Warranty Created!", 'status' => true]);
+        // return response()->json(['message'=> "Successfully Warranty Created!", 'status' => true]);
+        return response()->json([
+            'status' => true,
+            'message'=> "Successfully Warranty Created!", 
+            'warranties' => [
+                'id'        => $warranty->id,
+                'duration'  => $warranty->duration,
+                'period'    => ucfirst($warranty->period),
+            ]
+        ]);
     }
 
     /**

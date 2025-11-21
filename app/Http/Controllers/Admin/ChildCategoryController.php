@@ -140,7 +140,16 @@ class ChildCategoryController extends Controller
         }
 
         DB::commit();
-        return response()->json(['message'=> "Successfully ChildCategory Created!", 'status' => true]);
+        // return response()->json(['message'=> "Successfully ChildCategory Created!", 'status' => true]);
+        return response()->json([
+            'status' => true,
+            'message'=> "Successfully ChildCategory Created!", 
+            'childCategory' => [
+                'id'    => $childCategory->id,
+                'name'  => $childCategory->name,
+                'image' => asset($childCategory->img),
+            ]
+        ]);
     }
 
     /**

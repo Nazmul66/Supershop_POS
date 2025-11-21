@@ -100,7 +100,7 @@
 								<div class="col-lg-6">
 									<div class="mb-3">
 										<label class="form-label" for="duration">Duration<span class="text-danger ms-1">*</span></label>
-										<input class="form-control" id="duration" type="text" name="duration">
+										<input class="form-control" id="duration" type="number" name="duration">
 
                                         <span id="duration_validate" class="text-danger validation-error mt-1"></span>
 									</div>
@@ -187,7 +187,7 @@
 								<div class="col-lg-6">
 									<div class="mb-3">
 										<label class="form-label" for="up_duration">Duration<span class="text-danger ms-1">*</span></label>
-										<input class="form-control" id="up_duration" type="text" name="duration">
+										<input class="form-control" id="up_duration" type="number" name="duration">
 
                                         <span id="up_duration_validate" class="text-danger validation-error mt-1"></span>
 									</div>

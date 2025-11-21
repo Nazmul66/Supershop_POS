@@ -196,6 +196,63 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <div class="input-group mb-1">
+                        <label class="col-4" for="warranties_id"><b>Warranties</b></label>
+                        <div class="col-8">
+
+                            <div class="d-flex">
+                                <div class="" style="width: 100%;">
+                                    <select class="form-select" id="warranties_id" name="warranties_id">
+                                        <option value="" disabled selected>Select</option>
+                                        @foreach ($warranties as $row)
+                                            <option value="{{ $row->id }}" 
+                                                >{{ $row->duration }}  {{ Str::ucfirst($row->period) }}</option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+                                <button class="add_input" data-bs-toggle="modal" data-bs-target="#warrantyModal">
+                                    <i class="fas fa-plus input_i"></i>
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <span id="warranties_id_validate" class="text-danger validation-error mt-1"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="input-group mb-1">
+                        <label class="col-4" for="childCategory_id"><b>ChildCategory</b></label>
+                        <div class="col-8">
+
+                            <div class="d-flex">
+                                <div class="" style="width: 100%;">
+                                    <select class="form-select" id="childCategory_id" name="childCategory_id">
+                                        <option value="" disabled selected>Select</option>
+                                        @foreach ($childCategories as $row)
+                                            <option value="{{ $row->id }}" 
+                                                data-image-url="{{ asset($row->img) }}"
+                                                >{{ $row->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+                                <button class="add_input" data-bs-toggle="modal" data-bs-target="#childCategoryModal">
+                                    <i class="fas fa-plus input_i"></i>
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <span id="childCategory_id_validate" class="text-danger validation-error mt-1"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="input-group mb-1">
                         <label class="col-4" for="brand_id"><b>Brand</b> <span class="text-danger">*</span></label>
                         <div class="col-8">
 
@@ -398,7 +455,89 @@
             <!-- /End SubCategory Create Modal  -->
 
 
-            <!-- /End Brand Create Modal  -->
+            <!-- ChildCategory Create Modal -->
+            <div id="childCategoryModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+            style="display: none;" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">Create Child-Category</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="childCategoryForm" enctype="multipart/form-data">
+                                @csrf
+
+                                <div class="mb-3">
+                                    <label class="form-label">Category Name <span class="text-danger">*</span></label>
+                                    <select class="form-select category_id" name="category_id" id="third_category_id">
+                                        <option value="" disabled selected>Select</option>
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}" data-image-url="{{ asset($category->category_img) }}">{{ $category->category_name }}</option>
+                                            @endforeach
+                                    </select>
+
+                                    <span id="catName3_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">SubCategory Name <span class="text-danger">*</span></label>
+                                    <select class="form-select subCategory_id" name="subCategory_id" id="second_subCategory_id">
+                                        <option value="" disabled selected>Select </option>
+                                            @foreach ($subCategories as $subCat)
+                                                <option value="{{ $subCat->id }}" data-image-url="{{ asset($subCat->subcategory_img) }}">{{ $subCat->subcategory_name }}</option>
+                                            @endforeach
+                                    </select>
+
+                                    <span id="subCatName3_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="childCategory_name" class="form-label">ChildCategory Name <span class="text-danger">*</span></label>
+                                    <input class="form-control" id="childCategory_name" type="text" name="name" placeholder="ChildCategory Name">
+
+                                    <span id="childCat_name_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="childCategory_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
+                                    <input type="file" class="form-control" name="img" id="childCategory_img" accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'child_image_preview')">
+
+                                    <span id="child_image_validate" class="text-danger validation-error mt-1"></span>
+
+                                    <div id="child_image_preview" class="mt-3">
+                                        <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Status <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="status">
+                                        <option value="1" selected>Active</option>
+                                        <option value="0">Inactive</option>
+                                    </select>
+                                </div>
+
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <button type="button" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="modal">Close
+                                    </button>
+
+                                    <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+            <!-- /End ChildCategory Create Modal  -->
+
+
+            <!-- Brand Create Modal  -->
             <div id="brandModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
             style="display: none;" aria-hidden="true">
                 <div class="modal-dialog">
@@ -456,7 +595,7 @@
              <!-- /End Brand Create Modal  -->
 
 
-             <!-- /End Unit Create Modal  -->
+             <!-- Unit Create Modal  -->
              <div id="unitModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
                  style="display: none;" aria-hidden="true">
                  <div class="modal-dialog">
@@ -508,6 +647,90 @@
                  </div><!-- /.modal-dialog -->
              </div>
             <!-- /End Unit Create Modal  -->
+
+
+            <!-- Create Warrenty Modal -->
+            <div id="warrantyModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+            style="display: none;" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">Create Warranty</h5>
+
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="warrantyForm" enctype="multipart/form-data">
+                                @csrf
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label for="warranty" class="form-label">Warranty <span class="text-danger">*</span></label>
+                                            <input class="form-control" id="warranty" type="text" name="warranty">
+            
+                                            <span id="warranty_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="duration">Duration<span class="text-danger ms-1">*</span></label>
+                                            <input class="form-control" id="duration" type="number" name="duration">
+
+                                            <span id="duration_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6" >
+                                        <div class="mb-3">
+                                            <label class="form-label" for="period">Period<span class="text-danger ms-1">*</span></label>
+                                            <select class="select form-control" id="period" name="period">
+                                                <option value="" selected disabled>Select</option>
+                                                <option value="day">Day</option>
+                                                <option value="month">Month</option>
+                                                <option value="year">Year</option>
+                                            </select>
+
+                                            <span id="period_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="description">Description<span class="text-danger ms-1">*</span></label>
+                                            <textarea class="form-control" id="description" name="description"></textarea>
+
+                                            <span id="description_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Status <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="status">
+                                        <option value="1" selected>Active</option>
+                                        <option value="0">Inactive</option>
+                                    </select>
+                                </div>
+
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <button type="button" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="modal">Close
+                                    </button>
+
+                                    <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+            <!-- /End Create Warrenty Modal  -->
 
         </div>
     </div>
@@ -662,6 +885,68 @@
                 });
             })
 
+
+            // Create Data
+            $('#childCategoryForm').submit(function (e) {
+                e.preventDefault();
+                let formData = new FormData(this);
+
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{ route('admin.childCategory.store') }}",
+                    data: formData,
+                    processData: false,  // Prevent jQuery from processing the data
+                    contentType: false,  // Prevent jQuery from setting contentType
+                    success: function (res) {
+                        console.log(res);
+                        if (res.status === true) {
+                            // Add new subCategory to dropdown
+                            $('#childCategory_id').append(
+                                `<option value="${res.childCategory.id}" data-image-url="${res.childCategory.image}">
+                                    ${res.childCategory.name}
+                                </option>`
+                            );
+
+                            // Optional: auto-select the newly added option
+                            $('#third_category_id').val('').trigger('change');
+                            $('#second_subCategory_id ').val('').trigger('change');
+                            $('#childCategory_id').val(res.childCategory.id).trigger('change');
+
+                            $('#child_image_preview').html(`
+                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                            `);
+
+                            $('#childCategoryModal').modal('hide');
+                            $('#childCategoryForm')[0].reset();
+                            $('.validation-error').html('');
+
+                            swal.fire({
+                                title: "Success",
+                                text: `${res.message}`,
+                                icon: "success"
+                            })
+                        }
+                    },
+                    error: function (err) {
+                        let error = err.responseJSON.errors;
+
+                        $('#catName3_validate').empty().html(error.category_id);
+                        $('#subCatName3_validate').empty().html(error.subCategory_id);
+                        $('#childCat_name_validate').empty().html(error.name);
+                        $('#child_image_validate').empty().html(error.img);
+
+                        swal.fire({
+                            title: "Failed",
+                            text: "Something Went Wrong !",
+                            icon: "error"
+                        })
+                    }
+                });
+            })
+
             // Create Brand Data
             $('#brandForm').submit(function (e) {
                 e.preventDefault();
@@ -774,6 +1059,62 @@
                     }
                 });
             })
+
+            // Create Warrenty Data
+            $('#warrantyForm').submit(function (e) {
+                e.preventDefault();
+
+                let formData = new FormData(this);
+
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{ route('admin.warranties.store') }}",
+                    data: formData,
+                    processData: false,  // Prevent jQuery from processing the data
+                    contentType: false,  // Prevent jQuery from setting contentType
+                    success: function (res) {
+                        // console.log(res);
+                        if (res.status === true) {
+                            // Add new brand to dropdown
+                            $('#warranties_id ').append(
+                                `<option value="${res.warranties.id}">
+                                    ${res.warranties.duration} ${res.warranties.period}
+                                </option>`
+                            );
+
+                            // Optional: auto-select the newly added option
+                            $('#warranties_id').val(res.warranties.id).trigger('change');
+
+                            $('#warrantyModal').modal('hide');
+                            $('#warrantyForm')[0].reset();
+                            $('.validation-error').html('');
+
+                            swal.fire({
+                                title: "Success",
+                                text: `${res.message}`,
+                                icon: "success"
+                            })
+                        }
+                    },
+                    error: function (err) {
+                        let error = err.responseJSON.errors;
+
+                        $('#warranty_validate').empty().html(error.warranty);
+                        $('#duration_validate').empty().html(error.duration);
+                        $('#period_validate').empty().html(error.period);
+                        $('#description_validate').empty().html(error.description);
+
+                        swal.fire({
+                            title: "Failed",
+                            text: "Something Went Wrong !",
+                            icon: "error"
+                        })
+                    }
+                });
+            })
         })
     </script>
 
@@ -810,14 +1151,38 @@
                 templateSelection: formatState, 
             });
 
+            //____ third_category_id Select2 ____//
+            $('#third_category_id').select2({
+                templateResult: formatState,       
+                templateSelection: formatState, 
+            });
+
             //____ subCategory_id Select2 ____//
             $('#subCategory_id').select2({
                 templateResult: formatState,       
                 templateSelection: formatState, 
             });
 
+            //____ second_subCategory_id Select2 ____//
+            $('#second_subCategory_id').select2({
+                templateResult: formatState,       
+                templateSelection: formatState, 
+            });
+
+            //____ childCategory_id Select2 ____//
+            $('#childCategory_id').select2({
+                templateResult: formatState,       
+                templateSelection: formatState, 
+            });
+
             //____ brand_id Select2 ____//
             $('#brand_id').select2({
+                templateResult: formatState,       
+                templateSelection: formatState, 
+            });
+
+            //____ warranties_id Select2 ____//
+            $('#warranties_id ').select2({
                 templateResult: formatState,       
                 templateSelection: formatState, 
             });

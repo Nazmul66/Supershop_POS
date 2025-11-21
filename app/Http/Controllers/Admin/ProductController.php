@@ -14,6 +14,7 @@ use App\Models\ChildCategory;
 use App\Models\Product;
 use App\Models\Brand;
 use App\Models\Unit;
+use App\Models\Warranty;
 use Brian2694\Toastr\Facades\Toastr;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -43,10 +44,12 @@ class ProductController extends Controller
     {
         $categories           = Category::get_data();
         $subCategories        = Subcategory::get_data();
+        $childCategories      = ChildCategory::get_data();
         $brands               = Brand::get_data();
         $units                = Unit::get_data();
+        $warranties           = Warranty::get_data();
 
-        return view('admin.pages.product.index', compact('categories', 'subCategories', 'brands', 'units'));
+        return view('admin.pages.product.index', compact('categories', 'subCategories', 'childCategories', 'brands', 'units', 'warranties'));
     }
 
     public function create()

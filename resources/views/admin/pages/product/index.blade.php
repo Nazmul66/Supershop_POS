@@ -61,7 +61,7 @@
     </div>
 
 
-    <!-- Content part Start -->
+    <!-- 1st Row Content part Start -->
     <div class="card">
         <div class="card-body">
 
@@ -284,7 +284,7 @@
                     <div class="input-group mb-1">
                         <label class="col-4" for="alert_qty"><b>Alert Quantity</b> <span class="text-danger">*</span></label>
                         <div class="col-8">
-                            <input type="number" name="alert_qty" class="form-control" id="alert_qty" required="" value="{{ old('alert_qty', 0) }}">
+                            <input type="number" name="alert_qty" class="form-control" id="alert_qty" min="1" required="" value="{{ old('alert_qty', 1) }}">
                         </div>
 
                         <span id="alert_qty_validate" class="text-danger validation-error mt-1"></span>
@@ -293,7 +293,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <div class="input-group mb-1">
                         <label class="col-4" for="condition"><b>Condition</b> <span class="text-danger">*</span></label>
 
@@ -308,11 +308,11 @@
                     <span id="condition_validate" class="text-danger validation-error mt-1"></span>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <div class="input-group mb-1">
                          <label class="col-4" for="stocks"><b>Stock</b> <span class="text-danger">*</span></label>
                         <div class="col-8">
-                            <input type="number" name="stock" class="form-control" id="stocks" required="" value="{{ old('stock', 0) }}">
+                            <input type="number" name="stock" class="form-control" id="stocks" required="" min="1" value="{{ old('stock', 1) }}">
                         </div>
                     </div>
 
@@ -736,9 +736,127 @@
     </div>
 
 
+    <!-- 2nd Row Content part Start -->
     <div class="card">
         <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <div class="input-group mb-1">
+                        <label class="col-4" for="name"><b>Applicable Tax</b></label>
+                        <div class="col-8">
+                            <div class="d-flex gap-2">
+                                <div class="" style="width: 100%;">
+                                    <select class="form-select" id="" name="">
+                                        <option value="none" selected>None</option>
+                                    </select>
+                                </div>
 
+                                <div class="" style="width: 100%;">
+                                    <select class="form-select" id="" name="">
+                                        <option value="exclusive" selected>Exclusive</option>
+                                        <option value="inclusive">Inclusive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <div class="input-group mb-1">
+                        <label class="col-4" for="name"><b>Tax Applicable For</b></label>
+                        <div class="col-8">
+                            <select class="form-select" id="" name="">
+                                <option value="exclusive" selected>For Selling Price</option>
+                                <option value="inclusive">For Cost & Selling Price</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <div class="input-group mb-1">
+                         <label class="col-4" for="unit_cost"><b>Unit Cost (Exc. Tax)</b> <span class="text-danger">*</span></label>
+                        <div class="col-8">
+                            <input type="number" name="unit_cost" class="form-control" id="unit_cost" required="" placeholder="0.00" min="1" value="{{ old('unit_cost') }}">
+                        </div>
+                    </div>
+
+                    <span id="unit_cost_validate" class="text-danger validation-error mt-1"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <div class="input-group mb-1">
+                         <label class="col-4" for="profit_margin"><b>Profit Margin(%)</b> <span class="text-danger">*</span></label>
+                        <div class="col-8">
+                            <input type="number" name="profit_margin" class="form-control" id="profit_margin" required="" placeholder="0.00" min="1" value="{{ old('profit_margin') }}">
+                        </div>
+                    </div>
+
+                    <span id="profit_margin_validate" class="text-danger validation-error mt-1"></span>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <div class="input-group mb-1">
+                        <label class="col-4" for="variant"><b>Has Variant?</b></label>
+                        <div class="col-8">
+                            <select class="form-select" id="variant" name="variant">
+                                <option value="no" selected>No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <div class="input-group mb-1">
+                         <label class="col-4" for="unit_price"><b>Unit Price (Exc. Tax)</b> <span class="text-danger">*</span></label>
+                        <div class="col-8">
+                            <input type="number" name="unit_price" class="form-control" id="unit_price" required="" placeholder="0.00" min="1" value="{{ old('unit_price') }}">
+                        </div>
+                    </div>
+
+                    <span id="unit_price_validate" class="text-danger validation-error mt-1"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 3rd Row Content part Start -->
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <div class="input-group mb-1">
+                        <label class="col-4" for="display_ecom"><b>Displayed In E-com</b></label>
+                        <div class="col-8">
+                            <select class="form-select" id="display_ecom" name="display_ecom">
+                                <option value="no" selected>No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <div class="input-group mb-1">
+                        <label class="col-4" for="for_sale"><b>Is For Sale</b></label>
+                        <div class="col-8">
+                            <select class="form-select" id="for_sale" name="for_sale">
+                                <option value="yes" selected>Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

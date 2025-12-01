@@ -252,7 +252,7 @@
                                 <span>Financial Settings</span><span class="menu-arrow"></span>
                             </a>
                             <ul>
-                                <li><a href="{{ route('admin.financial-settings.taxRate.settings') }}" class="@yield('taxRate-setting')">Tax Rates</a></li>
+                                <li><a href="{{ route('admin.financial-settings.taxRate.index') }}" class="@yield('taxRate-setting')">Tax Rates</a></li>
                             </ul>
                         </li>
 

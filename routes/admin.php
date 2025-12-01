@@ -343,7 +343,11 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     //______ Financial Settings _____//
     Route::group(["as" => 'financial-settings.',"prefix" => '/financial-settings'], function () {
         //______Tax Rate Setting  _____//
-        Route::get('/taxRate-settings', [FinancialSettingController::class, 'taxRate_settings'])->name('taxRate.settings');
+        // Route::get('/taxRate-settings', [FinancialSettingController::class, 'taxRate_settings'])->name('taxRate.settings');
+        Route::resource('/taxRate', FinancialSettingController::class)->names('taxRate')->except('show');
+        Route::get('/taxRate-data', [FinancialSettingController::class, 'getData'])->name('taxRate-data');
+        Route::post('/change-taxRate-status', [FinancialSettingController::class, 'changeTaxRateStatus'])->name('taxRate.status');
+        Route::get('/taxRate/pdf', [FinancialSettingController::class, 'allTaxRatePdf'])->name('taxRate.pdf');
     });
    
 

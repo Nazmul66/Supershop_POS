@@ -70,7 +70,7 @@
                                 <span class="menu-arrow"></span>
                             </a>
                             <ul style="display: none;">
-                                <li><a href="{{ route('admin.financial-settings.taxRate.settings') }}" class="@yield('taxRate-setting')">Tax Rates</a></li>
+                                <li><a href="{{ route('admin.financial-settings.taxRate.index') }}" class="@yield('taxRate-setting')">Tax Rates</a></li>
                             </ul>
                         </li>
 

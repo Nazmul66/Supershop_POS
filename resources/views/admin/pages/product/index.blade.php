@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <link rel="stylesheet" href="{{ asset('public/admin/assets/css/dropify.min.css') }}">
 
     <style>
         label{
@@ -60,6 +62,8 @@
         </div>
     </div>
 
+<form action="" method="POST" enctype="multipart/form-data">
+    @csrf
 
     <!-- 1st Row Content part Start -->
     <div class="card">
@@ -838,11 +842,63 @@
             <div class="row">
                 <div class="col-md-6 mb-2">
                     <div class="input-group mb-1">
+                        <label class="col-4" for="discount_type"><b>Discount Type</b></label>
+                        <div class="col-8">
+                            <select class="form-select" id="discount_type" name="discount_type">
+                                <option value="none">Select Discount Type</option>
+                                <option value="amount">Amount ( TK )</option>
+                                <option value="percent">Percent ( % )</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <div class="input-group mb-1">
                         <label class="col-4" for="display_ecom"><b>Displayed In E-com</b></label>
                         <div class="col-8">
                             <select class="form-select" id="display_ecom" name="display_ecom">
                                 <option value="no" selected>No</option>
                                 <option value="yes">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2 discount_value d-none">
+                    <div class="input-group mb-1">
+                        <label class="col-4" for="discount_value"><b>Discount Value</b></label>
+                        <div class="col-8">
+                            <input class="form-control" type="number" id="discount_value" name="discount_value" value="{{ old('discount_value') }}"  placeholder="Discount Value....">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2 offer_start_value d-none">
+                    <div class="input-group mb-1">
+                        <label class="col-4" for="offer_start_date"><b>Offer Start Date</b></label>
+                        <div class="col-8">
+                            <input class="form-control offer_start_date" type="date" id="offer_start_date" name="offer_start_date" placeholder="Select a date...." value="{{ old('offer_start_date') }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2 offer_end_value d-none">
+                    <div class="input-group mb-1">
+                        <label class="col-4" for="offer_end_date"><b>Offer End Date</b></label>
+                        <div class="col-8">
+                            <input class="form-control offer_end_date" type="date" id="offer_end_date" name="offer_end_date" value="{{ old('offer_end_date') }}" placeholder="Select a date....">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <div class="input-group mb-1">
+                        <label class="col-4" for="display_ecom"><b>Is Featured</b></label>
+                        <div class="col-8">
+                            <select class="form-select" id="is_featured" name="is_featured">
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
                             </select>
                         </div>
                     </div>
@@ -859,9 +915,74 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-12 mb-2">
+                    <div class="input-group mb-1">
+                        <label class="form-label col-2" for="product_size"><strong>Multiple Products Tag</strong></label>
+                        <div class="col-10">
+                            <input type="text" class="product-tags" value="{{ old('tags') }}" name="tags" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- 4th Row Content part Start -->
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label" for="thumb_image">Thumbnail Photo <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control" name="thumb_image" id="thumb_image" data-allowed-file-extensions="png jpeg jpg gif webp" >
+                    </div>
+    
+                    <span id="image_validate" class="text-danger mt-2">
+                        @error('thumb_image'){{ $message }}@enderror
+                    </span>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label" for="long_description">Long Description <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="long_description" name="long_description" rows="8" placeholder="Long Description....">{{ old('long_description') }}</textarea>
+                    </div>
+    
+                    <span id="long_validate" class="text-danger mt-1">
+                        @error('long_description'){{ $message }}@enderror
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5th Row Content part Start -->
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="video_link">Video Link</label>
+                    <textarea class="form-control" id="video_link" name="video_link"  rows="7" placeholder="Link Paste Here....">{{ old('video_link') }}</textarea>
+                </div>
+    
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="short">Short Description <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="short" class="" name="short_description" rows="7" placeholder="Short Description....">{{ old('short_description') }}</textarea>
+    
+                    <span id="short_validate" class="text-danger mt-2">
+                        @error('short_description'){{ $message }}@enderror
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="d-flex justify-content-end align-items-center mb-5">
+        <button type="button" class="btn btn-secondary waves-effect me-3">Save Changes </button>
+    </div>
+</form>
 
 @endsection
 
@@ -869,6 +990,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js"></script>
+    <script src="{{ asset('public/admin/assets/js/dropify.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
@@ -942,7 +1065,6 @@
         unitCostInput.addEventListener("input", () => updateValues("cost"));
         profitMarginInput.addEventListener("input", () => updateValues("margin"));
     </script>
-
 
     <script>
         $(document).ready(function () {
@@ -1299,16 +1421,64 @@
 
     <script>
         $(document).ready(function () {
+            $('#thumb_image').dropify({
+                messages: {
+                    'default': "Drag and drop a file here or click",
+                    'replace': "Drag and drop or click to replace",
+                    'remove': "Remove",
+                    'error': "Oops, something wrong happened."
+                }
+            });
+
+            function toggleDiscountDivs() {
+                const selectedValue = $('#discount_type').val();
+
+                if (selectedValue === 'amount' || selectedValue === 'percent') {
+                    // Show all related divs
+                    $('.discount_value').removeClass('d-none'); // Show discount value div (if it exists)
+                    $('.offer_start_value').removeClass('d-none'); // Show offer start date div
+                    $('.offer_end_value').removeClass('d-none'); // Show offer end date div
+                } else {
+                    // Hide all related divs
+                    $('.discount_value').addClass('d-none');
+                    $('.offer_start_value').addClass('d-none');
+                    $('.offer_end_value').addClass('d-none');
+                }
+            }
+
+            // Initial check on page load
+            toggleDiscountDivs();
+
+            // Event listener for changes to #discount_type
+            $('#discount_type').on('change', function () {
+                toggleDiscountDivs();
+            });
+
+            // Ckeditor 5 plugin
+            let jReq;
+            ClassicEditor
+                .create(document.querySelector('#long_description'))
+                .then(newEditor => {
+                    jReq = newEditor;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
             // Choice.js plugin
-            // const product_tags = new Choices('.product-tags',{
-            //     removeItems: true,
-            //     duplicateItemsAllowed: false,
-            //     removeItemButton: true,
-            //     delimiter: ',',
-            // });
+            const product_tags = new Choices('.product-tags',{
+                removeItems: true,
+                duplicateItemsAllowed: false,
+                removeItemButton: true,
+                delimiter: ',',
+            });
 
             // Flatpicker Plugin
             $(".offer_start_date").flatpickr({
+                minDate: "today"
+            });
+
+            $(".offer_end_date").flatpickr({
                 minDate: "today"
             });
 

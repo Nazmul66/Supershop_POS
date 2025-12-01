@@ -492,9 +492,6 @@ select > option:disabled{
     border-right: none !important;
 }
 
-
-
-
 .toggle_label {
     width: 34px !important;
     height: 16px !important;
@@ -561,22 +558,29 @@ li.select2-results__option > span{
     background-color: #e9ecef;
     border: 1px solid #ced4da;
 }
-.form-control,
-.form-select {
+input.form-control,
+input.form-select {
     border-color: #aaa;
     height: 35px;
 }
-.form-control:focus,
-.form-select:focus {
+textarea.form-select {
+    border-color: #aaa !important;
+}
+input.form-control:focus,
+input.form-select:focus,
+textarea.form-control:focus {
     border-color: #aaa;
 }
-.form-control::placeholder,
-.form-control::-webkit-input-placeholder,
-.form-control:-ms-input-placeholder,
-.form-control::-ms-input-placeholder,
-.form-select::placeholder,
-.form-select::-webkit-input-placeholder,
-.form-select:-ms-input-placeholder,
-.form-select::-ms-input-placeholder {
+input.form-control::placeholder,
+input.form-control::-webkit-input-placeholder,
+input.form-control:-ms-input-placeholder,
+input.form-control::-ms-input-placeholder,
+input.form-select::placeholder,
+input.form-select::-webkit-input-placeholder,
+input.form-select:-ms-input-placeholder,
+input.form-select::-ms-input-placeholder {
     color: red !important;
+}
+.ck-editor__editable {
+    min-height: 245px !important;
 }

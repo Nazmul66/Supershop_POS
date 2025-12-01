@@ -748,6 +748,9 @@
                                 <div class="" style="width: 100%;">
                                     <select class="form-select" id="" name="">
                                         <option value="none" selected>None</option>
+                                        @foreach ($tax_rates as $row)
+                                            <option value="{{ $row->id }}" selected>{{ $row->tax_name }} ({{ $row->percentage }}%)</option>
+                                        @endforeach
                                     </select>
                                 </div>
 
@@ -804,7 +807,7 @@
                     <div class="input-group mb-1">
                         <label class="col-4" for="variant"><b>Has Variant?</b></label>
                         <div class="col-8">
-                            <select class="form-select" id="variant" name="variant">
+                            <select class="form-select has_variant" id="variant" name="variant">
                                 <option value="no" selected>No</option>
                                 <option value="yes">Yes</option>
                             </select>
@@ -878,6 +881,66 @@
                 reader.readAsDataURL(file);
             }
         }
+
+
+        // Select Variant Options
+        document.getElementById("variant").addEventListener("change", function () {
+            let unitCost  = document.getElementById("unit_cost").value.trim();
+            let unitPrice = document.getElementById("unit_price").value.trim();
+            console.log(this.value, unitCost, unitPrice);
+
+            if (this.value === "yes") {
+
+                if (unitCost === "" || unitCost === "0" || 
+                    unitPrice === "" || unitPrice === "0") {
+
+                    alert("Before creating the variant, product cost and product price field must not be empty.");
+
+                    // reset dropdown back to "No"
+                    this.value = "no";
+                }
+            }
+        });
+
+        // for unit Price
+        const unitPriceInput = document.getElementById("unit_price");
+        const unitCostInput  = document.getElementById("unit_cost");
+        const profitMarginInput = document.getElementById("profit_margin");
+        const variantInput = document.getElementById("variant"); 
+
+        // Calculate and update fields
+        function updateValues(changed) {
+            let price = parseFloat(unitPriceInput.value) || 0;
+            let cost  = parseFloat(unitCostInput.value) || 0;
+            let margin = parseFloat(profitMarginInput.value) || 0;
+
+            // If either price or cost is empty, set variant to "no"
+            if (!unitPriceInput.value || !unitCostInput.value) {
+                variantInput.value = "no";
+            }
+
+            if (changed === "price" || changed === "cost") {
+                if (cost <= 0 || price <= 0) {
+                    profitMarginInput.value = "";
+                    return;
+                }
+                // Profit Margin (%) = ((Price - Cost) / Cost) * 100
+                profitMarginInput.value = ((price - cost) / cost * 100).toFixed(2);
+            } 
+            else if (changed === "margin") {
+                if (cost <= 0) {
+                    unitPriceInput.value = "";
+                    return;
+                }
+                let price = ( cost * margin ) / 100;
+                unitPriceInput.value = (cost + price).toFixed(2);
+            }
+        }
+
+        // Event listeners
+        unitPriceInput.addEventListener("input", () => updateValues("price"));
+        unitCostInput.addEventListener("input", () => updateValues("cost"));
+        profitMarginInput.addEventListener("input", () => updateValues("margin"));
     </script>
 
 

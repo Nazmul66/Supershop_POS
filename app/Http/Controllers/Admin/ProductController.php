@@ -14,6 +14,7 @@ use App\Models\ChildCategory;
 use App\Models\Product;
 use App\Models\Brand;
 use App\Models\Unit;
+use App\Models\TaxRate;
 use App\Models\Warranty;
 use Brian2694\Toastr\Facades\Toastr;
 use Exception;
@@ -48,8 +49,9 @@ class ProductController extends Controller
         $brands               = Brand::get_data();
         $units                = Unit::get_data();
         $warranties           = Warranty::get_data();
+        $tax_rates            = TaxRate::get_data();
 
-        return view('admin.pages.product.index', compact('categories', 'subCategories', 'childCategories', 'brands', 'units', 'warranties'));
+        return view('admin.pages.product.index', compact('categories', 'subCategories', 'childCategories', 'brands', 'units', 'warranties', 'tax_rates'));
     }
 
     public function create()

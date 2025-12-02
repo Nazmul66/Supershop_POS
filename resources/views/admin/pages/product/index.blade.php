@@ -21,6 +21,19 @@
         .table thead tr th {
             background-color: #092C4C !important;
         }
+        .variants_body{
+            height: 0;
+            opacity: 0;
+            transform: translateX(-125%);
+            pointer-events: none;
+            transition: all 0.5s ease-in-out; 
+        }
+        .variants_body.actives{
+            height: 100%;
+            opacity: 1;
+            transform: translateX(0%);
+            pointer-events: auto;
+        }
     </style>
 @endpush
 
@@ -839,7 +852,7 @@
     </div>
 
     <!-- 3rd Row Content part Start -->
-     <div class="card">
+     <div class="card variants_body">
         <div class="card-body">
             <div class="row">
                 <div class="row align-items-end">
@@ -873,7 +886,7 @@
                                         <tr id="variant_row" class="variant_row">
                                             <td class="text-start">
                                                 <select class="form-control" name="" id="variants">
-                                                    <option value="" disabled selected>Create Combination</option>
+                                                    <option value="" disabled selected>Select</option>
                                                     <option value="1">Db</option>
                                                     <option value="2">size</option>
                                                     <option value="3">Pant Size</option>
@@ -881,19 +894,19 @@
                                             </td>
                 
                                             <td class="text-start">
-                                                <input type="text" name="variant_codes[]" id="variant_code" class="form-control reqireable fw-bold" placeholder="Variant Code">
+                                                <input type="text" name="variant_codes[]" id="variant_code" class="form-control reqireable fw-bold" value="21101" placeholder="Variant Code">
                                             </td>
                 
                                             <td class="text-start">
-                                                <input type="number" name="variant_costs[]" step="any" class="form-control requireable fw-bold" placeholder="0.00" id="variant_cost" required="">
+                                                <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost requireable fw-bold" placeholder="0.00" id="variant_cost" required="">
                                             </td>
                 
                                             <td class="text-start">
-                                                <input type="number" step="any" name="variant_profits[]" class="form-control requireable fw-bold" placeholder="0.00" id="variant_profit">
+                                                <input type="number" step="any" name="variant_profits[]" class="form-control requireable variant_profit fw-bold" placeholder="0.00" id="variant_profit">
                                             </td>
                 
                                             <td class="text-start">
-                                                <input type="number" step="any" name="variant_prices[]" class="form-control requireable fw-bold" placeholder="0.00" id="variant_price" required="">
+                                                <input type="number" step="any" name="variant_prices[]" class="form-control requireable variant_price  fw-bold" placeholder="0.00" id="variant_price" required="">
                                             </td>
                 
                                             <td class="text-start">
@@ -1074,11 +1087,13 @@
     <script src="{{ asset('public/admin/assets/js/dropify.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    <script>
+    <script>    
         const body = document.querySelector(".dynamic_variant_body");
-
         document.getElementById("add_more_variant_btn").addEventListener("click", function (e) {
             e.preventDefault();
+            let unitCost  = document.getElementById("unit_cost").value.trim();
+            let unitPrice = document.getElementById("unit_price").value.trim();
+            let profitMargin = document.getElementById("profit_margin").value.trim();
 
             // Create new row
             let newRow = document.createElement("tr");
@@ -1087,7 +1102,7 @@
             newRow.innerHTML = `
                 <td>
                     <select class="form-control variants">
-                        <option value="" disabled selected>Create Combination</option>
+                        <option value="" disabled selected>Select</option>
                         <option value="1">Db</option>
                         <option value="2">Size</option>
                         <option value="3">Pant Size</option>
@@ -1095,19 +1110,19 @@
                 </td>
 
                 <td>
-                    <input type="text" name="variant_codes[]" class="form-control variant_code fw-bold" placeholder="Variant Code">
+                    <input type="text" name="variant_codes[]" class="form-control variant_code fw-bold" value="" placeholder="Variant Code">
                 </td>
 
                 <td>
-                    <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost fw-bold" placeholder="0.00">
+                    <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost fw-bold" value="${unitCost}" placeholder="0.00">
                 </td>
 
                 <td>
-                    <input type="number" name="variant_profits[]" step="any" class="form-control variant_profit fw-bold" placeholder="0.00">
+                    <input type="number" name="variant_profits[]" step="any" class="form-control variant_profit fw-bold" value="${profitMargin}" placeholder="0.00">
                 </td>
 
                 <td>
-                    <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold" placeholder="0.00">
+                    <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold" value="${unitPrice}" placeholder="0.00">
                 </td>
 
                 <td>
@@ -1130,6 +1145,52 @@
                 e.target.closest(".variant_row").remove();
             }
         });
+
+
+        function calculateRow(row, changed) {
+            let costInput   = row.querySelector(".variant_cost");
+            let profitInput = row.querySelector(".variant_profit");
+            let priceInput  = row.querySelector(".variant_price");
+
+            let cost   = parseFloat(costInput.value) || 0;
+            let profit = parseFloat(profitInput.value) || 0;
+            let price  = parseFloat(priceInput.value) || 0;
+
+            if (changed === "cost" || changed === "price") {
+                if (cost <= 0 || price <= 0) {
+                    profitInput.value = "";
+                    return;
+                }
+                // Profit Margin = ((Price - Cost) / Cost) * 100
+                let profitMargin = ((price - cost) / cost) * 100;
+                profitInput.value = profitMargin.toFixed(2);
+            }
+
+            if (changed === "profit") {
+                if (cost <= 0) {
+                    priceInput.value = "";
+                    return;
+                }
+                // Price = Cost + (Cost * Profit% / 100)
+                let newPrice = cost + (cost * profit / 100);
+                priceInput.value = newPrice.toFixed(2);
+            }
+        }
+
+        // Listen on ALL dynamic rows
+        document.addEventListener("input", function(e) {
+            if (
+                e.target.classList.contains("variant_cost") ||
+                e.target.classList.contains("variant_profit") ||
+                e.target.classList.contains("variant_price")
+            ) {
+                let row = e.target.closest(".variant_row");
+
+                if (e.target.classList.contains("variant_cost")) calculateRow(row, "cost");
+                if (e.target.classList.contains("variant_price")) calculateRow(row, "price");
+                if (e.target.classList.contains("variant_profit")) calculateRow(row, "profit");
+            }
+        });
     </script>
 
     <script>
@@ -1148,18 +1209,28 @@
         document.getElementById("variant").addEventListener("change", function () {
             let unitCost  = document.getElementById("unit_cost").value.trim();
             let unitPrice = document.getElementById("unit_price").value.trim();
-            console.log(this.value, unitCost, unitPrice);
+            let profitMargin = document.getElementById("profit_margin").value.trim();
+            // console.log(this.value, unitCost, unitPrice);
 
             if (this.value === "yes") {
 
-                if (unitCost === "" || unitCost === "0" || 
-                    unitPrice === "" || unitPrice === "0") {
+                if ( unitCost === "" || unitCost === "0" || 
+                    unitPrice === "" || unitPrice === "0" ){
 
                     alert("Before creating the variant, product cost and product price field must not be empty.");
 
                     // reset dropdown back to "No"
                     this.value = "no";
                 }
+                else {
+                    let costInput   = document.querySelector(".variant_cost").value = parseFloat(unitCost);
+                    let profitInput = document.querySelector(".variant_profit").value = parseFloat(profitMargin);
+                    let priceInput  = document.querySelector(".variant_price").value = parseFloat(unitPrice);
+                    document.querySelector(".variants_body").classList.add('actives');
+                }
+            }
+            else{
+                document.querySelector(".variants_body").classList.remove('actives');
             }
         });
 

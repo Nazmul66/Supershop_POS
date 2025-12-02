@@ -18,6 +18,9 @@
             color: #1d1c1c;
             font-weight: 600;
         }
+        .table thead tr th {
+            background-color: #092C4C !important;
+        }
     </style>
 @endpush
 
@@ -288,7 +291,7 @@
                     <div class="input-group mb-1">
                         <label class="col-4" for="alert_qty"><b>Alert Quantity</b> <span class="text-danger">*</span></label>
                         <div class="col-8">
-                            <input type="number" name="alert_qty" class="form-control" id="alert_qty" min="1" required="" value="{{ old('alert_qty', 1) }}">
+                            <input type="number" name="alert_qty" class="form-control" id="alert_qty" min="1" required="" value="{{ old('alert_qty') }}">
                         </div>
 
                         <span id="alert_qty_validate" class="text-danger validation-error mt-1"></span>
@@ -316,7 +319,7 @@
                     <div class="input-group mb-1">
                          <label class="col-4" for="stocks"><b>Stock</b> <span class="text-danger">*</span></label>
                         <div class="col-8">
-                            <input type="number" name="stock" class="form-control" id="stocks" required="" min="1" value="{{ old('stock', 1) }}">
+                            <input type="number" name="stock" class="form-control" id="stocks" required="" min="1" value="{{ old('stock') }}">
                         </div>
                     </div>
 
@@ -835,8 +838,85 @@
         </div>
     </div>
 
-
     <!-- 3rd Row Content part Start -->
+     <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="row align-items-end">
+                    <div class="col-md-6">
+                        <p class="fw-bold" style="background: #7dd9f8; display: inline; padding: 2px 7px;">Create Variant</p>
+                    </div>
+                
+                    <div class="col-md-6">
+                        <div class="add_more_btn">
+                            <button id="add_more_variant_btn" class="btn btn-sm btn-dark float-end">Add More</button>
+                        </div>
+                    </div>
+                
+                    <div class="col-md-12">
+                        <div class="table-responsive mt-1">
+                            <div class="data-table-wrapper">
+                                <table class="table modal-table table-sm">
+                                    <thead>
+                                        <tr class="text-center bg-primary variant_header">
+                                            <th class="text-white text-start">Select Variant</th>
+                                            <th class="text-white text-start">Variant Code <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp" data-bs-original-title="Also known as SKU. Variant code(SKU) must be unique." aria-label="Also known as SKU. Variant code(SKU) must be unique."></i></th>
+                                            <th class="text-white text-start" id="variant_cost_label">Unit Cost (Exc. Tax)</th>
+                                            <th class="text-white text-start">Profit(%)</th>
+                                            <th class="text-white text-start" id="variant_price_label">Unit Price (Exc. Tax)</th>
+                                            <th class="text-white text-start">Variant Photo</th>
+                                            <th><i class="fas fa-trash-alt text-white"></i></th>
+                                        </tr>
+                                    </thead>
+                    
+                                    <tbody class="dynamic_variant_body">
+                                        <tr id="variant_row" class="variant_row">
+                                            <td class="text-start">
+                                                <select class="form-control" name="" id="variants">
+                                                    <option value="" disabled selected>Create Combination</option>
+                                                    <option value="1">Db</option>
+                                                    <option value="2">size</option>
+                                                    <option value="3">Pant Size</option>
+                                                </select>
+                                            </td>
+                
+                                            <td class="text-start">
+                                                <input type="text" name="variant_codes[]" id="variant_code" class="form-control reqireable fw-bold" placeholder="Variant Code">
+                                            </td>
+                
+                                            <td class="text-start">
+                                                <input type="number" name="variant_costs[]" step="any" class="form-control requireable fw-bold" placeholder="0.00" id="variant_cost" required="">
+                                            </td>
+                
+                                            <td class="text-start">
+                                                <input type="number" step="any" name="variant_profits[]" class="form-control requireable fw-bold" placeholder="0.00" id="variant_profit">
+                                            </td>
+                
+                                            <td class="text-start">
+                                                <input type="number" step="any" name="variant_prices[]" class="form-control requireable fw-bold" placeholder="0.00" id="variant_price" required="">
+                                            </td>
+                
+                                            <td class="text-start">
+                                                <input type="file" name="variant_image[]" class="form-control" id="variant_image">
+                                            </td>
+                
+                                            <td class="text-start">
+                                                <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
+                                            </td>
+                                        </tr>
+                
+                                        <tr id="set_variant_multiple_units" class="set_variant_multiple_units"></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+
+    <!-- 4th Row Content part Start -->
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -928,13 +1008,13 @@
         </div>
     </div>
 
-    <!-- 4th Row Content part Start -->
+    <!-- 5th Row Content part Start -->
     <div class="card">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
                     <div class="mb-3">
-                        <label class="form-label" for="thumb_image">Thumbnail Photo <span class="text-danger">*</span></label>
+                        <label class="form-label" for="thumb_image"><b>Thumbnail Photo</b> <span class="text-danger">*</span></label>
                         <input type="file" class="form-control" name="thumb_image" id="thumb_image" data-allowed-file-extensions="png jpeg jpg gif webp" >
                     </div>
     
@@ -945,7 +1025,7 @@
 
                 <div class="col-md-12">
                     <div class="mb-3">
-                        <label class="form-label" for="long_description">Long Description <span class="text-danger">*</span></label>
+                        <label class="form-label" for="long_description"><b>Long Description</b> <span class="text-danger">*</span></label>
                         <textarea class="form-control" id="long_description" name="long_description" rows="8" placeholder="Long Description....">{{ old('long_description') }}</textarea>
                     </div>
     
@@ -957,17 +1037,17 @@
         </div>
     </div>
 
-    <!-- 5th Row Content part Start -->
+    <!-- 6th Row Content part Start -->
     <div class="card">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label" for="video_link">Video Link</label>
+                    <label class="form-label" for="video_link"><b>Video Link</b></label>
                     <textarea class="form-control" id="video_link" name="video_link"  rows="7" placeholder="Link Paste Here....">{{ old('video_link') }}</textarea>
                 </div>
     
                 <div class="col-md-6 mb-3">
-                    <label class="form-label" for="short">Short Description <span class="text-danger">*</span></label>
+                    <label class="form-label" for="short"><b>Short Description</b> <span class="text-danger">*</span></label>
                     <textarea class="form-control" id="short" class="" name="short_description" rows="7" placeholder="Short Description....">{{ old('short_description') }}</textarea>
     
                     <span id="short_validate" class="text-danger mt-2">
@@ -993,6 +1073,64 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js"></script>
     <script src="{{ asset('public/admin/assets/js/dropify.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        const body = document.querySelector(".dynamic_variant_body");
+
+        document.getElementById("add_more_variant_btn").addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Create new row
+            let newRow = document.createElement("tr");
+            newRow.classList.add("variant_row");
+
+            newRow.innerHTML = `
+                <td>
+                    <select class="form-control variants">
+                        <option value="" disabled selected>Create Combination</option>
+                        <option value="1">Db</option>
+                        <option value="2">Size</option>
+                        <option value="3">Pant Size</option>
+                    </select>
+                </td>
+
+                <td>
+                    <input type="text" name="variant_codes[]" class="form-control variant_code fw-bold" placeholder="Variant Code">
+                </td>
+
+                <td>
+                    <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost fw-bold" placeholder="0.00">
+                </td>
+
+                <td>
+                    <input type="number" name="variant_profits[]" step="any" class="form-control variant_profit fw-bold" placeholder="0.00">
+                </td>
+
+                <td>
+                    <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold" placeholder="0.00">
+                </td>
+
+                <td>
+                    <input type="file" name="variant_image[]" class="form-control variant_image">
+                </td>
+
+                <td>
+                    <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
+                </td>
+            `;
+
+            // PREPEND new row at the top
+            body.prepend(newRow);
+        });
+
+        // Remove row
+        document.addEventListener("click", function (e) {
+            if (e.target.classList.contains("variant_remove_btn")) {
+                e.preventDefault();
+                e.target.closest(".variant_row").remove();
+            }
+        });
+    </script>
 
     <script>
         function showImagePreview(event, previewId) {

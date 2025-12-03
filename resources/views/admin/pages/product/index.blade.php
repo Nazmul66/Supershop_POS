@@ -894,7 +894,7 @@
                                             </td>
                 
                                             <td class="text-start">
-                                                <input type="text" name="variant_codes[]" id="variant_code" class="form-control reqireable fw-bold" value="21101" placeholder="Variant Code">
+                                                <input type="text" name="variant_codes[]" id="variant_code" class="form-control reqireable fw-bold" placeholder="Variant Code">
                                             </td>
                 
                                             <td class="text-start">
@@ -1249,6 +1249,7 @@
             // If either price or cost is empty, set variant to "no"
             if (!unitPriceInput.value || !unitCostInput.value) {
                 variantInput.value = "no";
+                document.querySelector(".variants_body").classList.remove('actives');
             }
 
             if (changed === "price" || changed === "cost") {

@@ -48,15 +48,16 @@ class BrandsController extends Controller
                      <img src="'.asset( $brand->image ).'" width="50px" height="50px">
                 </a>';
             })
-            ->addColumn('created_by', function ($category) {
-                $adminName = \App\Models\Admin::find($category->created_by)?->name ?? 'Unknown';
-                $adminEmail = \App\Models\Admin::find($category->created_by)?->email ?? 'Unknown';
-                $adminImage = \App\Models\Admin::find($category->created_by)?->image ?? 'Unknown';
+            ->addColumn('created_by', function ($brand) {
+                $adminName = \App\Models\Admin::find($brand->created_by)?->name ?? 'Unknown';
+                $adminEmail = \App\Models\Admin::find($brand->created_by)?->email ?? 'Unknown';
+                $maskMail = Str::mask($adminEmail, '*', -18, 8);
+                $adminImage = \App\Models\Admin::find($brand->created_by)?->image ?? 'Unknown';
                 return '<div class="d-flex align-items-center">
                       <img  class="rounded-circle me-2" width="40"  height="40" src="'.asset($adminImage) .'" />
                       <div>
                         <p class="mb-0">'. $adminName .'</p> 
-                        <p class="mb-0">'. $adminEmail .'</p>
+                        <p class="mb-0">'. $maskMail .'</p>
                       </div>
                 </div>';
             })

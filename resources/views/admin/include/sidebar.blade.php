@@ -101,6 +101,16 @@
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Inventory</h6>
                     <ul>
+                        @if(auth("admin")->user()->can("main-admin-access"))
+                            <li class="submenu">
+                                <a href="javascript:void(0);" class="@yield('application')"><i class="ti ti-brand-apple-arcade  fs-16 me-2"></i><span>Variants</span><span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="{{ route('admin.variant.name.index') }}" class="@yield('variant-name')">Variant Name</a></li>
+                                    <li><a href="" class="">Variant Value</a></li>
+                                </ul>
+                            </li>
+                        @endif
+
                         <li class="@yield('category')"><a href="{{ route('admin.category.index') }}"><i class="ti ti-list-details fs-16 me-2"></i><span>Category</span></a></li>
 
                         <li class="@yield('subCategory')"><a href="{{ route('admin.subcategory.index') }}"><i class="ti ti-carousel-vertical fs-16 me-2"></i><span>Sub Category</span></a></li>

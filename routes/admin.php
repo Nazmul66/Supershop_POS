@@ -3,7 +3,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\AttributeNameController;
+use App\Http\Controllers\Admin\VariantNameController;
 use App\Http\Controllers\Admin\GeneralSettingController;
 use App\Http\Controllers\Admin\SystemSettingController;
 use App\Http\Controllers\Admin\CountryController;
@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Admin\FinancialSettingController;
 use App\Http\Controllers\Admin\WebsiteSetController;
 use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\AttributeValueController;
+use App\Http\Controllers\Admin\VariantValueController;
 use App\Http\Controllers\Admin\AdminRoleController;
 use App\Http\Controllers\Admin\ShippingRuleController;
 use App\Http\Controllers\Admin\AdminController;
@@ -77,6 +77,18 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/dashboard', [AdminController::class, "dashboard"])->name('dashboard');
 
 
+    //______ Variant Name _____//
+    Route::resource('/variant-name', VariantNameController::class)->names('variant.name')->except(['show']);
+    Route::get('/variant-name/data', [VariantNameController::class, 'getData'])->name('variant-name.data');
+    Route::post('/variant-name-status', [VariantNameController::class, 'changeStatus'])->name('variant-name.status');
+
+
+    //______ Variant Values _____//
+    Route::resource('/variant-value', VariantValueController::class)->names('variant.value')->except(['show']);
+    Route::get('/variant-value/data', [VariantValueController::class, 'getData'])->name('variant-value.data');
+    Route::post('/variant-value-status', [VariantValueController::class, 'changeStatus'])->name('variant-value.status');
+    Route::get('/variant-value/view/{id}', [VariantValueController::class, 'variantView'])->name('variant-value.view');
+
     //______ Category _____//
     Route::resource('/categories', CategoryController::class)->names('category')->except('show');
     Route::get('/category-data', [CategoryController::class, 'getData'])->name('category-data');
@@ -117,14 +129,10 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/brands/view/{id}', [BrandsController::class, 'brandView'])->name('brand.view');
     Route::get('/brands/pdf', [BrandsController::class, 'allBrandsPdf'])->name('brand.pdf');
 
-    //______ product _____//
-    // Route::get('/product', function(){
-    //     return view('admin.pages.product.index');
-    // })->name('product');
+
     Route::resource('/product', ProductController::class)->names('product');
     Route::get('/product-data', [ProductController::class, 'getData'])->name('product-data');
     Route::post('/change-product-status', [ProductController::class, 'changeProductStatus'])->name('product.status');
-
 
 
     //______ Country _____//

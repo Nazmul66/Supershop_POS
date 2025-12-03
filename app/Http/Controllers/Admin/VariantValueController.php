@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\AttributeName;
-use App\Models\AttributeValue;
+use App\Models\VariantName;
+use App\Models\VariantValue;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 
-class AttributeValueController extends Controller
+class VariantValueController extends Controller
 {
     public $user;
     public function __construct()
@@ -33,13 +33,13 @@ class AttributeValueController extends Controller
             throw UnauthorizedException::forPermissions(['index.attribute']);
         }
 
-        return view('backend.pages.attribute.attribute_values');
+        return view('admin.pages.variant.variant_values');
     }
 
     public function getData()
     {
         // get all data
-        $attrValues = AttributeValue::get();
+        $attrValues = VariantValue::get();
 
         return DataTables::of($attrValues)
             ->addIndexColumn()
@@ -123,7 +123,7 @@ class AttributeValueController extends Controller
             $status = 1;
         }
 
-        $page = AttributeValue::findOrFail($id);
+        $page = VariantValue::findOrFail($id);
         $page->status = $status;
         $page->save();
 
@@ -154,7 +154,7 @@ class AttributeValueController extends Controller
 
         DB::beginTransaction();
         try {
-            $attributeValue = new AttributeValue();
+            $attributeValue = new VariantValue();
 
             $attributeValue->attribute             = $request->attribute;
             if( $request->attribute === 'color' ){
@@ -179,7 +179,7 @@ class AttributeValueController extends Controller
     }
 
 
-    public function edit(AttributeValue $attributeValue)
+    public function edit(VariantValue $attributeValue)
     {
         if (!$this->user || !$this->user->can('update.attribute')) {
             throw UnauthorizedException::forPermissions(['update.attribute']);
@@ -198,7 +198,7 @@ class AttributeValueController extends Controller
             throw UnauthorizedException::forPermissions(['update.attribute']);
         }
 
-        $attributeValue  = AttributeValue::find($id);
+        $attributeValue  = VariantValue::find($id);
         // dd($request->all(), $attributeValue);
 
         $request->validate(
@@ -239,7 +239,7 @@ class AttributeValueController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AttributeValue $attributeValue)
+    public function destroy(VariantValue $attributeValue)
     {
         if (!$this->user || !$this->user->can('delete.attribute')) {
             throw UnauthorizedException::forPermissions(['delete.attribute']);
@@ -252,7 +252,7 @@ class AttributeValueController extends Controller
 
     public function attributeView($id)
     {
-        $attributeValue  = AttributeValue::find($id);
+        $attributeValue  = VariantValue::find($id);
         // dd($attributeValue);
 
         $statusHtml = '';

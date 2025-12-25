@@ -10,7 +10,7 @@
 
 </head>
 
-<body>
+<body class="mini-sidebar">
 
 	{{-- Offline Template Show --}}
 	@include('global_view.offline')

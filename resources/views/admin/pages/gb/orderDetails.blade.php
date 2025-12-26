@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @push('title')
-    Create FAQ
+    Order Details
 @endpush
 
 
@@ -172,7 +172,11 @@
                                 <tr>
                                     <th>Sku</th>
                                     <th>Image</th>
-                                    <th>Product Name</th>
+                                    <th>
+                                        <span style="text-wrap: auto;">
+                                            Product Name
+                                        </span>
+                                    </th>
                                     <th>Weight / Unit</th>
                                     <th>Price</th>
                                     <th>Discount</th>
@@ -187,7 +191,11 @@
                                     <td>
                                         <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" width="20">
                                     </td>
-                                    <td>Safawi/kalmi Dates (A Grade) 1kg</td>
+                                    <td>
+                                        <span style="text-wrap: auto;">
+                                            Safawi/kalmi Dates (A Grade) 1kg
+                                        </span>
+                                    </td>
                                     <td>1 kg</td>
                                     <td>BDT 750</td>
                                     <td>BDT 686.25 (8.5%)</td>
@@ -200,7 +208,11 @@
                                     <td>
                                         <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" width="20">
                                     </td>
-                                    <td>Safawi/kalmi Dates (A Grade) 1kg</td>
+                                    <td>
+                                        <span style="text-wrap: auto;">
+                                            Safawi/kalmi Dates (A Grade) 1kg
+                                        </span>
+                                    </td>
                                     <td>1 kg</td>
                                     <td>BDT 750</td>
                                     <td>BDT 686.25 (8.5%)</td>
@@ -264,7 +276,7 @@
             </div>
 
 
-            <!-- Status Modal -->
+            <!-- Order Status Modal -->
             <div id="orderModal" class="modal fade effect-flip-vertical" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
             style="display: none;" aria-hidden="true">
                 <div class="modal-dialog">

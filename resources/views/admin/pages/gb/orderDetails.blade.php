@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
     <style>
         body{
@@ -46,6 +47,16 @@
         .table tbody tr td{
             font-size: 12px !important;
         }
+        .order_status option[value="pending"] {
+           color: #000; 
+        }
+        .order_status option[value="hold"] {
+            color: #FE9F43;
+        }
+
+        .order_status option[value="cancel"] {
+            color: #dc3545; 
+        }
         @media (min-width: 1240px) and (max-width: 1560px) {
             .table-responsive {
                 overflow-x: auto !important;
@@ -64,9 +75,13 @@
     <div class="page-header">
         <div class="add-item d-flex">
             <div class="page-title">
-                <h4 class="fw-bold">FAQ</h4>
+                <h4 class="fw-bold">Order Details</h4>
                 <h6>Manage your Faqs</h6>
             </div>
+        </div>
+
+        <div class="page-btn">
+            <a href="#" class="btn btn-primary">Back</a>
         </div>
     </div>
 
@@ -81,14 +96,9 @@
                         </p>
 
                         <div class="dropdown">
-                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
                               Pending
                             </a>
-                            <ul class="dropdown-menu" style="">
-                                <li><a class="dropdown-item" href="#"><strong>Pending</strong></a></li>
-                                <li><a class="dropdown-item" href="#"><strong>On Hold</strong></a></li>
-                                <li><a class="dropdown-item" href="#"><strong>Cancelled</strong></a></li>
-                            </ul>
                         </div>
 
                         <div class="ms-3">
@@ -252,11 +262,305 @@
                 </div>
                 {{-- /Table Part End --}}
             </div>
+
+
+            <!-- Status Modal -->
+            <div id="orderModal" class="modal fade effect-flip-vertical" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+            style="display: none;" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">Order Status</h5>
+                            <button type="button" class="btn-close" id="btn_cross" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="createForm" enctype="multipart/form-data">
+                                @csrf
+
+                                <div class="mb-3">
+                                    <label for="order_status" class="form-label">Order Status <span class="text-danger">*</span></label>
+
+                                    <select class="form-select order_status" id="order_status" name="order_status">
+                                        <option value="pending" selected><strong>Pending</strong></option>
+                                        <option value="hold"><strong>On Hold</strong></option>
+                                        <option value="cancel"><strong>Cancelled</strong></option>
+                                    </select>
+
+                                    <span id="holiday_name_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
+
+                                <div class="mb-3 hold_status_reason d-none">
+                                    <label class="form-label" for="hold_status_reason">Select On Hold Status </label>
+                                    <select class="form-select" id="hold_status_reason" name="hold_status_reason">
+                                        <option value="">Select Option</option>
+                                        <option value="can_not_answer">Can not answer </option>
+                                        <option value="phone_number_unreachable">Phone number unreachable</option>
+                                        <option value="pre_order">Pre-order</option>
+                                        <option value="out_of_stock">Out of stock</option>
+                                        <option value="awaiting_payment_confirm">Awaiting payment confirmation</option>
+                                    </select>
+
+                                    <span id="featured_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
+
+                                <div class="mb-3 cancel_status_reason d-none">
+                                    <label class="form-label" for="cancel_status_reason">Select Cancelled Status </label>
+                                    <select class="form-select" id="cancel_status_reason" name="cancel_status_reason">
+                                        <option value="">Select Option</option>
+                                        <option value="can_not_payment_advanced">Can not payment advanced </option>
+                                        <option value="product_unavailable">Product Unavailable</option>
+                                        <option value="duplicate_order">Duplicate Order</option>
+                                        <option value="payment_failed">Payment Failed</option>
+                                        <option value="found_better_price">Found Better Price Elsewhere</option>
+                                        <option value="delivery_too_long">Delivery Time Too Long</option>
+                                        <option value="payment_failed">Payment Failed</option>
+                                        <option value="product_out_of_stock">Product Out of Stock</option>
+                                        <option value="ordered_by_mistake">Ordered by Mistake</option>
+                                        <option value="changed_my_mind">Changed My Mind</option>
+                                        <option value="high_delivery_charge">High Delivery Charge</option>
+                                        <option value="other_reason">Other Reason</option>
+                                    </select>
+
+                                    <span id="featured_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
+                                
+                                <div class="mb-3 shipping_date d-none">
+                                    <label class="form-label" for="reportrange">Shipping Date <span class="text-danger"> *</span></label>
+
+                                    <input type="text" id="shipping_date" name="shipping_date" class="form-control" placeholder="Select date range" readonly disabled="true" />
+                                </div>
+
+                                <div class="col-lg-12 approve_status d-none">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <input type="checkbox" id="approve_status" disabled="true">
+
+                                        <span>Auto-Approve Status</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 approve_date d-none">
+                                    <div class="mb-3 mt-3">
+                                        <label class="form-label">Approve Date <span class="text-danger"> *</span></label>
+
+                                        <input type="text" id="approve_date" name="approve_date" class="form-control" placeholder="Select date range" readonly />
+                                    </div>
+                                </div>
+
+
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3"
+                                        data-bs-dismiss="modal">Close </button>
+
+                                    <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+
+
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
         </div>
     </div>
 @endsection
 
 @push('add-js')
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script>
+        // select order status option appears
+        document.addEventListener('DOMContentLoaded', function () {
+            const orderStatus = document.getElementById('order_status');
+            const holdReasonBox = document.querySelector('.hold_status_reason');
+            const cancelReasonBox = document.querySelector('.cancel_status_reason');
+            const shippingDateField = document.querySelector('.shipping_date');
+            const autoApproveField = document.querySelector('.approve_status');
+            const holdReasonInput = document.getElementById('hold_status_reason');
+            const cancelReasonInput = document.getElementById('cancel_status_reason');
+            const approveDateBox  = document.querySelector('.approve_date');
+            const autoApproveInput = document.getElementById('approve_status');
+
+            function toggleHoldReason() {
+                orderStatus.style.color =
+                orderStatus.value === 'pending' ? '#000' :
+                orderStatus.value === 'hold'    ? '#FE9F43' : '#dc3545';
+
+                if (orderStatus.value === 'hold') {
+                    holdReasonBox.classList.remove('d-none');
+                    cancelReasonBox.classList.add('d-none');
+                    approveDateBox.classList.add('d-none');
+                    holdReasonInput.value = "";
+                    autoApproveInput.checked = false;
+                } 
+                else if( orderStatus.value === 'cancel' ){
+                    holdReasonBox.classList.add('d-none');
+                    cancelReasonBox.classList.remove('d-none');
+                    approveDateBox.classList.add('d-none');
+                    shippingDateField.classList.add('d-none');
+                    autoApproveField.classList.add('d-none');
+                    cancelReasonInput.value = "";
+                } 
+                else {
+                    holdReasonBox.classList.add('d-none');
+                    cancelReasonBox.classList.add('d-none');
+                    approveDateBox.classList.add('d-none');
+                    shippingDateField.classList.add('d-none');
+                    autoApproveField.classList.add('d-none');
+                }
+            }
+
+            // On change
+            orderStatus.addEventListener('change', toggleHoldReason);
+
+            // On page load (important if "hold" is preselected)
+            toggleHoldReason();
+
+
+            function allReset(){
+                orderStatus.style.color = '#000';
+                orderStatus.value = 'pending';
+                holdReasonBox.classList.add('d-none');
+                cancelReasonBox.classList.add('d-none');
+                approveDateBox.classList.add('d-none');
+                shippingDateField.classList.add('d-none');
+                autoApproveField.classList.add('d-none');
+                holdReasonInput.value = "";
+                cancelReasonInput.value = "";
+                autoApproveInput.checked = false;
+            }
+
+            document.getElementById('btn_saves').addEventListener('click', allReset);
+            document.getElementById('btn_close').addEventListener('click', allReset);
+            document.getElementById('btn_cross').addEventListener('click', allReset);
+            document.getElementById('orderModal').addEventListener('hidden.bs.modal', allReset);
+        });
+
+        // On hold Status select
+        document.addEventListener('DOMContentLoaded', function() {
+            const holdReasonSelect = document.getElementById('hold_status_reason');
+            const shippingDateField = document.querySelector('.shipping_date');
+            const autoApproveField = document.querySelector('.approve_status');
+            const shippingDateInput = document.getElementById('shipping_date');
+            const autoApproveInput = document.getElementById('approve_status');
+            const approveDateBox  = document.querySelector('.approve_date');
+            const approveDateInput = document.getElementById('approve_date');
+
+            function toggleDependentFields() {
+                if (holdReasonSelect.value !== '') {
+                    // Show dependent fields
+                    shippingDateField.classList.remove('d-none');
+                    autoApproveField.classList.remove('d-none');
+                    shippingDateInput.removeAttribute('disabled');
+                    autoApproveInput.removeAttribute('disabled');
+
+                    if ($(shippingDateInput).data('daterangepicker')) {
+                        const picker = $(shippingDateInput).data('daterangepicker');
+                        picker.setStartDate(moment());
+                        picker.setEndDate(moment());
+                    }
+
+                    if ($(approveDateInput).data('daterangepicker')) {
+                        const picker = $(approveDateInput).data('daterangepicker');
+                        picker.setStartDate(moment());
+                        picker.setEndDate(moment());
+                    }
+
+                } else {
+                    // Hide dependent fields
+                    shippingDateField.classList.add('d-none');
+                    autoApproveField.classList.add('d-none');
+                    shippingDateInput.setAttribute('disabled', true);
+                    autoApproveInput.setAttribute('disabled', true);
+                    autoApproveInput.checked = false;
+                    approveDateBox.classList.add('d-none');
+                }
+            }
+
+            // Listen to change event
+            holdReasonSelect.addEventListener('change', toggleDependentFields);
+
+            // Run on page load in case a value is preselected
+            toggleDependentFields();
+
+        });
+
+
+        // On Auto Approve daterange
+        document.addEventListener('DOMContentLoaded', function() {
+            const approveCheckbox = document.getElementById('approve_status');
+            const approveDateBox  = document.querySelector('.approve_date');
+            const approveDateInput = document.getElementById('approve_date');
+
+            function toggleApproveDate() {
+                if (approveCheckbox.checked) {
+                    approveDateBox.classList.remove('d-none');
+                    approveDateInput.disabled = false;
+                } else {
+                    approveDateBox.classList.add('d-none');
+                    approveDateInput.disabled = true;
+                    approveDateInput.value = '';
+
+                    if ($(approveDateInput).data('daterangepicker')) {
+                        const picker = $(approveDateInput).data('daterangepicker');
+                        picker.setStartDate(moment());
+                        picker.setEndDate(moment());
+                    }
+                }
+            }
+
+            // Listen to checkbox change
+            approveCheckbox.addEventListener('change', toggleApproveDate);
+
+            // Initial state on page load
+            toggleApproveDate();
+
+        });
+        
+
+    </script>
+
+    <script type="text/javascript">
+        $(function() {
+        
+            function initDateRangePicker(selector, up){
+
+            
+                var start = moment().subtract(29, 'days');
+                var end = moment();
+            
+                function cb(start, end) {
+                    $(selector).find('span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
+            
+                $(selector).daterangepicker({
+                    timePicker: true,
+                    drops: up,
+                    startDate: moment(),
+                    endDate: moment(),
+                    locale: {
+                        format: 'MMMM D/YYYY hh:mm A'
+                    },
+                    ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                }, cb);
+            
+                cb(start, end);
+            }
+
+            // Initialize both inputs
+            initDateRangePicker('#shipping_date', "down");
+            initDateRangePicker('#approve_date', "up");
+        });
+    </script>
+
 <script>
     // Copy Order Id function
     document.getElementById('copyId').addEventListener('click', function () {
@@ -279,7 +583,7 @@
         });
     });
 
-    // Copy Order Id function
+    // Copy Phone Number function
     document.getElementById('copyNumber').addEventListener('click', function () {
         const copyNumber = document.getElementById('copyText').innerText;
         const iconWrappers = this;

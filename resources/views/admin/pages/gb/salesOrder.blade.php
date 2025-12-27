@@ -110,6 +110,18 @@
         @keyframes rotate {
             100%{    transform: rotate(360deg)}
         }
+        .page_intersaction{
+            max-height: 70vh;   /* screen height */
+            overflow-y: auto;
+        }
+        .customer_details{
+            position: relative;
+        }
+        .customer_details .btn_edit{
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
     </style>
 @endpush
 
@@ -133,91 +145,96 @@
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-3">
-                    {{-- OnGoing Order PArt --}}
-                    <div class="order_processing mb-5">
-                        <div class="d-flex align-items-center gap-3 mb-3 border-bottom pb-3">
-                            <h5>OnGoing Order</h5>
-                            <span class="badge badge-lg bg-primary">3</span>
-                            <div class="bar_loader">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </div>
-    
-                        {{-- 1st Order History --}}
-                        <div class="border-bottom pb-2 mb-3">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="d-flex align-items-center gap-1">
-                                    <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
-                                </div>
-    
-                                <div class="dropdown">
-                                    <a class="btn btn-secondary" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
-                                      Pending
-                                    </a>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="page_intersaction">
+                {{-- OnGoing Order PArt --}}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="order_processing">
+                            <div class="d-flex align-items-center gap-3 mb-3 border-bottom pb-3">
+                                <h5>OnGoing Order</h5>
+                                <span class="badge badge-lg bg-primary">3</span>
+                                <div class="bar_loader">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
                                 </div>
                             </div>
-    
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span>BDT 2250.00</span>
-                                <span>Sep 22,2025, 9:45 P.M</span>
-                            </div>
-                        </div>
-    
-                        {{-- 2nd Order History --}}
-                        <div class="border-bottom pb-2 mb-3">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="d-flex align-items-center gap-1">
-                                    <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+        
+                            {{-- 1st Order History --}}
+                            <div class="border-bottom pb-2 mb-3">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <div class="d-flex align-items-center gap-1">
+                                        <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                    </div>
+        
+                                    <div class="dropdown">
+                                        <a class="btn btn-secondary" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
+                                            Pending
+                                        </a>
+                                    </div>
                                 </div>
-    
-                                <div class="dropdown">
-                                    <a class="btn btn-primary dropdown-toggle" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
-                                      On Hold
-                                    </a>
-                                </div>
-                            </div>
-    
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span>BDT 2075.50</span>
-                                <span>Sep 29,2025, 11:45 P.M</span>
-                            </div>
-                        </div>
-    
-                        {{-- 3rd Order History --}}
-                        <div class="border-bottom pb-2" >
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="d-flex align-items-center gap-1">
-                                    <a href="#" class="text-secondary"><strong>GB-4985</strong></a>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
-                                </div>
-    
-                                <div class="dropdown">
-                                    <a class="btn btn-info" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
-                                      In Transit
-                                    </a>
+        
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span>BDT 2250.00</span>
+                                    <span>Sep 22,2025 9:45 P.M</span>
                                 </div>
                             </div>
-    
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span>BDT 2075.50</span>
-                                <span>Sep 29,2025, 11:45 P.M</span>
+        
+                            {{-- 2nd Order History --}}
+                            <div class="border-bottom pb-2 mb-3">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <div class="d-flex align-items-center gap-1">
+                                        <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                    </div>
+        
+                                    <div class="dropdown">
+                                        <a class="btn btn-primary dropdown-toggle" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
+                                            On Hold
+                                        </a>
+                                    </div>
+                                </div>
+        
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span>BDT 2075.50</span>
+                                    <span>Sep 29,2025, 11:45 P.M</span>
+                                </div>
+                            </div>
+        
+                            {{-- 3rd Order History --}}
+                            <div class="border-bottom pb-2" >
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <div class="d-flex align-items-center gap-1">
+                                        <a href="#" class="text-secondary"><strong>GB-4985</strong></a>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                    </div>
+        
+                                    <div class="dropdown">
+                                        <a class="btn btn-info" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
+                                            In Transit
+                                        </a>
+                                    </div>
+                                </div>
+        
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span>BDT 2075.50</span>
+                                    <span>Sep 29,2025, 11:45 P.M</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    {{-- Delivery Partner --}}
-                    <div class="">
+                {{-- Delivery Partner --}}
+                <div class="card">
+                    <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <h5><strong>Delivery Success Rate</strong></h5>
                             <a data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="Refresh" type="button" class="btn btn-square btn-secondary btn_refresh"><i style="line-height: 0; font-size: 16px;" class="ti ti-rotate"></i></a>
@@ -229,6 +246,8 @@
                             </div>
                             <span id="percentage">88.00%</span>
                         </div>
+                        
+                        <p style="font-size: 12px;">Updated On: Sep 22,2025, 9:45 P.M</p>
 
                         <div class="delivery_progress">
                             <div class="loading_zone d-none">
@@ -283,11 +302,102 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- Customer Details --}}
+                <div class="card customer_details">
+                    <button type="button" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#editModal" class="btn_edit btn btn-outline-secondary">Edit</button>
+
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <span class="mb-1 d-block" style="font-size: 12px;">Customer ID</span>
+                            <div class="d-flex align-items-center gap-2">
+                                <h5>C-415236</h5>
+                                <span class="badge badge-sm bg-primary">New</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <span class="mb-1 d-block" style="font-size: 12px;">Customer Name</span>
+                            <h5>Nazmul Hassan</h5>
+                        </div>
+
+                        <div class="mb-3">
+                            <span class="mb-1 d-block" style="font-size: 12px;">Phone Number</span>
+                            <h5>+8801542695148</h5>
+                        </div>
+
+                        <div class="mb-3">
+                            <span class="mb-1 d-block" style="font-size: 12px;">Customer Address</span>
+                            <h5>K-39/5, kuril vatara - 1229</h5>
+                        </div>
+
+                        <div class="mb-3">
+                            <span class="mb-1 d-block" style="font-size: 12px;">Map Location</span>
+                            <h5> Ranks Business Centre, Plot-Ka-218/1-2, Pragati Sarani Main Road, Kuril, Dhaka-1229.</h5>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
 
+
+    <!-- Customer Update Modal -->
+    <div id="editModal" class="modal fade effect-flip-vertical" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+    style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Update Customer Details</h5>
+                    <button type="button" class="btn-close" id="btn_cross" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="createForm" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="cus_name">Customer Name <span class="text-danger"> *</span></label>
+
+                                <input type="text" id="cus_name" name="cus_name" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="mb-3 mt-3">
+                                <label class="form-label">Phone Number <span class="text-danger"> *</span></label>
+
+                                <input type="text" id="cus_number" name="cus_number" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="cus_address">Customer Address </label>
+                                <div class="input-addon-right position-relative">
+                                    <textarea name="cus_address" class="form-control" id="cus_address" cols="30" rows="5"></textarea>
+                                </div>
+
+                                <span id="cus_address_validate" class="text-danger validation-error mt-1"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="d-flex justify-content-end align-items-center">
+                            <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3"
+                                data-bs-dismiss="modal">Close </button>
+
+                            <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Save changes</button>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 
 @endsection
 

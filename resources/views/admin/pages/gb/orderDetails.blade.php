@@ -62,6 +62,33 @@
                 overflow-x: auto !important;
             }
         }
+        .payment_action{
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #66667A;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+        .payment_action .ti-plus{
+            font-size: 16px;
+        }
+        .user_icon{
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50px;
+            background: #b7cff6;
+            margin: 0 auto 12px;
+        }
+        .user_icon .ti-credit-card{
+            font-size: 30px;
+            color: #212B36;
+        }
     </style>
 @endpush
 
@@ -230,11 +257,11 @@
                                 </tr>
                                 <tr>
                                     <td colspan="6" style="text-align: right;">
-                                        <span style="font-weight: 700; color: #000;">Discount</span>
+                                        <span style="font-weight: 700; color: #000;">(-) Discount</span>
                                     </td>
                                     <td></td>
                                     <td></td>
-                                    <td>BDT 00.00</td>
+                                    <td>- BDT 00.00</td>
                                 </tr>
                                 <tr>
                                     <td colspan="6" style="text-align: right;">
@@ -246,19 +273,11 @@
                                 </tr>
                                 <tr>
                                     <td colspan="6" style="text-align: right;">
-                                        <span style="font-weight: 700; color: #000;">Advance Payment</span>
+                                        <span style="font-weight: 700; color: #000;">(-) Advance Payment</span>
                                     </td>
                                     <td></td>
                                     <td></td>
-                                    <td>BDT 200.00</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="6" style="text-align: right;">
-                                        <span style="font-weight: 700; color: #000;">Total Due</span>
-                                    </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td><span class="text-danger">(BDT 4047.5)</span></td>
+                                    <td sty>- BDT 200.00</td>
                                 </tr>
                                 <tr>
                                     <td colspan="6" style="text-align: right;">
@@ -266,13 +285,84 @@
                                     </td>
                                     <td></td>
                                     <td></td>
-                                    <td><span class="text-success">BDT 200.00</span></td>
+                                    <td><span class="text-success">BDT 4047.00</span></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
                 {{-- /Table Part End --}}
+
+                <div class="text-end mt-5 mb-5">
+                    <button type="button" class="btn btn-secondary" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#add_payment">Add Payment</button>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Payment History <sup class="badge bg-soft-info">In Processing...</sup></h4>
+                </div>
+
+                <div class="card-body">
+                    {{-- <div class="table-responsive">
+                        <table class="table table-nowrap mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Payment Type</th>
+                                    <th>
+                                        <span style="text-wrap: auto;">
+                                           Note
+                                        </span>
+                                    </th>
+                                    <th>Payment Method</th>
+                                    <th>Transaction</th>
+                                    <th>Updated At</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Advance</td>
+                                    <td>
+                                        <span style="text-wrap: auto;">
+                                            Safawi/kalmi Dates (A Grade) 1kg
+                                        </span>
+                                    </td>
+                                    <td>Cash On Delivery</td>
+                                    <td>Trans-154645564</td>
+                                    <td>25 Dec 2025, 09:10 A.M</td>
+                                    <td>BDT 750</td>
+                                    <td>
+                                        <div class="payment_action">
+                                            <i class="ti ti-plus"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="text-align: right;">
+                                        <span style="font-weight: 700; color: #000;">SubTotal</span>
+                                    </td>
+                                    <td colspan="2">BDT 4047.00</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="text-align: right;">
+                                        <span style="font-weight: 700; color: #000;">Total Owing</span>
+                                    </td>
+                                    <td colspan="2">BDT 4047.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> --}}
+
+                    <div class="">
+                        <div class="user_icon">
+                            <i class="ti ti-credit-card"></i>
+                        </div>
+                        <p class="text-center mb-2">No Payment History</p>
+                    </div>
+                </div>
             </div>
 
 
@@ -373,6 +463,95 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div>
+
+
+            <!-- Add Payment Modal -->
+            <div id="add_payment" class="modal fade effect-flip-vertical" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+            style="display: none;" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">Add Payment</h5>
+                            <button type="button" class="btn-close" id="btn_cross" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="createForm" enctype="multipart/form-data">
+                                @csrf
+
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="payment_type">Payment Type <span class="text-danger"> *</span></label>
+
+                                        <select name="payment_type" id="payment_type" class="form-control">
+                                            <option value="payment">Payment</option>
+                                            <option value="advance_payment">Advance Payment</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="payment_method">Payment Method <span class="text-danger"> *</span></label>
+
+                                        <select name="payment_method" id="payment_method" class="form-control">
+                                            <option value="cod">Cash On Delivery</option>
+                                            <option value="bkash">Bkash</option>
+                                            <option value="nagad">Nagad</option>
+                                            <option value="upay">Upay</option>
+                                            <option value="rupali_bank">Rupali Bank</option>
+                                            <option value="eastarn_bank">Eastern Bank</option>
+                                            <option value="dutch_bank">Dutch Bangla Bank</option>
+                                            <option value="brac_bank">Brac Bank</option>
+                                            <option value="city_bank">City Bank</option>
+                                            <option value="bank_asia">Bank Asia</option>
+                                            <option value="mutual_trust">Mutual Trust</option>
+                                            <option value="ifici_bank">IFICI Bank</option>
+                                            <option value="ucb_bank">UCB Bank</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="mb-3 mt-3">
+                                        <label class="form-label" for="trans_id">Transaction ID <span class="text-danger"> *</span></label>
+                                        <input type="text" id="trans_id" name="trans_id" class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="mb-3 mt-3">
+                                        <label class="form-label" for="cus_number">Amount <span class="text-danger"> *</span></label>
+                                        <input type="text" id="cus_number" name="cus_number" class="form-control" placeholder="00.00" />
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="note">Note</label>
+                                        <div class="input-addon-right position-relative">
+                                            <textarea name="note" class="form-control" id="note" cols="30" rows="3"></textarea>
+                                        </div>
+        
+                                        <span id="note_validate" class="text-danger validation-error mt-1"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3"
+                                        data-bs-dismiss="modal">Close </button>
+
+                                    <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+
+
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+
         </div>
     </div>
 @endsection
@@ -589,7 +768,7 @@
             setTimeout(() => {
                 this.setAttribute("data-bs-original-title", "Copy");
                 iconWrapper.innerHTML = '<i class="ti ti-copy"></i>';
-            }, 2000);
+            }, 1000);
         }).catch(error => {
             console.error('Copy failed:', error);
         });
@@ -610,7 +789,7 @@
             setTimeout(() => {
                 this.setAttribute("data-bs-original-title", "Copy");
                 iconWrappers.innerHTML = '<i class="ti ti-copy"></i>';
-            }, 2000);
+            }, 1000);
         }).catch(error => {
             console.error('Copy failed:', error);
         });

@@ -89,6 +89,73 @@
             font-size: 30px;
             color: #212B36;
         }
+        .customer_details{
+            position: relative;
+        }
+        .customer_details .btn_edit{
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        .user_icon{
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50px;
+            background: #b7cff6;
+            margin: 0 auto 12px;
+        }
+        .user_icon .ti-user,
+        .user_icon .ti-package{
+            font-size: 30px;
+            color: #212B36;
+        }
+        .delivery_progress {
+            position: relative;
+        }
+        .loading_zone{
+            position: absolute; 
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.6);
+
+        }
+        .loading_zone .load-position{
+            position: absolute;
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%);
+        }
+        .arrow_loader {
+            width: 48px;
+            height: 48px;
+            display: inline-block;
+            position: relative;
+            border-width: 3px 2px 3px 2px;
+            border-style: solid dotted solid dotted;
+            border-color: #de3500 rgba(255, 255, 255,0.3) #3EB780 rgba(151, 107, 93, 0.3);
+            border-radius: 50%;
+            box-sizing: border-box;
+            animation: 1s rotate linear infinite;
+        }
+        .arrow_loader:before , .arrow_loader:after{
+            content: '';
+            top: 0;
+            left: 0;
+            position: absolute;
+            border: 10px solid transparent;
+            border-bottom-color:#3EB780;
+            transform: translate(-10px, 19px) rotate(-35deg);
+        }
+        .arrow_loader:after {
+            border-color: #de3500 #0000 #0000 #0000 ;
+            transform: translate(32px, 3px) rotate(-35deg);
+        }
+        @keyframes rotate {
+            100%{    transform: rotate(360deg)}
+        }
     </style>
 @endpush
 
@@ -159,7 +226,7 @@
                 {{-- Right Column Start --}}
                 <div class="col-lg-4 offset-lg-4 text-end">
                     <div class="d-flex align-items-center justify-content-end gap-1 mb-2">
-                        <i class="ti ti-info-circle text-info"></i>
+                        <i class="ti ti-info-circle text-info" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
                         <h2>Mahtab</h2>
                     </div>
                     <p class="badge badge-sm bg-primary mb-2">New</p>
@@ -299,6 +366,7 @@
             </div>
 
 
+            {{-- Payment History --}}
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Payment History <sup class="badge bg-soft-info">In Processing...</sup></h4>
@@ -552,6 +620,191 @@
                 </div><!-- /.modal-dialog -->
             </div>
 
+
+             <!-- Customer all history -->
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5 id="offcanvasRightLabel">Customer Overview</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div> <!-- end offcanvas-header-->
+
+                <div class="offcanvas-body">
+                    {{-- Customer Details --}}
+                    <div class="card customer_details">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Customer ID</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h5>C-415236</h5>
+                                    <span class="badge badge-sm bg-primary">New</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Customer Name</span>
+                                <h5>Nazmul Hassan</h5>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Phone Number</span>
+                                <h5>+8801542695148</h5>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Customer Address</span>
+                                <h5>K-39/5, kuril vatara - 1229</h5>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Map Location</span>
+                                <h5> Ranks Business Centre, Plot-Ka-218/1-2, Pragati Sarani Main Road, Kuril, Dhaka-1229.</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Delivery Partner --}}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h5><strong>Delivery Success Rate</strong></h5>
+                                <a data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="Refresh" type="button" class="btn btn-square btn-secondary btn_refresh"><i style="line-height: 0; font-size: 16px;" class="ti ti-rotate"></i></a>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between gap-1 mb-3">
+                                <div class="progress progress-sm" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 100%; background: #FF0000;">
+                                    <div class="progress-bar bg-secondary" style="width: 88%"></div>
+                                </div>
+                                <span id="percentage">88.00%</span>
+                            </div>
+                            
+                            <p style="font-size: 12px;">Updated On: Sep 22,2025, 9:45 P.M</p>
+
+                            <div class="delivery_progress">
+                                <div class="loading_zone d-none">
+                                    <div class="load-position">
+                                        <span class="arrow_loader"></span>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Partner</th>
+                                                <th>Total</th>
+                                                <th>Delivered</th>
+                                                <th class="text-danger">Undelivered</th>
+                                                <th>Percentage(%)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Steadfast</td>
+                                                <td>23</td>
+                                                <td>21</td>
+                                                <td>2</td>
+                                                <td>91.30%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pathao</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                                <td>0</td>
+                                                <td>100.00%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Redx</td>
+                                                <td>1</td>
+                                                <td>0</td>
+                                                <td>1</td>
+                                                <td>00.00%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total</td>
+                                                <td>25</td>
+                                                <td>22</td>
+                                                <td>3</td>
+                                                <td>88.00%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Customer Order History --}}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <h5>Order History</h5>
+                                    <span class="badge badge-md bg-primary">3</span>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <h5>Delivered</h5>
+                                    <span class="badge badge-md bg-primary">3</span>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <h5>Flagged</h5>
+                                    <span class="badge badge-md bg-primary">0</span>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-3">
+                                    <h5>Delivered</h5>
+                                    <span class="badge badge-md bg-primary">3</span>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                {{-- 1st Order History --}}
+                                {{-- <div class="border-bottom pb-2 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                        </div>
+
+                                        <button class="btn btn-soft-info"> Delivered</button>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>BDT 2250.00</span>
+                                        <span>Sep 22,2025 9:45 P.M</span>
+                                    </div>
+                                </div> --}}
+
+                                {{-- 2nd Order History --}}
+                                {{-- <div class="border-bottom pb-2 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                        </div>
+            
+                                        <button class="btn btn-soft-info"> Delivered</button>
+                                    </div>
+            
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>BDT 2075.50</span>
+                                        <span>Sep 29,2025, 11:45 P.M</span>
+                                    </div>
+                                </div> --}}
+
+                                {{-- Delivery Record --}}
+                                <div class="mt-5">
+                                    <div class="user_icon">
+                                        <i class="ti ti-package"></i>
+                                    </div>
+                                    <h6 class="text-center mb-2">No Order History ?</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- end offcanvas-body-->
+            </div>
         </div>
     </div>
 @endsection
@@ -561,6 +814,18 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
     <script>
+        document.querySelector('.btn_refresh').addEventListener('click', function () {
+            const loader = document.querySelector('.loading_zone');
+        
+            // show loader
+            loader.classList.remove('d-none');
+        
+            // optional: hide again after loading (example)
+            setTimeout(() => {
+                loader.classList.add('d-none');
+            }, 2000);
+        });
+
         // select order status option appears
         document.addEventListener('DOMContentLoaded', function () {
             const orderStatus = document.getElementById('order_status');

@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
     <style>
         body{
@@ -50,6 +51,10 @@
             width: 20px;
             cursor: pointer;
         }
+        .flatpickr-input {
+    pointer-events: auto !important;
+    background-color: #fff !important;
+}
         .order_processing{
             width: 100%;
             max-height: 320px; 
@@ -115,6 +120,12 @@
         .page_intersaction{
             max-height: 70vh;   /* screen height */
             overflow-y: auto;
+            padding-right: 12px;
+        }
+        .product_intersaction{
+            max-height: 54vh;   /* screen height */
+            overflow-y: auto;
+            padding-right: 12px;
         }
         .customer_details{
             position: relative;
@@ -126,7 +137,7 @@
         }
         .search_box{
             position: relative;
-            background: #e2e8ef;
+            background: #e6eaed;
             padding: 14px 16px;
             border-radius: 6px;
         }
@@ -184,6 +195,7 @@
             margin: 0 auto 12px;
         }
         .user_icon .ti-user,
+        .user_icon .ti-basket,
         .user_icon .ti-package{
             font-size: 30px;
             color: #212B36;
@@ -205,12 +217,77 @@
         .search_form_box .ti-search{
            position: absolute;
            top: 50%;
-           left: 4px;
+           left: 0;
            transform: translateY(-50%);
            font-size: 22px;
         }
         .form-check-input {
             border: 1px solid #706666 !important;
+        }
+        .pageWrapper,
+        .productSearchWrapper,
+        .productWrapper{
+            padding-right: 10px;
+        }
+        .scroll-box{
+            overflow-y: hidden;
+            transition: max-height 0.2s ease;
+        }
+        .card_empty{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wg-quantity {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            background: #fff;
+            height: 38px;
+        }
+        .form-select,
+        .form-control{
+            font-weight: 600;
+        }
+
+        .btn-quantity {
+            width: 38px;
+            height: 38px;
+            border: none;
+            background: #0b2545; /* match Add to Cart button */
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            user-select: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-quantity:hover {
+            background: #163a6b;
+        }
+
+        .btn-quantity:active {
+            transform: scale(0.95);
+        }
+
+        .quantity-product {
+            width: 50px;
+            height: 38px;
+            text-align: center;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0b2545;
+            background: #f8fafc;
         }
     </style>
 @endpush
@@ -238,7 +315,7 @@
 
     <div class="row">
         <div class="col-lg-3">
-            <div class="page_intersaction">
+            <div class="pageWrapper scroll-box">
                 {{-- Customer Search Option --}}
                 <div class="search_box mb-3">
                     <div class="">
@@ -390,7 +467,7 @@
                                 <table class="table table-nowrap mb-0">
                                     <thead>
                                         <tr>
-                                            <th>Partner</th>
+                                            <th>Courier</th>
                                             <th>Total</th>
                                             <th>Delivered</th>
                                             <th class="text-danger">Undelivered</th>
@@ -540,6 +617,198 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-lg-4">
+            <div class="">
+                {{-- Product Search Option --}}
+                <div class="mb-4">
+                    <div class="search_box">
+                        <h3 class="mb-1" for="product_search">Product Search</h3>
+                        <div class="search_form_box">
+                            <input type="text" id="product_search" name="product_search" class="form_search" placeholder="Search by Product Name or Sku" />
+                            <i class="ti ti-search"></i>
+                        </div>
+                    </div>
+
+                    <div id="search_msg_show" class="mt-2 d-none">
+                        <strong><span>"Items founds in product search: 0"</span></strong>
+                    </div>
+                </div>
+
+
+                {{-- All Product List --}}
+                <div class="product_box productSearchWrapper scroll-box">
+                    <div class="card border border-2 mb-3">
+                        <div class="card-header">
+                           <div class="d-flex align-items-center gap-2">
+                               <img src="{{ asset('public/admin/assets/images/Lichu-Modhu-500g_with-box_v2.webp') }}" alt="" width="85">
+                               <div class="">
+                                  <h4 class="mb-2">লিচু ফুলের মধু/Lichu Flower Honey</h4>
+                                  <p><strong>SKU:</strong> A000121</p>
+                               </div>
+                           </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <h5>BDT 600.00</h5>
+                                </div>
+                                <button type="button" class="btn btn-secondary"> 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-shopping-cart"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 2a1 1 0 0 1 .993 .883l.007 .117v1.068l13.071 .935a1 1 0 0 1 .929 1.024l-.01 .114l-1 7a1 1 0 0 1 -.877 .853l-.113 .006h-12v2h10a3 3 0 1 1 -2.995 3.176l-.005 -.176l.005 -.176c.017 -.288 .074 -.564 .166 -.824h-5.342a3 3 0 1 1 -5.824 1.176l-.005 -.176l.005 -.176a3.002 3.002 0 0 1 1.995 -2.654v-12.17h-1a1 1 0 0 1 -.993 -.883l-.007 -.117a1 1 0 0 1 .883 -.993l.117 -.007h2zm0 16a1 1 0 1 0 0 2a1 1 0 0 0 0 -2zm11 0a1 1 0 1 0 0 2a1 1 0 0 0 0 -2z"></path></svg>
+                                    Add To Cart</button>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between">
+                                <button type="button" class="btn btn-outline-secondary btn-w-xs">Weight: 0.5 kg</button>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h6> Check Availibities</h6> <i class="ti ti-info-circle text-success" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border border-2 mb-3">
+                        <div class="card-header">
+                           <div class="d-flex align-items-center gap-2">
+                               <img src="{{ asset('public/admin/assets/images/WhatsApp_Image_2025-11-04_at_18.51.14_1.webp') }}" alt="" width="85">
+                               <div class="">
+                                  <h4 class="mb-2">সুন্দরবনের মধু/Sundarban Honey</h4>
+                                  <p><strong>SKU:</strong> A000251</p>
+                               </div>
+                           </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <h5>BDT 1550.00</h5>
+                                    <del>
+                                       <h5>BDT 1700.00</h5>
+                                    </del>
+                                </div>
+                                <button type="button" class="btn btn-secondary"> 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-shopping-cart"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 2a1 1 0 0 1 .993 .883l.007 .117v1.068l13.071 .935a1 1 0 0 1 .929 1.024l-.01 .114l-1 7a1 1 0 0 1 -.877 .853l-.113 .006h-12v2h10a3 3 0 1 1 -2.995 3.176l-.005 -.176l.005 -.176c.017 -.288 .074 -.564 .166 -.824h-5.342a3 3 0 1 1 -5.824 1.176l-.005 -.176l.005 -.176a3.002 3.002 0 0 1 1.995 -2.654v-12.17h-1a1 1 0 0 1 -.993 -.883l-.007 -.117a1 1 0 0 1 .883 -.993l.117 -.007h2zm0 16a1 1 0 1 0 0 2a1 1 0 0 0 0 -2zm11 0a1 1 0 1 0 0 2a1 1 0 0 0 0 -2z"></path></svg>
+                                    Add To Cart</button>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between">
+                                <button type="button" class="btn btn-outline-secondary btn-w-xs">Weight: 1 kg</button>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h6> Check Availibities</h6> <i class="ti ti-info-circle text-success" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Cart (0)</h2>
+                </div>
+            </div>
+
+            <div class="productWrapper scroll-box">
+                {{-- <div class="card">
+                    <div class="card-body scroll_box">   
+                        <div class="mt-5">
+                            <div class="user_icon">
+                                <i class="ti ti-basket"></i>
+                            </div>
+                            <h4 class="text-center mb-2">Cart Empty</h4>
+                        </div>
+                    </div>
+                </div> --}}
+                
+                <div class="">
+                    <div class="card border border-2 mb-3">
+                        <div class="card-header">
+                           <div class="d-flex align-items-center gap-2">
+                               <img src="{{ asset('public/admin/assets/images/Lichu-Modhu-500g_with-box_v2.webp') }}" alt="" width="85">
+                               <div class="">
+                                  <h4 class="mb-2">লিচু ফুলের মধু/Lichu Flower Honey</h4>
+                                  <p class="mb-2"><strong>SKU:</strong> A000121</p>
+                                  <div class="d-flex align-items-center gap-2">
+                                      <h5>BDT 600.00</h5>
+                                  </div>
+                               </div>
+                           </div>
+    
+                           <div class="mt-2">
+                                <button type="button" class="btn btn-outline-secondary btn-w-xs">Weight: 0.5 kg</button>
+                           </div>
+                        </div>
+    
+                        <div class="card-body">
+                            <div class="p-3 bg-secondary-transparent">
+                                <h4>Unit Price</h4>
+                                <p>BDT 600.00</p>
+                            </div>
+    
+                            <div class="d-flex align-items-center justify-content-between gap-2 mt-4">
+                                <p class="text-success mb-0"><strong>( No Discount )</strong></p>
+                                <div class="d-flex align-items-center gap-4">
+                                    <h5>BDT 600.00</h5>
+                                    <div class="wg-quantity">
+                                        <span class="btn-quantity btn-decrease">-</span>
+                                        <input class="quantity-product" type="text" name="qty" value="1">
+                                        <span class="btn-quantity btn-increase">+</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="card border border-2 mb-3">
+                        <div class="card-header">
+                           <div class="d-flex align-items-center gap-2">
+                               <img src="{{ asset('public/admin/assets/images/WhatsApp_Image_2025-11-04_at_18.51.14_1.webp') }}" alt="" width="85">
+                               <div class="">
+                                  <h4 class="mb-2">সুন্দরবনের মধু/Sundarban Honey</h4>
+                                  <p class="mb-2"><strong>SKU:</strong> A000251</p>
+                                  <div class="d-flex align-items-center gap-2">
+                                      <h5>BDT 1550.00</h5>
+                                      <del>
+                                        <h5>BDT 1700.00</h5>
+                                      </del>
+                                  </div>
+                               </div>
+                           </div>
+    
+                           <div class="mt-2">
+                                <button type="button" class="btn btn-outline-secondary btn-w-xs">Weight: 1 kg</button>
+                           </div>
+                        </div>
+    
+                        <div class="card-body">
+                            <div class="p-3 bg-secondary-transparent">
+                                <h4>Unit Price</h4>
+                                <p>BDT 1700.00</p>
+                            </div>
+    
+                            <div class="d-flex align-items-center justify-content-between gap-2 mt-4">
+                                <p class="text-danger mb-0"><strong>( BDT 150 Taka Discount )</strong></p>
+                                <div class="d-flex align-items-center gap-4">
+                                    <h5>BDT 1550.00</h5>
+                                    <div class="wg-quantity">
+                                        <span class="btn-quantity btn-decrease">-</span>
+                                        <input class="quantity-product" type="text" name="qty" value="1">
+                                        <span class="btn-quantity btn-increase">+</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="text-end mt-2 mb-5">
+                        <button class="btn btn-square btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Next</button>
+                   </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -629,7 +898,7 @@
                             <div class="mb-3">
                                 <label class="form-label" for="cus_type">Customer Type</label>
 
-                                <select name="cus_type" id="cus_type" class="form-control">
+                                <select name="cus_type" id="cus_type" class="form-select">
                                     <option value="" selected>Ecommerce Type Customer</option>
                                 </select>
                             </div>
@@ -757,11 +1026,185 @@
         </div><!-- /.modal-dialog -->
     </div>
 
+    {{-- Order Processing --}}
+    <div class="offcanvas offcanvas-end show" tabindex="-1" id="offcanvasRight" style="width: 400px !important;" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+          <h5 id="offcanvasRightLabel">Order Details</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="cus_type"><strong>Customer Type </strong></label>
+
+                        <select name="cus_type" id="cus_type" class="form-select">
+                            <option value="" selected>Ecommerce Type Customer</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="cus_name"><strong>Customer Name </strong> <span class="text-danger"> *</span></label>
+                        <input type="text" id="cus_name" name="cus_name" class="form-control" />
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="cus_phone"><strong>Phone Number </strong> <span class="text-danger"> *</span></label>
+                        <input type="text" id="cus_phone" name="cus_phone" class="form-control" />
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="cus_email"><strong>Email ( Optional ) </strong> </label>
+                        <input type="text" id="cus_email" name="cus_email" class="form-control" />
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="cus_address"><strong>Customer Address </strong> <span class="text-danger"> *</span></label>
+
+                        <div class="input-addon-right">
+                            <textarea name="cus_address" class="form-control" id="cus_address" cols="30" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="map_location"><strong>Map Location </strong> <span class="text-danger"> *</span></label>
+
+                        <div class="input-addon-right">
+                            <textarea name="map_location" class="form-control" id="map_location" cols="30" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="" class="form-label"><strong>Save As</strong></label>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                                <label class="form-check-label" for="home">
+                                    Home
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                                <label class="form-check-label" for="work">
+                                    Work
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
+                                <label class="form-check-label" for="other">
+                                    Other
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="additional"><strong>Additional Note </strong> <span class="text-danger"> *</span></label>
+
+                        <div class="input-addon-right">
+                            <textarea name="additional" class="form-control" id="additional" cols="30" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="pickup_location"><strong>Pickup Location </strong></label>
+
+                        <select name="pickup_location" id="pickup_location" class="form-select" required>
+                            <option value="" selected disabled>Select Warehouse</option>
+                            <option >Banasree Warehouse</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="courier_agent"><strong>Assign Delivery Partner </strong></label>
+
+                        <select name="courier_agent" id="courier_agent" class="form-select" required>
+                            <option value="" selected disabled>Select Courier Agent</option>
+                            <option value="dd" data-image-url="{{ asset('public/admin/assets/images/steadfast.png') }}">SteadFast</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="shipping_date"><strong>Shipping Date </strong> </label>
+                        <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="flatpickr_date">
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="cus_email"><strong>Transaction ID ( Optional ) </strong> </label>
+                        <input type="text" id="cus_email" name="cus_email" class="form-control" />
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="amount"><strong>Advance Payment Amount </strong> </label>
+                        <input type="text" id="amount" name="advance_amount" class="form-control" />
+                    </div>
+
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                            <label class="form-check-label" for="home">
+                                <strong>Flat</strong>
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                            <label class="form-check-label" for="work">
+                                <strong>Percentage</strong>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="discount"><strong>Discount (Optional) </strong> </label>
+                        <input type="number" id="discount" name="discount" class="form-control" />
+                    </div>
+
+                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
+                        <label class="form-label" for="delivery_type"><strong>Delivery Type </strong> </label>
+                        <select name="delivery_type" id="delivery_type" class="form-select" required>
+                            <option value="" selected>ঢাকার ভিতরে ডেলিভারি ৮০ টাকা</option>
+                            <option value="">চট্টগ্রাম ভিতরে ডেলিভারি ৮০ টাকা</option>
+                            <option value="">ঢাকার বাহিরে ডেলিভারি ১৩০ টাকা</option>
+                        </select>
+                    </div>
+
+                    <div class="free_delivery mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="checkbox" id="free_delivery">
+                            <span><strong>Free Delivery</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="" style="margin-bottom: 180px;">
+                        <label class="form-label" for="cus_source">Customer Source</label>
+
+                        <select name="cus_source" id="cus_source" class="form-control cus_source">
+                            <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
+                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
+                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
+                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
+                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+
 @endsection
 
 
 @push('add-js')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -797,9 +1240,85 @@
             }
         });
     });
+
+    // Product Search
+    document.addEventListener('DOMContentLoaded', function () {
+        const product_search = document.getElementById('product_search');
+        const search_msg_show = document.getElementById('search_msg_show');
+    
+        product_search.addEventListener('input', function () {
+            if (this.value.trim() !== '') {
+                search_msg_show.classList.remove('d-none');
+            } else {
+                search_msg_show.classList.add('d-none');
+            }
+        });
+    });
+
+    // Window div scroll
+    document.addEventListener('DOMContentLoaded', function () {
+        const wrappers = document.querySelectorAll('.scroll-box');
+
+        function adjustHeight() {
+            const viewportHeight = window.innerHeight;
+
+            wrappers.forEach(wrapper => {
+                const rect = wrapper.getBoundingClientRect();
+                const availableHeight = viewportHeight - rect.top - 20;
+
+                if (availableHeight > 0) {
+                    wrapper.style.maxHeight = availableHeight + 'px';
+
+                    // Enable scroll only if content exceeds height
+                    if (wrapper.scrollHeight > availableHeight) {
+                        wrapper.style.overflowY = 'auto';
+                    } else {
+                        wrapper.style.overflowY = 'hidden';
+                    }
+                }
+            });
+        }
+
+        adjustHeight();
+        window.addEventListener('resize', adjustHeight);
+    });
+
+    // Product increase & increase
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.wg-quantity').forEach(wrapper => {
+            const input = wrapper.querySelector('.quantity-product');
+            const increaseBtn = wrapper.querySelector('.btn-increase');
+            const decreaseBtn = wrapper.querySelector('.btn-decrease');
+
+            increaseBtn.addEventListener('click', () => {
+                input.value = parseInt(input.value) + 1;
+            });
+
+            decreaseBtn.addEventListener('click', () => {
+                let current = parseInt(input.value);
+                if (current > 1) {
+                    input.value = current - 1;
+                }
+            });
+        });
+    });
 </script>
 
 <script>
+    $(function() {
+        $('#flatpickr_date').daterangepicker({
+            singleDatePicker: true,
+            timePicker: true,
+            timePicker24Hour: false,
+            timePickerIncrement: 1,
+            startDate: moment().startOf('hour'),
+            endDate: moment().startOf('hour').add(32, 'hour'),
+            locale: {
+                format: 'YYYY/MM/DD hh:mm A'
+            }
+        });
+    });
+
     document.querySelector('.btn_refresh').addEventListener('click', function () {
         const loader = document.querySelector('.loading_zone');
     
@@ -812,8 +1331,14 @@
         }, 2000);
     });
 
+
     //____ warranties_id Select2 ____//
-    $('#cus_source').select2({
+    $('.cus_source').select2({
+        templateResult: formatState,       
+        templateSelection: formatState, 
+    });
+
+    $('#courier_agent').select2({
         templateResult: formatState,       
         templateSelection: formatState, 
     });
@@ -830,7 +1355,7 @@
         }
 
         var $state = $(
-            '<span><img src="' + imageUrl + '" style="width: 35px; height: 35px; margin-right: 8px;" /> ' + state.text + '</span>'
+            '<span><img src="' + imageUrl + '" style="width: 30px; height: 30px; border-radius: 6px; margin-right: 8px;" /> ' + state.text + '</span>'
         );
         return $state;
     };

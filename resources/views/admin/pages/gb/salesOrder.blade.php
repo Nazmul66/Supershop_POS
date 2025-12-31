@@ -289,6 +289,62 @@
             color: #0b2545;
             background: #f8fafc;
         }
+
+        .order_calculation{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 250px;
+            background: #fff;
+        }
+
+
+        .custom-tooltip {
+            position: absolute;
+            width: 550px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            z-index: 9999;
+        }
+
+        .custom-tooltip.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .tooltip-content {
+            padding: 16px 18px;
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        /* .tooltip-content h6 {
+            margin-bottom: 6px;
+            font-weight: 600;
+        } */
+
+        .tooltip-arrow {
+            position: absolute;
+            left: -8px;            /* EXACT 8px gap */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid #ffffff;
+        }
+
+        .tooltip-trigger {
+            cursor: pointer;
+        }
     </style>
 @endpush
 
@@ -378,7 +434,10 @@
                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                     <div class="d-flex align-items-center gap-1">
                                         <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                        <div >
+                                            <svg  data-tooltip="tip1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark tooltip-trigger icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                        </div>
+
                                     </div>
         
                                     <div class="dropdown">
@@ -1026,11 +1085,12 @@
         </div><!-- /.modal-dialog -->
     </div>
 
+
     {{-- Order Processing --}}
-    <div class="offcanvas offcanvas-end show" tabindex="-1" id="offcanvasRight" style="width: 400px !important;" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
-          <h5 id="offcanvasRightLabel">Order Details</h5>
-          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <h3 id="offcanvasRightLabel">Order Details</h3>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
 
         <div class="offcanvas-body">
@@ -1180,7 +1240,7 @@
                         </div>
                     </div>
 
-                    <div class="" style="margin-bottom: 180px;">
+                    <div class="bg-secondary-transparent p-3 rounded-2" style="margin-bottom: 240px;">
                         <label class="form-label" for="cus_source">Customer Source</label>
 
                         <select name="cus_source" id="cus_source" class="form-control cus_source">
@@ -1195,7 +1255,84 @@
             </div>
         </div>
 
-        
+        <div class="order_calculation">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                        <span><strong>SubTotal</strong></span>
+                        <span><strong>BDT 2150.00</strong></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                        <span><strong>(-) Discount</strong></span>
+                        <span class="text-danger">- <strong>BDT 200.00</strong></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                        <span><strong>Delivery Fee</strong></span>
+                        <span class="text-success"><strong>BDT 130.00</strong></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                        <span><strong>(-) Advance Payment</strong></span>
+                        <span class="text-danger">- <strong>BDT 200.00</strong></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span><strong>Total Received</strong></span>
+                        <span><strong>BDT 1620.00</strong></span>
+                    </div>
+
+                    <div class="d-flex justify-content-end align-items-center gap-2">
+                        <button class="btn btn-square btn-outline-secondary" type="button" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
+                        <button class="btn btn-square btn-secondary" type="button">Checkout & Proceed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Custom Tooltips --}}
+    <div class="custom-tooltip" id="tip1">
+        <div class="tooltip-arrow"></div>
+        <div class="tooltip-content">
+            <div class="mb-0">
+                <div class="table-responsive">
+                    <table class="table table-nowrap mb-0">
+                        <thead>
+                            <tr>
+                                <th>Sku</th>
+                                <th>Image</th>
+                                <th>
+                                    <span style="text-wrap: auto;">
+                                        Product Name
+                                    </span>
+                                </th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Total Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>A000268</td>
+                                <td>
+                                    <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" width="20">
+                                </td>
+                                <td>
+                                    <span style="text-wrap: auto;">
+                                        Safawi/kalmi Dates (A Grade) 1kg Safawi/kalmi Dates (A Grade) 1kg
+                                    </span>
+                                </td>
+                                <td>BDT 750</td>
+                                <td>3 kg</td>
+                                <td>BDT 2058.75 <del class="ms-1">BDT 2250</del></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
 @endsection
@@ -1207,6 +1344,50 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
 <script>
+    // Custom Tooltips
+    document.addEventListener('DOMContentLoaded', function () {
+        const triggers = document.querySelectorAll('.tooltip-trigger');
+        const GAP = 25;
+
+        triggers.forEach(trigger => {
+            const tooltip = document.getElementById(trigger.dataset.tooltip);
+            let hideTimeout;
+
+            function showTooltip() {
+                clearTimeout(hideTimeout);
+
+                const rect = trigger.getBoundingClientRect();
+                const tooltipHeight = tooltip.offsetHeight;
+
+                const top = rect.top + window.scrollY + rect.height / 2 - tooltipHeight / 2;
+                const left = rect.right / 2 + window.scrollX / 2 + GAP;
+
+                tooltip.style.top = `${top}px`;
+                tooltip.style.left = `${left}px`;
+
+                tooltip.classList.add('show');
+            }
+
+            function hideTooltip() {
+                hideTimeout = setTimeout(() => {
+                    tooltip.classList.remove('show');
+                }, 50); // small delay to allow cursor move
+            }
+
+            // Hover on icon
+            trigger.addEventListener('mouseenter', showTooltip);
+            trigger.addEventListener('mouseleave', hideTooltip);
+
+            // Keep open when hovering tooltip itself
+            tooltip.addEventListener('mouseenter', () => {
+                clearTimeout(hideTimeout);
+            });
+
+            tooltip.addEventListener('mouseleave', hideTooltip);
+        });
+    });
+
+
     document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.getElementById('cus_name');
         const createBox = document.querySelector('.cus_create_box');

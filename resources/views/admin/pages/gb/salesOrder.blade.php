@@ -52,9 +52,9 @@
             cursor: pointer;
         }
         .flatpickr-input {
-    pointer-events: auto !important;
-    background-color: #fff !important;
-}
+            pointer-events: auto !important;
+            background-color: #fff !important;
+        }
         .order_processing{
             width: 100%;
             max-height: 320px; 
@@ -298,52 +298,9 @@
             height: 250px;
             background: #fff;
         }
-
-
-        .custom-tooltip {
-            position: absolute;
-            width: 550px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.25s ease;
-            z-index: 9999;
-        }
-
-        .custom-tooltip.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .tooltip-content {
-            padding: 16px 18px;
-            font-size: 14px;
-            color: #1f2937;
-        }
-
-        /* .tooltip-content h6 {
-            margin-bottom: 6px;
-            font-weight: 600;
-        } */
-
-        .tooltip-arrow {
-            position: absolute;
-            left: -8px;            /* EXACT 8px gap */
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent;
-            border-right: 8px solid #ffffff;
-        }
-
-        .tooltip-trigger {
-            cursor: pointer;
+        .copyright-footer {
+            padding: 12px 24px;
+            display: none !important;
         }
     </style>
 @endpush
@@ -689,8 +646,9 @@
                         </div>
                     </div>
 
-                    <div id="search_msg_show" class="mt-2 d-none">
-                        <strong><span>"Items founds in product search: 0"</span></strong>
+                    <div id="search_msg_show" class="mt-2 d-none d-flex align-items-center justify-content-between gap-3">
+                        <strong><span>0 Item founds in "sd"</span></strong>
+                        <button type="button" class="text-danger border-0 bg-transparent">Clear Search</button>
                     </div>
                 </div>
 
@@ -764,7 +722,7 @@
         </div>
 
         <div class="col-lg-5">
-            <div class="card">
+            <div class="card mb-2">
                 <div class="card-header">
                     <h2>Cart (0)</h2>
                 </div>
@@ -1493,7 +1451,7 @@
             timePicker24Hour: false,
             timePickerIncrement: 1,
             startDate: moment().startOf('hour'),
-            endDate: moment().startOf('hour').add(32, 'hour'),
+            endDate: moment().startOf('hour'),
             locale: {
                 format: 'YYYY/MM/DD hh:mm A'
             }

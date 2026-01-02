@@ -261,7 +261,7 @@
                 {{-- Table Part Start --}}
                 <div class="mt-5">
                     <div class="table-responsive">
-                        <table class="table table-nowrap mb-0">
+                        <table class="table table-bordered table-nowrap mb-0">
                             <thead>
                                 <tr>
                                     <th>Sku</th>

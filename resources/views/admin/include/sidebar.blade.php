@@ -97,7 +97,7 @@
                 </li>
 
 
-                 {{-- Inventory --}}
+                {{-- Inventory --}}
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Inventory</h6>
                     <ul>
@@ -125,6 +125,16 @@
                     </ul>
                 </li>
 
+                {{-- Order Management --}}
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Order Management</h6>
+                    <ul>
+                        <li class="@yield('faq')">
+                            <a href="{{ route('admin.faq.index') }}" >
+                            <i class="ti ti-shopping-bag-check fs-16 me-2"></i><span>Manage Order</span></a>
+                        </li>
+                    </ul>
+                </li>
 
                 {{-- Content (CMS) --}}
                 <li class="submenu-open">

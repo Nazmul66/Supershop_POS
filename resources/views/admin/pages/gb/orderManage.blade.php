@@ -35,6 +35,18 @@
             background-color: #ddebf0 !important;
             color: #2892af !important;
         }
+        .bg-input-field{
+            background: #F7F7F7;
+            padding: 8px;
+        }
+        input.form_inputs{
+            border: 1px solid transparent !important;
+            background: #F7F7F7;
+        }
+        input.form_inputs:focus{
+            border: 1px solid transparent !important;
+            background: #F7F7F7;
+        }
         .search_box{
             position: relative;
             width: 260px;
@@ -91,7 +103,26 @@
             height: 18px;
             border: 1px solid #8c8686 !important;
         }
-
+        .form-check-input {
+            border: 1px solid #000;
+        }
+        .form-check-input[type=checkbox] {
+            border-radius: 0px;
+        }
+        .form-check-input:focus {
+            border: 1px solid #000;
+            border: 1px solid #FE9F43;
+        }
+        .calender_icon{
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #9292a9;
+            cursor: pointer;
+            background: #F7F7F7;
+        }
 
         .table thead tr th{
             font-size: 13px !important;
@@ -101,6 +132,12 @@
         }
         .table thead tr th{
             font-weight: 700;
+        }
+        .popup_table thead tr th,
+        .popup_table tbody tr td{
+            font-size: 10px !important;
+            font-weight: 600;
+            padding: .5rem .5rem;
         }
         @media (min-width: 1240px) and (max-width: 1560px) {
             .table-responsive {
@@ -122,7 +159,7 @@
 @section('body-content')
 
     <!-- Breadcrumb -->
-    <div class="page-header">
+    <div class="page-header mb-2">
         <div class="add-item d-flex">
             <div class="page-title">
                 <h2 class="fw-bold">Orders</h2>
@@ -145,13 +182,13 @@
     </div>
 
     {{-- Search Box --}}
-    <div class="d-flex align-items-center gap-2 mb-2">
+    <div class="search_container d-flex align-items-center gap-2 mb-2">
         <div class="search_box">
             <input type="text" placeholder="Search" name="search_filter" class="search_filter" id="search_filter">
             <i class="ti ti-search"></i>
         </div>
 
-        <button type="button" class="btn btn-square btn-secondary d-flex align-items-center gap-2"><i class="ti ti-filter" style="font-size: 20px;"></i> <span class="filter_name">Filter</span></button>
+        <button type="button" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer" aria-controls="offcanvasExample" class="btn btn-square btn-secondary d-flex align-items-center gap-2"><i class="ti ti-filter" style="font-size: 20px;"></i> <span class="filter_name">Filter</span></button>
     </div>
 
     {{-- Tab Button --}}
@@ -172,7 +209,7 @@
         <div class="row">
             <div class="mt-0">
                 <div class="table-responsive pb-3">
-                    <table class="table table-nowrap mb-0">
+                    <table class="table table-hover table-nowrap mb-0">
                         <thead>
                             <tr>
                                 <th>
@@ -325,7 +362,7 @@
         <div class="tooltip-content">
             <div class="mb-0">
                 <div class="table-responsive">
-                    <table class="table table-nowrap mb-0">
+                    <table class="popup_table table table-hover table-nowrap mb-0">
                         <thead>
                             <tr>
                                 <th>Sku</th>
@@ -360,6 +397,249 @@
                 </div>
             </div>
         </div>
+    </div>
+
+
+    {{-- Filter Drawer Option --}}
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="filterDrawer" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div> <!-- end offcanvas-header-->
+
+        <div class="offcanvas-body">
+           <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Delivery Types</h4>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Regular
+                        </label>
+                    </div>
+    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Express
+                        </label>
+                    </div>
+    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            In-Store Pickup
+                        </label>
+                    </div>
+                </div>
+           </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Order Status</h4>
+
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Pending
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            On Hold
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Approved
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Approved
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Processing
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Ready To Ship
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            In-Transit
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Delivered
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Flagged
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Cancelled
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Order Sources</h4>
+
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Phone Call
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Facebook
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Messenger
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Whatsapp
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Instagram
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Tiktok
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Offline
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Up Sell
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Website
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Live Chat
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Telesales
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Others
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Creation Date Range</h4>
+
+                <div class="bg-input-field">
+                    <div class="position-relative">
+                        <input type="text" id="creation_date" name="creation_date" class="form-control form_inputs" placeholder="Select date range" />
+                        <label for="creation_date" class="calender_icon">
+                            <i class="ti ti-calendar-event"></i>
+                        </label>
+                    </div>
+                </div>
+           </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Shipping Date Range</h4>
+
+                <div class="bg-input-field">
+                    <div class="position-relative">
+                        <input type="text" id="shipping_date" name="shipping_date" class="form-control form_inputs" placeholder="Select date range" />
+                        <label for="shipping_date" class="calender_icon">
+                            <i class="ti ti-calendar-event"></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Transition Date Range</h4>
+
+                <div class="bg-input-field">
+                    <div class="position-relative">
+                        <input type="text" id="transition_date" name="transition_date" class="form-control form_inputs" placeholder="Select date range" />
+                        <label for="transition_date" class="calender_icon">
+                            <i class="ti ti-calendar-event"></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end offcanvas-body-->
     </div>
     
 @endsection
@@ -414,6 +694,51 @@
 
             tooltip.addEventListener('mouseleave', hideTooltip);
         });
+    });
+
+    // Multiple Date Range
+    $(function() {
+        function initDateRangePicker(selector, position){
+            var start = moment().subtract(29, 'days');
+            var end = moment();
+        
+            function cb(start, end) {
+                $(selector).find('span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+        
+            $(selector).daterangepicker({
+                timePicker: true,
+                drops: position,
+                autoUpdateInput: false,
+                startDate: moment(),
+                endDate: moment(),
+                locale: {
+                    format: 'MMMM D/YYYY hh:mm A'
+                },
+                ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+
+            $(selector).on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MMMM D, YYYY hh:mm A') + ' - ' + picker.endDate.format('MMMM D, YYYY hh:mm A'));
+            });
+
+            $(selector).on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+        
+            cb(start, end);
+        }
+        // Initialize both inputs
+        initDateRangePicker('#creation_date', "up");
+        initDateRangePicker('#shipping_date', "up");
+        initDateRangePicker('#transition_date', "up");
     });
 
     // Copy Order Id function

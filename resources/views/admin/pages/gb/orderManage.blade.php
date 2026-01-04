@@ -39,13 +39,17 @@
             background: #F7F7F7;
             padding: 8px;
         }
-        input.form_inputs{
+        input.form_inputs,
+        .select_form{
             border: 1px solid transparent !important;
             background: #F7F7F7;
+            color: #6a7178;
         }
-        input.form_inputs:focus{
+        input.form_inputs:focus,
+        .select_form:focus{
             border: 1px solid transparent !important;
             background: #F7F7F7;
+            color: #6a7178;
         }
         .search_box{
             position: relative;
@@ -57,12 +61,46 @@
             height: 40px;
             padding-left: 15px;
             color: #212B36;
+            padding-right: 60px;
         }
         .search_box .search_filter::-webkit-input-placeholder,
         .search_box .search_filter::-moz-placeholder,
         .search_box .search_filter::-ms-input-placeholder{
             color: #CACACA;
         }
+        .search_box #clear_search_filter{
+            position: absolute;
+            top: 50%;
+            right: 42px;
+            transform: translate(0, -50%);
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .search_sub_container{
+            position: relative;
+        }
+        .search_sub_container .cus_history_box{
+            position: absolute;
+            top: 40px;
+            left: 0px;
+            padding: 20px 12px 12px;
+            border-radius: 6px;
+            background: #FFF;
+            z-index: 50;
+            width: 100%;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+        }
+        .search_sub_container .cus_history_box.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
         .search_box .ti-search{
             position: absolute;
             top: 0;
@@ -98,6 +136,20 @@
             font-size: 20px;
             cursor: pointer;
         }
+        .user_icon{
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50px;
+            background: #e0eef9;
+            margin: 0 auto 12px;
+        }
+        .user_icon .ti-user{
+            font-size: 30px;
+            color: #212B36;
+        }
         th .checkboxs .checkmarks, td .checkboxs .checkmarks {
             width: 18px;
             height: 18px;
@@ -122,6 +174,13 @@
             color: #9292a9;
             cursor: pointer;
             background: #F7F7F7;
+        }
+        .form_labels{
+            color: #BEC1C4;
+        }
+        .select2-container--default .select2-selection--single {
+            border: 1px solid transparent !important;
+            background-color: transparent !important;
         }
 
         .table thead tr th{
@@ -149,6 +208,9 @@
                 overflow-x: auto !important;
             }
         }
+
+
+
     </style>
 @endpush
 
@@ -183,9 +245,43 @@
 
     {{-- Search Box --}}
     <div class="search_container d-flex align-items-center gap-2 mb-2">
-        <div class="search_box">
-            <input type="text" placeholder="Search" name="search_filter" class="search_filter" id="search_filter">
-            <i class="ti ti-search"></i>
+        <div class="search_sub_container">
+            <div class="search_box">
+                <input type="text" placeholder="Search" name="search_filter" class="search_filter" id="search_filter">
+                <i class="ti ti-search" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-dark" data-bs-placement="top" data-bs-original-title="Search by Customer Name, Invoice No, Phone Number"></i>
+
+                <i class="ti ti-x d-none" id="clear_search_filter"></i>
+            </div>
+
+            
+            <div class="cus_history_box">
+                <h6 class="text-success mb-3">Showing <span>1</span> result of "<span id="rt_input">GB-412536</span>"</h6>
+
+                <div class="border border-1 p-3">
+                    {{-- <div class="">
+                        <div class="user_icon">
+                            <i class="ti ti-user"></i>
+                        </div>
+                        <p class="text-center mb-2">Sorry! Data not found.</p>
+                    </div> --}}
+
+                    <div class="border-bottom pb-1 mb-3">
+                        <a href="" class="d-block">
+                            <h5 class="mb-1">Kabir Hassan</h5>
+                            <span class="badge badge-xs bg-soft-info">GB-467545</span>
+                            <p class="mt-1">01765201685</p>
+                        </a>
+                    </div>
+    
+                    <div class="border-bottom pb-1 mb-3">
+                        <a href="" class="d-block">
+                            <h5 class="mb-1">Kabir Hassan</h5>
+                            <span class="badge badge-xs bg-soft-info">GB-465845</span>
+                            <p class="mt-1">01765201685</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <button type="button" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer" aria-controls="offcanvasExample" class="btn btn-square btn-secondary d-flex align-items-center gap-2"><i class="ti ti-filter" style="font-size: 20px;"></i> <span class="filter_name">Filter</span></button>
@@ -204,7 +300,7 @@
         <a class="nav-link" data-bs-toggle="tab" role="tab" href="#nav-offers" aria-selected="false" tabindex="-1">Cancelled</a>
     </nav>
 
-    {{-- Tab Button --}}
+    {{-- Table Responsive --}}
     <div class="mb-0 border-1">
         <div class="row">
             <div class="mt-0">
@@ -284,7 +380,7 @@
                                         <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
                                         <div class="d-flex align-items-center gap-1 mb-1">
                                             <span class="badge badge-sm bg-primary">New</span>
-                                            <i class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
+                                            <i data-bs-toggle="offcanvas" data-bs-target="#customer_history" aria-controls="offcanvasRight" class="ti ti-info-circle cursor-pointer tooltips-triggers" style="font-size: 18px;"></i>
                                         </div>
 
                                         <div class="d-flex align-items-center gap-2 mb-1">
@@ -358,7 +454,7 @@
 
     {{-- Custom Tooltips --}}
     <div class="custom-tooltip" id="tip1">
-        <div class="tooltip-arrow"></div>
+        <div class="tooltip-arrows"></div>
         <div class="tooltip-content">
             <div class="mb-0">
                 <div class="table-responsive">
@@ -403,7 +499,7 @@
     {{-- Filter Drawer Option --}}
     <div class="offcanvas offcanvas-start" tabindex="-1" id="filterDrawer" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+            <h4 class="offcanvas-title" id="offcanvasExampleLabel">Order Filter</h4>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div> <!-- end offcanvas-header-->
 
@@ -639,6 +735,403 @@
                     </div>
                 </div>
             </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Invoice Range</h4>
+
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-input-field ">
+                        <label for="" class="form_labels">Starting Invoice</label>
+                        <input type="text" id="start_invoice" name="start_invoice" class="form-control form_inputs" placeholder="" />
+                    </div>
+
+                    <div class="bg-input-field ">
+                        <label for="" class="form_labels">Ending Invoice</label>
+                        <input type="text" id="end_invoice" name="end_invoice" class="form-control form_inputs" placeholder="" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Total Order Value</h4>
+
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-input-field ">
+                        <label for="" class="form_labels">Min</label>
+                        <input type="number" id="min_order_value" min="1" name="min_order_value" class="form-control form_inputs" placeholder="" />
+                    </div>
+
+                    <div class="bg-input-field ">
+                        <label for="" class="form_labels">Max</label>
+                        <input type="number" id="max_order_value" min="1" name="max_order_value" class="form-control form_inputs" placeholder="" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Total Product Count</h4>
+
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-input-field ">
+                        <label for="" class="form_labels">Min</label>
+                        <input type="number" id="min_product_count" min="1" name="min_product_count" class="form-control form_inputs" placeholder="" />
+                    </div>
+
+                    <div class="bg-input-field ">
+                        <label for="" class="form_labels">Max</label>
+                        <input type="number" id="max_product_count" min="1" name="max_product_count" class="form-control form_inputs" placeholder="" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Delivery Partner</h4>
+
+                <div class="bg-input-field ">
+                    <select name="courier_agent" id="courier_agent" class="form-select" required>
+                        <option value="" selected disabled>Select Courier Agent</option>
+                        <option value="dd" data-image-url="{{ asset('public/admin/assets/images/steadfast.png') }}">SteadFast</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Pick Up Address</h4>
+
+                <div class="bg-input-field ">
+                    <select name="pickup_location" id="pickup_location" class="form-select select_form" required>
+                        <option value="" selected disabled>Select Warehouse</option>
+                        <option >Banasree Warehouse</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">By User</h4>
+
+                <div class="bg-input-field ">
+                    <select name="agent_user" id="agent_user" class="form-select" required>
+                        <option value="" selected disabled>Select User</option>
+                        <option value="dd" data-image-url="{{ asset('public/admin/assets/images/steadfast.png') }}">SteadFast</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Customer Tag</h4>
+
+                <div class="bg-input-field mb-1">
+                    <select name="cus_tag" id="cus_tag" class="form-control select_form">
+                        <option value="" selected disabled>Select Option</option>
+                        <option value="new">New</option>
+                        <option value="regular">Regular</option>
+                        <option value="vip">VIP</option>
+                        <option value="corporate">Corporate</option>
+                        <option value="employee">Employee</option>
+                        <option value="probashi">Probashi</option>
+                    </select>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Select All
+                    </label>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Internal Notes</h4>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Available
+                        </label>
+                    </div>
+    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Unavailable
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Discount (Order & Product)</h4>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Available
+                        </label>
+                    </div>
+    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Unavailable
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Advance Payments & Payments</h4>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Available
+                        </label>
+                    </div>
+    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Unavailable
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Invoice Print</h4>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Already Printed
+                        </label>
+                    </div>
+    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Not Yet Printed
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Customer Additional Info</h4>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Available
+                        </label>
+                    </div>
+    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Unavailable
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <button type="button" class="btn btn-danger">Reset Filter</button>
+                    <button type="button" class="btn btn-secondary">Apply Filter</button>
+                </div>
+            </div>
+        </div> <!-- end offcanvas-body-->
+    </div>
+
+
+    <!-- Customer all history -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="customer_history" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel">Customer Overview</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div> <!-- end offcanvas-header-->
+
+        <div class="offcanvas-body">
+            {{-- Customer Details --}}
+            <div class="card customer_details">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <span class="mb-1 d-block" style="font-size: 12px;">Customer ID</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <h5>C-415236</h5>
+                            <span class="badge badge-sm bg-primary">New</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="mb-1 d-block" style="font-size: 12px;">Customer Name</span>
+                        <h5>Nazmul Hassan</h5>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="mb-1 d-block" style="font-size: 12px;">Phone Number</span>
+                        <h5>+8801542695148</h5>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="mb-1 d-block" style="font-size: 12px;">Customer Address</span>
+                        <h5>K-39/5, kuril vatara - 1229</h5>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="mb-1 d-block" style="font-size: 12px;">Map Location</span>
+                        <h5> Ranks Business Centre, Plot-Ka-218/1-2, Pragati Sarani Main Road, Kuril, Dhaka-1229.</h5>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Delivery Partner --}}
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5><strong>Delivery Success Rate</strong></h5>
+                        <a data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="Refresh" type="button" class="btn btn-square btn-secondary btn_refresh"><i style="line-height: 0; font-size: 16px;" class="ti ti-rotate"></i></a>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between gap-1 mb-3">
+                        <div class="progress progress-sm" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 100%; background: #FF0000;">
+                            <div class="progress-bar bg-secondary" style="width: 88%"></div>
+                        </div>
+                        <span id="percentage">88.00%</span>
+                    </div>
+                    
+                    <p style="font-size: 12px;">Updated On: Sep 22,2025, 9:45 P.M</p>
+
+                    <div class="delivery_progress">
+                        <div class="loading_zone d-none">
+                            <div class="load-position">
+                                <span class="arrow_loader"></span>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-nowrap mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Partner</th>
+                                        <th>Total</th>
+                                        <th>Delivered</th>
+                                        <th class="text-danger">Undelivered</th>
+                                        <th>Percentage(%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Steadfast</td>
+                                        <td>23</td>
+                                        <td>21</td>
+                                        <td>2</td>
+                                        <td>91.30%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pathao</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>0</td>
+                                        <td>100.00%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Redx</td>
+                                        <td>1</td>
+                                        <td>0</td>
+                                        <td>1</td>
+                                        <td>00.00%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td>25</td>
+                                        <td>22</td>
+                                        <td>3</td>
+                                        <td>88.00%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Customer Order History --}}
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <h5>Order History</h5>
+                            <span class="badge badge-md bg-primary">3</span>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <h5>Delivered</h5>
+                            <span class="badge badge-md bg-primary">3</span>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <h5>Flagged</h5>
+                            <span class="badge badge-md bg-primary">0</span>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <h5>Delivered</h5>
+                            <span class="badge badge-md bg-primary">3</span>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        {{-- 1st Order History --}}
+                        {{-- <div class="border-bottom pb-2 mb-3">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="d-flex align-items-center gap-1">
+                                    <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                </div>
+
+                                <button class="btn btn-soft-info"> Delivered</button>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span>BDT 2250.00</span>
+                                <span>Sep 22,2025 9:45 P.M</span>
+                            </div>
+                        </div> --}}
+
+                        {{-- 2nd Order History --}}
+                        {{-- <div class="border-bottom pb-2 mb-3">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="d-flex align-items-center gap-1">
+                                    <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                </div>
+
+                                <button class="btn btn-soft-info"> Delivered</button>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span>BDT 2075.50</span>
+                                <span>Sep 29,2025, 11:45 P.M</span>
+                            </div>
+                        </div> --}}
+
+                        {{-- Delivery Record --}}
+                        <div class="mt-5">
+                            <div class="user_icon">
+                                <i class="ti ti-package"></i>
+                            </div>
+                            <h6 class="text-center mb-2">No Order History ?</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div> <!-- end offcanvas-body-->
     </div>
     
@@ -650,6 +1143,102 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
+
+<script>
+        document.querySelector('.btn_refresh').addEventListener('click', function () {
+            const loader = document.querySelector('.loading_zone');
+        
+            // show loader
+            loader.classList.remove('d-none');
+        
+            // optional: hide again after loading (example)
+            setTimeout(() => {
+                loader.classList.add('d-none');
+            }, 2000);
+        });
+
+        // Clear Search Filer
+        document.addEventListener('DOMContentLoaded', function () {
+            const clear_search_filter = document.getElementById('clear_search_filter');
+            const searchInput = document.getElementById('search_filter');
+            const historyBox = document.querySelector('.cus_history_box');
+        
+            clear_search_filter.addEventListener('click', function () {
+                searchInput.value = "";
+                historyBox.classList.remove('show');
+                clear_search_filter.classList.add('d-none');
+            });
+        });
+
+
+         // Search Filer
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('search_filter');
+            const rt_input = document.getElementById('rt_input');
+            const historyBox = document.querySelector('.cus_history_box');
+            const clear_search_filter = document.getElementById('clear_search_filter');
+        
+            searchInput.addEventListener('input', function () {
+                const value = this.value.trim();
+
+                if (this.value.trim() !== '') {
+                    clear_search_filter.classList.remove('d-none');
+                    historyBox.classList.add('show');
+                    rt_input.innerText = value; 
+                    
+                } else {
+                    clear_search_filter.classList.add('d-none');
+                    historyBox.classList.remove('show');
+                }
+            });
+
+            searchInput.addEventListener('focus', function () {
+                if (this.value.trim() !== '') {
+                    // clear_search_filter.classList.add('d-none');
+                    historyBox.classList.add('show');
+                    rt_input.innerText = value; 
+                } else {
+                    // clear_search_filter.classList.remove('d-none');
+                    historyBox.classList.remove('show');
+                }
+            });
+        
+            // Optional: hide box when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.search_sub_container')) {
+                    historyBox.classList.remove('show');
+                }
+            });
+        });
+        
+
+        $('#agent_user').select2({
+            templateResult: formatState,       
+            templateSelection: formatState, 
+        });
+
+        $('#courier_agent').select2({
+            templateResult: formatState,       
+            templateSelection: formatState, 
+        });
+
+        function formatState (state) {
+            if (!state.id) {
+                return state.text; // Return text for disabled option
+            }
+
+            var imageUrl = $(state.element).data('image-url'); // Access image URL from data attribute
+
+            if (!imageUrl) {
+                return state.text; // Return text if no image URL is available
+            }
+
+            var $state = $(
+                '<span><img src="' + imageUrl + '" style="width: 30px; height: 30px; border-radius: 6px; margin-right: 8px;" /> ' + state.text + '</span>'
+            );
+            return $state;
+        };
+</script>
 
 <script>
 

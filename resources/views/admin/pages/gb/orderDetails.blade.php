@@ -75,20 +75,6 @@
         .payment_action .ti-plus{
             font-size: 16px;
         }
-        .user_icon{
-            width: 65px;
-            height: 65px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50px;
-            background: #b7cff6;
-            margin: 0 auto 12px;
-        }
-        .user_icon .ti-credit-card{
-            font-size: 30px;
-            color: #212B36;
-        }
         .customer_details{
             position: relative;
         }
@@ -96,65 +82,6 @@
             position: absolute;
             top: 15px;
             right: 15px;
-        }
-        .user_icon{
-            width: 65px;
-            height: 65px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50px;
-            background: #b7cff6;
-            margin: 0 auto 12px;
-        }
-        .user_icon .ti-user,
-        .user_icon .ti-package{
-            font-size: 30px;
-            color: #212B36;
-        }
-        .delivery_progress {
-            position: relative;
-        }
-        .loading_zone{
-            position: absolute; 
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.6);
-
-        }
-        .loading_zone .load-position{
-            position: absolute;
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%);
-        }
-        .arrow_loader {
-            width: 48px;
-            height: 48px;
-            display: inline-block;
-            position: relative;
-            border-width: 3px 2px 3px 2px;
-            border-style: solid dotted solid dotted;
-            border-color: #de3500 rgba(255, 255, 255,0.3) #3EB780 rgba(151, 107, 93, 0.3);
-            border-radius: 50%;
-            box-sizing: border-box;
-            animation: 1s rotate linear infinite;
-        }
-        .arrow_loader:before , .arrow_loader:after{
-            content: '';
-            top: 0;
-            left: 0;
-            position: absolute;
-            border: 10px solid transparent;
-            border-bottom-color:#3EB780;
-            transform: translate(-10px, 19px) rotate(-35deg);
-        }
-        .arrow_loader:after {
-            border-color: #de3500 #0000 #0000 #0000 ;
-            transform: translate(32px, 3px) rotate(-35deg);
-        }
-        @keyframes rotate {
-            100%{    transform: rotate(360deg)}
         }
     </style>
 @endpush

@@ -184,22 +184,6 @@
             visibility: visible;
             transform: translateY(0);
         }
-        .user_icon{
-            width: 65px;
-            height: 65px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50px;
-            background: #b7cff6;
-            margin: 0 auto 12px;
-        }
-        .user_icon .ti-user,
-        .user_icon .ti-basket,
-        .user_icon .ti-package{
-            font-size: 30px;
-            color: #212B36;
-        }
         .search_form_box{
            position: relative;
         }
@@ -647,8 +631,8 @@
                     </div>
 
                     <div id="search_msg_show" class="mt-2 d-none d-flex align-items-center justify-content-between gap-3">
-                        <strong><span>0 Item founds in "sd"</span></strong>
-                        <button type="button" class="text-danger border-0 bg-transparent">Clear Search</button>
+                        <strong><span>0 Item founds in "<span id="rt_input"></span>"</span></strong>
+                        <button type="button" id="clear_search" class="text-danger border-0 bg-transparent">Clear Search</button>
                     </div>
                 </div>
 
@@ -1010,6 +994,10 @@
                                 <select name="cus_tag" id="cus_tag" class="form-control">
                                     <option value="new" selected>New</option>
                                     <option value="regular">Regular</option>
+                                    <option value="vip">VIP</option>
+                                    <option value="corporate">Corporate</option>
+                                    <option value="employee">Employee</option>
+                                    <option value="probashi">Probashi</option>
                                 </select>
                             </div>
                         </div>
@@ -1252,7 +1240,7 @@
 
     {{-- Custom Tooltips --}}
     <div class="custom-tooltip" id="tip1">
-        <div class="tooltip-arrow"></div>
+        <div class="tooltip-arrows"></div>
         <div class="tooltip-content">
             <div class="mb-0">
                 <div class="table-responsive">
@@ -1355,7 +1343,8 @@
             if (this.value.trim() === '01833220886') {
                 historyBox.classList.add('show');
                 createBox.classList.remove('show');
-            } else {
+            } 
+            else {
                 historyBox.classList.remove('show');
                 createBox.classList.add('show');
             }
@@ -1365,7 +1354,8 @@
             if (this.value.trim() === '01833220886') {
                 historyBox.classList.add('show');
                 createBox.classList.remove('show');
-            } else {
+            } 
+            else {
                 historyBox.classList.remove('show');
                 createBox.classList.add('show');
             }
@@ -1383,14 +1373,31 @@
     // Product Search
     document.addEventListener('DOMContentLoaded', function () {
         const product_search = document.getElementById('product_search');
+        const rt_input = document.getElementById('rt_input');
         const search_msg_show = document.getElementById('search_msg_show');
     
         product_search.addEventListener('input', function () {
+            const value = this.value.trim();
+
             if (this.value.trim() !== '') {
                 search_msg_show.classList.remove('d-none');
+                rt_input.innerText = value;
             } else {
                 search_msg_show.classList.add('d-none');
             }
+        });
+    });
+
+
+    // Clear Product Search
+    document.addEventListener('DOMContentLoaded', function () {
+        const clear_search = document.getElementById('clear_search');
+        const product_search = document.getElementById('product_search');
+        const search_msg_show = document.getElementById('search_msg_show');
+    
+        clear_search.addEventListener('click', function () {
+            product_search.value = "";
+            search_msg_show.classList.add('d-none');
         });
     });
 

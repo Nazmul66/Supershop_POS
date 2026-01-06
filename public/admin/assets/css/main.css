@@ -688,3 +688,36 @@ input.form-select::-ms-input-placeholder {
     font-size: 30px;
     color: #212B36;
 }
+
+.selected_all .badge {
+    font-size: 10px;
+    border-radius: 6px;
+}
+
+.selected_all i {
+    font-size: 12px;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #0B7267 !important;
+    border: 1px solid #fff !important;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    border-right: 1px solid #fff!important;
+    color: #FFF !important;
+    font-size: 12px;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover, .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:focus {
+    background-color: #0B7267 !important;
+    color: #FFF !important;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__display {
+    font-size: 12px;
+}
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: 1px solid transparent !important;
+    background: transparent !important;
+}
+.select2-container--default .select2-selection--multiple {
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+}

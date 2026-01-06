@@ -9,9 +9,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="{{ asset('public/admin/assets/css/select2.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/daterangepicker.css') }}" />
 
     <style>
         body{
@@ -208,9 +208,6 @@
                 overflow-x: auto !important;
             }
         }
-
-
-
     </style>
 @endpush
 
@@ -248,7 +245,7 @@
         <div class="search_sub_container">
             <div class="search_box">
                 <input type="text" placeholder="Search" name="search_filter" class="search_filter" id="search_filter">
-                <i class="ti ti-search" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-dark" data-bs-placement="top" data-bs-original-title="Search by Customer Name, Invoice No, Phone Number"></i>
+                <i class="ti ti-search" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-dark" data-bs-placement="top" data-bs-original-title="Search by Customer Name, Order Id, Phone Number, Email, "></i>
 
                 <i class="ti ti-x d-none" id="clear_search_filter"></i>
             </div>
@@ -380,7 +377,7 @@
                                         <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
                                         <div class="d-flex align-items-center gap-1 mb-1">
                                             <span class="badge badge-sm bg-primary">New</span>
-                                            <i data-bs-toggle="offcanvas" data-bs-target="#customer_history" aria-controls="offcanvasRight" class="ti ti-info-circle cursor-pointer tooltips-triggers" style="font-size: 18px;"></i>
+                                            <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
                                         </div>
 
                                         <div class="d-flex align-items-center gap-2 mb-1">
@@ -509,22 +506,22 @@
 
                 <div class="d-flex align-items-center gap-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="regular">
+                        <label class="form-check-label" for="regular">
                             Regular
                         </label>
                     </div>
     
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="express">
+                        <label class="form-check-label" for="express">
                             Express
                         </label>
                     </div>
     
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="in-Store">
+                        <label class="form-check-label" for="in-Store">
                             In-Store Pickup
                         </label>
                     </div>
@@ -536,71 +533,64 @@
 
                 <div class="d-flex align-items-center flex-wrap gap-2">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="pending">
+                        <label class="form-check-label" for="pending">
                             Pending
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Hold">
+                        <label class="form-check-label" for="Hold">
                             On Hold
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Approved">
+                        <label class="form-check-label" for="Approved">
                             Approved
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Approved
-                        </label>
-                    </div>
-
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Processing">
+                        <label class="form-check-label" for="Processing">
                             Processing
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="ready_to_ship">
+                        <label class="form-check-label" for="ready_to_ship">
                             Ready To Ship
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="in-Transit">
+                        <label class="form-check-label" for="in-Transit">
                             In-Transit
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Delivered">
+                        <label class="form-check-label" for="Delivered">
                             Delivered
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Flagged">
+                        <label class="form-check-label" for="Flagged">
                             Flagged
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Cancelled">
+                        <label class="form-check-label" for="Cancelled">
                             Cancelled
                         </label>
                     </div>
@@ -619,78 +609,78 @@
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Facebook">
+                        <label class="form-check-label" for="Facebook">
                             Facebook
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Messenger">
+                        <label class="form-check-label" for="Messenger">
                             Messenger
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Whatsapp">
+                        <label class="form-check-label" for="Whatsapp">
                             Whatsapp
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Instagram">
+                        <label class="form-check-label" for="Instagram">
                             Instagram
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Tiktok">
+                        <label class="form-check-label" for="Tiktok">
                             Tiktok
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Offline">
+                        <label class="form-check-label" for="Offline">
                             Offline
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="up_sell">
+                        <label class="form-check-label" for="up_sell">
                             Up Sell
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="Website">
+                        <label class="form-check-label" for="Website">
                             Website
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="live_chat">
+                        <label class="form-check-label" for="live_chat">
                             Live Chat
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="telesales">
+                        <label class="form-check-label" for="telesales">
                             Telesales
                         </label>
                     </div>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="others">
+                        <label class="form-check-label" for="others">
                             Others
                         </label>
                     </div>
@@ -708,7 +698,7 @@
                         </label>
                     </div>
                 </div>
-           </div>
+            </div>
 
             <div class="mb-4">
                 <h4 class="text-dark mb-2" style="font-weight: 700;">Shipping Date Range</h4>
@@ -742,12 +732,12 @@
                 <div class="d-flex align-items-center gap-2">
                     <div class="bg-input-field ">
                         <label for="" class="form_labels">Starting Invoice</label>
-                        <input type="text" id="start_invoice" name="start_invoice" class="form-control form_inputs" placeholder="" />
+                        <input type="number" min="1" id="start_invoice" name="start_invoice" class="form-control form_inputs" placeholder="" />
                     </div>
 
                     <div class="bg-input-field ">
                         <label for="" class="form_labels">Ending Invoice</label>
-                        <input type="text" id="end_invoice" name="end_invoice" class="form-control form_inputs" placeholder="" />
+                        <input type="number" min="1" id="end_invoice" name="end_invoice" class="form-control form_inputs" placeholder="" />
                     </div>
                 </div>
             </div>
@@ -796,6 +786,30 @@
             </div>
 
             <div class="mb-4">
+                <h4 class="text-dark mb-2" style="font-weight: 700;">Delivery Partner Status</h4>
+
+                <div class="bg-input-field ">
+                    <select name="courier_agent_status[]" id="courier_agent_status" class="form-select" multiple required>
+                        <option value="created">Pending</option>
+                        <option value="in_review">In Review</option>
+                        <option value="hold">Hold</option>
+                        <option value="delivered_approval_pending">Delivered Approval Pending</option>
+                        <option value="partial_delivered">Partial Delivered</option>
+                        <option value="cancelled_approval_pending">Cancelled Approval Pending</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="delivered">Delivered</option>
+                    </select>
+                </div>
+
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" value="delivery_status" id="delivery_status">
+                    <label class="form-check-label" for="delivery_status">
+                        Select All
+                    </label>
+                </div>
+            </div>
+
+            <div class="mb-4">
                 <h4 class="text-dark mb-2" style="font-weight: 700;">Pick Up Address</h4>
 
                 <div class="bg-input-field ">
@@ -821,8 +835,8 @@
                 <h4 class="text-dark mb-2" style="font-weight: 700;">Customer Tag</h4>
 
                 <div class="bg-input-field mb-1">
-                    <select name="cus_tag" id="cus_tag" class="form-control select_form">
-                        <option value="" selected disabled>Select Option</option>
+                    <select name="cus_tag[]" id="cus_tag" class="form-control select_form"  multiple required>
+                        <option value="fraud">Fraud</option>
                         <option value="new">New</option>
                         <option value="regular">Regular</option>
                         <option value="vip">VIP</option>
@@ -832,9 +846,9 @@
                     </select>
                 </div>
 
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" value="" id="cus_tag_select">
+                    <label class="form-check-label" for="cus_tag_select">
                         Select All
                     </label>
                 </div>
@@ -845,15 +859,15 @@
 
                 <div class="d-flex align-items-center gap-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="inter_available">
+                        <label class="form-check-label" for="inter_available">
                             Available
                         </label>
                     </div>
     
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="inter_unavailable">
+                        <label class="form-check-label" for="inter_unavailable">
                             Unavailable
                         </label>
                     </div>
@@ -865,15 +879,15 @@
 
                 <div class="d-flex align-items-center gap-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="discount_available">
+                        <label class="form-check-label" for="discount_available">
                             Available
                         </label>
                     </div>
     
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="discount_unavailable">
+                        <label class="form-check-label" for="discount_unavailable">
                             Unavailable
                         </label>
                     </div>
@@ -885,15 +899,15 @@
 
                 <div class="d-flex align-items-center gap-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="payment_available">
+                        <label class="form-check-label" for="payment_available">
                             Available
                         </label>
                     </div>
     
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="payment_unavailable">
+                        <label class="form-check-label" for="payment_unavailable">
                             Unavailable
                         </label>
                     </div>
@@ -905,15 +919,15 @@
 
                 <div class="d-flex align-items-center gap-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="invoice_available">
+                        <label class="form-check-label" for="invoice_available">
                             Already Printed
                         </label>
                     </div>
     
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="invoice_unavailable">
+                        <label class="form-check-label" for="invoice_unavailable">
                             Not Yet Printed
                         </label>
                     </div>
@@ -925,15 +939,15 @@
 
                 <div class="d-flex align-items-center gap-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="customer_available">
+                        <label class="form-check-label" for="customer_available">
                             Available
                         </label>
                     </div>
     
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="customer_unavailable">
+                        <label class="form-check-label" for="customer_unavailable">
                             Unavailable
                         </label>
                     </div>
@@ -942,206 +956,213 @@
 
             <div class="mb-3">
                 <div class="d-flex align-items-center justify-content-end gap-3">
-                    <button type="button" class="btn btn-danger">Reset Filter</button>
+                    <button type="button" id="resetFilter" class="btn btn-danger">Reset Filter</button>
                     <button type="button" class="btn btn-secondary">Apply Filter</button>
                 </div>
             </div>
         </div> <!-- end offcanvas-body-->
     </div>
 
-
-    <!-- Customer all history -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="customer_history" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header">
-            <h5 id="offcanvasRightLabel">Customer Overview</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div> <!-- end offcanvas-header-->
-
-        <div class="offcanvas-body">
-            {{-- Customer Details --}}
-            <div class="card customer_details">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <span class="mb-1 d-block" style="font-size: 12px;">Customer ID</span>
-                        <div class="d-flex align-items-center gap-2">
-                            <h5>C-415236</h5>
-                            <span class="badge badge-sm bg-primary">New</span>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="mb-1 d-block" style="font-size: 12px;">Customer Name</span>
-                        <h5>Nazmul Hassan</h5>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="mb-1 d-block" style="font-size: 12px;">Phone Number</span>
-                        <h5>+8801542695148</h5>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="mb-1 d-block" style="font-size: 12px;">Customer Address</span>
-                        <h5>K-39/5, kuril vatara - 1229</h5>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="mb-1 d-block" style="font-size: 12px;">Map Location</span>
-                        <h5> Ranks Business Centre, Plot-Ka-218/1-2, Pragati Sarani Main Road, Kuril, Dhaka-1229.</h5>
-                    </div>
+    {{-- Customer all history --}}
+    <div class="modal effect-scale fade" id="customer_history" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered text-center" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header">
+                    <h4 class="modal-title">Customer Overview</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                 </div>
-            </div>
 
-            {{-- Delivery Partner --}}
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h5><strong>Delivery Success Rate</strong></h5>
-                        <a data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="Refresh" type="button" class="btn btn-square btn-secondary btn_refresh"><i style="line-height: 0; font-size: 16px;" class="ti ti-rotate"></i></a>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between gap-1 mb-3">
-                        <div class="progress progress-sm" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 100%; background: #FF0000;">
-                            <div class="progress-bar bg-secondary" style="width: 88%"></div>
-                        </div>
-                        <span id="percentage">88.00%</span>
-                    </div>
-                    
-                    <p style="font-size: 12px;">Updated On: Sep 22,2025, 9:45 P.M</p>
-
-                    <div class="delivery_progress">
-                        <div class="loading_zone d-none">
-                            <div class="load-position">
-                                <span class="arrow_loader"></span>
-                            </div>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table class="table table-nowrap mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Partner</th>
-                                        <th>Total</th>
-                                        <th>Delivered</th>
-                                        <th class="text-danger">Undelivered</th>
-                                        <th>Percentage(%)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Steadfast</td>
-                                        <td>23</td>
-                                        <td>21</td>
-                                        <td>2</td>
-                                        <td>91.30%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Pathao</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>0</td>
-                                        <td>100.00%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Redx</td>
-                                        <td>1</td>
-                                        <td>0</td>
-                                        <td>1</td>
-                                        <td>00.00%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Total</td>
-                                        <td>25</td>
-                                        <td>22</td>
-                                        <td>3</td>
-                                        <td>88.00%</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Customer Order History --}}
-            <div class="card">
-                <div class="card-body">
-                    <div class="mb-4">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <h5>Order History</h5>
-                            <span class="badge badge-md bg-primary">3</span>
-                        </div>
-
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <h5>Delivered</h5>
-                            <span class="badge badge-md bg-primary">3</span>
-                        </div>
-
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <h5>Flagged</h5>
-                            <span class="badge badge-md bg-primary">0</span>
-                        </div>
-
-                        <div class="d-flex align-items-center gap-3">
-                            <h5>Delivered</h5>
-                            <span class="badge badge-md bg-primary">3</span>
-                        </div>
-                    </div>
-
-                    <div class="">
-                        {{-- 1st Order History --}}
-                        {{-- <div class="border-bottom pb-2 mb-3">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="d-flex align-items-center gap-1">
-                                    <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                <div class="modal-body text-start">
+                    {{-- Customer Details --}}
+                    <div class="card customer_details">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Customer ID</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h5>C-415236</h5>
+                                    <span class="badge badge-sm bg-primary">New</span>
                                 </div>
-
-                                <button class="btn btn-soft-info"> Delivered</button>
                             </div>
-
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span>BDT 2250.00</span>
-                                <span>Sep 22,2025 9:45 P.M</span>
+        
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Customer Name</span>
+                                <h5>Nazmul Hassan</h5>
                             </div>
-                        </div> --}}
-
-                        {{-- 2nd Order History --}}
-                        {{-- <div class="border-bottom pb-2 mb-3">
+        
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Phone Number</span>
+                                <h5>+8801542695148</h5>
+                            </div>
+        
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Customer Address</span>
+                                <h5>K-39/5, kuril vatara - 1229</h5>
+                            </div>
+        
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Map Location</span>
+                                <h5> Ranks Business Centre, Plot-Ka-218/1-2, Pragati Sarani Main Road, Kuril, Dhaka-1229.</h5>
+                            </div>
+                        </div>
+                    </div>
+        
+                    {{-- Delivery Partner --}}
+                    <div class="card">
+                        <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="d-flex align-items-center gap-1">
-                                    <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                <h5><strong>Delivery Success Rate</strong></h5>
+                                <a data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="Refresh" type="button" class="btn btn-square btn-secondary btn_refresh"><i style="line-height: 0; font-size: 16px;" class="ti ti-rotate"></i></a>
+                            </div>
+        
+                            <div class="d-flex align-items-center justify-content-between gap-1 mb-3">
+                                <div class="progress progress-sm" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 100%; background: #FF0000;">
+                                    <div class="progress-bar bg-secondary" style="width: 88%"></div>
                                 </div>
-
-                                <button class="btn btn-soft-info"> Delivered</button>
+                                <span id="percentage">88.00%</span>
                             </div>
-
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span>BDT 2075.50</span>
-                                <span>Sep 29,2025, 11:45 P.M</span>
+                            
+                            <p style="font-size: 12px;">Updated On: Sep 22,2025, 9:45 P.M</p>
+        
+                            <div class="delivery_progress">
+                                <div class="loading_zone d-none">
+                                    <div class="load-position">
+                                        <span class="arrow_loader"></span>
+                                    </div>
+                                </div>
+        
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Partner</th>
+                                                <th>Total</th>
+                                                <th>Delivered</th>
+                                                <th class="text-danger">Undelivered</th>
+                                                <th>Percentage(%)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Steadfast</td>
+                                                <td>23</td>
+                                                <td>21</td>
+                                                <td>2</td>
+                                                <td>91.30%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pathao</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                                <td>0</td>
+                                                <td>100.00%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Redx</td>
+                                                <td>1</td>
+                                                <td>0</td>
+                                                <td>1</td>
+                                                <td>00.00%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total</td>
+                                                <td>25</td>
+                                                <td>22</td>
+                                                <td>3</td>
+                                                <td>88.00%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div> --}}
-
-                        {{-- Delivery Record --}}
-                        <div class="mt-5">
-                            <div class="user_icon">
-                                <i class="ti ti-package"></i>
+                        </div>
+                    </div>
+        
+                    {{-- Customer Order History --}}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <h5>Order History</h5>
+                                    <span class="badge badge-md bg-primary">3</span>
+                                </div>
+        
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <h5>Delivered</h5>
+                                    <span class="badge badge-md bg-primary">3</span>
+                                </div>
+        
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <h5>Flagged</h5>
+                                    <span class="badge badge-md bg-primary">0</span>
+                                </div>
+        
+                                <div class="d-flex align-items-center gap-3">
+                                    <h5>Delivered</h5>
+                                    <span class="badge badge-md bg-primary">3</span>
+                                </div>
                             </div>
-                            <h6 class="text-center mb-2">No Order History ?</h6>
+        
+                            <div class="">
+                                {{-- 1st Order History --}}
+                                {{-- <div class="border-bottom pb-2 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                        </div>
+        
+                                        <button class="btn btn-soft-info"> Delivered</button>
+                                    </div>
+        
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>BDT 2250.00</span>
+                                        <span>Sep 22,2025 9:45 P.M</span>
+                                    </div>
+                                </div> --}}
+        
+                                {{-- 2nd Order History --}}
+                                {{-- <div class="border-bottom pb-2 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                        </div>
+        
+                                        <button class="btn btn-soft-info"> Delivered</button>
+                                    </div>
+        
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>BDT 2075.50</span>
+                                        <span>Sep 29,2025, 11:45 P.M</span>
+                                    </div>
+                                </div> --}}
+        
+                                {{-- Delivery Record --}}
+                                <div class="mt-5">
+                                    <div class="user_icon">
+                                        <i class="ti ti-package"></i>
+                                    </div>
+                                    <h6 class="text-center mb-2">No Order History ?</h6>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
-        </div> <!-- end offcanvas-body-->
+        </div>
     </div>
     
 @endsection
 
-@push('add-js')
+@push('add-js') 
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="{{ asset('public/admin/assets/js/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
 
 
 <script>
@@ -1221,6 +1242,16 @@
             templateResult: formatState,       
             templateSelection: formatState, 
         });
+        
+        $('#courier_agent_status').select2({
+            placeholder: "Select Delivery Status",
+            closeOnSelect: false,
+        });
+
+        $('#cus_tag').select2({
+            placeholder: "Select Customer Tag",
+            closeOnSelect: false,
+        });
 
         function formatState (state) {
             if (!state.id) {
@@ -1238,6 +1269,76 @@
             );
             return $state;
         };
+
+
+        /* -------- SELECT ALL -------- */
+        $('#delivery_status').on('change', function () {
+            if ($(this).is(':checked')) {
+                let allValues = [];
+
+                $('#courier_agent_status option').each(function () {
+                    allValues.push($(this).val());
+                });
+
+                $('#courier_agent_status').val(allValues).trigger('change');
+            } else {
+                $('#courier_agent_status').val(null).trigger('change');
+            }
+        });
+
+        /* -------- ON SELECT / UNSELECT -------- */
+        $('#courier_agent_status').on('change', function () {
+            let total = $('#courier_agent_status option').length;
+            let selected = $('#courier_agent_status option:selected').length;
+
+            $('#delivery_status').prop('checked', total === selected);
+        });
+        
+
+        /* -------- SELECT ALL -------- */
+        $('#cus_tag_select').on('change', function () {
+            if ($(this).is(':checked')) {
+                let allValues = [];
+
+                $('#cus_tag option').each(function () {
+                    allValues.push($(this).val());
+                });
+
+                $('#cus_tag').val(allValues).trigger('change');
+            } else {
+                $('#cus_tag').val(null).trigger('change');
+            }
+        });
+
+        /* -------- ON SELECT / UNSELECT -------- */
+        $('#cus_tag').on('change', function () {
+            let total = $('#cus_tag option').length;
+            let selected = $('#cus_tag option:selected').length;
+
+            $('#cus_tag_select').prop('checked', total === selected);
+        });
+
+
+
+        // Reset Filter
+        $('#resetFilter').on('click', function () {
+            $('.form-check-input').prop('checked', false);
+            $('.form_inputs').val('');
+            $('.select_form').val('');
+
+            /* ---DATE RANGE PICKER  --- */
+            if ($('.daterange').length) {
+                $('.daterange').val('');
+            }
+
+            /* -----SELECT2 RESET ---- */
+            $('.select2-hidden-accessible').each(function () {
+                $(this).val(null).trigger('change');
+            });
+
+            /* ----- MULTI SELECT / SELECT2 ----- */
+            $('select[multiple]').val(null).trigger('change');
+        });
 </script>
 
 <script>
@@ -1325,9 +1426,9 @@
             cb(start, end);
         }
         // Initialize both inputs
-        initDateRangePicker('#creation_date', "up");
-        initDateRangePicker('#shipping_date', "up");
-        initDateRangePicker('#transition_date', "up");
+        initDateRangePicker('#creation_date', "auto");
+        initDateRangePicker('#shipping_date', "auto");
+        initDateRangePicker('#transition_date', "auto");
     });
 
     // Copy Order Id function

@@ -53,20 +53,20 @@
             <!-- Logo -->
             <div class="sidebar-logo">
                 <a href="index.html" class="logo logo-normal">
-                    <img src="assets/img/logo.svg" alt="Img">
+                    <img src="{{ asset('public/admin/assets/img/logo.svg')}}" alt="Img">
                 </a>
                 <a href="index.html" class="logo logo-white">
-                    <img src="assets/img/logo-white.svg" alt="Img">
+                    <img src="{{ asset('public/admin/assets/img/logo-white.svg')}}" alt="Img">
                 </a>
                 <a href="index.html" class="logo-small">
-                    <img src="assets/img/logo-small.png" alt="Img">
+                    <img src="{{ asset('public/admin/assets/img/logo-small.png')}}" alt="Img">
                 </a>
             </div>
             <!-- /Logo -->
             <div class="sidebar-scroll">
                 <div class="text-center rounded bg-light p-3 mb-3 border">
                     <div class="avatar avatar-lg online mb-3">
-                        <img src="assets/img/customer/customer15.jpg" alt="Img" class="img-fluid rounded-circle">
+                        <img src="{{ asset('public/admin/assets/img/customer/customer15.jpg')}}" alt="Img" class="img-fluid rounded-circle">
                     </div>
                     <h6 class="fs-14 fw-bold mb-1">Adrian Herman</h6>
                     <p class="fs-12 mb-0">System Admin</p>

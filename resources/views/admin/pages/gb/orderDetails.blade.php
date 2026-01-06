@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/daterangepicker.css') }}" />
 
     <style>
         body{
@@ -153,7 +153,7 @@
                 {{-- Right Column Start --}}
                 <div class="col-lg-4 offset-lg-4 text-end">
                     <div class="d-flex align-items-center justify-content-end gap-1 mb-2">
-                        <i class="ti ti-info-circle text-info" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
+                        <i class="ti ti-info-circle text-info" data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" aria-controls="offcanvasRight"></i>
                         <h2>Mahtab</h2>
                     </div>
                     <p class="badge badge-sm bg-primary mb-2">New</p>
@@ -219,7 +219,7 @@
                                     </td>
                                     <td>1 kg</td>
                                     <td>BDT 750</td>
-                                    <td>BDT 686.25 (8.5%)</td>
+                                    <td>- BDT 686.25 (8.5%)</td>
                                     <td>3</td>
                                     <td>3 kg</td>
                                     <td>BDT 2058.75 <del class="ms-1">BDT 2250</del></td>
@@ -236,7 +236,7 @@
                                     </td>
                                     <td>1 kg</td>
                                     <td>BDT 750</td>
-                                    <td>BDT 686.25 (8.5%)</td>
+                                    <td>- BDT 686.25 (8.5%)</td>
                                     <td>3</td>
                                     <td>3 kg</td>
                                     <td>BDT 2058.75 <del class="ms-1">BDT 2250</del></td>
@@ -396,6 +396,10 @@
                                         <option value="pre_order">Pre-order</option>
                                         <option value="out_of_stock">Out of stock</option>
                                         <option value="awaiting_payment_confirm">Awaiting payment confirmation</option>
+                                        <option value="delivery_address_updted">Delivery Address Updated</option>
+                                        <option value="delivery_date_updted">Delivery Date Updated</option>
+                                        <option value="awaiting_customer_decision">Delivery Customer Decision</option>
+                                        <option value="additional_product_requirement">Additional Product Requirement</option>
                                     </select>
 
                                     <span id="featured_validate" class="text-danger validation-error mt-1"></span>
@@ -408,24 +412,29 @@
                                         <option value="can_not_payment_advanced">Can not payment advanced </option>
                                         <option value="product_unavailable">Product Unavailable</option>
                                         <option value="duplicate_order">Duplicate Order</option>
-                                        <option value="payment_failed">Payment Failed</option>
                                         <option value="found_better_price">Found Better Price Elsewhere</option>
-                                        <option value="delivery_too_long">Delivery Time Too Long</option>
-                                        <option value="payment_failed">Payment Failed</option>
                                         <option value="product_out_of_stock">Product Out of Stock</option>
-                                        <option value="ordered_by_mistake">Ordered by Mistake</option>
-                                        <option value="changed_my_mind">Changed My Mind</option>
-                                        <option value="high_delivery_charge">High Delivery Charge</option>
+                                        <option value="customer_not_available_delivery_time">Customer will not be available delivery time</option>
+                                        <option value="customer_wants_to_cancel">Customer wants to cancel</option>
+                                        <option value="customer_mistakenly_place_order">Customer Mistakenly Place Order</option>
+                                        <option value="customer_not_interest">Customer Not Interest</option>
+                                        <option value="delay_delivery">Delay Delivery </option>
+                                        <option value="urgent_delivery_reuired">Urgent Delivery Required</option>
+                                        <option value="out_of_area_coverage">Out of Area Coverage</option>
+                                        <option value="product_price_issue">Product Price Issue</option>
+                                        <option value="fake_order">Fake Order</option>
+                                        <option value="test_order">Test Order</option>
+                                        <option value="customer_pay_later">Customer will pay later</option>
                                         <option value="other_reason">Other Reason</option>
                                     </select>
 
                                     <span id="featured_validate" class="text-danger validation-error mt-1"></span>
                                 </div>
                                 
-                                <div class="mb-3 shipping_date d-none">
+                                <div class="mb-3 followUp_date d-none">
                                     <label class="form-label" for="reportrange">Shipping Date <span class="text-danger"> *</span></label>
 
-                                    <input type="text" id="shipping_date" name="shipping_date" class="form-control" placeholder="Select date range" readonly disabled="true" />
+                                    <input type="text" id="followUp_date" name="followUp_date" class="form-control" placeholder="Select date range" readonly disabled="true" />
                                 </div>
 
                                 <div class="col-lg-12 approve_status d-none">
@@ -548,197 +557,205 @@
             </div>
 
 
-             <!-- Customer all history -->
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-                <div class="offcanvas-header">
-                    <h5 id="offcanvasRightLabel">Customer Overview</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div> <!-- end offcanvas-header-->
-
-                <div class="offcanvas-body">
-                    {{-- Customer Details --}}
-                    <div class="card customer_details">
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <span class="mb-1 d-block" style="font-size: 12px;">Customer ID</span>
-                                <div class="d-flex align-items-center gap-2">
-                                    <h5>C-415236</h5>
-                                    <span class="badge badge-sm bg-primary">New</span>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <span class="mb-1 d-block" style="font-size: 12px;">Customer Name</span>
-                                <h5>Nazmul Hassan</h5>
-                            </div>
-
-                            <div class="mb-3">
-                                <span class="mb-1 d-block" style="font-size: 12px;">Phone Number</span>
-                                <h5>+8801542695148</h5>
-                            </div>
-
-                            <div class="mb-3">
-                                <span class="mb-1 d-block" style="font-size: 12px;">Customer Address</span>
-                                <h5>K-39/5, kuril vatara - 1229</h5>
-                            </div>
-
-                            <div class="mb-3">
-                                <span class="mb-1 d-block" style="font-size: 12px;">Map Location</span>
-                                <h5> Ranks Business Centre, Plot-Ka-218/1-2, Pragati Sarani Main Road, Kuril, Dhaka-1229.</h5>
-                            </div>
+            {{-- Customer Order History --}}
+            <div class="modal effect-scale fade" id="customer_history" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered text-center" role="document">
+                    <div class="modal-content modal-content-demo">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Customer Overview</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                         </div>
-                    </div>
 
-                    {{-- Delivery Partner --}}
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <h5><strong>Delivery Success Rate</strong></h5>
-                                <a data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="Refresh" type="button" class="btn btn-square btn-secondary btn_refresh"><i style="line-height: 0; font-size: 16px;" class="ti ti-rotate"></i></a>
-                            </div>
-
-                            <div class="d-flex align-items-center justify-content-between gap-1 mb-3">
-                                <div class="progress progress-sm" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 100%; background: #FF0000;">
-                                    <div class="progress-bar bg-secondary" style="width: 88%"></div>
-                                </div>
-                                <span id="percentage">88.00%</span>
-                            </div>
-                            
-                            <p style="font-size: 12px;">Updated On: Sep 22,2025, 9:45 P.M</p>
-
-                            <div class="delivery_progress">
-                                <div class="loading_zone d-none">
-                                    <div class="load-position">
-                                        <span class="arrow_loader"></span>
-                                    </div>
-                                </div>
-
-                                <div class="table-responsive">
-                                    <table class="table table-nowrap mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Partner</th>
-                                                <th>Total</th>
-                                                <th>Delivered</th>
-                                                <th class="text-danger">Undelivered</th>
-                                                <th>Percentage(%)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Steadfast</td>
-                                                <td>23</td>
-                                                <td>21</td>
-                                                <td>2</td>
-                                                <td>91.30%</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Pathao</td>
-                                                <td>1</td>
-                                                <td>1</td>
-                                                <td>0</td>
-                                                <td>100.00%</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Redx</td>
-                                                <td>1</td>
-                                                <td>0</td>
-                                                <td>1</td>
-                                                <td>00.00%</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total</td>
-                                                <td>25</td>
-                                                <td>22</td>
-                                                <td>3</td>
-                                                <td>88.00%</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Customer Order History --}}
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="mb-4">
-                                <div class="d-flex align-items-center gap-3 mb-3">
-                                    <h5>Order History</h5>
-                                    <span class="badge badge-md bg-primary">3</span>
-                                </div>
-
-                                <div class="d-flex align-items-center gap-3 mb-3">
-                                    <h5>Delivered</h5>
-                                    <span class="badge badge-md bg-primary">3</span>
-                                </div>
-
-                                <div class="d-flex align-items-center gap-3 mb-3">
-                                    <h5>Flagged</h5>
-                                    <span class="badge badge-md bg-primary">0</span>
-                                </div>
-
-                                <div class="d-flex align-items-center gap-3">
-                                    <h5>Delivered</h5>
-                                    <span class="badge badge-md bg-primary">3</span>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                {{-- 1st Order History --}}
-                                {{-- <div class="border-bottom pb-2 mb-3">
-                                    <div class="d-flex align-items-center justify-content-between mb-3">
-                                        <div class="d-flex align-items-center gap-1">
-                                            <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                        <div class="modal-body text-start">
+                            {{-- Customer Details --}}
+                            <div class="card customer_details">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <span class="mb-1 d-block" style="font-size: 12px;">Customer ID</span>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <h5>C-415236</h5>
+                                            <span class="badge badge-sm bg-primary">New</span>
                                         </div>
-
-                                        <button class="btn btn-soft-info"> Delivered</button>
                                     </div>
-
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span>BDT 2250.00</span>
-                                        <span>Sep 22,2025 9:45 P.M</span>
+                
+                                    <div class="mb-3">
+                                        <span class="mb-1 d-block" style="font-size: 12px;">Customer Name</span>
+                                        <h5>Nazmul Hassan</h5>
                                     </div>
-                                </div> --}}
-
-                                {{-- 2nd Order History --}}
-                                {{-- <div class="border-bottom pb-2 mb-3">
+                
+                                    <div class="mb-3">
+                                        <span class="mb-1 d-block" style="font-size: 12px;">Phone Number</span>
+                                        <h5>+8801542695148</h5>
+                                    </div>
+                
+                                    <div class="mb-3">
+                                        <span class="mb-1 d-block" style="font-size: 12px;">Customer Address</span>
+                                        <h5>K-39/5, kuril vatara - 1229</h5>
+                                    </div>
+                
+                                    <div class="mb-3">
+                                        <span class="mb-1 d-block" style="font-size: 12px;">Map Location</span>
+                                        <h5> Ranks Business Centre, Plot-Ka-218/1-2, Pragati Sarani Main Road, Kuril, Dhaka-1229.</h5>
+                                    </div>
+                                </div>
+                            </div>
+                
+                            {{-- Delivery Partner --}}
+                            <div class="card">
+                                <div class="card-body">
                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                        <div class="d-flex align-items-center gap-1">
-                                            <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                        <h5><strong>Delivery Success Rate</strong></h5>
+                                        <a data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="Refresh" type="button" class="btn btn-square btn-secondary btn_refresh"><i style="line-height: 0; font-size: 16px;" class="ti ti-rotate"></i></a>
+                                    </div>
+                
+                                    <div class="d-flex align-items-center justify-content-between gap-1 mb-3">
+                                        <div class="progress progress-sm" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 100%; background: #FF0000;">
+                                            <div class="progress-bar bg-secondary" style="width: 88%"></div>
                                         </div>
-            
-                                        <button class="btn btn-soft-info"> Delivered</button>
+                                        <span id="percentage">88.00%</span>
                                     </div>
-            
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span>BDT 2075.50</span>
-                                        <span>Sep 29,2025, 11:45 P.M</span>
+                                    
+                                    <p style="font-size: 12px;">Updated On: Sep 22,2025, 9:45 P.M</p>
+                
+                                    <div class="delivery_progress">
+                                        <div class="loading_zone d-none">
+                                            <div class="load-position">
+                                                <span class="arrow_loader"></span>
+                                            </div>
+                                        </div>
+                
+                                        <div class="table-responsive">
+                                            <table class="table table-nowrap mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Partner</th>
+                                                        <th>Total</th>
+                                                        <th>Delivered</th>
+                                                        <th class="text-danger">Undelivered</th>
+                                                        <th>Percentage(%)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Steadfast</td>
+                                                        <td>23</td>
+                                                        <td>21</td>
+                                                        <td>2</td>
+                                                        <td>91.30%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Pathao</td>
+                                                        <td>1</td>
+                                                        <td>1</td>
+                                                        <td>0</td>
+                                                        <td>100.00%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Redx</td>
+                                                        <td>1</td>
+                                                        <td>0</td>
+                                                        <td>1</td>
+                                                        <td>00.00%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Total</td>
+                                                        <td>25</td>
+                                                        <td>22</td>
+                                                        <td>3</td>
+                                                        <td>88.00%</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div> --}}
-
-                                {{-- Delivery Record --}}
-                                <div class="mt-5">
-                                    <div class="user_icon">
-                                        <i class="ti ti-package"></i>
+                                </div>
+                            </div>
+                
+                            {{-- Customer Order History --}}
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="mb-4">
+                                        <div class="d-flex align-items-center gap-3 mb-3">
+                                            <h5>Order History</h5>
+                                            <span class="badge badge-md bg-primary">3</span>
+                                        </div>
+                
+                                        <div class="d-flex align-items-center gap-3 mb-3">
+                                            <h5>Delivered</h5>
+                                            <span class="badge badge-md bg-primary">3</span>
+                                        </div>
+                
+                                        <div class="d-flex align-items-center gap-3 mb-3">
+                                            <h5>Flagged</h5>
+                                            <span class="badge badge-md bg-primary">0</span>
+                                        </div>
+                
+                                        <div class="d-flex align-items-center gap-3">
+                                            <h5>Delivered</h5>
+                                            <span class="badge badge-md bg-primary">3</span>
+                                        </div>
                                     </div>
-                                    <h6 class="text-center mb-2">No Order History ?</h6>
+                
+                                    <div class="">
+                                        {{-- 1st Order History --}}
+                                        {{-- <div class="border-bottom pb-2 mb-3">
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                                </div>
+                
+                                                <button class="btn btn-soft-info"> Delivered</button>
+                                            </div>
+                
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <span>BDT 2250.00</span>
+                                                <span>Sep 22,2025 9:45 P.M</span>
+                                            </div>
+                                        </div> --}}
+                
+                                        {{-- 2nd Order History --}}
+                                        {{-- <div class="border-bottom pb-2 mb-3">
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                                </div>
+                
+                                                <button class="btn btn-soft-info"> Delivered</button>
+                                            </div>
+                
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <span>BDT 2075.50</span>
+                                                <span>Sep 29,2025, 11:45 P.M</span>
+                                            </div>
+                                        </div> --}}
+                
+                                        {{-- Delivery Record --}}
+                                        <div class="mt-5">
+                                            <div class="user_icon">
+                                                <i class="ti ti-package"></i>
+                                            </div>
+                                            <h6 class="text-center mb-2">No Order History ?</h6>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
                     </div>
-                </div> <!-- end offcanvas-body-->
+                </div>
             </div>
         </div>
     </div>
 @endsection
 
 @push('add-js')
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
 
     <script>
         document.querySelector('.btn_refresh').addEventListener('click', function () {
@@ -758,7 +775,7 @@
             const orderStatus = document.getElementById('order_status');
             const holdReasonBox = document.querySelector('.hold_status_reason');
             const cancelReasonBox = document.querySelector('.cancel_status_reason');
-            const shippingDateField = document.querySelector('.shipping_date');
+            const followUpDateField = document.querySelector('.followUp_date');
             const autoApproveField = document.querySelector('.approve_status');
             const holdReasonInput = document.getElementById('hold_status_reason');
             const cancelReasonInput = document.getElementById('cancel_status_reason');
@@ -781,7 +798,7 @@
                     holdReasonBox.classList.add('d-none');
                     cancelReasonBox.classList.remove('d-none');
                     approveDateBox.classList.add('d-none');
-                    shippingDateField.classList.add('d-none');
+                    followUpDateField.classList.add('d-none');
                     autoApproveField.classList.add('d-none');
                     cancelReasonInput.value = "";
                 } 
@@ -789,7 +806,7 @@
                     holdReasonBox.classList.add('d-none');
                     cancelReasonBox.classList.add('d-none');
                     approveDateBox.classList.add('d-none');
-                    shippingDateField.classList.add('d-none');
+                    followUpDateField.classList.add('d-none');
                     autoApproveField.classList.add('d-none');
                 }
             }
@@ -807,7 +824,7 @@
                 holdReasonBox.classList.add('d-none');
                 cancelReasonBox.classList.add('d-none');
                 approveDateBox.classList.add('d-none');
-                shippingDateField.classList.add('d-none');
+                followUpDateField.classList.add('d-none');
                 autoApproveField.classList.add('d-none');
                 holdReasonInput.value = "";
                 cancelReasonInput.value = "";
@@ -823,9 +840,9 @@
         // On hold Status select
         document.addEventListener('DOMContentLoaded', function() {
             const holdReasonSelect = document.getElementById('hold_status_reason');
-            const shippingDateField = document.querySelector('.shipping_date');
+            const followUpDateField = document.querySelector('.followUp_date');
             const autoApproveField = document.querySelector('.approve_status');
-            const shippingDateInput = document.getElementById('shipping_date');
+            const followUpDateInput = document.getElementById('followUp_date');
             const autoApproveInput = document.getElementById('approve_status');
             const approveDateBox  = document.querySelector('.approve_date');
             const approveDateInput = document.getElementById('approve_date');
@@ -833,13 +850,13 @@
             function toggleDependentFields() {
                 if (holdReasonSelect.value !== '') {
                     // Show dependent fields
-                    shippingDateField.classList.remove('d-none');
+                    followUpDateField.classList.remove('d-none');
                     autoApproveField.classList.remove('d-none');
-                    shippingDateInput.removeAttribute('disabled');
+                    followUpDateInput.removeAttribute('disabled');
                     autoApproveInput.removeAttribute('disabled');
 
-                    if ($(shippingDateInput).data('daterangepicker')) {
-                        const picker = $(shippingDateInput).data('daterangepicker');
+                    if ($(followUpDateInput).data('daterangepicker')) {
+                        const picker = $(followUpDateInput).data('daterangepicker');
                         picker.setStartDate(moment());
                         picker.setEndDate(moment());
                     }
@@ -852,9 +869,9 @@
 
                 } else {
                     // Hide dependent fields
-                    shippingDateField.classList.add('d-none');
+                    followUpDateField.classList.add('d-none');
                     autoApproveField.classList.add('d-none');
-                    shippingDateInput.setAttribute('disabled', true);
+                    followUpDateInput.setAttribute('disabled', true);
                     autoApproveInput.setAttribute('disabled', true);
                     autoApproveInput.checked = false;
                     approveDateBox.classList.add('d-none');
@@ -905,43 +922,26 @@
     </script>
 
     <script type="text/javascript">
+        // Multiple Date Range
         $(function() {
-        
-            function initDateRangePicker(selector, up){
-
-            
-                var start = moment().subtract(29, 'days');
-                var end = moment();
-            
-                function cb(start, end) {
-                    $(selector).find('span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                }
-            
+            function initDateRangePicker(selector){
                 $(selector).daterangepicker({
+                    singleDatePicker: true,
                     timePicker: true,
-                    drops: up,
-                    startDate: moment(),
-                    endDate: moment(),
+                    timePicker24Hour: false,
+                    timePickerIncrement: 1,
+                    startDate: moment().startOf('hour'),
+                    endDate: moment().startOf('hour'),
                     locale: {
-                        format: 'MMMM D/YYYY hh:mm A'
-                    },
-                    ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                        format: 'YYYY/MM/DD hh:mm A'
                     }
-                }, cb);
-            
-                cb(start, end);
+                });
             }
-
             // Initialize both inputs
-            initDateRangePicker('#shipping_date', "down");
-            initDateRangePicker('#approve_date', "up");
+            initDateRangePicker('#followUp_date');
+            initDateRangePicker('#approve_date');
         });
+
     </script>
 
 <script>

@@ -4,13 +4,13 @@
         <!-- Logo -->
         <div class="header-left active">
             <a href="index.html" class="logo logo-normal">
-                <img src="assets/img/logo.svg" alt="Img">
+                <img src="{{ asset('public/admin/assets/img/logo.svg') }}" alt="Img">
             </a>
             <a href="index.html" class="logo logo-white">
-                <img src="assets/img/logo-white.svg" alt="Img">
+                <img src="{{ asset('public/admin/assets/img/logo-white.svg') }}" alt="Img">
             </a>
             <a href="index.html" class="logo-small">
-                <img src="assets/img/logo-small.png" alt="Img">
+                <img src="{{ asset('public/admin/assets/img/logo-small.png') }}" alt="Img">
             </a>
         </div>
         <!-- /Logo -->
@@ -39,7 +39,7 @@
                                 <span><i class="ti ti-search"></i></span>
                             </div>
                             <span class="input-group-text">
-                                <kbd class="d-flex align-items-center"><img src="assets/img/icons/command.svg" alt="img" class="me-1">K</kbd>
+                                <kbd class="d-flex align-items-center"><img src="{{ asset('public/admin/assets/img/icons/command.svg') }}" alt="img" class="me-1">K</kbd>
                             </span>
                         </div>
                         <div class="dropdown-menu search-dropdown" aria-labelledby="dropdownMenuClickable">
@@ -69,8 +69,8 @@
                                             @endif
                                         </a>
                                     </li>
-                                    <li><a href="javascript:void(0);">Jonita<img src="assets/img/profiles/avatar-01.jpg" alt="Img" class="img-fluid"></a></li>
-                                    <li><a href="javascript:void(0);">Aaron<img src="assets/img/profiles/avatar-10.jpg" alt="Img" class="img-fluid"></a></li>
+                                    <li><a href="javascript:void(0);">Jonita<img src="{{ asset('public/admin/assets/img/profiles/avatar-01.jpg') }}" alt="Img" class="img-fluid"></a></li>
+                                    <li><a href="javascript:void(0);">Aaron<img src="{{ asset('public/admin/assets/img/profiles/avatar-10.jpg') }}" alt="Img" class="img-fluid"></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                     data-bs-toggle="dropdown">
                     <span class="user-info">
                         <span class="user-letter">
-                            <img src="assets/img/store/store-01.png" alt="Store Logo" class="img-fluid">
+                            <img src="{{ asset('public/admin/assets/img/store/store-01.png')}}" alt="Store Logo" class="img-fluid">
                         </span>
                         <span class="user-detail">
                             <span class="user-name">Freshmart</span>
@@ -94,16 +94,16 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a href="javascript:void(0);" class="dropdown-item">
-                        <img src="assets/img/store/store-01.png" alt="Store Logo" class="img-fluid">Freshmart
+                        <img src="{{ asset('public/admin/assets/img/store/store-01.png ')}}" alt="Store Logo" class="img-fluid">Freshmart
                     </a>
                     <a href="javascript:void(0);" class="dropdown-item">
-                        <img src="assets/img/store/store-02.png" alt="Store Logo" class="img-fluid">Grocery Apex
+                        <img src="{{ asset('public/admin/assets/img/store/store-02.png ')}}" alt="Store Logo" class="img-fluid">Grocery Apex
                     </a>
                     <a href="javascript:void(0);" class="dropdown-item">
-                        <img src="assets/img/store/store-03.png" alt="Store Logo" class="img-fluid">Grocery Bevy
+                        <img src="{{ asset('public/admin/assets/img/store/store-03.png ')}}" alt="Store Logo" class="img-fluid">Grocery Bevy
                     </a>
                     <a href="javascript:void(0);" class="dropdown-item">
-                        <img src="assets/img/store/store-04.png" alt="Store Logo" class="img-fluid">Grocery Eden
+                        <img src="{{ asset('public/admin/assets/img/store/store-04.png ')}}" alt="Store Logo" class="img-fluid">Grocery Eden
                     </a>
                 </div>
             </li>
@@ -225,14 +225,14 @@
             <li class="nav-item dropdown has-arrow flag-nav nav-item-box">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
                     role="button">
-                    <img src="assets/img/flags/us-flag.svg" alt="Language" class="img-fluid">
+                    <img src="{{ asset('public/admin/assets/img/flags/us-flag.svg ')}}" alt="Language" class="img-fluid">
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a href="javascript:void(0);" class="dropdown-item">
-                        <img src="assets/img/flags/english.svg" alt="Img" height="16">English
+                        <img src="{{ asset('public/admin/assets/img/flags/english.svg ')}}" alt="Img" height="16">English
                     </a>
                     <a href="javascript:void(0);" class="dropdown-item">
-                        <img src="assets/img/flags/arabic.svg" alt="Img" height="16">Arabic
+                        <img src="{{ asset('public/admin/assets/img/flags/arabic.svg ')}}" alt="Img" height="16">Arabic
                     </a>
                 </div>
             </li>
@@ -265,7 +265,7 @@
                                 <a href="activities.html">
                                     <div class="media d-flex">
                                         <span class="avatar flex-shrink-0">
-                                            <img alt="Img" src="assets/img/profiles/avatar-13.jpg">
+                                            <img alt="Img" src="{{ asset('public/admin/assets/img/profiles/avatar-13.jpg ')}}">
                                         </span>
                                         <div class="flex-grow-1">
                                             <p class="noti-details"><span class="noti-title">James Kirwin</span> confirmed his order.  Order No: #78901.Estimated delivery: 2 days</p>
@@ -278,7 +278,7 @@
                                 <a href="activities.html">
                                     <div class="media d-flex">
                                         <span class="avatar flex-shrink-0">
-                                            <img alt="Img" src="assets/img/profiles/avatar-03.jpg">
+                                            <img alt="Img" src="{{ asset('public/admin/assets/img/profiles/avatar-03.jpg ')}}">
                                         </span>
                                         <div class="flex-grow-1">
                                             <p class="noti-details"><span class="noti-title">Leo Kelly</span> cancelled his order scheduled for  17 Jan 2025</p>
@@ -291,7 +291,7 @@
                                 <a href="activities.html" class="recent-msg">
                                     <div class="media d-flex">
                                         <span class="avatar flex-shrink-0">
-                                            <img alt="Img" src="assets/img/profiles/avatar-17.jpg">
+                                            <img alt="Img" src="{{ asset('public/admin/assets/img/profiles/avatar-17.jpg ')}}">
                                         </span>
                                         <div class="flex-grow-1">
                                             <p class="noti-details">Payment of $50 received for Order #67890 from <span class="noti-title">Antonio Engle</span></p>
@@ -304,7 +304,7 @@
                                 <a href="activities.html" class="recent-msg">
                                     <div class="media d-flex">
                                         <span class="avatar flex-shrink-0">
-                                            <img alt="Img" src="assets/img/profiles/avatar-02.jpg">
+                                            <img alt="Img" src="{{ asset('public/admin/assets/img/profiles/avatar-02.jpg')}}">
                                         </span>
                                         <div class="flex-grow-1">
                                             <p class="noti-details"><span class="noti-title">Andrea</span> confirmed his order.  Order No: #73401.Estimated delivery: 3 days</p>

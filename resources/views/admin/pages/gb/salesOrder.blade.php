@@ -390,7 +390,10 @@
         
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span>BDT 2250.00</span>
-                                    <span>Sep 22,2025 9:45 P.M</span>
+                                    <div class="">
+                                        <span>Sep 22,2025 9:45 P.M</span>
+                                        <i class="ti ti-info-circle text-dark" style="font-size: 16px;" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="This sales order GB-254136 was created by Nazmul Hassan at 11.23 A.M on Dec 02, 2026"></i>
+                                    </div>
                                 </div>
                             </div>
         
@@ -411,7 +414,10 @@
         
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span>BDT 2075.50</span>
-                                    <span>Sep 29,2025, 11:45 P.M</span>
+                                    <div class="">
+                                        <span>Sep 29,2025, 11:45 P.M</span>
+                                        <i class="ti ti-info-circle text-dark" style="font-size: 16px;" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="This sales order GB-254136 was created by Admin at 11.23 A.M on Dec 02, 2026"></i>
+                                    </div>
                                 </div>
                             </div>
         
@@ -660,10 +666,10 @@
                                     Add To Cart</button>
                             </div>
 
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center justify-content-between" data-bs-effect="effect-scale" data-bs-toggle="modal" href="#warehouse_modal" style="cursor: pointer;">
                                 <button type="button" class="btn btn-outline-secondary btn-w-xs">Weight: 0.5 kg</button>
                                 <div class="d-flex align-items-center gap-2">
-                                    <h6> Check Availibities</h6> <i class="ti ti-info-circle text-success" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
+                                    <h6> Check Availibities</h6> <i class="ti ti-info-circle text-success"></i>
                                 </div>
                             </div>
                         </div>
@@ -693,10 +699,10 @@
                                     Add To Cart</button>
                             </div>
 
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center justify-content-between"  data-bs-effect="effect-scale" data-bs-toggle="modal" href="#warehouse_modal" style="cursor: pointer;">
                                 <button type="button" class="btn btn-outline-secondary btn-w-xs">Weight: 1 kg</button>
                                 <div class="d-flex align-items-center gap-2">
-                                    <h6> Check Availibities</h6> <i class="ti ti-info-circle text-success" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>
+                                    <h6> Check Availibities</h6> <i class="ti ti-info-circle text-success"></i>
                                 </div>
                             </div>
                         </div>
@@ -804,6 +810,10 @@
                         </div>
                     </div>
     
+                    <div class="p-3 bg-secondary-transparent text-end">
+                        <h4>BDT 2150.00</h4>
+                    </div>
+
                     <div class="text-end mt-2 mb-5">
                         <button class="btn btn-square btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Next</button>
                    </div>
@@ -1136,7 +1146,7 @@
 
                     <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
                         <label class="form-label" for="shipping_date"><strong>Shipping Date </strong> </label>
-                        <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="flatpickr_date">
+                        <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="shipping_date">
                     </div>
 
                     <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
@@ -1276,6 +1286,49 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- Check Warehouse Modal --}}
+    <div class="modal effect-scale fade" id="warehouse_modal" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered text-center" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header">
+                    <h5 class="modal-title">Warehouse Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                </div>
+
+                <div class="modal-body text-start">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-hover table-nowrap mb-0">
+                            <thead>
+                                <tr>
+                                    <th>#SL.</th>
+                                    <th>Warehouse Name</th>
+                                    <th>Warehouse Location</th>
+                                    <th>Total Stock Qty</th>
+                                    <th>Total Processing Stock</th>
+                                    <th>Total In-transit Stock</th>
+                                    <th>Total Product Return</th>
+                                </tr>
+                            </thead>
+    
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Banasree Warehouse</td>
+                                    <td>Banasree B Block</td>
+                                    <td>235</td>
+                                    <td>120</td>
+                                    <td>1036</td>
+                                    <td>36</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1452,7 +1505,7 @@
 
 <script>
     $(function() {
-        $('#flatpickr_date').daterangepicker({
+        $('#shipping_date').daterangepicker({
             singleDatePicker: true,
             timePicker: true,
             timePicker24Hour: false,

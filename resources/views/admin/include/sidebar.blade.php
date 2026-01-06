@@ -2,13 +2,13 @@
     <!-- Logo -->
     <div class="sidebar-logo">
         <a href="index.html" class="logo logo-normal">
-            <img src="assets/img/logo.svg" alt="Img">
+            <img src="{{ asset('public/admin/assets/img/logo.svg') }}" alt="Img">
         </a>
         <a href="index.html" class="logo logo-white">
-            <img src="assets/img/logo-white.svg" alt="Img">
+            <img src="{{ asset('public/admin/assets/img/logo-white.svg') }}" alt="Img">
         </a>
         <a href="index.html" class="logo-small">
-            <img src="assets/img/logo-small.png" alt="Img">
+            <img src="{{ asset('public/admin/assets/img/logo-small.png') }}" alt="Img">
         </a>
         <a id="toggle_btn" href="javascript:void(0);" style="background: #FE9F43; opacity: 1;">
             <i data-feather="chevrons-left" class="feather-16"></i>
@@ -18,7 +18,7 @@
     <div class="modern-profile p-3 pb-0">
         <div class="text-center rounded bg-light p-3 mb-4 user-profile">
             <div class="avatar avatar-lg online mb-3">
-                <img src="assets/img/customer/customer15.jpg" alt="Img" class="img-fluid rounded-circle">
+                <img src="{{ asset('public/admin/assets/img/customer/customer15.jpg') }}" alt="Img" class="img-fluid rounded-circle">
             </div>
             <h6 class="fs-14 fw-bold mb-1">Adrian Herman</h6>
             <p class="fs-12 mb-0">System Admin</p>
@@ -34,7 +34,7 @@
     <div class="sidebar-header p-3 pb-0 pt-2">
         <div class="text-center rounded bg-light p-2 mb-4 sidebar-profile d-flex align-items-center">
             <div class="avatar avatar-md onlin">
-                <img src="assets/img/customer/customer15.jpg" alt="Img" class="img-fluid rounded-circle">
+                <img src="{{ asset('public/admin/assets/img/customer/customer15.jpg') }}" alt="Img" class="img-fluid rounded-circle">
             </div>
             <div class="text-start sidebar-profile-info ms-2">
                 <h6 class="fs-14 fw-bold mb-1">Adrian Herman</h6>

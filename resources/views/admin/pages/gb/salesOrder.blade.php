@@ -755,15 +755,16 @@
                                 <p>BDT 600.00</p>
                             </div>
     
-                            <div class="d-flex align-items-center justify-content-between gap-2 mt-4">
-                                <p class="text-success mb-0"><strong>( No Discount )</strong></p>
-                                <div class="d-flex align-items-center gap-4">
-                                    <h5>BDT 600.00</h5>
+                            <div class="d-flex align-items-center justify-content-between gap-4 mt-4">
+                                <button class="btn btn-success mb-0">Add Discount</button>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h6 class="text-nowrap">BDT 600.00</h6>
                                     <div class="wg-quantity">
                                         <span class="btn-quantity btn-decrease">-</span>
                                         <input class="quantity-product" type="text" name="qty" value="1">
                                         <span class="btn-quantity btn-increase">+</span>
                                     </div>
+                                    <i class="ti ti-trash cart_trash"></i>
                                 </div>
                             </div>
                         </div>
@@ -796,15 +797,19 @@
                                 <p>BDT 1700.00</p>
                             </div>
     
-                            <div class="d-flex align-items-center justify-content-between gap-2 mt-4">
-                                <p class="text-danger mb-0"><strong>( BDT 150 Taka Discount )</strong></p>
-                                <div class="d-flex align-items-center gap-4">
-                                    <h5>BDT 1550.00</h5>
+                            <div class="d-flex align-items-center justify-content-between gap-5 mt-4">
+                                <div class="">
+                                    <p class="text-danger mb-0 "><strong>( BDT 150 Taka Discount )</strong></p>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2">
+                                    <h6 class="text-nowrap">BDT 1550.00</h6>
                                     <div class="wg-quantity">
                                         <span class="btn-quantity btn-decrease">-</span>
                                         <input class="quantity-product" type="text" name="qty" value="1">
                                         <span class="btn-quantity btn-increase">+</span>
                                     </div>
+                                    <i class="ti ti-trash cart_trash"></i>
                                 </div>
                             </div>
                         </div>

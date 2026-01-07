@@ -208,6 +208,29 @@
                 overflow-x: auto !important;
             }
         }
+        
+
+
+        .dt-footer {
+    padding-top: 10px;
+}
+
+.dataTables_paginate {
+    display: flex;
+    gap: 6px;
+}
+
+.dataTables_paginate .paginate_button {
+    border: 1px solid #e5e7eb !important;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+.dataTables_paginate .paginate_button.current {
+    background: #2563eb !important;
+    color: #fff !important;
+    border-color: #2563eb !important;
+}
     </style>
 @endpush
 
@@ -227,6 +250,21 @@
         </div>
 
         <div class="d-flex align-items-center gap-3">
+            <div class="avatar-list-stacked">
+                <span class="avatar avatar-rounded">
+                    <img class="border border-white" src="{{ asset('public/admin/assets/img/profiles/avatar-05.jpg')}}" alt="img">
+                </span>
+                <span class="avatar avatar-rounded">
+                    <img class="border border-white" src="{{ asset('public/admin/assets/img/profiles/avatar-05.jpg')}}" alt="img">
+                </span>
+                <span class="avatar avatar-rounded">
+                    <img class="border border-white" src="{{ asset('public/admin/assets/img/profiles/avatar-05.jpg')}}" alt="img">
+                </span>
+                <a class="avatar bg-primary avatar-rounded text-fixed-white" href="javascript:void(0);">
+                    +8
+                </a>
+            </div>
+
             <div class="dropdown">
                 <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
                     Action
@@ -302,7 +340,7 @@
         <div class="row">
             <div class="mt-0">
                 <div class="table-responsive pb-3">
-                    <table class="table table-hover table-nowrap mb-0">
+                    <table class="table table-hover table-nowrap mb-0 datatables">
                         <thead>
                             <tr>
                                 <th>
@@ -329,6 +367,458 @@
                         </thead>
 
                         <tbody>
+                            <tr>
+                                <td>
+                                    <label class="checkboxs">
+                                        <input type="checkbox" id="select-all">
+                                        <span class="checkmarks"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div class="copy-row">
+                                        <div class="all_icons mb-2">
+                                            <i data-tooltip="tip1" class="ti ti-info-circle cursor-pointer tooltip-trigger"></i>
+
+                                            <i class="ti ti-copy cursor-pointer copy_name" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy"></i>
+
+                                            <i class="ti ti-printer cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Print"></i>
+
+                                            <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Edit"></i>
+                                        </div>
+
+                                        <a href="#" class="mb-2 d-block">
+                                            <p class="text-teal font-bold copy_element">GB-9632541</p>
+                                        </a>
+
+                                        <div class="">
+                                            <span class="badge bg-success">Whatsapp</span>
+                                            {{-- <span class="badge bg-primary">Website</span>
+                                            <span class="badge bg-success">Phone Call</span>
+                                            <span class="badge bg-info">Facebook</span>
+                                            <span class="badge bg-dark">Instagram</span> --}}
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                   <div class="d-flex flex-column">
+                                       <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Created:</span> Jan 1, 2026 09:49 A.M</p>
+                                       <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Shipping:</span> Jan 1, 2026 09:49 A.M</p>
+                                       <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Approved:</span> Jan 1, 2026 09:49 A.M</p>
+                                   </div>
+                                </td>
+
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div class="copy-row">
+                                        <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
+                                        <div class="d-flex align-items-center gap-1 mb-1">
+                                            <span class="badge badge-sm bg-primary">New</span>
+                                            <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
+                                        </div>
+
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <strong><span class="copyNumber">+8801833220886</span></strong>
+                                            <span data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy" class="text-success" style="cursor: pointer;"><i class="ti ti-copy copyIcon" style="font-size: 18px;"></i></span>
+                                            <a href="https://wa.me/01833220886" target="_blank" style="width: 18px;">
+                                                <img src="{{ asset('public/admin/assets/images/whatsapp.png') }}" alt="" width="18">
+                                            </a>
+                                        </div>
+
+                                        <div style="text-wrap: auto;">
+                                            <p style="font-weight: 500;">K-39/5, KURIL VATARA - 1229 K-39/5, KURIL VATARA - 1229</p>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="">
+                                        <span class="badge bg-soft-secondary">Warehouse</span>
+                                        <p class="mt-1" style="color: #1e857a;"><strong>Banasree Warehouse (1055)</strong></p>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="">
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Sales Amount:</span> BDT 1150.00</p>
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Paid Amount:</span> BDT 0.00</p>
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Due Amount:</span> BDT 1280.00</p>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-secondary">Pending</button>
+                                    {{-- <button type="button" class="btn btn-sm btn-warning">On Hold</button>
+                                    <button type="button" class="btn btn-sm btn-primary">Approved</button>
+                                    <button type="button" class="btn btn-sm btn-dark">Flagged</button>
+                                    <button type="button" class="btn btn-sm btn-success">Ready To Ship</button>
+                                    <button type="button" class="btn btn-sm btn-info">In-Transit</button>
+                                    <button type="button" class="btn btn-sm btn-danger">Cancelled</button>
+                                    <button type="button" class="btn btn-sm btn-success">Delivered</button> --}}
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center gap-1"> 
+                                        <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" style="width: 20px; border-radius: 50px;"> 
+                                        <p class="mb-0">Steadfast</p> 
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <p>BDT 130.00</p>
+                                </td>
+
+                                <td style="text-wrap: auto;">
+                                    
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-plus"></i> 
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="checkboxs">
+                                        <input type="checkbox" id="select-all">
+                                        <span class="checkmarks"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div class="copy-row">
+                                        <div class="all_icons mb-2">
+                                            <i data-tooltip="tip1" class="ti ti-info-circle cursor-pointer tooltip-trigger"></i>
+
+                                            <i class="ti ti-copy cursor-pointer copy_name" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy"></i>
+
+                                            <i class="ti ti-printer cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Print"></i>
+
+                                            <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Edit"></i>
+                                        </div>
+
+                                        <a href="#" class="mb-2 d-block">
+                                            <p class="text-teal font-bold copy_element">GB-9632541</p>
+                                        </a>
+
+                                        <div class="">
+                                            <span class="badge bg-success">Whatsapp</span>
+                                            {{-- <span class="badge bg-primary">Website</span>
+                                            <span class="badge bg-success">Phone Call</span>
+                                            <span class="badge bg-info">Facebook</span>
+                                            <span class="badge bg-dark">Instagram</span> --}}
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                   <div class="d-flex flex-column">
+                                       <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Created:</span> Jan 1, 2026 09:49 A.M</p>
+                                       <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Shipping:</span> Jan 1, 2026 09:49 A.M</p>
+                                       <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Approved:</span> Jan 1, 2026 09:49 A.M</p>
+                                   </div>
+                                </td>
+
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div class="copy-row">
+                                        <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
+                                        <div class="d-flex align-items-center gap-1 mb-1">
+                                            <span class="badge badge-sm bg-primary">New</span>
+                                            <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
+                                        </div>
+
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <strong><span class="copyNumber">+8801833220886</span></strong>
+                                            <span data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy" class="text-success" style="cursor: pointer;"><i class="ti ti-copy copyIcon" style="font-size: 18px;"></i></span>
+                                            <a href="https://wa.me/01833220886" target="_blank" style="width: 18px;">
+                                                <img src="{{ asset('public/admin/assets/images/whatsapp.png') }}" alt="" width="18">
+                                            </a>
+                                        </div>
+
+                                        <div style="text-wrap: auto;">
+                                            <p style="font-weight: 500;">K-39/5, KURIL VATARA - 1229 K-39/5, KURIL VATARA - 1229</p>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="">
+                                        <span class="badge bg-soft-secondary">Warehouse</span>
+                                        <p class="mt-1" style="color: #1e857a;"><strong>Banasree Warehouse (1055)</strong></p>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="">
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Sales Amount:</span> BDT 1150.00</p>
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Paid Amount:</span> BDT 0.00</p>
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Due Amount:</span> BDT 1280.00</p>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-secondary">Pending</button>
+                                    {{-- <button type="button" class="btn btn-sm btn-warning">On Hold</button>
+                                    <button type="button" class="btn btn-sm btn-primary">Approved</button>
+                                    <button type="button" class="btn btn-sm btn-dark">Flagged</button>
+                                    <button type="button" class="btn btn-sm btn-success">Ready To Ship</button>
+                                    <button type="button" class="btn btn-sm btn-info">In-Transit</button>
+                                    <button type="button" class="btn btn-sm btn-danger">Cancelled</button>
+                                    <button type="button" class="btn btn-sm btn-success">Delivered</button> --}}
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center gap-1"> 
+                                        <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" style="width: 20px; border-radius: 50px;"> 
+                                        <p class="mb-0">Steadfast</p> 
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <p>BDT 130.00</p>
+                                </td>
+
+                                <td style="text-wrap: auto;">
+                                    
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-plus"></i> 
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="checkboxs">
+                                        <input type="checkbox" id="select-all">
+                                        <span class="checkmarks"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div class="copy-row">
+                                        <div class="all_icons mb-2">
+                                            <i data-tooltip="tip1" class="ti ti-info-circle cursor-pointer tooltip-trigger"></i>
+
+                                            <i class="ti ti-copy cursor-pointer copy_name" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy"></i>
+
+                                            <i class="ti ti-printer cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Print"></i>
+
+                                            <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Edit"></i>
+                                        </div>
+
+                                        <a href="#" class="mb-2 d-block">
+                                            <p class="text-teal font-bold copy_element">GB-9632541</p>
+                                        </a>
+
+                                        <div class="">
+                                            <span class="badge bg-success">Whatsapp</span>
+                                            {{-- <span class="badge bg-primary">Website</span>
+                                            <span class="badge bg-success">Phone Call</span>
+                                            <span class="badge bg-info">Facebook</span>
+                                            <span class="badge bg-dark">Instagram</span> --}}
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                   <div class="d-flex flex-column">
+                                       <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Created:</span> Jan 1, 2026 09:49 A.M</p>
+                                       <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Shipping:</span> Jan 1, 2026 09:49 A.M</p>
+                                       <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Approved:</span> Jan 1, 2026 09:49 A.M</p>
+                                   </div>
+                                </td>
+
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div class="copy-row">
+                                        <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
+                                        <div class="d-flex align-items-center gap-1 mb-1">
+                                            <span class="badge badge-sm bg-primary">New</span>
+                                            <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
+                                        </div>
+
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <strong><span class="copyNumber">+8801833220886</span></strong>
+                                            <span data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy" class="text-success" style="cursor: pointer;"><i class="ti ti-copy copyIcon" style="font-size: 18px;"></i></span>
+                                            <a href="https://wa.me/01833220886" target="_blank" style="width: 18px;">
+                                                <img src="{{ asset('public/admin/assets/images/whatsapp.png') }}" alt="" width="18">
+                                            </a>
+                                        </div>
+
+                                        <div style="text-wrap: auto;">
+                                            <p style="font-weight: 500;">K-39/5, KURIL VATARA - 1229 K-39/5, KURIL VATARA - 1229</p>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="">
+                                        <span class="badge bg-soft-secondary">Warehouse</span>
+                                        <p class="mt-1" style="color: #1e857a;"><strong>Banasree Warehouse (1055)</strong></p>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="">
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Sales Amount:</span> BDT 1150.00</p>
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Paid Amount:</span> BDT 0.00</p>
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Due Amount:</span> BDT 1280.00</p>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-secondary">Pending</button>
+                                    {{-- <button type="button" class="btn btn-sm btn-warning">On Hold</button>
+                                    <button type="button" class="btn btn-sm btn-primary">Approved</button>
+                                    <button type="button" class="btn btn-sm btn-dark">Flagged</button>
+                                    <button type="button" class="btn btn-sm btn-success">Ready To Ship</button>
+                                    <button type="button" class="btn btn-sm btn-info">In-Transit</button>
+                                    <button type="button" class="btn btn-sm btn-danger">Cancelled</button>
+                                    <button type="button" class="btn btn-sm btn-success">Delivered</button> --}}
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center gap-1"> 
+                                        <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" style="width: 20px; border-radius: 50px;"> 
+                                        <p class="mb-0">Steadfast</p> 
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <p>BDT 130.00</p>
+                                </td>
+
+                                <td style="text-wrap: auto;">
+                                    
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-plus"></i> 
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="checkboxs">
+                                        <input type="checkbox" id="select-all">
+                                        <span class="checkmarks"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div class="copy-row">
+                                        <div class="all_icons mb-2">
+                                            <i data-tooltip="tip1" class="ti ti-info-circle cursor-pointer tooltip-trigger"></i>
+
+                                            <i class="ti ti-copy cursor-pointer copy_name" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy"></i>
+
+                                            <i class="ti ti-printer cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Print"></i>
+
+                                            <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Edit"></i>
+                                        </div>
+
+                                        <a href="#" class="mb-2 d-block">
+                                            <p class="text-teal font-bold copy_element">GB-9632541</p>
+                                        </a>
+
+                                        <div class="">
+                                            <span class="badge bg-success">Whatsapp</span>
+                                            {{-- <span class="badge bg-primary">Website</span>
+                                            <span class="badge bg-success">Phone Call</span>
+                                            <span class="badge bg-info">Facebook</span>
+                                            <span class="badge bg-dark">Instagram</span> --}}
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                   <div class="d-flex flex-column">
+                                       <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Created:</span> Jan 1, 2026 09:49 A.M</p>
+                                       <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Shipping:</span> Jan 1, 2026 09:49 A.M</p>
+                                       <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Approved:</span> Jan 1, 2026 09:49 A.M</p>
+                                   </div>
+                                </td>
+
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div class="copy-row">
+                                        <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
+                                        <div class="d-flex align-items-center gap-1 mb-1">
+                                            <span class="badge badge-sm bg-primary">New</span>
+                                            <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
+                                        </div>
+
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <strong><span class="copyNumber">+8801833220886</span></strong>
+                                            <span data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy" class="text-success" style="cursor: pointer;"><i class="ti ti-copy copyIcon" style="font-size: 18px;"></i></span>
+                                            <a href="https://wa.me/01833220886" target="_blank" style="width: 18px;">
+                                                <img src="{{ asset('public/admin/assets/images/whatsapp.png') }}" alt="" width="18">
+                                            </a>
+                                        </div>
+
+                                        <div style="text-wrap: auto;">
+                                            <p style="font-weight: 500;">K-39/5, KURIL VATARA - 1229 K-39/5, KURIL VATARA - 1229</p>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="">
+                                        <span class="badge bg-soft-secondary">Warehouse</span>
+                                        <p class="mt-1" style="color: #1e857a;"><strong>Banasree Warehouse (1055)</strong></p>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="">
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Sales Amount:</span> BDT 1150.00</p>
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Paid Amount:</span> BDT 0.00</p>
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Due Amount:</span> BDT 1280.00</p>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-secondary">Pending</button>
+                                    {{-- <button type="button" class="btn btn-sm btn-warning">On Hold</button>
+                                    <button type="button" class="btn btn-sm btn-primary">Approved</button>
+                                    <button type="button" class="btn btn-sm btn-dark">Flagged</button>
+                                    <button type="button" class="btn btn-sm btn-success">Ready To Ship</button>
+                                    <button type="button" class="btn btn-sm btn-info">In-Transit</button>
+                                    <button type="button" class="btn btn-sm btn-danger">Cancelled</button>
+                                    <button type="button" class="btn btn-sm btn-success">Delivered</button> --}}
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center gap-1"> 
+                                        <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" style="width: 20px; border-radius: 50px;"> 
+                                        <p class="mb-0">Steadfast</p> 
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <p>BDT 130.00</p>
+                                </td>
+
+                                <td style="text-wrap: auto;">
+                                    
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-plus"></i> 
+                                    </div>
+                                </td>
+                            </tr>
+
                             <tr>
                                 <td>
                                     <label class="checkboxs">
@@ -1005,6 +1495,101 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- OnGoing Order Part --}}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="order_processing">
+                                <div class="d-flex align-items-center gap-3 mb-3 border-bottom pb-3">
+                                    <h5>OnGoing Order</h5>
+                                    <span class="badge badge-lg bg-primary">3</span>
+                                    <div class="bar_loader">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+            
+                                {{-- 1st Order History --}}
+                                <div class="border-bottom pb-2 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
+                                            <div class="custom-tooltip" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="1. Safawi/kalmi Dates (A Grade) 1kg Safawi/kalmi Dates (A Grade) 1kg . BDT 1550, 2. সুন্দরবনের মধু/Sundarban Honey . BDT 2250">
+                                                <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark tooltip-trigger icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                            </div>
+
+                                        </div>
+            
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary" type="button" >
+                                                Pending
+                                            </button>
+                                        </div>
+                                    </div>
+            
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>BDT 2250.00</span>
+                                        <div class="">
+                                            <span>Sep 22,2025 9:45 P.M</span>
+                                            <i class="ti ti-info-circle text-dark" style="font-size: 16px;" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="This sales order GB-254136 was created by Nazmul Hassan at 11.23 A.M on Dec 02, 2026"></i>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                {{-- 2nd Order History --}}
+                                <div class="border-bottom pb-2 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                        </div>
+            
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary" type="button">
+                                                On Hold
+                                            </button>
+                                        </div>
+                                    </div>
+            
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>BDT 2075.50</span>
+                                        <div class="">
+                                            <span>Sep 29,2025, 11:45 P.M</span>
+                                            <i class="ti ti-info-circle text-dark" style="font-size: 16px;" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="This sales order GB-254136 was created by Admin at 11.23 A.M on Dec 02, 2026"></i>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                {{-- 3rd Order History --}}
+                                <div class="border-bottom pb-2" >
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="#" class="text-secondary"><strong>GB-4985</strong></a>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                        </div>
+            
+                                        <div class="dropdown">
+                                            <a class="btn btn-info" type="button" >
+                                                In Transit
+                                            </a>
+                                        </div>
+                                    </div>
+            
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>BDT 2075.50</span>
+                                        <div class="">
+                                            <span>Sep 29,2025, 11:45 P.M</span>
+                                            <i class="ti ti-info-circle text-dark" style="font-size: 16px;" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="This sales order GB-254136 was created by Admin at 11.23 A.M on Dec 02, 2026"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
         
                     {{-- Delivery Partner --}}
                     <div class="card">
@@ -1160,12 +1745,89 @@
 
 @push('add-js') 
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.6/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.6/js/buttons.dataTables.js"></script>
     <script src="{{ asset('public/admin/assets/js/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
 
 
 <script>
+        // Show Data through Datatable
+        let datatables = $('.datatables').DataTable({
+            pageLength: 25,
+            layout: {
+                topStart: {
+                    buttons: [
+                        {
+                            text: `<i class="ti ti-refresh"></i>`,
+                            className: 'btn btn-outline-secondary refresh_btn',
+                            action: function (e, dt, node, config) {
+                                alert('Button activated');
+                            }
+                        },
+                        {
+                            text: '<i class="ti ti-adjustments"></i> Filter Column',
+                            className: 'btn btn-secondary filter-column-btn',
+                            action: function () {
+                                // Bootstrap dropdown will handle it
+                            }
+                        }
+                    ],
+                    pageLength: {
+                        menu: [10, 25, 50, 100, 250, -1]
+                    },
+                },
+                topEnd: {
+                    paging: true,
+                }
+            },
+            language: {
+                lengthMenu: "Show _MENU_"
+            },
+            initComplete: function () {
+                let table = this.api(); // Safe reference to DataTable
+
+                // Inject dropdown HTML AFTER table initialization
+                $('.filter-column-btn').replaceWith(`
+                    <div class="dropdown">
+                        <button class="btn btn-secondary border dropdown-toggle filter-column-btn"
+                                data-bs-toggle="dropdown">
+                            <i class="ti ti-adjustments"></i> Filter Column
+                        </button>
+                        <div class="dropdown-menu filter-column-menu p-2"></div>
+                    </div>
+                `);
+
+                let columnMenu = $('.filter-column-menu');
+
+                // Build checkboxes for all columns
+                table.columns().every(function (index) {
+                    let column = this;
+                    let title = $(column.header()).text().trim();
+                    if (!title) return;
+
+                    columnMenu.append(`
+                        <div class="form-check mb-1">
+                            <input class="form-check-input toggle-column"
+                                type="checkbox"
+                                data-column="${index}"
+                                checked>
+                            <label class="form-check-label">${title}</label>
+                        </div>
+                    `);
+                });
+
+                // Bind toggle event
+                $(document).on('change', '.toggle-column', function () {
+                    let columnIndex = $(this).data('column');
+                    let visible = $(this).is(':checked');
+                    table.column(columnIndex).visible(visible);
+                });
+            }
+        });
+
+
         document.querySelector('.btn_refresh').addEventListener('click', function () {
             const loader = document.querySelector('.loading_zone');
         

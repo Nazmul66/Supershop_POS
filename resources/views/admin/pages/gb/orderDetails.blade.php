@@ -432,7 +432,7 @@
                                 </div>
                                 
                                 <div class="mb-3 followUp_date d-none">
-                                    <label class="form-label" for="reportrange">Shipping Date <span class="text-danger"> *</span></label>
+                                    <label class="form-label" for="reportrange">Follow Up Date <span class="text-danger"> *</span></label>
 
                                     <input type="text" id="followUp_date" name="followUp_date" class="form-control" placeholder="Select date range" readonly disabled="true" />
                                 </div>

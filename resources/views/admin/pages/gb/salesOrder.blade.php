@@ -286,6 +286,10 @@
             padding: 12px 24px;
             display: none !important;
         }
+        #create_customer{
+            max-width: 100%;
+            width: 500px !important;
+        }
     </style>
 @endpush
 
@@ -329,7 +333,7 @@
                         </div>
                         <p class="text-center mb-2">Sorry! Customer not found.</p>
                         <div class="text-center">
-                            <button type="button" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#create_customer" class="btn btn-secondary">Add Customer</button>
+                            <button type="button" data-bs-toggle="offcanvas"  data-bs-target="#create_customer" aria-controls="offcanvasRight" class="btn btn-secondary">Add Customer</button>
                         </div>
                     </div>
 
@@ -659,6 +663,7 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <div class="d-flex align-items-center gap-2">
+                                    <span class="text-dark fw-bold">Regular</span>
                                     <h5>BDT 600.00</h5>
                                 </div>
                                 <button type="button" class="btn btn-secondary"> 
@@ -688,11 +693,16 @@
 
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <h5>BDT 1550.00</h5>
-                                    <del>
-                                       <h5>BDT 1700.00</h5>
-                                    </del>
+                                <div class="">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="text-dark fw-bold">Regular</span>
+                                        <h5>BDT 1700.00</h5>
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="text-dark fw-bold">Sale</span>
+                                        <h5>BDT 1550.00</h5>
+                                    </div>
                                 </div>
                                 <button type="button" class="btn btn-secondary"> 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-shopping-cart"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 2a1 1 0 0 1 .993 .883l.007 .117v1.068l13.071 .935a1 1 0 0 1 .929 1.024l-.01 .114l-1 7a1 1 0 0 1 -.877 .853l-.113 .006h-12v2h10a3 3 0 1 1 -2.995 3.176l-.005 -.176l.005 -.176c.017 -.288 .074 -.564 .166 -.824h-5.342a3 3 0 1 1 -5.824 1.176l-.005 -.176l.005 -.176a3.002 3.002 0 0 1 1.995 -2.654v-12.17h-1a1 1 0 0 1 -.993 -.883l-.007 -.117a1 1 0 0 1 .883 -.993l.117 -.007h2zm0 16a1 1 0 1 0 0 2a1 1 0 0 0 0 -2zm11 0a1 1 0 1 0 0 2a1 1 0 0 0 0 -2z"></path></svg>
@@ -896,8 +906,8 @@
     </div>
 
 
-    <!-- Customer Create -->
-    <div id="create_customer" class="modal fade effect-flip-vertical" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+    <!-- CreateCustomer -->
+    {{-- <div id="create_customer" class="modal fade effect-flip-vertical" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
     style="display: none;" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -910,72 +920,60 @@
                     <form id="createForm" enctype="multipart/form-data">
                         @csrf
 
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label class="form-label" for="cus_type">Customer Type</label>
-
-                                <select name="cus_type" id="cus_type" class="form-select">
+                        <div class="mb-3">
+                            <div class="bg-input-field">
+                                <label for="cus_type" class="form_labels">Customer Type</label>
+                                <select name="cus_type" id="cus_type" class="form-select form_inputs">
                                     <option value="" selected>Ecommerce Type Customer</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label class="form-label" for="cus_name">Customer Name <span class="text-danger"> *</span></label>
-
-                                <input type="text" id="cus_name" name="cus_name" class="form-control" />
+                        <div class="mb-4">
+                            <div class="bg-input-field">
+                                <label for="cus_name" class="form_labels">Customer Name</label>
+                                <input type="text" id="cus_name" name="cus_name" class="form-control form_inputs" placeholder="" />
                             </div>
                         </div>
 
-                        <div class="col-lg-12">
-                            <div class="mb-3 mt-3">
-                                <label class="form-label" for="cus_number">Phone Number <span class="text-danger"> *</span></label>
-                                <input type="text" id="cus_number" name="cus_number" class="form-control" />
-                            </div>
+                        <div class="mb-3 mt-3">
+                            <label class="form-label" for="cus_number">Phone Number <span class="text-danger"> *</span></label>
+                            <input type="text" id="cus_number" name="cus_number" class="form-control" />
                         </div>
 
-                        <div class="col-lg-12">
-                            <div class="mb-3 mt-3">
-                                <label class="form-label" for="cus_email">Customer Email (optional)</label>
-                                <input type="text" id="cus_email" name="cus_email" class="form-control" />
-                            </div>
+                        <div class="mb-3 mt-3">
+                            <label class="form-label" for="cus_email">Customer Email (optional)</label>
+                            <input type="text" id="cus_email" name="cus_email" class="form-control" />
                         </div>
 
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label class="form-label" for="cus_address">Customer Address</label>
-                                <div class="input-addon-right position-relative">
-                                    <textarea name="cus_address" class="form-control" id="cus_address" cols="30" rows="3"></textarea>
-                                </div>
-
-                                <span id="cus_address_validate" class="text-danger validation-error mt-1"></span>
+                        <div class="mb-3">
+                            <label class="form-label" for="cus_address">Customer Address</label>
+                            <div class="input-addon-right position-relative">
+                                <textarea name="cus_address" class="form-control" id="cus_address" cols="30" rows="3"></textarea>
                             </div>
+
+                            <span id="cus_address_validate" class="text-danger validation-error mt-1"></span>
                         </div>
 
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label class="form-label" for="additional_note">Additional Note (optional)</label>
-                                <div class="input-addon-right position-relative">
-                                    <textarea name="additional_note" class="form-control" id="additional_note" cols="30" rows="3"></textarea>
-                                </div>
-
-                                <span id="additional_note_validate" class="text-danger validation-error mt-1"></span>
+                        <div class="mb-3">
+                            <label class="form-label" for="additional_note">Additional Note (optional)</label>
+                            <div class="input-addon-right position-relative">
+                                <textarea name="additional_note" class="form-control" id="additional_note" cols="30" rows="3"></textarea>
                             </div>
+
+                            <span id="additional_note_validate" class="text-danger validation-error mt-1"></span>
                         </div>
 
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label class="form-label" for="internal_note">Internal Note (optional)</label>
-                                <div class="input-addon-right position-relative">
-                                    <textarea name="internal_note" class="form-control" id="internal_note" cols="30" rows="3"></textarea>
-                                </div>
-
-                                <span id="internal_note_validate" class="text-danger validation-error mt-1"></span>
+                        <div class="mb-3">
+                            <label class="form-label" for="internal_note">Internal Note (optional)</label>
+                            <div class="input-addon-right position-relative">
+                                <textarea name="internal_note" class="form-control" id="internal_note" cols="30" rows="3"></textarea>
                             </div>
+
+                            <span id="internal_note_validate" class="text-danger validation-error mt-1"></span>
                         </div>
 
-                        <div class="col-lg-12">
+                        <div class="">
                             <label for="" class="form-label">Save As</label>
 
                             <div class="d-flex align-items-center gap-3">
@@ -1002,33 +1000,29 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-12">
-                            <div class="mt-3 mb-3">
-                                <label class="form-label" for="cus_tag">Customer Tag (Optional)</label>
+                        <div class="mt-3 mb-3">
+                            <label class="form-label" for="cus_tag">Customer Tag (Optional)</label>
 
-                                <select name="cus_tag" id="cus_tag" class="form-control">
-                                    <option value="new" selected>New</option>
-                                    <option value="regular">Regular</option>
-                                    <option value="vip">VIP</option>
-                                    <option value="corporate">Corporate</option>
-                                    <option value="employee">Employee</option>
-                                    <option value="probashi">Probashi</option>
-                                </select>
-                            </div>
+                            <select name="cus_tag" id="cus_tag" class="form-control">
+                                <option value="new" selected>New</option>
+                                <option value="regular">Regular</option>
+                                <option value="vip">VIP</option>
+                                <option value="corporate">Corporate</option>
+                                <option value="employee">Employee</option>
+                                <option value="probashi">Probashi</option>
+                            </select>
                         </div>
 
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label class="form-label" for="cus_source">Customer Source</label>
+                        <div class="mb-3">
+                            <label class="form-label" for="cus_source">Customer Source</label>
 
-                                <select name="cus_source" id="cus_source" class="form-control">
-                                    <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
-                                    <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
-                                    <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
-                                    <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
-                                    <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
-                                </select>
-                            </div>
+                            <select name="cus_source" id="cus_source" class="form-control">
+                                <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
+                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
+                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
+                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
+                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
+                            </select>
                         </div>
 
 
@@ -1036,14 +1030,148 @@
                             <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3"
                                 data-bs-dismiss="modal">Close </button>
 
-                            <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Save changes</button>
+                            <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Create</button>
                         </div>
                     </form>
                 </div>
 
-
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
+    </div> --}}
+
+
+    {{-- Create Customer --}}
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="create_customer" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h3 id="offcanvasRightLabel">Create Customer</h3>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body">
+            <div class="row">
+                <form id="createForm" enctype="multipart/form-data">
+                    @csrf
+    
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="cus_type" class="form_labels">Customer Type</label>
+                            <select name="cus_type" id="cus_type" class="form-select select_form mt-2">
+                                <option value="" selected>Ecommerce Type Customer</option>
+                            </select>
+                        </div>
+                    </div>
+    
+                    <div class="mb-4">
+                        <div class="bg-input-field">
+                            <label for="cus_name" class="form_labels">Customer Name <span class="text-danger"> *</span></label>
+                            <input type="text" id="cus_name" name="cus_name" class="form-control form_inputs" placeholder="" />
+                        </div>
+                    </div>
+    
+                    <div class="mb-3 mt-3">
+                        <div class="bg-input-field">
+                            <label for="cus_phone" class="form_labels">Phone Number <span class="text-danger"> *</span></label>
+                            <input type="text" id="cus_phone" name="cus_phone" class="form-control form_inputs" placeholder="" />
+                        </div>
+                    </div>
+    
+                    <div class="mb-3 mt-3">
+                        <div class="bg-input-field">
+                            <label for="cus_email" class="form_labels">Customer Email (optional) </label>
+                            <input type="email" id="cus_email" name="cus_email" class="form-control form_inputs" placeholder="" />
+                        </div>
+                    </div>
+    
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
+
+                            <div class="input-addon-right position-relative">
+                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="additional_note" class="form_labels">Additional Note (optional)</label>
+
+                            <div class="input-addon-right position-relative">
+                                <textarea name="additional_note" class="form-control form_inputs" id="additional_note" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="internal_note" class="form_labels">Internal Note (optional)</label>
+
+                            <div class="input-addon-right position-relative">
+                                <textarea name="internal_note" class="form-control form_inputs" id="internal_note" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="">
+                        <label for="" class="form-label">Save As</label>
+    
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                                <label class="form-check-label" for="home">
+                                    Home
+                                </label>
+                            </div>
+    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                                <label class="form-check-label" for="work">
+                                    Work
+                                </label>
+                            </div>
+    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
+                                <label class="form-check-label" for="other">
+                                    Other
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="mt-3 mb-3">
+                        <label class="form-label" for="cus_tag">Customer Tag (Optional)</label>
+    
+                        <select name="cus_tag" id="cus_tag" class="form-control">
+                            <option value="new" selected>New</option>
+                            <option value="regular">Regular</option>
+                            <option value="vip">VIP</option>
+                            <option value="corporate">Corporate</option>
+                            <option value="employee">Employee</option>
+                            <option value="probashi">Probashi</option>
+                        </select>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label class="form-label" for="cus_source">Customer Source</label>
+    
+                        <select name="cus_source" id="cus_source" class="form-control">
+                            <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
+                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
+                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
+                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
+                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
+                        </select>
+                    </div>
+    
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
+    
+                        <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
 
@@ -1402,6 +1530,10 @@
                 historyBox.classList.add('show');
                 createBox.classList.remove('show');
             } 
+            else if(this.value.trim() === ''){
+                historyBox.classList.remove('show');
+                createBox.classList.remove('show');
+            }
             else {
                 historyBox.classList.remove('show');
                 createBox.classList.add('show');
@@ -1413,6 +1545,10 @@
                 historyBox.classList.add('show');
                 createBox.classList.remove('show');
             } 
+            else if(this.value.trim() === ''){
+                historyBox.classList.remove('show');
+                createBox.classList.remove('show');
+            }
             else {
                 historyBox.classList.remove('show');
                 createBox.classList.add('show');

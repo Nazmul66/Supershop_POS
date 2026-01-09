@@ -761,6 +761,34 @@ label:not(.form-check-label):not(.custom-file-label) {
     font-size: 17px;
     cursor: pointer;
 }
-.custom-tooltip .tooltip-inner{
-    width: 400px !important;
+
+.bg-input-field{
+    background: #F7F7F7;
+    padding: 10px 20px;
+}
+.form_labels{
+    color: #676970 !important;
+}
+.form_inputs{
+    border: 1px solid transparent !important;
+    background: #F7F7F7;
+    color: #6a7178;
+}
+.select_form{
+    border: 1px solid #e1e1e1 !important;
+    background: #F7F7F7;
+    color: #6a7178;
+}
+.form_inputs:focus{
+    border: 1px solid transparent !important;
+    background: transparent;
+    color: #6a7178;
+}
+.select_form:focus{
+    background: transparent;
+    color: #6a7178; 
+}
+.bg-input-field:focus-within{
+    border: 1px solid #3A6931;
+    background-color: #FFF;
 }

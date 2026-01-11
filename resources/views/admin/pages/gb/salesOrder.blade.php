@@ -10,42 +10,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link href="{{ asset('public/admin/assets/css/select2.min.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/daterangepicker.css') }}" />
 
     <style>
         body{
             font-family: "Arimo", sans-serif !important;
-        }
-        .bar_loader {
-            display: flex;
-            align-items: flex-end;
-            gap: 6px;
-            width: 56px;
-            height: 40px;
-        }
-
-        .bar_loader span {
-            width: 5px;
-            height: 10px;
-            background: #28a745;
-            /* border-radius: 4px; */
-            animation: barMove 1.2s ease-in-out infinite;
-        }
-
-        /* Serial animation delay */
-        .bar_loader span:nth-child(1) { animation-delay: 0s; }
-        .bar_loader span:nth-child(2) { animation-delay: 0.1s; }
-        .bar_loader span:nth-child(3) { animation-delay: 0.2s; }
-        .bar_loader span:nth-child(4) { animation-delay: 0.3s; }
-        .bar_loader span:nth-child(5) { animation-delay: 0.4s; }
-        .bar_loader span:nth-child(6) { animation-delay: 0.5s; }
-
-        /* Up & Down animation */
-        @keyframes barMove {
-            0%   { height: 10px; opacity: 0.4; }
-            50%  { height: 40px; opacity: 1; }
-            100% { height: 10px; opacity: 0.4; }
         }
         .tabler_info_circle{
             width: 20px;
@@ -76,47 +46,6 @@
         .delivery_progress{
             position: relative;
         }
-        .loading_zone{
-            position: absolute; 
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.6);
-
-        }
-        .loading_zone .load-position{
-            position: absolute;
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%);
-        }
-        .arrow_loader {
-            width: 48px;
-            height: 48px;
-            display: inline-block;
-            position: relative;
-            border-width: 3px 2px 3px 2px;
-            border-style: solid dotted solid dotted;
-            border-color: #de3500 rgba(255, 255, 255,0.3) #3EB780 rgba(151, 107, 93, 0.3);
-            border-radius: 50%;
-            box-sizing: border-box;
-            animation: 1s rotate linear infinite;
-        }
-        .arrow_loader:before , .arrow_loader:after{
-            content: '';
-            top: 0;
-            left: 0;
-            position: absolute;
-            border: 10px solid transparent;
-            border-bottom-color:#3EB780;
-            transform: translate(-10px, 19px) rotate(-35deg);
-        }
-        .arrow_loader:after {
-            border-color: #de3500 #0000 #0000 #0000 ;
-            transform: translate(32px, 3px) rotate(-35deg);
-        }
-        @keyframes rotate {
-            100%{    transform: rotate(360deg)}
-        }
         .page_intersaction{
             max-height: 70vh;   /* screen height */
             overflow-y: auto;
@@ -134,76 +63,6 @@
             position: absolute;
             top: 15px;
             right: 15px;
-        }
-        .search_box{
-            position: relative;
-            background: #e6eaed;
-            padding: 14px 16px;
-            border-radius: 6px;
-        }
-        .search_box .cus_create_box{
-            position: absolute;
-            top: 85px;
-            left: 8px;
-            padding: 28px;
-            border-radius: 6px;
-            background: #FFF;
-            z-index: 50;
-            width: 95%;
-            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-        }
-        /* Show state */
-        .search_box .cus_create_box.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        .search_box .cus_history_box{
-            position: absolute;
-            top: 85px;
-            left: 8px;
-            padding: 20px 28px 12px 28px;
-            border-radius: 6px;
-            background: #FFF;
-            z-index: 50;
-            width: 95%;
-            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-        }
-        .search_box .cus_history_box.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        .search_form_box{
-           position: relative;
-        }
-        .search_form_box .form_search{
-            border: none;
-            width: 100%;
-            padding-left: 28px;
-            background: transparent;
-            height: 35px;
-            font-size: 16px;
-            border-radius: 4px;
-            color: #212B36;
-            font-weight: 500;
-        }
-        .search_form_box .ti-search{
-           position: absolute;
-           top: 50%;
-           left: 0;
-           transform: translateY(-50%);
-           font-size: 22px;
         }
         .form-check-input {
             border: 1px solid #706666 !important;
@@ -224,56 +83,10 @@
             align-items: center;
             justify-content: center;
         }
-
-        .wg-quantity {
-            display: inline-flex;
-            align-items: center;
-            border: 1px solid #e2e8f0;
-            overflow: hidden;
-            background: #fff;
-            height: 38px;
-        }
         .form-select,
         .form-control{
             font-weight: 600;
         }
-
-        .btn-quantity {
-            width: 38px;
-            height: 38px;
-            border: none;
-            background: #0b2545; /* match Add to Cart button */
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            user-select: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s ease, transform 0.1s ease;
-        }
-
-        .btn-quantity:hover {
-            background: #163a6b;
-        }
-
-        .btn-quantity:active {
-            transform: scale(0.95);
-        }
-
-        .quantity-product {
-            width: 50px;
-            height: 38px;
-            text-align: center;
-            border: none;
-            outline: none;
-            font-size: 14px;
-            font-weight: 600;
-            color: #0b2545;
-            background: #f8fafc;
-        }
-
         .order_calculation{
             position: absolute;
             bottom: 0;
@@ -833,6 +646,10 @@
                         <button class="btn btn-square btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Next</button>
                    </div>
                 </div>
+
+                <div class="">
+
+                </div>
             </div>
         </div>
     </div>
@@ -904,140 +721,6 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
-
-
-    <!-- CreateCustomer -->
-    {{-- <div id="create_customer" class="modal fade effect-flip-vertical" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-    style="display: none;" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Create Customer</h5>
-                    <button type="button" class="btn-close" id="btn_cross" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form id="createForm" enctype="multipart/form-data">
-                        @csrf
-
-                        <div class="mb-3">
-                            <div class="bg-input-field">
-                                <label for="cus_type" class="form_labels">Customer Type</label>
-                                <select name="cus_type" id="cus_type" class="form-select form_inputs">
-                                    <option value="" selected>Ecommerce Type Customer</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <div class="bg-input-field">
-                                <label for="cus_name" class="form_labels">Customer Name</label>
-                                <input type="text" id="cus_name" name="cus_name" class="form-control form_inputs" placeholder="" />
-                            </div>
-                        </div>
-
-                        <div class="mb-3 mt-3">
-                            <label class="form-label" for="cus_number">Phone Number <span class="text-danger"> *</span></label>
-                            <input type="text" id="cus_number" name="cus_number" class="form-control" />
-                        </div>
-
-                        <div class="mb-3 mt-3">
-                            <label class="form-label" for="cus_email">Customer Email (optional)</label>
-                            <input type="text" id="cus_email" name="cus_email" class="form-control" />
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label" for="cus_address">Customer Address</label>
-                            <div class="input-addon-right position-relative">
-                                <textarea name="cus_address" class="form-control" id="cus_address" cols="30" rows="3"></textarea>
-                            </div>
-
-                            <span id="cus_address_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label" for="additional_note">Additional Note (optional)</label>
-                            <div class="input-addon-right position-relative">
-                                <textarea name="additional_note" class="form-control" id="additional_note" cols="30" rows="3"></textarea>
-                            </div>
-
-                            <span id="additional_note_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label" for="internal_note">Internal Note (optional)</label>
-                            <div class="input-addon-right position-relative">
-                                <textarea name="internal_note" class="form-control" id="internal_note" cols="30" rows="3"></textarea>
-                            </div>
-
-                            <span id="internal_note_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="">
-                            <label for="" class="form-label">Save As</label>
-
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
-                                    <label class="form-check-label" for="home">
-                                        Home
-                                    </label>
-                                </div>
-
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
-                                    <label class="form-check-label" for="work">
-                                        Work
-                                    </label>
-                                </div>
-
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
-                                    <label class="form-check-label" for="other">
-                                        Other
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-3 mb-3">
-                            <label class="form-label" for="cus_tag">Customer Tag (Optional)</label>
-
-                            <select name="cus_tag" id="cus_tag" class="form-control">
-                                <option value="new" selected>New</option>
-                                <option value="regular">Regular</option>
-                                <option value="vip">VIP</option>
-                                <option value="corporate">Corporate</option>
-                                <option value="employee">Employee</option>
-                                <option value="probashi">Probashi</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label" for="cus_source">Customer Source</label>
-
-                            <select name="cus_source" id="cus_source" class="form-control">
-                                <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
-                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
-                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
-                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
-                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
-                            </select>
-                        </div>
-
-
-                        <div class="d-flex justify-content-end align-items-center">
-                            <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3"
-                                data-bs-dismiss="modal">Close </button>
-
-                            <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Create</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div> --}}
 
 
     {{-- Create Customer --}}
@@ -1153,9 +836,9 @@
                     </div>
     
                     <div class="mb-3">
-                        <label class="form-label" for="cus_source">Customer Source</label>
+                        <label class="form-label" for="create_cus_source">Customer Source</label>
     
-                        <select name="cus_source" id="cus_source" class="form-control">
+                        <select name="cus_source" id="create_cus_source" class="form-control">
                             <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
@@ -1176,51 +859,62 @@
 
 
     {{-- Order Processing --}}
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas offcanvas-end" data-bs-backdrop="false" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h3 id="offcanvasRightLabel">Order Details</h3>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            {{-- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> --}}
         </div>
 
         <div class="offcanvas-body">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="cus_type"><strong>Customer Type </strong></label>
-
-                        <select name="cus_type" id="cus_type" class="form-select">
-                            <option value="" selected>Ecommerce Type Customer</option>
-                        </select>
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="cus_type" class="form_labels">Customer Type</label>
+                            <select name="cus_type" id="cus_type" class="form-select select_form mt-2">
+                                <option value="" selected>Ecommerce Type Customer</option>
+                            </select>
+                        </div>
                     </div>
-
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="cus_name"><strong>Customer Name </strong> <span class="text-danger"> *</span></label>
-                        <input type="text" id="cus_name" name="cus_name" class="form-control" />
-                    </div>
-
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="cus_phone"><strong>Phone Number </strong> <span class="text-danger"> *</span></label>
-                        <input type="text" id="cus_phone" name="cus_phone" class="form-control" />
-                    </div>
-
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="cus_email"><strong>Email ( Optional ) </strong> </label>
-                        <input type="text" id="cus_email" name="cus_email" class="form-control" />
-                    </div>
-
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="cus_address"><strong>Customer Address </strong> <span class="text-danger"> *</span></label>
-
-                        <div class="input-addon-right">
-                            <textarea name="cus_address" class="form-control" id="cus_address" cols="30" rows="3"></textarea>
+    
+                    <div class="mb-3 mt-3">
+                        <div class="bg-input-field">
+                            <label for="cus_phone" class="form_labels">Phone Number <span class="text-danger"> *</span></label>
+                            <input type="text" id="cus_phone" name="cus_phone" class="form-control form_inputs" placeholder="" />
                         </div>
                     </div>
 
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="map_location"><strong>Map Location </strong> <span class="text-danger"> *</span></label>
+                    <div class="mb-3 mt-3">
+                        <div class="bg-input-field">
+                            <label for="cus_email" class="form_labels">Customer Email (optional) </label>
+                            <input type="email" id="cus_email" name="cus_email" class="form-control form_inputs" placeholder="" />
+                        </div>
+                    </div>
 
-                        <div class="input-addon-right">
-                            <textarea name="map_location" class="form-control" id="map_location" cols="30" rows="3"></textarea>
+                    <div class="mb-4">
+                        <div class="bg-input-field">
+                            <label for="cus_name" class="form_labels">Customer Name <span class="text-danger"> *</span></label>
+                            <input type="text" id="cus_name" name="cus_name" class="form-control form_inputs" placeholder="" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="cus_address" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
+
+                            <div class="input-addon-right position-relative">
+                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="map_address" class="form_labels">Map Location <span class="text-danger"> *</span></label>
+
+                            <div class="input-addon-right position-relative">
+                                <textarea name="map_address" class="form-control form_inputs" id="map_address" cols="30" rows="2"></textarea>
+                            </div>
                         </div>
                     </div>
 
@@ -1229,14 +923,14 @@
 
                         <div class="d-flex align-items-center gap-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" >
                                 <label class="form-check-label" for="home">
                                     Home
                                 </label>
                             </div>
 
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work" checked>
                                 <label class="form-check-label" for="work">
                                     Work
                                 </label>
@@ -1251,75 +945,95 @@
                         </div>
                     </div>
 
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="additional"><strong>Additional Note </strong> <span class="text-danger"> *</span></label>
-
-                        <div class="input-addon-right">
-                            <textarea name="additional" class="form-control" id="additional" cols="30" rows="3"></textarea>
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="pickup_location" class="form_labels"><strong>Pickup Location </strong></label>
+                            <select name="pickup_location" id="pickup_location" class="form-select select_form mt-2">
+                                <option value="" selected disabled>Select Warehouse</option>
+                                <option >Banasree Warehouse</option>
+                            </select>
                         </div>
                     </div>
 
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="pickup_location"><strong>Pickup Location </strong></label>
-
-                        <select name="pickup_location" id="pickup_location" class="form-select" required>
-                            <option value="" selected disabled>Select Warehouse</option>
-                            <option >Banasree Warehouse</option>
-                        </select>
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="courier_agent" class="form_labels mb-2"><strong>Assign Delivery Partner </strong></label>
+                            <select name="courier_agent" id="courier_agent" class="form-select select_form">
+                                <option value="" selected disabled>Select Courier Agent</option>
+                                <option value="dd" data-image-url="{{ asset('public/admin/assets/images/steadfast.png') }}">SteadFast</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="courier_agent"><strong>Assign Delivery Partner </strong></label>
-
-                        <select name="courier_agent" id="courier_agent" class="form-select" required>
-                            <option value="" selected disabled>Select Courier Agent</option>
-                            <option value="dd" data-image-url="{{ asset('public/admin/assets/images/steadfast.png') }}">SteadFast</option>
-                        </select>
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="shipping_date" class="form_labels"><strong>Shipping Date </strong> <span class="text-danger"> *</span></label>
+                            <input type="text" id="shipping_date" name="shipping_date" class="form-control form_inputs" placeholder="YYYY-MM-DD" />
+                        </div>
                     </div>
 
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="shipping_date"><strong>Shipping Date </strong> </label>
-                        <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="shipping_date">
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="transaction_id" class="form_labels"><strong>Transaction ID ( Optional ) </strong></label>
+                            <input type="text" id="transaction_id" name="transaction_id" class="form-control form_inputs" placeholder="" />
+                        </div>
                     </div>
 
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="cus_email"><strong>Transaction ID ( Optional ) </strong> </label>
-                        <input type="text" id="cus_email" name="cus_email" class="form-control" />
-                    </div>
-
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="amount"><strong>Advance Payment Amount </strong> </label>
-                        <input type="text" id="amount" name="advance_amount" class="form-control" />
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="advance_amount" class="form_labels"><strong>Advance Payment Amount </strong></label>
+                            <input type="number" id="advance_amount" name="advance_amount" class="form-control form_inputs" placeholder="" />
+                        </div>
                     </div>
 
                     <div class="d-flex align-items-center gap-3 mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
-                            <label class="form-check-label" for="home">
+                            <input class="form-check-input" type="radio" name="discountAs" id="homes" value="homes" checked>
+                            <label class="form-check-label" for="homes">
                                 <strong>Flat</strong>
                             </label>
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
-                            <label class="form-check-label" for="work">
+                            <input class="form-check-input" type="radio" name="discountAs" id="works" value="works">
+                            <label class="form-check-label" for="works">
                                 <strong>Percentage</strong>
                             </label>
                         </div>
                     </div>
 
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="discount"><strong>Discount (Optional) </strong> </label>
-                        <input type="number" id="discount" name="discount" class="form-control" />
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="discount" class="form_labels"><strong>Discount (Optional) </strong></label>
+                            <input type="number" id="discount" name="discount" class="form-control form_inputs" placeholder="" />
+                        </div>
                     </div>
 
-                    <div class="mb-3 bg-secondary-transparent p-3 rounded-2">
-                        <label class="form-label" for="delivery_type"><strong>Delivery Type </strong> </label>
-                        <select name="delivery_type" id="delivery_type" class="form-select" required>
-                            <option value="" selected>ঢাকার ভিতরে ডেলিভারি ৮০ টাকা</option>
-                            <option value="">চট্টগ্রাম ভিতরে ডেলিভারি ৮০ টাকা</option>
-                            <option value="">ঢাকার বাহিরে ডেলিভারি ১৩০ টাকা</option>
-                        </select>
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="additional_note" class="form_labels">Additional Note </label>
+
+                            <div class="input-addon-right position-relative">
+                                <textarea name="additional_note" class="form-control form_inputs" id="additional_note" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="internal_note" class="form_labels">Internal Note </label>
+
+                            <div class="input-addon-right position-relative">
+                                <textarea name="internal_note" class="form-control form_inputs" id="internal_note" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="delivery_fee" class="form_labels"><strong>Delivery Fee </strong></label>
+                            <input type="number" id="delivery_fee" name="delivery_fee" class="form-control form_inputs" placeholder="" />
+                        </div>
                     </div>
 
                     <div class="free_delivery mb-3">
@@ -1329,16 +1043,17 @@
                         </div>
                     </div>
 
-                    <div class="bg-secondary-transparent p-3 rounded-2" style="margin-bottom: 240px;">
-                        <label class="form-label" for="cus_source">Customer Source</label>
-
-                        <select name="cus_source" id="cus_source" class="form-control cus_source">
-                            <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
-                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
-                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
-                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
-                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
-                        </select>
+                    <div class="" style="margin-bottom: 240px;">
+                        <div class="bg-input-field">
+                            <label for="cus_source" class="form_labels mb-2"><strong>Customer Source </strong></label>
+                            <select name="cus_source" id="cus_source" class="form-select select_form">
+                                <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
+                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
+                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
+                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
+                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1348,22 +1063,22 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                        <span><strong>SubTotal</strong></span>
+                        <p class="m-0"><strong>SubTotal</strong></p>
                         <span><strong>BDT 2150.00</strong></span>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                        <span><strong>(-) Discount</strong></span>
+                        <p class="m-0"><strong>(-) Discount</strong></p>
                         <span class="text-danger">- <strong>BDT 200.00</strong></span>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                        <span><strong>Delivery Fee</strong></span>
+                        <p class="m-0"><strong>Delivery Fee <span class="text-success">(Steadfast)</span> </strong></p>
                         <span class="text-success"><strong>BDT 130.00</strong></span>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                        <span><strong>(-) Advance Payment</strong></span>
+                        <p class="m-0"><strong>(-) Advance Payment</strong></p>
                         <span class="text-danger">- <strong>BDT 200.00</strong></span>
                     </div>
 
@@ -1373,7 +1088,7 @@
                     </div>
 
                     <div class="d-flex justify-content-end align-items-center gap-2">
-                        <button class="btn btn-square btn-outline-secondary" type="button" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
+                        <button class="btn btn-square btn-outline-secondary" type="button" data-bs-dismiss="offcanvas" aria-label="Close">Back</button>
                         <button class="btn btn-square btn-secondary" type="button">Checkout & Proceed</button>
                     </div>
                 </div>
@@ -1424,7 +1139,6 @@
         </div>
     </div>
 
-
     {{-- Check Warehouse Modal --}}
     <div class="modal effect-scale fade" id="warehouse_modal" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered text-center" role="document">
@@ -1471,9 +1185,9 @@
 
 
 @push('add-js')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="{{ asset('public/admin/assets/js/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
 
 <script>
     // Custom Tooltips
@@ -1672,8 +1386,14 @@
     });
 
 
-    //____ warranties_id Select2 ____//
-    $('.cus_source').select2({
+    //____ Create Customer Source Select2 ____//
+    $('#create_cus_source').select2({
+        templateResult: formatState,       
+        templateSelection: formatState, 
+    });
+
+    //____ Customer Source Select2 ____//
+    $('#cus_source').select2({
         templateResult: formatState,       
         templateSelection: formatState, 
     });

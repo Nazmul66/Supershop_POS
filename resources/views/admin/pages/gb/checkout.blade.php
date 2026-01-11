@@ -25,6 +25,9 @@
             font-size: 15px;
             line-height: 24px;
         }
+        .form-check-input {
+            border: 1px solid #000;
+        }
     </style>
 @endpush
 
@@ -193,6 +196,17 @@
                         </table>
                     </div>
                 {{-- /Table Part End --}}
+
+                    <div class="form-check form-check-md d-flex align-items-center justify-content-end mb-3 mt-3">
+                        <input class="form-check-input" type="checkbox" value="" id="checkebox-md">
+                        <label class="form-check-label" for="checkebox-md">
+                            <h5 class="m-0">Auto-Approve Status</h5>
+                        </label>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="button" class="btn btn-secondary">Placed Order</button>
+                    </div>
                 </div>
             </div>
         </div>

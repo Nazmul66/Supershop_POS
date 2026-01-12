@@ -28,6 +28,16 @@
         .form-check-input {
             border: 1px solid #000;
         }
+        .sl_no{
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #98bfdd;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
     </style>
 @endpush
 
@@ -40,9 +50,11 @@
     <!-- Breadcrumb -->
     <div class="page-header">
         <div class="add-item d-flex">
-            <div class="page-title">
-                <h4 class="fw-bold">Order Checkout</h4>
-                {{-- <h6>Manage your Faqs</h6> --}}
+            <div class="page-title d-flex align-items-center gap-2">
+                <button class="btn btn-icon btn-secondary" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="Back">
+                    <i class="ti ti-arrow-back-up" style="font-size: 24px;"></i>
+                </button>
+                <h4 class="fw-bold mb-0">Order Checkout</h4>
             </div>
         </div>
 
@@ -124,7 +136,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>1</td>
+                                    <td>
+                                        <span class="sl_no">1</span>
+                                    </td>
                                     <td>
                                         <div class="">
                                             <div class="d-flex align-items-center gap-2">
@@ -132,25 +146,31 @@
                                                 <div class="">
                                                    <h4 class="mb-2">সুন্দরবনের মধু/Sundarban Honey</h4>
                                                    <p class="mb-1"><strong>SKU:</strong> A000251</p>
-                                                   <div class="d-flex align-items-center gap-2">
+
+                                                   {{-- <div class="d-flex align-items-center gap-2">
                                                        <h5>BDT 1550.00</h5>
                                                        <del>
                                                          <h5>BDT 1700.00</h5>
                                                        </del>
+                                                   </div> --}}
+
+                                                   <div class="d-flex align-items-center gap-5 mb-1">
+                                                       <p class="m-0"><strong><span>Amount:</span> BDT 3400.00</strong></p>
+                                                       <p class="m-0"><strong><span>Qty:</span> 2</strong></p>
+                                                       <p class="m-0"><strong><span>Weight:</span> 1 Kg</strong></p>
                                                    </div>
 
-                                                   <div class="d-flex align-items-center gap-3">
-                                                       <p class="m-0"><strong><span>Qty:</span> 2</strong></p>
-                                                       <p class="m-0"><strong><span>Weight:</span> 1Kg</strong></p>
-                                                   </div>
+                                                   <p class="text-success fw-bold">( - 8.82% Discount Applied )</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
 
                                     <td>
-                                        <h5 class="text-dark m-0">BDT 3100.00</h5>
-                                        <del><h5 class="text-dark m-0">BDT 3400.00</h5></del>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <del><h6 class="text-dark m-0">BDT 3400.00</h6></del>
+                                            <h4 class="text-dark m-0">BDT 3100.00</h4>
+                                        </div>
                                     </td>
                                 </tr>
 
@@ -158,7 +178,7 @@
                                     <td colspan="2" style="text-align: right;">
                                         <span style="font-weight: 700; color: #000;">SubTotal<span/>
                                     </td>
-                                    <td><span class="text-dark">BDT 3100.00</span></strong></td>
+                                    <td><strong><span class="text-dark">BDT 3100.00</span></strong></td>
                                 </tr>
 
                                 <tr>
@@ -197,15 +217,16 @@
                     </div>
                 {{-- /Table Part End --}}
 
-                    <div class="form-check form-check-md d-flex align-items-center justify-content-end mb-3 mt-3">
+                    <div class="border-2 border-bottom form-check form-check-md d-flex align-items-center justify-content-end pb-3 mb-3 mt-3">
                         <input class="form-check-input" type="checkbox" value="" id="checkebox-md">
                         <label class="form-check-label" for="checkebox-md">
                             <h5 class="m-0">Auto-Approve Status</h5>
                         </label>
                     </div>
 
-                    <div class="text-end">
-                        <button type="button" class="btn btn-secondary">Placed Order</button>
+                    <div class="d-flex align-items-center justify-content-end gap-3">
+                        <button type="button" class="btn btn-outline-secondary">Cancel</button>
+                        <button type="button" class="btn btn-success">Placed Order</button>
                     </div>
                 </div>
             </div>

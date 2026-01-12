@@ -103,6 +103,12 @@
             max-width: 100%;
             width: 500px !important;
         }
+        #orderDetails{
+            width: 520px !important;
+        }
+        .or_text_field{
+            font-size: 12px;
+        }
     </style>
 @endpush
 
@@ -133,10 +139,10 @@
                 {{-- Customer Search Option --}}
                 <div class="search_box mb-3">
                     <div class="">
-                        <h3 class="mb-1">Customer Search</h3>
-                        <div class="search_form_box">
-                            <input type="text" id="cus_name" name="cus_name" class="form_search" placeholder="Search by Name or Phone Number" />
-                            <i class="ti ti-search"></i>
+                        <h5 class="mb-1">Customer Search</h5>
+                        <div class="customer_form_box">
+                            <span>+880</span>
+                            <input type="text" id="cus_name" name="cus_name" class="customer_search" maxlength="11" minlength="11"/>
                         </div>
                     </div>
 
@@ -335,7 +341,7 @@
 
                 {{-- Customer Details --}}
                 <div class="card customer_details">
-                    <button type="button" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#editModal" class="btn_edit btn btn-outline-secondary">Edit</button>
+                    <button type="button" data-bs-toggle="offcanvas"  data-bs-target="#update_customer" aria-controls="offcanvasRight" class="btn_edit btn btn-outline-secondary">Edit</button>
 
                     <div class="card-body">
                         <div class="mb-3">
@@ -446,7 +452,7 @@
                 {{-- Product Search Option --}}
                 <div class="mb-4">
                     <div class="search_box">
-                        <h3 class="mb-1" for="product_search">Product Search</h3>
+                        <h5 class="mb-1" for="product_search">Product Search</h5>
                         <div class="search_form_box">
                             <input type="text" id="product_search" name="product_search" class="form_search" placeholder="Search by Product Name or Sku" />
                             <i class="ti ti-search"></i>
@@ -643,7 +649,7 @@
                     </div>
 
                     <div class="text-end mt-2 mb-5">
-                        <button class="btn btn-square btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Next</button>
+                        <button class="btn btn-square btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#orderDetails" aria-controls="orderDetails">Next</button>
                    </div>
                 </div>
 
@@ -656,70 +662,138 @@
 
 
     <!-- Customer Details Update Modal -->
-    <div id="editModal" class="modal fade effect-flip-vertical" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-    style="display: none;" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Update Customer Details</h5>
-                    <button type="button" class="btn-close" id="btn_cross" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                </div>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="update_customer" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h3 id="offcanvasRightLabel">Update Customer</h3>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
 
-                <div class="modal-body">
-                    <form id="createForm" enctype="multipart/form-data">
-                        @csrf
+        <div class="offcanvas-body">
+            <div class="row">
+                <form id="createForm" enctype="multipart/form-data">
+                    @csrf
+    
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="cus_type" class="form_labels">Customer Type</label>
+                            <select name="cus_type" id="cus_type" class="form-select select_form mt-2">
+                                <option value="" selected>Ecommerce Type Customer</option>
+                            </select>
+                        </div>
+                    </div>
+    
+                    <div class="mb-4">
+                        <div class="bg-input-field">
+                            <label for="cus_name" class="form_labels">Customer Name <span class="text-danger"> *</span></label>
+                            <input type="text" id="cus_name" name="cus_name" class="form-control form_inputs" placeholder="" />
+                        </div>
+                    </div>
+    
+                    <div class="mb-3 mt-3">
+                        <div class="bg-input-field">
+                            <label for="cus_phone" class="form_labels">Phone Number <span class="text-danger"> *</span></label>
+                            <input type="text" id="cus_phone" name="cus_phone" class="form-control form_inputs" placeholder="" />
+                        </div>
+                    </div>
+    
+                    <div class="mb-3 mt-3">
+                        <div class="bg-input-field">
+                            <label for="cus_email" class="form_labels">Customer Email (optional) </label>
+                            <input type="email" id="cus_email" name="cus_email" class="form-control form_inputs" placeholder="" />
+                        </div>
+                    </div>
+    
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
 
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label class="form-label" for="cus_tag">Customer Tag <span class="text-danger"> *</span></label>
-
-                                <select name="cus_tag" id="cus_tag" class="form-control">
-                                    <option value="new" selected>New</option>
-                                    <option value="regular">Regular</option>
-                                </select>
+                            <div class="input-addon-right position-relative">
+                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
                             </div>
                         </div>
+                    </div>
+    
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="additional_note" class="form_labels">Additional Note (optional)</label>
 
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label class="form-label" for="cus_name">Customer Name <span class="text-danger"> *</span></label>
-
-                                <input type="text" id="cus_name" name="cus_name" class="form-control" />
+                            <div class="input-addon-right position-relative">
+                                <textarea name="additional_note" class="form-control form_inputs" id="additional_note" cols="30" rows="2"></textarea>
                             </div>
                         </div>
+                    </div>
+    
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="internal_note" class="form_labels">Internal Note (optional)</label>
 
-                        <div class="col-lg-12">
-                            <div class="mb-3 mt-3">
-                                <label class="form-label">Phone Number <span class="text-danger"> *</span></label>
-
-                                <input type="text" id="cus_number" name="cus_number" class="form-control" />
+                            <div class="input-addon-right position-relative">
+                                <textarea name="internal_note" class="form-control form_inputs" id="internal_note" cols="30" rows="2"></textarea>
                             </div>
                         </div>
-
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label class="form-label" for="cus_address">Customer Address </label>
-                                <div class="input-addon-right position-relative">
-                                    <textarea name="cus_address" class="form-control" id="cus_address" cols="30" rows="5"></textarea>
-                                </div>
-
-                                <span id="cus_address_validate" class="text-danger validation-error mt-1"></span>
+                    </div>
+    
+                    <div class="">
+                        <label for="" class="form-label">Save As</label>
+    
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                                <label class="form-check-label" for="home">
+                                    Home
+                                </label>
+                            </div>
+    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                                <label class="form-check-label" for="work">
+                                    Work
+                                </label>
+                            </div>
+    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
+                                <label class="form-check-label" for="other">
+                                    Other
+                                </label>
                             </div>
                         </div>
-
-
-                        <div class="d-flex justify-content-end align-items-center">
-                            <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3"
-                                data-bs-dismiss="modal">Close </button>
-
-                            <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Save changes</button>
-                        </div>
-                    </form>
-                </div>
-
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+                    </div>
+    
+                    <div class="mt-3 mb-3">
+                        <label class="form-label" for="cus_tag">Customer Tag (Optional)</label>
+    
+                        <select name="cus_tag" id="cus_tag" class="form-control">
+                            <option value="new" selected>New</option>
+                            <option value="regular">Regular</option>
+                            <option value="vip">VIP</option>
+                            <option value="fraud">Fraud</option>
+                            <option value="corporate">Corporate</option>
+                            <option value="employee">Employee</option>
+                            <option value="probashi">Probashi</option>
+                        </select>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label class="form-label" for="create_cus_source">Customer Source</label>
+    
+                        <select name="cus_source" id="create_cus_source" class="form-control">
+                            <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
+                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
+                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
+                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
+                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
+                        </select>
+                    </div>
+    
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
+    
+                        <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
 
@@ -829,6 +903,7 @@
                             <option value="new" selected>New</option>
                             <option value="regular">Regular</option>
                             <option value="vip">VIP</option>
+                            <option value="fraud">Fraud</option>
                             <option value="corporate">Corporate</option>
                             <option value="employee">Employee</option>
                             <option value="probashi">Probashi</option>
@@ -859,7 +934,7 @@
 
 
     {{-- Order Processing --}}
-    <div class="offcanvas offcanvas-end" data-bs-backdrop="false" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas offcanvas-end"  tabindex="-1" id="orderDetails" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h3 id="offcanvasRightLabel">Order Details</h3>
             {{-- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> --}}
@@ -867,38 +942,40 @@
 
         <div class="offcanvas-body">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="mb-3">
+                <div class="col-lg-12"  style="margin-bottom: 270px;">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="cus_type" class="form_labels">Customer Type</label>
                             <select name="cus_type" id="cus_type" class="form-select select_form mt-2">
-                                <option value="" selected>Ecommerce Type Customer</option>
+                                <option value="ecom_type_customer" selected>Ecommerce Type Customer</option>
+                                <option value="distributor">Distributor</option>
+                                <option value="retialer">Retailer</option>
                             </select>
                         </div>
                     </div>
     
-                    <div class="mb-3 mt-3">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="cus_phone" class="form_labels">Phone Number <span class="text-danger"> *</span></label>
                             <input type="text" id="cus_phone" name="cus_phone" class="form-control form_inputs" placeholder="" />
                         </div>
                     </div>
 
-                    <div class="mb-3 mt-3">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="cus_email" class="form_labels">Customer Email (optional) </label>
                             <input type="email" id="cus_email" name="cus_email" class="form-control form_inputs" placeholder="" />
                         </div>
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="cus_name" class="form_labels">Customer Name <span class="text-danger"> *</span></label>
                             <input type="text" id="cus_name" name="cus_name" class="form-control form_inputs" placeholder="" />
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="cus_address" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
 
@@ -908,7 +985,7 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="map_address" class="form_labels">Map Location <span class="text-danger"> *</span></label>
 
@@ -918,7 +995,7 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label for="" class="form-label"><strong>Save As</strong></label>
 
                         <div class="d-flex align-items-center gap-3">
@@ -945,7 +1022,7 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="pickup_location" class="form_labels"><strong>Pickup Location </strong></label>
                             <select name="pickup_location" id="pickup_location" class="form-select select_form mt-2">
@@ -955,9 +1032,9 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <div class="bg-input-field">
-                            <label for="courier_agent" class="form_labels mb-2"><strong>Assign Delivery Partner </strong></label>
+                            <label for="courier_agent" class="form_labels mb-2"><strong>Prefered Delivery Partner </strong></label>
                             <select name="courier_agent" id="courier_agent" class="form-select select_form">
                                 <option value="" selected disabled>Select Courier Agent</option>
                                 <option value="dd" data-image-url="{{ asset('public/admin/assets/images/steadfast.png') }}">SteadFast</option>
@@ -965,28 +1042,57 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
+                        <div class="bg-input-field">
+                            <label for="cus_source" class="form_labels mb-2"><strong>Customer Source </strong></label>
+                            <select name="cus_source" id="cus_source" class="form-select select_form">
+                                <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
+                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
+                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
+                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
+                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <div class="bg-input-field">
+                            <label for="cus_type" class="form_labels">Payment Method</label>
+                            <select name="cus_type" id="cus_type" class="form-select select_form mt-2">
+                                <option value="cod" selected>Cash On Delivery</option>
+                                <option value="bkash_agent">Bkash Mercent</option>
+                                <option value="nagad">Nagad</option>
+                                <option value="pubali_bank">Pubali Bank</option>
+                                <option value="ebl">Eastern Bank</option>
+                                <option value="bank_asia">Bank Asia</option>
+                                <option value="dhaka_bank">Dhaka Bank</option>
+                                <option value="ssl_commercez">SSL Commercez</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="shipping_date" class="form_labels"><strong>Shipping Date </strong> <span class="text-danger"> *</span></label>
                             <input type="text" id="shipping_date" name="shipping_date" class="form-control form_inputs" placeholder="YYYY-MM-DD" />
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="transaction_id" class="form_labels"><strong>Transaction ID ( Optional ) </strong></label>
                             <input type="text" id="transaction_id" name="transaction_id" class="form-control form_inputs" placeholder="" />
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="advance_amount" class="form_labels"><strong>Advance Payment Amount </strong></label>
                             <input type="number" id="advance_amount" name="advance_amount" class="form-control form_inputs" placeholder="" />
                         </div>
                     </div>
 
-                    <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="d-flex align-items-center gap-3 mb-2">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="discountAs" id="homes" value="homes" checked>
                             <label class="form-check-label" for="homes">
@@ -1002,14 +1108,14 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="discount" class="form_labels"><strong>Discount (Optional) </strong></label>
                             <input type="number" id="discount" name="discount" class="form-control form_inputs" placeholder="" />
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="additional_note" class="form_labels">Additional Note </label>
 
@@ -1019,7 +1125,7 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="internal_note" class="form_labels">Internal Note </label>
 
@@ -1029,30 +1135,17 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <div class="bg-input-field">
                             <label for="delivery_fee" class="form_labels"><strong>Delivery Fee </strong></label>
                             <input type="number" id="delivery_fee" name="delivery_fee" class="form-control form_inputs" placeholder="" />
                         </div>
                     </div>
 
-                    <div class="free_delivery mb-3">
+                    <div class="free_delivery">
                         <div class="d-flex align-items-center gap-2">
                             <input type="checkbox" id="free_delivery">
                             <span><strong>Free Delivery</strong></span>
-                        </div>
-                    </div>
-
-                    <div class="" style="margin-bottom: 240px;">
-                        <div class="bg-input-field">
-                            <label for="cus_source" class="form_labels mb-2"><strong>Customer Source </strong></label>
-                            <select name="cus_source" id="cus_source" class="form-select select_form">
-                                <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
-                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
-                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
-                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
-                                <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
-                            </select>
                         </div>
                     </div>
                 </div>
@@ -1063,33 +1156,33 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                        <p class="m-0"><strong>SubTotal</strong></p>
-                        <span><strong>BDT 2150.00</strong></span>
+                        <p class="or_text_field m-0"><strong>SubTotal</strong></p>
+                        <span class="or_text_field"><strong>BDT 2150.00</strong></span>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                        <p class="m-0"><strong>(-) Discount</strong></p>
-                        <span class="text-danger">- <strong>BDT 200.00</strong></span>
+                        <p class="or_text_field m-0"><strong>(-) Discount</strong></p>
+                        <span class="or_text_field text-danger">- <strong>BDT 200.00</strong></span>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                        <p class="m-0"><strong>Delivery Fee <span class="text-success">(Steadfast)</span> </strong></p>
-                        <span class="text-success"><strong>BDT 130.00</strong></span>
+                        <p class="or_text_field m-0"><strong>Delivery Fee <span class="text-success">(Steadfast)</span> </strong></p>
+                        <span class="or_text_field text-success"><strong>BDT 130.00</strong></span>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                        <p class="m-0"><strong>(-) Advance Payment</strong></p>
-                        <span class="text-danger">- <strong>BDT 200.00</strong></span>
+                        <p class="or_text_field m-0"><strong>(-) Advance Payment</strong></p>
+                        <span class="or_text_field text-danger">- <strong>BDT 200.00</strong></span>
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span><strong>Total Received</strong></span>
-                        <span><strong>BDT 1620.00</strong></span>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="or_text_field"><strong>Total Received</strong></span>
+                        <span class="or_text_field"><strong>BDT 1620.00</strong></span>
                     </div>
 
                     <div class="d-flex justify-content-end align-items-center gap-2">
                         <button class="btn btn-square btn-outline-secondary" type="button" data-bs-dismiss="offcanvas" aria-label="Close">Back</button>
-                        <button class="btn btn-square btn-secondary" type="button">Checkout & Proceed</button>
+                        <button class="btn btn-square btn-secondary" type="button">Proceed to checkout</button>
                     </div>
                 </div>
             </div>

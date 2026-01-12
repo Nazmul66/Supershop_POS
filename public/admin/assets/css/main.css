@@ -839,8 +839,14 @@ label:not(.form-check-label):not(.custom-file-label) {
 .search_box{
     position: relative;
     background: #e6eaed;
-    padding: 14px 16px;
+    padding: 12px 16px 8px;
     border-radius: 6px;
+    border: 1px solid #e6eaed;
+    transition: all 0.3s ease-in-out;
+}
+.search_box:hover{
+    background: transparent;
+    border: 1px solid #3A6931;
 }
 .search_box .cus_create_box{
     position: absolute;
@@ -866,7 +872,7 @@ label:not(.form-check-label):not(.custom-file-label) {
 }
 .search_box .cus_history_box{
     position: absolute;
-    top: 85px;
+    top: 75px;
     left: 8px;
     padding: 20px 28px 12px 28px;
     border-radius: 6px;
@@ -884,6 +890,26 @@ label:not(.form-check-label):not(.custom-file-label) {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+}
+.customer_form_box{
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+.customer_form_box span{
+    font-size: 16px;
+    color: #212B36;
+    font-weight: 500;
+}
+.customer_form_box .customer_search{
+    border: none;
+    width: 100%;
+    background: transparent;
+    height: 35px;
+    font-size: 16px;
+    border-radius: 4px;
+    color: #212B36;
+    font-weight: 500;
 }
 .search_form_box{
    position: relative;
@@ -953,12 +979,13 @@ label:not(.form-check-label):not(.custom-file-label) {
 
 .bg-input-field{
     background: #F7F7F7;
-    padding: 10px 20px;
+    padding: 6px 14px;
     border: 1px solid transparent;
     transition: all 0.2s ease-in-out;
 }
 .form_labels{
     color: #676970 !important;
+    font-size: 12px;
 }
 .form_inputs{
     border: 1px solid transparent !important;
@@ -970,7 +997,7 @@ label:not(.form-check-label):not(.custom-file-label) {
 .select_form{
     border: 1px solid #e1e1e1 !important;
     background: #F7F7F7;
-    color: #6a7178;
+    color: #282828;
     transition: all 0.2s ease-in-out;
 }
 .form_inputs:focus{
@@ -981,7 +1008,7 @@ label:not(.form-check-label):not(.custom-file-label) {
 }
 .select_form:focus{
     background: transparent;
-    color: #6a7178; 
+    color: #282828;
 }
 .bg-input-field:focus-within{
     border: 1px solid #3A6931;

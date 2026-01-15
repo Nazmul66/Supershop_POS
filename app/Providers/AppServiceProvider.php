@@ -20,7 +20,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // $timezone = env('DB_TIMEZONE', '+00:00');
-        // DB::statement("SET time_zone = '{$timezone}'");
+
     }
 }

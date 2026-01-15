@@ -38,6 +38,8 @@
         .search_box{
             position: relative;
             width: 260px;
+            padding: 0;
+            border-radius: 2px;
         }
         .search_box .search_filter{
             border: 1px solid #ebebeb;

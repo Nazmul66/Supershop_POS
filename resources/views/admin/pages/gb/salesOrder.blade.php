@@ -585,7 +585,7 @@
                             </div>
     
                             <div class="d-flex align-items-center justify-content-between gap-4 mt-4">
-                                <button class="btn btn-success mb-0">Add Discount</button>
+                                <button class="btn btn-outline-success mb-0">Add Discount</button>
                                 <div class="d-flex align-items-center gap-2">
                                     <h6 class="text-nowrap">BDT 600.00</h6>
                                     <div class="wg-quantity">
@@ -628,7 +628,8 @@
     
                             <div class="d-flex align-items-center justify-content-between gap-5 mt-4">
                                 <div class="">
-                                    <p class="text-danger mb-0 "><strong>( BDT 150 Taka Discount )</strong></p>
+                                    <p class="text-success mb-0 "><strong>( - 8.82% Discount Applied )</strong></p>
+                                    <a href="#" class="text-danger mb-0 text-decoration-underline"><strong>Remove</strong></a>
                                 </div>
 
                                 <div class="d-flex align-items-center gap-2">

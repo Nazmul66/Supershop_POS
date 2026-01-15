@@ -136,6 +136,16 @@
                     <p class="mb-2"><strong>Auto approve date :</strong> Dec 12-2025 09:10 P.M</p>
                     <div class="mb-2 d-flex align-items-center gap-1"><strong>Assign to delivery partner :</strong> <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" width="20"> Steadfast </div>
                     <div class="mb-2 d-flex align-items-center gap-1"><strong>Source :</strong>  Website <img src="{{ asset('public/admin/assets/img/logo-small.png') }}" alt="" width="20"> </div>
+
+                    <div class="mb-2 d-flex align-items-center gap-2">
+                        <p class="mb-0"><strong>Delivery Status :</strong></p> 
+                        
+                        <a href="#" class="border border-2 border-secondary py-1 px-2 d-flex align-items-center gap-1">
+                            <i class="ti ti-map-2"></i>
+                            <p class="mb-0">Pending</p>
+                        </a>
+                    </div>
+
                     <p class="mb-2"><strong>Delivery Type :</strong> Regular / New</p>
                     <p class="mb-2"><strong>Source Info :</strong> https://ghorerbazar.com/collections/dates</p>
                     <p class="mb-4"><strong>Delivery Note :</strong> dgdfgsdfdfds sddsfsd sdfsdfsdf sdfsdfsf</p>
@@ -379,7 +389,8 @@
                                     <label for="order_status" class="form-label">Order Status <span class="text-danger">*</span></label>
 
                                     <select class="form-select order_status" id="order_status" name="order_status">
-                                        <option value="pending" selected><strong>Pending</strong></option>
+                                        <option value="" selected disabled><strong></strong></option>
+                                        <option value="pending"><strong>Pending</strong></option>
                                         <option value="hold"><strong>On Hold</strong></option>
                                         <option value="cancel"><strong>Cancelled</strong></option>
                                     </select>
@@ -567,7 +578,7 @@
                         </div>
 
                         <div class="modal-body text-start">
-                            {{-- Customer Details --}}
+                             {{-- Customer Details --}}
                             <div class="card customer_details">
                                 <div class="card-body">
                                     <div class="mb-3">
@@ -599,7 +610,7 @@
                                     </div>
                                 </div>
                             </div>
-                
+
                             {{-- Delivery Partner --}}
                             <div class="card">
                                 <div class="card-body">
@@ -628,9 +639,9 @@
                                             <table class="table table-nowrap mb-0">
                                                 <thead>
                                                     <tr>
-                                                        <th>Partner</th>
+                                                        <th>Courier</th>
                                                         <th>Total</th>
-                                                        <th>Delivered</th>
+                                                        <th class="text-success">Delivered</th>
                                                         <th class="text-danger">Undelivered</th>
                                                         <th>Percentage(%)</th>
                                                     </tr>
@@ -666,6 +677,98 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- OnGoing Order Part --}}
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="order_processing">
+                                        <div class="d-flex align-items-center gap-3 mb-3 border-bottom pb-3">
+                                            <h5>OnGoing Order</h5>
+                                            <span class="badge badge-lg bg-primary">3</span>
+                                            <div class="bar_loader">
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                            </div>
+                                        </div>
+                    
+                                        {{-- 1st Order History --}}
+                                        <div class="border-bottom pb-2 mb-3">
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
+                                                    <div >
+                                                        <svg  data-tooltip="tip1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark tooltip-trigger icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                                    </div>
+
+                                                </div>
+                    
+                                                <div class="dropdown">
+                                                    <a class="btn btn-secondary" href="#" role="button" aria-expanded="false">
+                                                        Pending
+                                                    </a>
+                                                </div>
+                                            </div>
+                    
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <span>BDT 2250.00</span>
+                                                <div class="">
+                                                    <span>Sep 22,2025 9:45 P.M</span>
+                                                    <i class="ti ti-info-circle text-dark" style="font-size: 16px;" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="This sales order GB-254136 was created by Nazmul Hassan at 11.23 A.M on Dec 02, 2026"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        {{-- 2nd Order History --}}
+                                        <div class="border-bottom pb-2 mb-3">
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                                </div>
+
+                                                <div class="dropdown">
+                                                    <a class="btn btn-primary" href="#" role="button" aria-expanded="false">
+                                                        On Hold
+                                                    </a>
+                                                </div>
+                                            </div>
+                    
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <span>BDT 2075.50</span>
+                                                <div class="">
+                                                    <span>Sep 29,2025, 11:45 P.M</span>
+                                                    <i class="ti ti-info-circle text-dark" style="font-size: 16px;" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="This sales order GB-254136 was created by Admin at 11.23 A.M on Dec 02, 2026"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        {{-- 3rd Order History --}}
+                                        <div class="border-bottom pb-2" >
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <a href="#" class="text-secondary"><strong>GB-4985</strong></a>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                                </div>
+
+                                                <div class="dropdown">
+                                                    <a class="btn btn-info" href="#" role="button" aria-expanded="false">
+                                                        On Hold
+                                                    </a>
+                                                </div>
+                                            </div>
+                    
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <span>BDT 2075.50</span>
+                                                <span>Sep 29,2025, 11:45 P.M</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

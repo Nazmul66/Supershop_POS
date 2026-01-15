@@ -88,6 +88,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/checkout', function(){
         return view('admin.pages.gb.checkout');
     });
+    Route::get('/invoice', function(){
+        return view('admin.pages.gb.invoice_print');
+    });
 
 
     //______ Variant Name _____//

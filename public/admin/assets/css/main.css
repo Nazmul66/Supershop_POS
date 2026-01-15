@@ -1006,9 +1006,15 @@ label:not(.form-check-label):not(.custom-file-label) {
     font-size: 16px;
     color: #282828;
 }
+.form_inputs:focus .form_labels{
+    color: #3EB780 !important;
+}
 .select_form:focus{
     background: transparent;
     color: #282828;
+}
+.select_form:focus .form_labels{
+    color: #3EB780 !important;
 }
 .bg-input-field:focus-within{
     border: 1px solid #3A6931;

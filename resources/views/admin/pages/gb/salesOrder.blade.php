@@ -95,10 +95,6 @@
             height: 250px;
             background: #fff;
         }
-        .copyright-footer {
-            padding: 12px 24px;
-            display: none !important;
-        }
         #create_customer{
             max-width: 100%;
             width: 500px !important;
@@ -108,6 +104,9 @@
         }
         .or_text_field{
             font-size: 12px;
+        }
+        .copyright-footer{
+            padding: 40px 24px 40px;
         }
     </style>
 @endpush
@@ -135,7 +134,7 @@
 
     <div class="row">
         <div class="col-lg-3">
-            <div class="pageWrapper scroll-box">
+            <div class="pageWrapper">
                 {{-- Customer Search Option --}}
                 <div class="search_box mb-3">
                     <div class="">
@@ -176,270 +175,272 @@
                     </div>
                 </div>
 
-                {{-- OnGoing Order Part --}}
-                <div class="card">
-                    <div class="card-body">
-                        <div class="order_processing">
-                            <div class="d-flex align-items-center gap-3 mb-3 border-bottom pb-3">
-                                <h5>OnGoing Order</h5>
-                                <span class="badge badge-lg bg-primary">3</span>
-                                <div class="bar_loader">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
+                <div class="scroll-box">
+                    {{-- OnGoing Order Part --}}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="order_processing">
+                                <div class="d-flex align-items-center gap-3 mb-3 border-bottom pb-3">
+                                    <h5>OnGoing Order</h5>
+                                    <span class="badge badge-lg bg-primary">3</span>
+                                    <div class="bar_loader">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+            
+                                {{-- 1st Order History --}}
+                                <div class="border-bottom pb-2 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
+                                            <div >
+                                                <svg  data-tooltip="tip1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark tooltip-trigger icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                            </div>
+
+                                        </div>
+            
+                                        <div class="dropdown">
+                                            <a class="btn btn-secondary" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
+                                                Pending
+                                            </a>
+                                        </div>
+                                    </div>
+            
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>BDT 2250.00</span>
+                                        <div class="">
+                                            <span>Sep 22,2025 9:45 P.M</span>
+                                            <i class="ti ti-info-circle text-dark" style="font-size: 16px;" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="This sales order GB-254136 was created by Nazmul Hassan at 11.23 A.M on Dec 02, 2026"></i>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                {{-- 2nd Order History --}}
+                                <div class="border-bottom pb-2 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                        </div>
+            
+                                        <div class="dropdown">
+                                            <a class="btn btn-primary dropdown-toggle" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
+                                                On Hold
+                                            </a>
+                                        </div>
+                                    </div>
+            
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>BDT 2075.50</span>
+                                        <div class="">
+                                            <span>Sep 29,2025, 11:45 P.M</span>
+                                            <i class="ti ti-info-circle text-dark" style="font-size: 16px;" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="This sales order GB-254136 was created by Admin at 11.23 A.M on Dec 02, 2026"></i>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                {{-- 3rd Order History --}}
+                                <div class="border-bottom pb-2" >
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="#" class="text-secondary"><strong>GB-4985</strong></a>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                        </div>
+            
+                                        <div class="dropdown">
+                                            <a class="btn btn-info" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
+                                                In Transit
+                                            </a>
+                                        </div>
+                                    </div>
+            
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>BDT 2075.50</span>
+                                        <span>Sep 29,2025, 11:45 P.M</span>
+                                    </div>
                                 </div>
                             </div>
-        
-                            {{-- 1st Order History --}}
-                            <div class="border-bottom pb-2 mb-3">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <div class="d-flex align-items-center gap-1">
-                                        <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
-                                        <div >
-                                            <svg  data-tooltip="tip1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark tooltip-trigger icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                        </div>
+                    </div>
+
+                    {{-- Delivery Partner --}}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h5><strong>Delivery Success Rate</strong></h5>
+                                <a data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="Refresh" type="button" class="btn btn-square btn-secondary btn_refresh"><i style="line-height: 0; font-size: 16px;" class="ti ti-rotate"></i></a>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between gap-1 mb-3">
+                                <div class="progress progress-sm" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 100%; background: #FF0000;">
+                                    <div class="progress-bar bg-secondary" style="width: 88%"></div>
+                                </div>
+                                <span id="percentage">88.00%</span>
+                            </div>
+                            
+                            <p style="font-size: 12px;">Updated On: Sep 22,2025, 9:45 P.M</p>
+
+                            <div class="delivery_progress">
+                                <div class="loading_zone d-none">
+                                    <div class="load-position">
+                                        <span class="arrow_loader"></span>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Courier</th>
+                                                <th>Total</th>
+                                                <th>Delivered</th>
+                                                <th class="text-danger">Undelivered</th>
+                                                <th>Percentage(%)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Steadfast</td>
+                                                <td>23</td>
+                                                <td>21</td>
+                                                <td>2</td>
+                                                <td>91.30%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pathao</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                                <td>0</td>
+                                                <td>100.00%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Redx</td>
+                                                <td>1</td>
+                                                <td>0</td>
+                                                <td>1</td>
+                                                <td>00.00%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total</td>
+                                                <td>25</td>
+                                                <td>22</td>
+                                                <td>3</td>
+                                                <td>88.00%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Customer Details --}}
+                    <div class="card customer_details">
+                        <button type="button" data-bs-toggle="offcanvas"  data-bs-target="#update_customer" aria-controls="offcanvasRight" class="btn_edit btn btn-outline-secondary">Edit</button>
+
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Customer ID</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h5>C-415236</h5>
+                                    <span class="badge badge-sm bg-primary">New</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Customer Name</span>
+                                <h5>Nazmul Hassan</h5>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Phone Number</span>
+                                <h5>+8801542695148</h5>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Customer Address</span>
+                                <h5>K-39/5, kuril vatara - 1229</h5>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="mb-1 d-block" style="font-size: 12px;">Map Location</span>
+                                <h5> Ranks Business Centre, Plot-Ka-218/1-2, Pragati Sarani Main Road, Kuril, Dhaka-1229.</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Customer Order History --}}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <h5>Order History</h5>
+                                    <span class="badge badge-md bg-primary">3</span>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <h5>Delivered</h5>
+                                    <span class="badge badge-md bg-primary">3</span>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <h5>Flagged</h5>
+                                    <span class="badge badge-md bg-primary">0</span>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-3">
+                                    <h5>Delivered</h5>
+                                    <span class="badge badge-md bg-primary">3</span>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                {{-- 1st Order History --}}
+                                {{-- <div class="border-bottom pb-2 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
                                         </div>
 
+                                        <button class="btn btn-soft-info"> Delivered</button>
                                     </div>
-        
-                                    <div class="dropdown">
-                                        <a class="btn btn-secondary" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
-                                            Pending
-                                        </a>
-                                    </div>
-                                </div>
-        
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span>BDT 2250.00</span>
-                                    <div class="">
+
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>BDT 2250.00</span>
                                         <span>Sep 22,2025 9:45 P.M</span>
-                                        <i class="ti ti-info-circle text-dark" style="font-size: 16px;" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="This sales order GB-254136 was created by Nazmul Hassan at 11.23 A.M on Dec 02, 2026"></i>
                                     </div>
-                                </div>
-                            </div>
-        
-                            {{-- 2nd Order History --}}
-                            <div class="border-bottom pb-2 mb-3">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <div class="d-flex align-items-center gap-1">
-                                        <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                </div> --}}
+
+                                {{-- 2nd Order History --}}
+                                {{-- <div class="border-bottom pb-2 mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                        </div>
+            
+                                        <button class="btn btn-soft-info"> Delivered</button>
                                     </div>
-        
-                                    <div class="dropdown">
-                                        <a class="btn btn-primary dropdown-toggle" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
-                                            On Hold
-                                        </a>
-                                    </div>
-                                </div>
-        
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span>BDT 2075.50</span>
-                                    <div class="">
+            
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>BDT 2075.50</span>
                                         <span>Sep 29,2025, 11:45 P.M</span>
-                                        <i class="ti ti-info-circle text-dark" style="font-size: 16px;" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="This sales order GB-254136 was created by Admin at 11.23 A.M on Dec 02, 2026"></i>
                                     </div>
-                                </div>
-                            </div>
-        
-                            {{-- 3rd Order History --}}
-                            <div class="border-bottom pb-2" >
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <div class="d-flex align-items-center gap-1">
-                                        <a href="#" class="text-secondary"><strong>GB-4985</strong></a>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
+                                </div> --}}
+
+                                {{-- Delivery Record --}}
+                                <div class="mt-5">
+                                    <div class="user_icon">
+                                        <i class="ti ti-package"></i>
                                     </div>
-        
-                                    <div class="dropdown">
-                                        <a class="btn btn-info" href="#" role="button" aria-expanded="false" data-bs-toggle="modal" data-bs-effect="effect-flip-vertical" data-bs-target="#orderModal">
-                                            In Transit
-                                        </a>
-                                    </div>
+                                    <h6 class="text-center mb-2">No Order History ?</h6>
                                 </div>
-        
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span>BDT 2075.50</span>
-                                    <span>Sep 29,2025, 11:45 P.M</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Delivery Partner --}}
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <h5><strong>Delivery Success Rate</strong></h5>
-                            <a data-bs-toggle="tooltip" data-bs-custom-class="tooltip-secondary" data-bs-placement="top" data-bs-original-title="Refresh" type="button" class="btn btn-square btn-secondary btn_refresh"><i style="line-height: 0; font-size: 16px;" class="ti ti-rotate"></i></a>
-                        </div>
-
-                        <div class="d-flex align-items-center justify-content-between gap-1 mb-3">
-                            <div class="progress progress-sm" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 100%; background: #FF0000;">
-                                <div class="progress-bar bg-secondary" style="width: 88%"></div>
-                            </div>
-                            <span id="percentage">88.00%</span>
-                        </div>
-                        
-                        <p style="font-size: 12px;">Updated On: Sep 22,2025, 9:45 P.M</p>
-
-                        <div class="delivery_progress">
-                            <div class="loading_zone d-none">
-                                <div class="load-position">
-                                    <span class="arrow_loader"></span>
-                                </div>
-                            </div>
-
-                            <div class="table-responsive">
-                                <table class="table table-nowrap mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Courier</th>
-                                            <th>Total</th>
-                                            <th>Delivered</th>
-                                            <th class="text-danger">Undelivered</th>
-                                            <th>Percentage(%)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Steadfast</td>
-                                            <td>23</td>
-                                            <td>21</td>
-                                            <td>2</td>
-                                            <td>91.30%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Pathao</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>100.00%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Redx</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>00.00%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Total</td>
-                                            <td>25</td>
-                                            <td>22</td>
-                                            <td>3</td>
-                                            <td>88.00%</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Customer Details --}}
-                <div class="card customer_details">
-                    <button type="button" data-bs-toggle="offcanvas"  data-bs-target="#update_customer" aria-controls="offcanvasRight" class="btn_edit btn btn-outline-secondary">Edit</button>
-
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <span class="mb-1 d-block" style="font-size: 12px;">Customer ID</span>
-                            <div class="d-flex align-items-center gap-2">
-                                <h5>C-415236</h5>
-                                <span class="badge badge-sm bg-primary">New</span>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="mb-1 d-block" style="font-size: 12px;">Customer Name</span>
-                            <h5>Nazmul Hassan</h5>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="mb-1 d-block" style="font-size: 12px;">Phone Number</span>
-                            <h5>+8801542695148</h5>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="mb-1 d-block" style="font-size: 12px;">Customer Address</span>
-                            <h5>K-39/5, kuril vatara - 1229</h5>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="mb-1 d-block" style="font-size: 12px;">Map Location</span>
-                            <h5> Ranks Business Centre, Plot-Ka-218/1-2, Pragati Sarani Main Road, Kuril, Dhaka-1229.</h5>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Customer Order History --}}
-                <div class="card">
-                    <div class="card-body">
-                        <div class="mb-4">
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <h5>Order History</h5>
-                                <span class="badge badge-md bg-primary">3</span>
-                            </div>
-
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <h5>Delivered</h5>
-                                <span class="badge badge-md bg-primary">3</span>
-                            </div>
-
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <h5>Flagged</h5>
-                                <span class="badge badge-md bg-primary">0</span>
-                            </div>
-
-                            <div class="d-flex align-items-center gap-3">
-                                <h5>Delivered</h5>
-                                <span class="badge badge-md bg-primary">3</span>
-                            </div>
-                        </div>
-
-                        <div class="">
-                            {{-- 1st Order History --}}
-                            {{-- <div class="border-bottom pb-2 mb-3">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <div class="d-flex align-items-center gap-1">
-                                        <a href="#" class="text-secondary"><strong>GB-4658</strong></a>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
-                                    </div>
-
-                                    <button class="btn btn-soft-info"> Delivered</button>
-                                </div>
-
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span>BDT 2250.00</span>
-                                    <span>Sep 22,2025 9:45 P.M</span>
-                                </div>
-                            </div> --}}
-
-                            {{-- 2nd Order History --}}
-                            {{-- <div class="border-bottom pb-2 mb-3">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <div class="d-flex align-items-center gap-1">
-                                        <a href="#" class="text-secondary"><strong>GB-4885</strong></a>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon text-dark icon-tabler icons-tabler-filled tabler_info_circle icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg>
-                                    </div>
-        
-                                    <button class="btn btn-soft-info"> Delivered</button>
-                                </div>
-        
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span>BDT 2075.50</span>
-                                    <span>Sep 29,2025, 11:45 P.M</span>
-                                </div>
-                            </div> --}}
-
-                            {{-- Delivery Record --}}
-                            <div class="mt-5">
-                                <div class="user_icon">
-                                    <i class="ti ti-package"></i>
-                                </div>
-                                <h6 class="text-center mb-2">No Order History ?</h6>
                             </div>
                         </div>
                     </div>
@@ -1283,6 +1284,12 @@
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
 
+    <script>
+        window.onbeforeunload = function () {
+            window.scrollTo(0, 0);
+        };
+    </script>
+
 <script>
     // Custom Tooltips
     document.addEventListener('DOMContentLoaded', function () {
@@ -1412,7 +1419,7 @@
 
             wrappers.forEach(wrapper => {
                 const rect = wrapper.getBoundingClientRect();
-                const availableHeight = viewportHeight - rect.top - 20;
+                const availableHeight = viewportHeight - rect.top;
 
                 if (availableHeight > 0) {
                     wrapper.style.maxHeight = availableHeight + 'px';

@@ -1023,4 +1023,12 @@ label:not(.form-check-label):not(.custom-file-label) {
 .select2-container--default .select2-selection--single {
     background: transparent !important;
 }
+.pos-settings-panel {
+    max-height: calc(100vh - 120px); /* adjust based on header */
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; /* iOS smooth scroll */
+    overscroll-behavior: contain;
+    padding-right: 6px; /* avoid scrollbar overlap */
+}
 

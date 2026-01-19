@@ -29,10 +29,30 @@
             transition: all 0.5s ease-in-out; 
         }
         .variants_body.actives{
-            height: 100%;
+            height: 310px;
             opacity: 1;
             transform: translateX(0%);
             pointer-events: auto;
+        }
+        .dropify-message .file-icon p{
+            line-height: 40px !important;
+            font-size: 37px !important;
+        }
+        .dropify-message .file-icon::before{
+            display: none !important;
+        }
+        input.form-control, input.form-select {
+            border-color: #E6EAEd;
+        }
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #E6EAED !important;
+        }
+        @media (min-width: 1240px) and (max-width: 1560px) {
+            .table-responsive {
+                overflow-x: inherit;
+                overflow-y: auto;
+                height: 250px;
+            }
         }
     </style>
 @endpush
@@ -81,1000 +101,1003 @@
 <form action="" method="POST" enctype="multipart/form-data">
     @csrf
 
-    <!-- 1st Row Content part Start -->
-    <div class="card">
-        <div class="card-body">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- 1st Row Content part Start -->
+            <div class="card">
+                <div class="card-body">
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="name"><b>Product Name</b> <span class="text-danger">*</span></label>
-                        <div class="col-8">
-                            <input type="text" name="name" class="form-control" id="name" required=""  placeholder="Product Name" value="{{ old('name') }}">
-                        </div>
-                    </div>
-
-                    <span id="name_validate" class="text-danger validation-error mt-1"></span>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="code">
-                            <b>Product Code
-                                <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp text-info" data-bs-original-title="Also known as SKU. If you leave this field empty, it will be generated automatically." aria-label="Also known as SKU. If you leave this field empty, it will be generated automatically."></i></b>
-                        </label>
-                        <div class="col-8">
-                            <input type="text" name="code" class="form-control" autocomplete="off" id="code" placeholder="Product Code" value="{{ old('code') }}">
-                        </div>
-                    </div>
-
-                    <span id="code_validate" class="text-danger validation-error mt-1"></span>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="unit_id"><b>Unit</b> <span class="text-danger">*</span></label>
-
-                        <div class="col-8">
-                            <div class="d-flex">
-                                <div class="" style="width: 100%;">
-                                    <select class="form-select" id="unit_id" name="unit_id">
-                                        <option value="" disabled selected>Select</option>
-                                        @foreach ($units as $row)
-                                            <option value="{{ $row->id }}">{{ $row->unit }} ( {{ $row->short_name }} )</option>
-                                        @endforeach
-                                    </select>
-
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="name"><b>Product Name</b> <span class="text-danger">*</span></label>
+                                <div class="col-8">
+                                    <input type="text" name="name" class="form-control" id="name" required=""  placeholder="Product Name" value="{{ old('name') }}">
                                 </div>
-                                <button class="add_input" data-bs-toggle="modal" data-bs-target="#unitModal">
-                                    <i class="fas fa-plus input_i"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <span id="unit_validate" class="text-danger validation-error mt-1"></span>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <div class="input-group mb-1">
-                         <label class="col-4" for="barcode_type"><b>Barcode Type</b></label>
-                        <div class="col-8">
-                            <select class="form-select" id="barcode_type" name="barcode_type">
-                                <option value="" disabled selected>Select</option>
-                                <option value="c128">Code 128 (C128)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <span id="barcode_type_validate" class="text-danger validation-error mt-1"></span>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="category_id"><b>Category</b> <span class="text-danger">*</span></label>
-                        <div class="col-8">
-
-                            <div class="d-flex">
-                                <div class="" style="width: 100%;">
-                                    <select class="form-select" id="category_id" name="category_id">
-                                        <option value="" disabled selected>Select</option>
-                                        @foreach ($categories as $row)
-                                            <option value="{{ $row->id }}" 
-                                                data-image-url="{{ asset($row->category_img) }}"
-                                                {{ old('category_id') }}
-                                                >{{ $row->category_name }}</option>
-                                        @endforeach
-                                    </select>
-
-                                </div>
-                                <button class="add_input" data-bs-toggle="modal" data-bs-target="#categoryModal">
-                                    <i class="fas fa-plus input_i"></i>
-                                </button>
                             </div>
 
+                            <span id="name_validate" class="text-danger validation-error mt-1"></span>
                         </div>
 
-                        <span id="category_id_validate" class="text-danger validation-error mt-1"></span>
-                    </div>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="subCategory_id"><b>SubCategory</b> <span class="text-danger">*</span></label>
-                        <div class="col-8">
-
-                            <div class="d-flex">
-                                <div class="" style="width: 100%;">
-                                    <select class="form-select" id="subCategory_id" name="subCategory_id">
-                                        <option value="" disabled selected>Select</option>
-                                        @foreach ($subCategories as $row)
-                                            <option value="{{ $row->id }}" 
-                                                data-image-url="{{ asset($row->subcategory_img) }}"
-                                                {{ old('subCategory_id') }}
-                                                >{{ $row->subcategory_name }}</option>
-                                        @endforeach
-                                    </select>
-
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="code">
+                                    <b>Product Code
+                                        <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp text-info" data-bs-original-title="Also known as SKU. If you leave this field empty, it will be generated automatically." aria-label="Also known as SKU. If you leave this field empty, it will be generated automatically."></i></b>
+                                </label>
+                                <div class="col-8">
+                                    <input type="text" name="code" class="form-control" autocomplete="off" id="code" placeholder="Product Code" value="{{ old('code') }}">
                                 </div>
-                                <button class="add_input" data-bs-toggle="modal" data-bs-target="#subCategoryModal">
-                                    <i class="fas fa-plus input_i"></i>
-                                </button>
                             </div>
 
-                        </div>
-
-                        <span id="subCategory_id_validate" class="text-danger validation-error mt-1"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="warranties_id"><b>Warranties</b></label>
-                        <div class="col-8">
-
-                            <div class="d-flex">
-                                <div class="" style="width: 100%;">
-                                    <select class="form-select" id="warranties_id" name="warranties_id">
-                                        <option value="" disabled selected>Select</option>
-                                        @foreach ($warranties as $row)
-                                            <option value="{{ $row->id }}" 
-                                                >{{ $row->duration }}  {{ Str::ucfirst($row->period) }}</option>
-                                        @endforeach
-                                    </select>
-
-                                </div>
-                                <button class="add_input" data-bs-toggle="modal" data-bs-target="#warrantyModal">
-                                    <i class="fas fa-plus input_i"></i>
-                                </button>
-                            </div>
-
-                        </div>
-
-                        <span id="warranties_id_validate" class="text-danger validation-error mt-1"></span>
-                    </div>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="childCategory_id"><b>ChildCategory</b></label>
-                        <div class="col-8">
-
-                            <div class="d-flex">
-                                <div class="" style="width: 100%;">
-                                    <select class="form-select" id="childCategory_id" name="childCategory_id">
-                                        <option value="" disabled selected>Select</option>
-                                        @foreach ($childCategories as $row)
-                                            <option value="{{ $row->id }}" 
-                                                data-image-url="{{ asset($row->img) }}"
-                                                >{{ $row->name }}</option>
-                                        @endforeach
-                                    </select>
-
-                                </div>
-                                <button class="add_input" data-bs-toggle="modal" data-bs-target="#childCategoryModal">
-                                    <i class="fas fa-plus input_i"></i>
-                                </button>
-                            </div>
-
-                        </div>
-
-                        <span id="childCategory_id_validate" class="text-danger validation-error mt-1"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="brand_id"><b>Brand</b> <span class="text-danger">*</span></label>
-                        <div class="col-8">
-
-                            <div class="d-flex">
-                                <div class="" style="width: 100%;">
-                                    <select class="form-select" id="brand_id" name="brand_id">
-                                        <option value="" disabled selected>Select</option>
-                                        @foreach ($brands as $row)
-                                            <option value="{{ $row->id }}" 
-                                                data-image-url="{{ asset($row->image) }}"
-                                                {{ old('brand_id') }}
-                                                >{{ $row->brand_name  }}</option>
-                                        @endforeach
-                                    </select>
-
-                                </div>
-                                <button class="add_input" data-bs-toggle="modal" data-bs-target="#brandModal">
-                                    <i class="fas fa-plus input_i"></i>
-                                </button>
-                            </div>
-
-                        </div>
-
-                        <span id="brand_id_validate" class="text-danger validation-error mt-1"></span>
-                    </div>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="alert_qty"><b>Alert Quantity</b> <span class="text-danger">*</span></label>
-                        <div class="col-8">
-                            <input type="number" name="alert_qty" class="form-control" id="alert_qty" min="1" required="" value="{{ old('alert_qty') }}">
-                        </div>
-
-                        <span id="alert_qty_validate" class="text-danger validation-error mt-1"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="condition"><b>Condition</b> <span class="text-danger">*</span></label>
-
-                        <div class="col-8">
-                            <select class="form-select" id="condition" name="condition">
-                                <option value="new" selected>New</option>
-                                <option value="used">Used</option>
-                            </select>
+                            <span id="code_validate" class="text-danger validation-error mt-1"></span>
                         </div>
                     </div>
 
-                    <span id="condition_validate" class="text-danger validation-error mt-1"></span>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="input-group mb-1">
-                         <label class="col-4" for="stocks"><b>Stock</b> <span class="text-danger">*</span></label>
-                        <div class="col-8">
-                            <input type="number" name="stock" class="form-control" id="stocks" required="" min="1" value="{{ old('stock') }}">
-                        </div>
-                    </div>
-
-                    <span id="stock_validate" class="text-danger validation-error mt-1"></span>
-                </div>
-            </div>
-
-
-            <!-- Category Create Modal -->
-            <div id="categoryModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-            style="display: none;" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Create Category</h5>
-
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <form id="categoryForm" enctype="multipart/form-data">
-                                @csrf
-
-                                <div class="mb-3">
-                                    <label for="category_name" class="form-label">Name <span class="text-danger">*</span></label>
-                                    <input class="form-control" id="category_name" type="text" name="category_name" placeholder="Category Name">
-
-                                    <span id="cat_name_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="category_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(160px x 160px)</sup></label>
-                                    <input type="file" class="form-control" name="category_img" id="category_img" accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'cat_image_preview')">
-
-                                    <span id="cat_image_validate" class="text-danger validation-error mt-1"></span>
-
-                                    <div id="cat_image_preview" class="mt-3">
-                                        <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Status <span class="text-danger">*</span></label>
-                                    <select class="form-select" name="status">
-                                        <option value="1" selected>Active</option>
-                                        <option value="0">Inactive</option>
-                                    </select>
-
-                                    <span id="status_validate" class="text-danger mt-1"></span>
-                                </div>
-
-                                <div class="d-flex justify-content-end align-items-center">
-                                    <button type="button" class="btn btn-secondary waves-effect me-3"
-                                            data-bs-dismiss="modal">Close
-                                    </button>
-
-                                    <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
-                                        Save Changes
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div>
-            <!-- /End Category Create Modal  -->
-
-
-            <!-- SubCategory Create Modal -->
-            <div id="subCategoryModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-            style="display: none;" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Create SubCategory</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            {{-- method="POST" action="{{ route('admin.category.store') }}" --}}
-                            <form id="subcategoryForm" enctype="multipart/form-data">
-                                @csrf
-
-                                <div class="mb-3">
-                                    <label class="form-label">Category Name <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="form-select" name="category_id" id="second_category_id">
-                                        <option value="" disabled selected>Select</option>
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}" data-image-url="{{ asset($category->category_img) }}">{{ $category->category_name }}</option>
-                                            @endforeach
-                                    </select>
-
-                                    <span id="cats_name_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="subcategory_name" class="form-label">SubCategory Name <span class="text-danger">*</span>
-                                    </label>
-                                    <input class="form-control" id="subcategory_name" type="text" name="subcategory_name" placeholder="SubCategory Name">
-
-                                    <span id="subCats_name_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="subcategory_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(160px x 160px)</sup></label>
-                                    <input type="file" class="form-control" name="subcategory_img" id="subcategory_img" accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'sub_image_preview')">
-
-                                    <span id="subCats_image_validate" class="text-danger validation-error mt-1"></span>
-
-                                        <div id="sub_image_preview" class="mt-3">
-                                        <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Status <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="form-select" name="status">
-                                        <option value="1" selected>Active</option>
-                                        <option value="0">Inactive</option>
-                                    </select>
-
-                                    <span id="status_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-
-                                <div class="d-flex justify-content-end align-items-center">
-                                    <button type="button" class="btn btn-secondary waves-effect me-3"
-                                        data-bs-dismiss="modal">Close </button>
-
-                                    <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save Changes </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div>
-            <!-- /End SubCategory Create Modal  -->
-
-
-            <!-- ChildCategory Create Modal -->
-            <div id="childCategoryModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-            style="display: none;" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Create Child-Category</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <form id="childCategoryForm" enctype="multipart/form-data">
-                                @csrf
-
-                                <div class="mb-3">
-                                    <label class="form-label">Category Name <span class="text-danger">*</span></label>
-                                    <select class="form-select category_id" name="category_id" id="third_category_id">
-                                        <option value="" disabled selected>Select</option>
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}" data-image-url="{{ asset($category->category_img) }}">{{ $category->category_name }}</option>
-                                            @endforeach
-                                    </select>
-
-                                    <span id="catName3_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">SubCategory Name <span class="text-danger">*</span></label>
-                                    <select class="form-select subCategory_id" name="subCategory_id" id="second_subCategory_id">
-                                        <option value="" disabled selected>Select </option>
-                                            @foreach ($subCategories as $subCat)
-                                                <option value="{{ $subCat->id }}" data-image-url="{{ asset($subCat->subcategory_img) }}">{{ $subCat->subcategory_name }}</option>
-                                            @endforeach
-                                    </select>
-
-                                    <span id="subCatName3_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="childCategory_name" class="form-label">ChildCategory Name <span class="text-danger">*</span></label>
-                                    <input class="form-control" id="childCategory_name" type="text" name="name" placeholder="ChildCategory Name">
-
-                                    <span id="childCat_name_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="childCategory_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
-                                    <input type="file" class="form-control" name="img" id="childCategory_img" accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'child_image_preview')">
-
-                                    <span id="child_image_validate" class="text-danger validation-error mt-1"></span>
-
-                                    <div id="child_image_preview" class="mt-3">
-                                        <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Status <span class="text-danger">*</span></label>
-                                    <select class="form-select" name="status">
-                                        <option value="1" selected>Active</option>
-                                        <option value="0">Inactive</option>
-                                    </select>
-                                </div>
-
-                                <div class="d-flex justify-content-end align-items-center">
-                                    <button type="button" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="modal">Close
-                                    </button>
-
-                                    <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
-                                        Save Changes
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div>
-            <!-- /End ChildCategory Create Modal  -->
-
-
-            <!-- Brand Create Modal  -->
-            <div id="brandModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-            style="display: none;" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Create Brand</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <form id="brandForm" enctype="multipart/form-data">
-                                @csrf
-
-                                <div class="mb-3">
-                                    <label for="brand_name" class="form-label">Brand Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="brand_name" name="brand_name" placeholder="Brand name">
-
-                                    <span id="brand_name_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="image" class="form-label">Brand Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
-                                    <input type="file" class="form-control" name="image" id="image"  accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'brand_image_preview')">
-
-                                    <span id="brand_image_validate" class="text-danger validation-error mt-1"></span>
-
-                                    <div id="brand_image_preview" class="mt-3">
-                                        <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Status <span class="text-danger">*</span></label>
-                                    <select class="form-select" name="status">
-                                        <option value="1" selected>Active</option>
-                                        <option value="0">Deactive</option>
-                                    </select>
-
-                                    <span id="featured_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-
-                                <div class="d-flex justify-content-end align-items-center">
-                                    <button type="button" class="btn btn-secondary waves-effect me-3"
-                                        data-bs-dismiss="modal">Close </button>
-
-                                    <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save changes</button>
-                                </div>
-                            </form>
-                        </div>
-
-
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div>
-             <!-- /End Brand Create Modal  -->
-
-
-             <!-- Unit Create Modal  -->
-             <div id="unitModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-                 style="display: none;" aria-hidden="true">
-                 <div class="modal-dialog">
-                     <div class="modal-content">
-                         <div class="modal-header">
-                             <h5 class="modal-title" id="myModalLabel">Create Unit</h5>
-                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                         </div>
- 
-                         <div class="modal-body">
-                             <form id="unitForm" enctype="multipart/form-data">
-                                 @csrf
- 
-                                 <div class="mb-3">
-                                     <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
-                                     <input type="text" class="form-control" id="unit" name="unit" placeholder="Unit">
- 
-                                     <span id="units_validate" class="text-danger validation-error mt-1"></span>
-                                 </div>
- 
- 
-                                 <div class="mb-3">
-                                     <label for="short_name" class="form-label">Short Name <span class="text-danger">*</span></label>
-                                     <input type="text" class="form-control" id="short_name" name="short_name" placeholder="Short Name">
- 
-                                     <span id="short_name_validate" class="text-danger validation-error mt-1"></span>
-                                 </div>
- 
- 
-                                 <div class="mb-3">
-                                     <label class="form-label">Status <span class="text-danger">*</span></label>
-                                     <select class="form-select" name="status">
-                                         <option value="1" selected>Active</option>
-                                         <option value="0">Deactive</option>
-                                     </select>
- 
-                                     <span id="featured_validate" class="text-danger validation-error mt-1"></span>
-                                 </div>
- 
-                                 <div class="d-flex justify-content-end align-items-center">
-                                     <button type="button" class="btn btn-secondary waves-effect me-3"
-                                         data-bs-dismiss="modal">Close </button>
- 
-                                     <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save changes</button>
-                                 </div>
-                             </form>
-                         </div>
-                     </div><!-- /.modal-content -->
-                 </div><!-- /.modal-dialog -->
-             </div>
-            <!-- /End Unit Create Modal  -->
-
-
-            <!-- Create Warrenty Modal -->
-            <div id="warrantyModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-            style="display: none;" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Create Warranty</h5>
-
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <form id="warrantyForm" enctype="multipart/form-data">
-                                @csrf
-
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label for="warranty" class="form-label">Warranty <span class="text-danger">*</span></label>
-                                            <input class="form-control" id="warranty" type="text" name="warranty">
-            
-                                            <span id="warranty_validate" class="text-danger validation-error mt-1"></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="duration">Duration<span class="text-danger ms-1">*</span></label>
-                                            <input class="form-control" id="duration" type="number" name="duration">
-
-                                            <span id="duration_validate" class="text-danger validation-error mt-1"></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6" >
-                                        <div class="mb-3">
-                                            <label class="form-label" for="period">Period<span class="text-danger ms-1">*</span></label>
-                                            <select class="select form-control" id="period" name="period">
-                                                <option value="" selected disabled>Select</option>
-                                                <option value="day">Day</option>
-                                                <option value="month">Month</option>
-                                                <option value="year">Year</option>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="unit_id"><b>Unit</b> <span class="text-danger">*</span></label>
+
+                                <div class="col-8">
+                                    <div class="d-flex">
+                                        <div class="" style="width: 100%;">
+                                            <select class="form-select" id="unit_id" name="unit_id">
+                                                <option value="" disabled selected>Select</option>
+                                                @foreach ($units as $row)
+                                                    <option value="{{ $row->id }}">{{ $row->unit }} ( {{ $row->short_name }} )</option>
+                                                @endforeach
                                             </select>
 
-                                            <span id="period_validate" class="text-danger validation-error mt-1"></span>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="description">Description<span class="text-danger ms-1">*</span></label>
-                                            <textarea class="form-control" id="description" name="description"></textarea>
-
-                                            <span id="description_validate" class="text-danger validation-error mt-1"></span>
-                                        </div>
+                                        <button class="add_input" data-bs-toggle="modal" data-bs-target="#unitModal">
+                                            <i class="fas fa-plus input_i"></i>
+                                        </button>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Status <span class="text-danger">*</span></label>
-                                    <select class="form-select" name="status">
-                                        <option value="1" selected>Active</option>
-                                        <option value="0">Inactive</option>
-                                    </select>
-                                </div>
-
-                                <div class="d-flex justify-content-end align-items-center">
-                                    <button type="button" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="modal">Close
-                                    </button>
-
-                                    <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
-                                        Save Changes
-                                    </button>
-                                </div>
-                            </form>
+                            <span id="unit_validate" class="text-danger validation-error mt-1"></span>
                         </div>
 
-
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div>
-            <!-- /End Create Warrenty Modal  -->
-
-        </div>
-    </div>
-
-
-    <!-- 2nd Row Content part Start -->
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6 mb-2">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="name"><b>Applicable Tax</b></label>
-                        <div class="col-8">
-                            <div class="d-flex gap-2">
-                                <div class="" style="width: 100%;">
-                                    <select class="form-select" id="" name="">
-                                        <option value="none" selected>None</option>
-                                        @foreach ($tax_rates as $row)
-                                            <option value="{{ $row->id }}" selected>{{ $row->tax_name }} ({{ $row->percentage }}%)</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="" style="width: 100%;">
-                                    <select class="form-select" id="" name="">
-                                        <option value="exclusive" selected>Exclusive</option>
-                                        <option value="inclusive">Inclusive</option>
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="barcode_type"><b>Barcode Type</b></label>
+                                <div class="col-8">
+                                    <select class="form-select" id="barcode_type" name="barcode_type">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="c128">Code 128 (C128)</option>
                                     </select>
                                 </div>
                             </div>
+
+                            <span id="barcode_type_validate" class="text-danger validation-error mt-1"></span>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-md-6 mb-2">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="name"><b>Tax Applicable For</b></label>
-                        <div class="col-8">
-                            <select class="form-select" id="" name="">
-                                <option value="exclusive" selected>For Selling Price</option>
-                                <option value="inclusive">For Cost & Selling Price</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-2">
-                    <div class="input-group mb-1">
-                         <label class="col-4" for="unit_cost"><b>Unit Cost (Exc. Tax)</b> <span class="text-danger">*</span></label>
-                        <div class="col-8">
-                            <input type="number" name="unit_cost" class="form-control" id="unit_cost" required="" placeholder="0.00" min="1" value="{{ old('unit_cost') }}">
-                        </div>
-                    </div>
-
-                    <span id="unit_cost_validate" class="text-danger validation-error mt-1"></span>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-2">
-                    <div class="input-group mb-1">
-                         <label class="col-4" for="profit_margin"><b>Profit Margin(%)</b> <span class="text-danger">*</span></label>
-                        <div class="col-8">
-                            <input type="number" name="profit_margin" class="form-control" id="profit_margin" required="" placeholder="0.00" min="1" value="{{ old('profit_margin') }}">
-                        </div>
-                    </div>
-
-                    <span id="profit_margin_validate" class="text-danger validation-error mt-1"></span>
-                </div>
-
-                <div class="col-md-6 mb-2">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="variant"><b>Has Variant?</b></label>
-                        <div class="col-8">
-                            <select class="form-select has_variant" id="variant" name="variant">
-                                <option value="no" selected>No</option>
-                                <option value="yes">Yes</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-2">
-                    <div class="input-group mb-1">
-                         <label class="col-4" for="unit_price"><b>Unit Price (Exc. Tax)</b> <span class="text-danger">*</span></label>
-                        <div class="col-8">
-                            <input type="number" name="unit_price" class="form-control" id="unit_price" required="" placeholder="0.00" min="1" value="{{ old('unit_price') }}">
-                        </div>
-                    </div>
-
-                    <span id="unit_price_validate" class="text-danger validation-error mt-1"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3rd Row Content part Start -->
-     <div class="card variants_body">
-        <div class="card-body">
-            <div class="row">
-                <div class="row align-items-end">
-                    <div class="col-md-6">
-                        <p class="fw-bold" style="background: #7dd9f8; display: inline; padding: 2px 7px;">Create Variant</p>
-                    </div>
-                
-                    <div class="col-md-6">
-                        <div class="add_more_btn">
-                            <button id="add_more_variant_btn" class="btn btn-sm btn-dark float-end">Add More</button>
-                        </div>
-                    </div>
-                
-                    <div class="col-md-12">
-                        <div class="table-responsive mt-1">
-                            <div class="data-table-wrapper">
-                                <table class="table modal-table table-sm">
-                                    <thead>
-                                        <tr class="text-center bg-primary variant_header">
-                                            <th class="text-white text-start">Select Variant</th>
-                                            <th class="text-white text-start">Variant Code <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp" data-bs-original-title="Also known as SKU. Variant code(SKU) must be unique." aria-label="Also known as SKU. Variant code(SKU) must be unique."></i></th>
-                                            <th class="text-white text-start" id="variant_cost_label">Unit Cost (Exc. Tax)</th>
-                                            <th class="text-white text-start">Profit(%)</th>
-                                            <th class="text-white text-start" id="variant_price_label">Unit Price (Exc. Tax)</th>
-                                            <th class="text-white text-start">Variant Photo</th>
-                                            <th><i class="fas fa-trash-alt text-white"></i></th>
-                                        </tr>
-                                    </thead>
                     
-                                    <tbody class="dynamic_variant_body">
-                                        <tr id="variant_row" class="variant_row">
-                                            <td class="text-start">
-                                                <select class="form-control" name="" id="variants">
-                                                    <option value="" disabled selected>Select</option>
-                                                    <option value="1">Db</option>
-                                                    <option value="2">size</option>
-                                                    <option value="3">Pant Size</option>
-                                                </select>
-                                            </td>
-                
-                                            <td class="text-start">
-                                                <input type="text" name="variant_codes[]" id="variant_code" class="form-control reqireable fw-bold" placeholder="Variant Code">
-                                            </td>
-                
-                                            <td class="text-start">
-                                                <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost requireable fw-bold" placeholder="0.00" id="variant_cost" required="">
-                                            </td>
-                
-                                            <td class="text-start">
-                                                <input type="number" step="any" name="variant_profits[]" class="form-control requireable variant_profit fw-bold" placeholder="0.00" id="variant_profit">
-                                            </td>
-                
-                                            <td class="text-start">
-                                                <input type="number" step="any" name="variant_prices[]" class="form-control requireable variant_price  fw-bold" placeholder="0.00" id="variant_price" required="">
-                                            </td>
-                
-                                            <td class="text-start">
-                                                <input type="file" name="variant_image[]" class="form-control" id="variant_image">
-                                            </td>
-                
-                                            <td class="text-start">
-                                                <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
-                                            </td>
-                                        </tr>
-                
-                                        <tr id="set_variant_multiple_units" class="set_variant_multiple_units"></tr>
-                                    </tbody>
-                                </table>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="category_id"><b>Category</b> <span class="text-danger">*</span></label>
+                                <div class="col-8">
+
+                                    <div class="d-flex">
+                                        <div class="" style="width: 100%;">
+                                            <select class="form-select" id="category_id" name="category_id">
+                                                <option value="" disabled selected>Select</option>
+                                                @foreach ($categories as $row)
+                                                    <option value="{{ $row->id }}" 
+                                                        data-image-url="{{ asset($row->category_img) }}"
+                                                        {{ old('category_id') }}
+                                                        >{{ $row->category_name }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                        <button class="add_input" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                                            <i class="fas fa-plus input_i"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                <span id="category_id_validate" class="text-danger validation-error mt-1"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="subCategory_id"><b>SubCategory</b> <span class="text-danger">*</span></label>
+                                <div class="col-8">
+
+                                    <div class="d-flex">
+                                        <div class="" style="width: 100%;">
+                                            <select class="form-select" id="subCategory_id" name="subCategory_id">
+                                                <option value="" disabled selected>Select</option>
+                                                @foreach ($subCategories as $row)
+                                                    <option value="{{ $row->id }}" 
+                                                        data-image-url="{{ asset($row->subcategory_img) }}"
+                                                        {{ old('subCategory_id') }}
+                                                        >{{ $row->subcategory_name }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                        <button class="add_input" data-bs-toggle="modal" data-bs-target="#subCategoryModal">
+                                            <i class="fas fa-plus input_i"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                <span id="subCategory_id_validate" class="text-danger validation-error mt-1"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="warranties_id"><b>Warranties</b></label>
+                                <div class="col-8">
+
+                                    <div class="d-flex">
+                                        <div class="" style="width: 100%;">
+                                            <select class="form-select" id="warranties_id" name="warranties_id">
+                                                <option value="" disabled selected>Select</option>
+                                                @foreach ($warranties as $row)
+                                                    <option value="{{ $row->id }}" 
+                                                        >{{ $row->duration }}  {{ Str::ucfirst($row->period) }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                        <button class="add_input" data-bs-toggle="modal" data-bs-target="#warrantyModal">
+                                            <i class="fas fa-plus input_i"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                <span id="warranties_id_validate" class="text-danger validation-error mt-1"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="childCategory_id"><b>ChildCategory</b></label>
+                                <div class="col-8">
+
+                                    <div class="d-flex">
+                                        <div class="" style="width: 100%;">
+                                            <select class="form-select" id="childCategory_id" name="childCategory_id">
+                                                <option value="" disabled selected>Select</option>
+                                                @foreach ($childCategories as $row)
+                                                    <option value="{{ $row->id }}" 
+                                                        data-image-url="{{ asset($row->img) }}"
+                                                        >{{ $row->name }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                        <button class="add_input" data-bs-toggle="modal" data-bs-target="#childCategoryModal">
+                                            <i class="fas fa-plus input_i"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                <span id="childCategory_id_validate" class="text-danger validation-error mt-1"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="brand_id"><b>Brand</b> <span class="text-danger">*</span></label>
+                                <div class="col-8">
+
+                                    <div class="d-flex">
+                                        <div class="" style="width: 100%;">
+                                            <select class="form-select" id="brand_id" name="brand_id">
+                                                <option value="" disabled selected>Select</option>
+                                                @foreach ($brands as $row)
+                                                    <option value="{{ $row->id }}" 
+                                                        data-image-url="{{ asset($row->image) }}"
+                                                        {{ old('brand_id') }}
+                                                        >{{ $row->brand_name  }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                        <button class="add_input" data-bs-toggle="modal" data-bs-target="#brandModal">
+                                            <i class="fas fa-plus input_i"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                <span id="brand_id_validate" class="text-danger validation-error mt-1"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="alert_qty"><b>Alert Quantity</b> <span class="text-danger">*</span></label>
+                                <div class="col-8">
+                                    <input type="number" name="alert_qty" class="form-control" id="alert_qty" min="1" required="" value="{{ old('alert_qty') }}">
+                                </div>
+
+                                <span id="alert_qty_validate" class="text-danger validation-error mt-1"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="condition"><b>Condition</b> <span class="text-danger">*</span></label>
+
+                                <div class="col-8">
+                                    <select class="form-select" id="condition" name="condition">
+                                        <option value="new" selected>New</option>
+                                        <option value="used">Used</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <span id="condition_validate" class="text-danger validation-error mt-1"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="stocks"><b>Stock</b> <span class="text-danger">*</span></label>
+                                <div class="col-8">
+                                    <input type="number" name="stock" class="form-control" id="stocks" required="" min="1" value="{{ old('stock') }}">
+                                </div>
+                            </div>
+
+                            <span id="stock_validate" class="text-danger validation-error mt-1"></span>
+                        </div>
+                    </div>
+
+
+                    <!-- Category Create Modal -->
+                    <div id="categoryModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+                    style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myModalLabel">Create Category</h5>
+
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <form id="categoryForm" enctype="multipart/form-data">
+                                        @csrf
+
+                                        <div class="mb-3">
+                                            <label for="category_name" class="form-label">Name <span class="text-danger">*</span></label>
+                                            <input class="form-control" id="category_name" type="text" name="category_name" placeholder="Category Name">
+
+                                            <span id="cat_name_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="category_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(160px x 160px)</sup></label>
+                                            <input type="file" class="form-control" name="category_img" id="category_img" accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'cat_image_preview')">
+
+                                            <span id="cat_image_validate" class="text-danger validation-error mt-1"></span>
+
+                                            <div id="cat_image_preview" class="mt-3">
+                                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Status <span class="text-danger">*</span></label>
+                                            <select class="form-select" name="status">
+                                                <option value="1" selected>Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+
+                                            <span id="status_validate" class="text-danger mt-1"></span>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end align-items-center">
+                                            <button type="button" class="btn btn-secondary waves-effect me-3"
+                                                    data-bs-dismiss="modal">Close
+                                            </button>
+
+                                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
+                                                Save Changes
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
+                    <!-- /End Category Create Modal  -->
+
+
+                    <!-- SubCategory Create Modal -->
+                    <div id="subCategoryModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+                    style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myModalLabel">Create SubCategory</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    {{-- method="POST" action="{{ route('admin.category.store') }}" --}}
+                                    <form id="subcategoryForm" enctype="multipart/form-data">
+                                        @csrf
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Category Name <span class="text-danger">*</span>
+                                            </label>
+                                            <select class="form-select" name="category_id" id="second_category_id">
+                                                <option value="" disabled selected>Select</option>
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}" data-image-url="{{ asset($category->category_img) }}">{{ $category->category_name }}</option>
+                                                    @endforeach
+                                            </select>
+
+                                            <span id="cats_name_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="subcategory_name" class="form-label">SubCategory Name <span class="text-danger">*</span>
+                                            </label>
+                                            <input class="form-control" id="subcategory_name" type="text" name="subcategory_name" placeholder="SubCategory Name">
+
+                                            <span id="subCats_name_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="subcategory_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(160px x 160px)</sup></label>
+                                            <input type="file" class="form-control" name="subcategory_img" id="subcategory_img" accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'sub_image_preview')">
+
+                                            <span id="subCats_image_validate" class="text-danger validation-error mt-1"></span>
+
+                                                <div id="sub_image_preview" class="mt-3">
+                                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Status <span class="text-danger">*</span>
+                                            </label>
+                                            <select class="form-select" name="status">
+                                                <option value="1" selected>Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+
+                                            <span id="status_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end align-items-center">
+                                            <button type="button" class="btn btn-secondary waves-effect me-3"
+                                                data-bs-dismiss="modal">Close </button>
+
+                                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save Changes </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
+                    <!-- /End SubCategory Create Modal  -->
+
+
+                    <!-- ChildCategory Create Modal -->
+                    <div id="childCategoryModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+                    style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myModalLabel">Create Child-Category</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <form id="childCategoryForm" enctype="multipart/form-data">
+                                        @csrf
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Category Name <span class="text-danger">*</span></label>
+                                            <select class="form-select category_id" name="category_id" id="third_category_id">
+                                                <option value="" disabled selected>Select</option>
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}" data-image-url="{{ asset($category->category_img) }}">{{ $category->category_name }}</option>
+                                                    @endforeach
+                                            </select>
+
+                                            <span id="catName3_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">SubCategory Name <span class="text-danger">*</span></label>
+                                            <select class="form-select subCategory_id" name="subCategory_id" id="second_subCategory_id">
+                                                <option value="" disabled selected>Select </option>
+                                                    @foreach ($subCategories as $subCat)
+                                                        <option value="{{ $subCat->id }}" data-image-url="{{ asset($subCat->subcategory_img) }}">{{ $subCat->subcategory_name }}</option>
+                                                    @endforeach
+                                            </select>
+
+                                            <span id="subCatName3_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="childCategory_name" class="form-label">ChildCategory Name <span class="text-danger">*</span></label>
+                                            <input class="form-control" id="childCategory_name" type="text" name="name" placeholder="ChildCategory Name">
+
+                                            <span id="childCat_name_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="childCategory_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
+                                            <input type="file" class="form-control" name="img" id="childCategory_img" accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'child_image_preview')">
+
+                                            <span id="child_image_validate" class="text-danger validation-error mt-1"></span>
+
+                                            <div id="child_image_preview" class="mt-3">
+                                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Status <span class="text-danger">*</span></label>
+                                            <select class="form-select" name="status">
+                                                <option value="1" selected>Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end align-items-center">
+                                            <button type="button" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="modal">Close
+                                            </button>
+
+                                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
+                                                Save Changes
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
+                    <!-- /End ChildCategory Create Modal  -->
+
+
+                    <!-- Brand Create Modal  -->
+                    <div id="brandModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+                    style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myModalLabel">Create Brand</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <form id="brandForm" enctype="multipart/form-data">
+                                        @csrf
+
+                                        <div class="mb-3">
+                                            <label for="brand_name" class="form-label">Brand Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="brand_name" name="brand_name" placeholder="Brand name">
+
+                                            <span id="brand_name_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="image" class="form-label">Brand Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
+                                            <input type="file" class="form-control" name="image" id="image"  accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'brand_image_preview')">
+
+                                            <span id="brand_image_validate" class="text-danger validation-error mt-1"></span>
+
+                                            <div id="brand_image_preview" class="mt-3">
+                                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Status <span class="text-danger">*</span></label>
+                                            <select class="form-select" name="status">
+                                                <option value="1" selected>Active</option>
+                                                <option value="0">Deactive</option>
+                                            </select>
+
+                                            <span id="featured_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end align-items-center">
+                                            <button type="button" class="btn btn-secondary waves-effect me-3"
+                                                data-bs-dismiss="modal">Close </button>
+
+                                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
+                    <!-- /End Brand Create Modal  -->
+
+
+                    <!-- Unit Create Modal  -->
+                    <div id="unitModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+                        style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myModalLabel">Create Unit</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                                </div>
+        
+                                <div class="modal-body">
+                                    <form id="unitForm" enctype="multipart/form-data">
+                                        @csrf
+        
+                                        <div class="mb-3">
+                                            <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="unit" name="unit" placeholder="Unit">
+        
+                                            <span id="units_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+        
+        
+                                        <div class="mb-3">
+                                            <label for="short_name" class="form-label">Short Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="short_name" name="short_name" placeholder="Short Name">
+        
+                                            <span id="short_name_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+        
+        
+                                        <div class="mb-3">
+                                            <label class="form-label">Status <span class="text-danger">*</span></label>
+                                            <select class="form-select" name="status">
+                                                <option value="1" selected>Active</option>
+                                                <option value="0">Deactive</option>
+                                            </select>
+        
+                                            <span id="featured_validate" class="text-danger validation-error mt-1"></span>
+                                        </div>
+        
+                                        <div class="d-flex justify-content-end align-items-center">
+                                            <button type="button" class="btn btn-secondary waves-effect me-3"
+                                                data-bs-dismiss="modal">Close </button>
+        
+                                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
+                    <!-- /End Unit Create Modal  -->
+
+
+                    <!-- Create Warrenty Modal -->
+                    <div id="warrantyModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+                    style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myModalLabel">Create Warranty</h5>
+
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <form id="warrantyForm" enctype="multipart/form-data">
+                                        @csrf
+
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="mb-3">
+                                                    <label for="warranty" class="form-label">Warranty <span class="text-danger">*</span></label>
+                                                    <input class="form-control" id="warranty" type="text" name="warranty">
+                    
+                                                    <span id="warranty_validate" class="text-danger validation-error mt-1"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="duration">Duration<span class="text-danger ms-1">*</span></label>
+                                                    <input class="form-control" id="duration" type="number" name="duration">
+
+                                                    <span id="duration_validate" class="text-danger validation-error mt-1"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6" >
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="period">Period<span class="text-danger ms-1">*</span></label>
+                                                    <select class="select form-control" id="period" name="period">
+                                                        <option value="" selected disabled>Select</option>
+                                                        <option value="day">Day</option>
+                                                        <option value="month">Month</option>
+                                                        <option value="year">Year</option>
+                                                    </select>
+
+                                                    <span id="period_validate" class="text-danger validation-error mt-1"></span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-lg-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="description">Description<span class="text-danger ms-1">*</span></label>
+                                                    <textarea class="form-control" id="description" name="description"></textarea>
+
+                                                    <span id="description_validate" class="text-danger validation-error mt-1"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Status <span class="text-danger">*</span></label>
+                                            <select class="form-select" name="status">
+                                                <option value="1" selected>Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end align-items-center">
+                                            <button type="button" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="modal">Close
+                                            </button>
+
+                                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
+                                                Save Changes
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
+                    <!-- /End Create Warrenty Modal  -->
+
+                </div>
+            </div>
+
+            <!-- 3rd Row Content part Start -->
+            <div class="card variants_body">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="row align-items-end">
+                            <div class="col-md-6">
+                                <p class="fw-bold" style="background: #7dd9f8; display: inline; padding: 2px 7px;">Create Variant</p>
+                            </div>
+                        
+                            <div class="col-md-6">
+                                <div class="add_more_btn">
+                                    <button id="add_more_variant_btn" class="btn btn-sm btn-dark float-end">Add More</button>
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-12">
+                                <div class="table-responsive mt-1">
+                                    <div class="data-table-wrapper">
+                                        <table class="table modal-table table-sm">
+                                            <thead>
+                                                <tr class="text-center bg-primary variant_header">
+                                                    <th class="text-white text-start">Select Variant</th>
+                                                    <th class="text-white text-start">Variant Code <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp" data-bs-original-title="Also known as SKU. Variant code(SKU) must be unique." aria-label="Also known as SKU. Variant code(SKU) must be unique."></i></th>
+                                                    <th class="text-white text-start" id="variant_cost_label">Unit Cost (Exc. Tax)</th>
+                                                    <th class="text-white text-start">Profit(%)</th>
+                                                    <th class="text-white text-start" id="variant_price_label">Unit Price (Exc. Tax)</th>
+                                                    <th class="text-white text-start">Variant Photo</th>
+                                                    <th><i class="fas fa-trash-alt text-white"></i></th>
+                                                </tr>
+                                            </thead>
+                            
+                                            <tbody class="dynamic_variant_body">
+                                                <tr id="variant_row" class="variant_row">
+                                                    <td class="text-start">
+                                                        <select class="form-control" name="" id="variants">
+                                                            <option value="" disabled selected>Select</option>
+                                                            <option value="1">Db</option>
+                                                            <option value="2">size</option>
+                                                            <option value="3">Pant Size</option>
+                                                        </select>
+                                                    </td>
+                        
+                                                    <td class="text-start">
+                                                        <input type="text" name="variant_codes[]" id="variant_code" class="form-control reqireable fw-bold" placeholder="Variant Code">
+                                                    </td>
+                        
+                                                    <td class="text-start">
+                                                        <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost requireable fw-bold" placeholder="0.00" id="variant_cost" required="">
+                                                    </td>
+                        
+                                                    <td class="text-start">
+                                                        <input type="number" step="any" name="variant_profits[]" class="form-control requireable variant_profit fw-bold" placeholder="0.00" id="variant_profit">
+                                                    </td>
+                        
+                                                    <td class="text-start">
+                                                        <input type="number" step="any" name="variant_prices[]" class="form-control requireable variant_price  fw-bold" placeholder="0.00" id="variant_price" required="">
+                                                    </td>
+                        
+                                                    <td class="text-start">
+                                                        <input type="file" name="variant_image[]" class="form-control" id="variant_image">
+                                                    </td>
+                        
+                                                    <td class="text-start">
+                                                        <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
+                                                    </td>
+                                                </tr>
+                        
+                                                <tr id="set_variant_multiple_units" class="set_variant_multiple_units"></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6th Row Content part Start -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="long_description"><b>Long Description</b> <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="long_description" name="long_description" rows="8" placeholder="Long Description....">{{ old('long_description') }}</textarea>
+                            </div>
+            
+                            <span id="long_validate" class="text-danger mt-1">
+                                @error('long_description'){{ $message }}@enderror
+                            </span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="video_link"><b>Video Link</b></label>
+                            <textarea class="form-control" id="video_link" name="video_link"  rows="7" placeholder="Link Paste Here....">{{ old('video_link') }}</textarea>
+                        </div>
+            
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="short"><b>Short Description</b> <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="short" class="" name="short_description" rows="7" placeholder="Short Description....">{{ old('short_description') }}</textarea>
+            
+                            <span id="short_validate" class="text-danger mt-2">
+                                @error('short_description'){{ $message }}@enderror
+                            </span>
+                        </div>
+
+                        <div class="col-md-12 mb-2">
+                            <div class="input-group mb-1">
+                                <label class="form-label col-3" for="product_size"><strong>Multiple Products Tag</strong></label>
+                                <div class="col-9">
+                                    <input type="text" class="product-tags" value="{{ old('tags') }}" name="tags" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-     </div>
 
-    <!-- 4th Row Content part Start -->
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6 mb-2">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="discount_type"><b>Discount Type</b></label>
-                        <div class="col-8">
-                            <select class="form-select" id="discount_type" name="discount_type">
-                                <option value="none">Select Discount Type</option>
-                                <option value="amount">Amount ( TK )</option>
-                                <option value="percent">Percent ( % )</option>
-                            </select>
+        <div class="col-lg-4">
+            <!-- 5th Row Content part Start -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="thumb_image"><b>Thumbnail Photo</b> <span class="text-danger">*</span></label>
+                                <input type="file" class="form-control" name="thumb_image" id="thumb_image" data-allowed-file-extensions="png jpeg jpg gif webp" >
+                            </div>
+            
+                            <span id="image_validate" class="text-danger mt-2">
+                                @error('thumb_image'){{ $message }}@enderror
+                            </span>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-md-6 mb-2">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="display_ecom"><b>Displayed In E-com</b></label>
-                        <div class="col-8">
-                            <select class="form-select" id="display_ecom" name="display_ecom">
-                                <option value="no" selected>No</option>
-                                <option value="yes">Yes</option>
-                            </select>
+            <!-- 2nd Row Content part Start -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="name"><b>Applicable Tax</b></label>
+                                <div class="col-8">
+                                    <div class="d-flex gap-2">
+                                        <div class="" style="width: 100%;">
+                                            <select class="form-select" id="" name="">
+                                                <option value="none" selected>None</option>
+                                                @foreach ($tax_rates as $row)
+                                                    <option value="{{ $row->id }}" selected>{{ $row->tax_name }} ({{ $row->percentage }}%)</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="" style="width: 100%;">
+                                            <select class="form-select" id="" name="">
+                                                <option value="exclusive" selected>Exclusive</option>
+                                                <option value="inclusive">Inclusive</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mb-2">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="name"><b>Tax Applicable For</b></label>
+                                <div class="col-8">
+                                    <select class="form-select" id="" name="">
+                                        <option value="exclusive" selected>For Selling Price</option>
+                                        <option value="inclusive">For Cost & Selling Price</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="variant"><b>Has Variant?</b></label>
+                                <div class="col-8">
+                                    <select class="form-select has_variant" id="variant" name="variant">
+                                        <option value="no" selected>No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mb-2">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="unit_cost"><b>Unit Cost (Exc. Tax)</b> <span class="text-danger">*</span></label>
+                                <div class="col-8">
+                                    <input type="number" name="unit_cost" class="form-control" id="unit_cost" required="" placeholder="0.00" min="1" value="{{ old('unit_cost') }}">
+                                </div>
+                            </div>
+
+                            <span id="unit_cost_validate" class="text-danger validation-error mt-1"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="profit_margin"><b>Profit Margin(%)</b> <span class="text-danger">*</span></label>
+                                <div class="col-8">
+                                    <input type="number" name="profit_margin" class="form-control" id="profit_margin" required="" placeholder="0.00" min="1" value="{{ old('profit_margin') }}">
+                                </div>
+                            </div>
+
+                            <span id="profit_margin_validate" class="text-danger validation-error mt-1"></span>
+                        </div>
+
+                        <div class="col-md-12 mb-2">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="unit_price"><b>Unit Price (Exc. Tax)</b> <span class="text-danger">*</span></label>
+                                <div class="col-8">
+                                    <input type="number" name="unit_price" class="form-control" id="unit_price" required="" placeholder="0.00" min="1" value="{{ old('unit_price') }}">
+                                </div>
+                            </div>
+
+                            <span id="unit_price_validate" class="text-danger validation-error mt-1"></span>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-md-6 mb-2 discount_value d-none">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="discount_value"><b>Discount Value</b></label>
-                        <div class="col-8">
-                            <input class="form-control" type="number" id="discount_value" name="discount_value" value="{{ old('discount_value') }}"  placeholder="Discount Value....">
+            <!-- 4th Row Content part Start -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="discount_type"><b>Discount Type</b></label>
+                                <div class="col-8">
+                                    <select class="form-select" id="discount_type" name="discount_type">
+                                        <option value="none">Select Discount Type</option>
+                                        <option value="amount">Amount ( TK )</option>
+                                        <option value="percent">Percent ( % )</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-md-6 mb-2 offer_start_value d-none">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="offer_start_date"><b>Offer Start Date</b></label>
-                        <div class="col-8">
-                            <input class="form-control offer_start_date" type="date" id="offer_start_date" name="offer_start_date" placeholder="Select a date...." value="{{ old('offer_start_date') }}">
+                        <div class="col-md-12 mb-2">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="display_ecom"><b>Displayed In E-com</b></label>
+                                <div class="col-8">
+                                    <select class="form-select" id="display_ecom" name="display_ecom">
+                                        <option value="no" selected>No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-md-6 mb-2 offer_end_value d-none">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="offer_end_date"><b>Offer End Date</b></label>
-                        <div class="col-8">
-                            <input class="form-control offer_end_date" type="date" id="offer_end_date" name="offer_end_date" value="{{ old('offer_end_date') }}" placeholder="Select a date....">
+                        <div class="col-md-12 mb-2 discount_value d-none">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="discount_value"><b>Discount Value</b></label>
+                                <div class="col-8">
+                                    <input class="form-control" type="number" id="discount_value" name="discount_value" value="{{ old('discount_value') }}"  placeholder="Discount Value....">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-md-6 mb-2">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="display_ecom"><b>Is Featured</b></label>
-                        <div class="col-8">
-                            <select class="form-select" id="is_featured" name="is_featured">
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
-                            </select>
+                        <div class="col-md-12 mb-2 offer_start_value d-none">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="offer_start_date"><b>Offer Start Date</b></label>
+                                <div class="col-8">
+                                    <input class="form-control offer_start_date" type="date" id="offer_start_date" name="offer_start_date" placeholder="Select a date...." value="{{ old('offer_start_date') }}">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-md-6 mb-2">
-                    <div class="input-group mb-1">
-                        <label class="col-4" for="for_sale"><b>Is For Sale</b></label>
-                        <div class="col-8">
-                            <select class="form-select" id="for_sale" name="for_sale">
-                                <option value="yes" selected>Yes</option>
-                                <option value="no">No</option>
-                            </select>
+                        <div class="col-md-12 mb-2 offer_end_value d-none">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="offer_end_date"><b>Offer End Date</b></label>
+                                <div class="col-8">
+                                    <input class="form-control offer_end_date" type="date" id="offer_end_date" name="offer_end_date" value="{{ old('offer_end_date') }}" placeholder="Select a date....">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-md-12 mb-2">
-                    <div class="input-group mb-1">
-                        <label class="form-label col-2" for="product_size"><strong>Multiple Products Tag</strong></label>
-                        <div class="col-10">
-                            <input type="text" class="product-tags" value="{{ old('tags') }}" name="tags" />
+                        <div class="col-md-12 mb-2">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="display_ecom"><b>Is Featured</b></label>
+                                <div class="col-8">
+                                    <select class="form-select" id="is_featured" name="is_featured">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mb-2">
+                            <div class="input-group mb-1">
+                                <label class="col-4" for="for_sale"><b>Is For Sale</b></label>
+                                <div class="col-8">
+                                    <select class="form-select" id="for_sale" name="for_sale">
+                                        <option value="yes" selected>Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- 5th Row Content part Start -->
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="mb-3">
-                        <label class="form-label" for="thumb_image"><b>Thumbnail Photo</b> <span class="text-danger">*</span></label>
-                        <input type="file" class="form-control" name="thumb_image" id="thumb_image" data-allowed-file-extensions="png jpeg jpg gif webp" >
-                    </div>
-    
-                    <span id="image_validate" class="text-danger mt-2">
-                        @error('thumb_image'){{ $message }}@enderror
-                    </span>
-                </div>
-
-                <div class="col-md-12">
-                    <div class="mb-3">
-                        <label class="form-label" for="long_description"><b>Long Description</b> <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="long_description" name="long_description" rows="8" placeholder="Long Description....">{{ old('long_description') }}</textarea>
-                    </div>
-    
-                    <span id="long_validate" class="text-danger mt-1">
-                        @error('long_description'){{ $message }}@enderror
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 6th Row Content part Start -->
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label" for="video_link"><b>Video Link</b></label>
-                    <textarea class="form-control" id="video_link" name="video_link"  rows="7" placeholder="Link Paste Here....">{{ old('video_link') }}</textarea>
-                </div>
-    
-                <div class="col-md-6 mb-3">
-                    <label class="form-label" for="short"><b>Short Description</b> <span class="text-danger">*</span></label>
-                    <textarea class="form-control" id="short" class="" name="short_description" rows="7" placeholder="Short Description....">{{ old('short_description') }}</textarea>
-    
-                    <span id="short_validate" class="text-danger mt-2">
-                        @error('short_description'){{ $message }}@enderror
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <div class="d-flex justify-content-end align-items-center mb-5">
         <button type="button" class="btn btn-secondary waves-effect me-3">Save Changes </button>
     </div>
+
 </form>
 
 @endsection

@@ -60,6 +60,9 @@
                 height: 250px;
             }
         }
+        .add_more_btn{
+            width: 170px;
+        }
     </style>
 @endpush
 
@@ -788,13 +791,16 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="row align-items-end">
-                                <div class="col-md-6">
+                                <div class="d-flex align-items-center justify-content-between">
                                     <p class="fw-bold" style="background: #7dd9f8; display: inline; padding: 2px 7px;">Create Variant</p>
-                                </div>
-                            
-                                <div class="col-md-6">
+
                                     <div class="add_more_btn">
-                                        <button id="add_more_variant_btn" class="btn btn-sm btn-dark float-end">Add More</button>
+                                        <select class="form-control variants" id="add_more_variant">
+                                            <option value="" disabled selected>Select Options</option>
+                                            <option value="db" data-id="1">Db</option>
+                                            <option value="size" data-id="2">Size</option>
+                                            <option value="color" data-id="3">Color</option>
+                                        </select>
                                     </div>
                                 </div>
                             
@@ -804,26 +810,24 @@
                                             <table class="table table-border">
                                                 <thead>
                                                     <tr class="text-center bg-primary variant_header">
-                                                        <th class="text-white text-start">Select Variant</th>
+                                                        <th><i class="fas fa-trash-alt text-white"></i></th>
+                                                        <th class="text-white text-start">Variant Name</th>
                                                         <th class="text-white text-start">Variant Code <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp" data-bs-original-title="Also known as SKU. Variant code(SKU) must be unique." aria-label="Also known as SKU. Variant code(SKU) must be unique."></i></th>
                                                         <th class="text-white text-start" id="variant_cost_label">Unit Cost (Exc. Tax)</th>
                                                         <th class="text-white text-start">Profit(%)</th>
                                                         <th class="text-white text-start" id="variant_price_label">Unit Price (Exc. Tax)</th>
                                                         <th class="text-white text-start" id="variant_qty">Qty</th>
                                                         <th class="text-white text-start">Variant Photo</th>
-                                                        <th><i class="fas fa-trash-alt text-white"></i></th>
+                                                        
                                                     </tr>
                                                 </thead>
                                 
                                                 <tbody class="dynamic_variant_body">
-                                                    <tr id="variant_row" class="variant_row">
+                                                    {{-- <tr id="variant_row" class="variant_row">
                                                         <td class="text-start">
-                                                            <select class="form-control variants" name="" required="">
-                                                                <option value="" disabled selected>Select</option>
-                                                                <option value="1">Db</option>
-                                                                <option value="2">size</option>
-                                                                <option value="3">Pant Size</option>
-                                                            </select>
+                                                            <input type="hidden" class="form-control" value="" name="variant_id[]" id="variant_id">
+                                                            
+                                                            <input type="text" class="form-control reqireable" value="" id="variant_name" name="variant_name[]" readonly required>
                                                         </td>
                             
                                                         <td class="text-start">
@@ -853,9 +857,7 @@
                                                         <td class="text-start">
                                                             <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
                                                         </td>
-                                                    </tr>
-                            
-                                                    <tr id="set_variant_multiple_units" class="set_variant_multiple_units"></tr>
+                                                    </tr> --}}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -1121,68 +1123,88 @@
     <script src="{{ asset('public/admin/assets/js/dropify.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    <script>    
-        const body = document.querySelector(".dynamic_variant_body");
-        document.getElementById("add_more_variant_btn").addEventListener("click", function (e) {
-            e.preventDefault();
-            let unitCost  = document.getElementById("unit_cost").value.trim();
-            let unitPrice = document.getElementById("unit_price").value.trim();
-            let profitMargin = document.getElementById("profit_margin").value.trim();
+    <script>   
+    
+    $(document).ready(function() {
+        // Initialize Select2 plugin
+        $('#add_more_variant').select2();
+     
+        // When a new value is selected
+        $('#add_more_variant').on('select2:select', function (e) {
+            let unitCost     = parseFloat($('#unit_cost').val()) || 0;
+            let unitPrice    = parseFloat($('#unit_price').val()) || 0;
+            let profitMargin = parseFloat($('#profit_margin').val()) || 0;
 
-            // Create new row
-            let newRow = document.createElement("tr");
-            newRow.classList.add("variant_row");
+            var selectedValue = e.params.data.id; // Get the selected value (ID)
+            var selectId = $('#add_more_variant').find('option[value="' + selectedValue + '"]').data('id');
 
-            newRow.innerHTML = `
-                <td>
-                    <select class="form-control variants" name="" required="">
-                        <option value="" disabled selected>Select</option>
-                        <option value="1">Db</option>
-                        <option value="2">Size</option>
-                        <option value="3">Pant Size</option>
-                    </select>
-                </td>
+            // Disable the selected option in the dropdown
+            var option = $('#add_more_variant').find('option[value="' + selectedValue + '"]');
+            option.prop('disabled', true);
 
-                <td>
-                    <input type="text" name="variant_codes[]" class="form-control variant_code fw-bold" value="" placeholder="Variant Code" required="">
-                </td>
+            // Trigger the Select2 to refresh the dropdown options
+            $('#add_more_variant').select2();
 
-                <td>
-                    <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost fw-bold" value="${unitCost}" placeholder="0.00" required="">
-                </td>
+            // Prepend the new size row to the table
+            $('.dynamic_variant_body').prepend(`
+                <tr data-value="${selectedValue}">
+                    <td>
+                        <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
+                    </td>
 
-                <td>
-                    <input type="number" name="variant_profits[]" step="any" class="form-control variant_profit fw-bold" value="${profitMargin}" placeholder="0.00" required="">
-                </td>
+                    <td>
+                        <input type="hidden" class="form-control" value="${selectId}" name="variant_id[]" id="variant_id">
+                        <input type="text" class="form-control" value="${selectedValue}" name="variant_name[]" id="variant_name" readonly required>
+                    </td>
 
-                <td>
-                    <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold" value="${unitPrice}" placeholder="0.00" required="">
-                </td>
+                    <td>
+                        <input type="text" name="variant_codes[]" class="form-control variant_code fw-bold" value="" placeholder="Variant Code" required="">
+                    </td>
 
-                <td class="text-start">
-                    <input type="number" name="variant_qty[]" class="form-control variant_qty fw-bold" id="variant_qty" value="1" min="1" required="">
-                </td>
+                    <td>
+                        <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost fw-bold" value="${unitCost}" placeholder="0.00" required="">
+                    </td>
 
-                <td>
-                    <input type="file" name="variant_image[]" class="form-control variant_image" required="">
-                </td>
+                    <td>
+                        <input type="number" name="variant_profits[]" step="any" class="form-control variant_profit fw-bold" value="${profitMargin}" placeholder="0.00" required="">
+                    </td>
 
-                <td>
-                    <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
-                </td>
-            `;
+                    <td>
+                        <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold" value="${unitPrice}" placeholder="0.00" required="">
+                    </td>
 
-            // PREPEND new row at the top
-            body.prepend(newRow);
-        });
+                    <td class="text-start">
+                        <input type="number" name="variant_qty[]" class="form-control variant_qty fw-bold" id="variant_qty" value="1" min="1" required="">
+                    </td>
 
-        // Remove row
-        document.addEventListener("click", function (e) {
-            if (e.target.classList.contains("variant_remove_btn")) {
-                e.preventDefault();
-                e.target.closest(".variant_row").remove();
-            }
-        });
+                    <td>
+                        <input type="file" name="variant_image[]" class="form-control variant_image" required="">
+                    </td>
+                </tr>
+            `);
+
+            // Reset the select dropdown after a value is appended
+            $('#add_more_variant').val('').trigger('change');
+        })
+    });
+    
+
+    // Remove row
+    $(document).on('click', '.variant_remove_btn', function() {
+        var row = $(this).closest('tr');  // Find the closest row (tr)
+        var removedValue = row.data('value'); // Get the value from the row
+
+        // Re-enable the option in the select dropdown
+        var option = $('#add_more_variant').find('option[value="' + removedValue + '"]');
+        option.prop('disabled', false);
+
+        // Refresh the select2 dropdown to reflect the changes
+        $('#add_more_variant').select2();
+
+        // Remove the row from the table
+        row.remove();
+        // toastr.success("Product Variant remove");
+    });
 
 
         function calculateRow(row, changed) {
@@ -1261,9 +1283,9 @@
                     this.value = "no";
                 }
                 else {
-                    let costInput   = document.querySelector(".variant_cost").value = parseFloat(unitCost);
-                    let profitInput = document.querySelector(".variant_profit").value = parseFloat(profitMargin);
-                    let priceInput  = document.querySelector(".variant_price").value = parseFloat(unitPrice);
+                    // let costInput   = document.querySelector(".variant_cost").value = unitCost;
+                    // let profitInput = document.querySelector(".variant_profit").value = profitMargin;
+                    // let priceInput  = document.querySelector(".variant_price").value = unitPrice;
                     document.querySelector(".variants_body").classList.add('actives');
                 }
             }
@@ -1780,6 +1802,12 @@
 
             //____ warranties_id Select2 ____//
             $('#warranties_id ').select2({
+                templateResult: formatState,       
+                templateSelection: formatState, 
+            });
+
+            //____ warranties_id Select2 ____//
+            $('#add_more_variant').select2({
                 templateResult: formatState,       
                 templateSelection: formatState, 
             });

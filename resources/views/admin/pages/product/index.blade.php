@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/daterangepicker.css') }}" />
     <link rel="stylesheet" href="{{ asset('public/admin/assets/css/dropify.min.css') }}">
 
     <style>
@@ -62,6 +63,10 @@
         }
         .add_more_btn{
             width: 170px;
+        }
+        .form-control:disabled, .form-control[readonly] {
+            background-color: #e9e9ef;
+            opacity: 1;
         }
     </style>
 @endpush
@@ -1060,20 +1065,20 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12 mb-2 offer_start_value d-none">
+                            {{-- <div class="col-md-12 mb-2 offer_start_value d-none">
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="offer_start_date"><b>Offer Start Date</b></label>
                                     <div class="col-8">
                                         <input class="form-control offer_start_date" type="date" id="offer_start_date" name="offer_start_date" placeholder="Select a date...." value="{{ old('offer_start_date') }}">
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-12 mb-2 offer_end_value d-none">
                                 <div class="input-group mb-1">
-                                    <label class="col-4" for="offer_end_date"><b>Offer End Date</b></label>
+                                    <label class="col-4" for="discount_date"><b>Discount Date</b></label>
                                     <div class="col-8">
-                                        <input class="form-control offer_end_date" type="date" id="offer_end_date" name="offer_end_date" value="{{ old('offer_end_date') }}" placeholder="Select a date....">
+                                        <input class="form-control offer_end_date" type="text" id="discount_date" name="discount_date" value="" placeholder="Select a date....">
                                     </div>
                                 </div>
                             </div>
@@ -1120,91 +1125,138 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js"></script>
+    <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
     <script src="{{ asset('public/admin/assets/js/dropify.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+    <script>
+        // Multiple Date Range
+        $(function() {
+            function initDateRangePicker(selector, position){
+                var start = moment().subtract(29, 'days');
+                var end = moment();
+            
+                function cb(start, end) {
+                    $(selector).find('span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
+            
+                $(selector).daterangepicker({
+                    timePicker: true,
+                    drops: position,
+                    autoUpdateInput: false,
+                    startDate: moment(),
+                    endDate: moment(),
+                    locale: {
+                        format: 'MMMM D/YYYY hh:mm A'
+                    },
+                    ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                }, cb);
+
+                $(selector).on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('MMMM D, YYYY hh:mm A') + ' - ' + picker.endDate.format('MMMM D, YYYY hh:mm A'));
+                });
+
+                $(selector).on('cancel.daterangepicker', function(ev, picker) {
+                    $(this).val('');
+                });
+            
+                cb(start, end);
+            }
+            // Initialize both inputs
+            initDateRangePicker('#discount_date', "down");
+        });
+    </script>
+
     <script>   
     
-    $(document).ready(function() {
-        // Initialize Select2 plugin
-        $('#add_more_variant').select2();
-     
-        // When a new value is selected
-        $('#add_more_variant').on('select2:select', function (e) {
-            let unitCost     = parseFloat($('#unit_cost').val()) || 0;
-            let unitPrice    = parseFloat($('#unit_price').val()) || 0;
-            let profitMargin = parseFloat($('#profit_margin').val()) || 0;
+        $(document).ready(function() {
+            // Initialize Select2 plugin
+            $('#add_more_variant').select2();
+        
+            // When a new value is selected
+            $('#add_more_variant').on('select2:select', function (e) {
+                let unitCost     = parseFloat($('#unit_cost').val()) || 0;
+                let unitPrice    = parseFloat($('#unit_price').val()) || 0;
+                let profitMargin = parseFloat($('#profit_margin').val()) || 0;
 
-            var selectedValue = e.params.data.id; // Get the selected value (ID)
-            var selectId = $('#add_more_variant').find('option[value="' + selectedValue + '"]').data('id');
+                var selectedValue = e.params.data.id; // Get the selected value (ID)
+                var selectId = $('#add_more_variant').find('option[value="' + selectedValue + '"]').data('id');
 
-            // Disable the selected option in the dropdown
-            var option = $('#add_more_variant').find('option[value="' + selectedValue + '"]');
-            option.prop('disabled', true);
+                // Disable the selected option in the dropdown
+                var option = $('#add_more_variant').find('option[value="' + selectedValue + '"]');
+                option.prop('disabled', true);
 
-            // Trigger the Select2 to refresh the dropdown options
+                // Trigger the Select2 to refresh the dropdown options
+                $('#add_more_variant').select2();
+
+                // Prepend the new size row to the table
+                $('.dynamic_variant_body').prepend(`
+                    <tr class="variant_row" data-value="${selectedValue}">
+                        <td>
+                            <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
+                        </td>
+
+                        <td>
+                            <input type="hidden" class="form-control" value="${selectId}" name="variant_id[]" id="variant_id">
+                            <input type="text" class="form-control variant_name" value="${selectedValue}" name="variant_name[]" id="variant_name" readonly required>
+                        </td>
+
+                        <td>
+                            <input type="text" name="variant_codes[]" class="form-control variant_code fw-bold" value="" placeholder="Variant Code" required="">
+                        </td>
+
+                        <td>
+                            <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost fw-bold" value="${unitCost}" placeholder="0.00" required="">
+                        </td>
+
+                        <td>
+                            <input type="number" name="variant_profits[]" step="any" class="form-control variant_profit fw-bold" value="${profitMargin}" placeholder="0.00" required="">
+                        </td>
+
+                        <td>
+                            <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold" value="${unitPrice}" placeholder="0.00" required="">
+                        </td>
+
+                        <td class="text-start">
+                            <input type="number" name="variant_qty[]" class="form-control variant_qty fw-bold" id="variant_qty" value="1" min="1" required="">
+                        </td>
+
+                        <td>
+                            <input type="file" name="variant_image[]" class="form-control variant_image" required="">
+                        </td>
+                    </tr>
+                `);
+
+                // Reset the select dropdown after a value is appended
+                $('#add_more_variant').val('').trigger('change');
+            })
+        });
+        
+
+        // Remove row
+        $(document).on('click', '.variant_remove_btn', function() {
+            var row = $(this).closest('tr');  // Find the closest row (tr)
+            var removedValue = row.data('value'); // Get the value from the row
+
+            // Re-enable the option in the select dropdown
+            var option = $('#add_more_variant').find('option[value="' + removedValue + '"]');
+            option.prop('disabled', false);
+
+            // Refresh the select2 dropdown to reflect the changes
             $('#add_more_variant').select2();
 
-            // Prepend the new size row to the table
-            $('.dynamic_variant_body').prepend(`
-                <tr data-value="${selectedValue}">
-                    <td>
-                        <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
-                    </td>
-
-                    <td>
-                        <input type="hidden" class="form-control" value="${selectId}" name="variant_id[]" id="variant_id">
-                        <input type="text" class="form-control" value="${selectedValue}" name="variant_name[]" id="variant_name" readonly required>
-                    </td>
-
-                    <td>
-                        <input type="text" name="variant_codes[]" class="form-control variant_code fw-bold" value="" placeholder="Variant Code" required="">
-                    </td>
-
-                    <td>
-                        <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost fw-bold" value="${unitCost}" placeholder="0.00" required="">
-                    </td>
-
-                    <td>
-                        <input type="number" name="variant_profits[]" step="any" class="form-control variant_profit fw-bold" value="${profitMargin}" placeholder="0.00" required="">
-                    </td>
-
-                    <td>
-                        <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold" value="${unitPrice}" placeholder="0.00" required="">
-                    </td>
-
-                    <td class="text-start">
-                        <input type="number" name="variant_qty[]" class="form-control variant_qty fw-bold" id="variant_qty" value="1" min="1" required="">
-                    </td>
-
-                    <td>
-                        <input type="file" name="variant_image[]" class="form-control variant_image" required="">
-                    </td>
-                </tr>
-            `);
-
-            // Reset the select dropdown after a value is appended
-            $('#add_more_variant').val('').trigger('change');
-        })
-    });
-    
-
-    // Remove row
-    $(document).on('click', '.variant_remove_btn', function() {
-        var row = $(this).closest('tr');  // Find the closest row (tr)
-        var removedValue = row.data('value'); // Get the value from the row
-
-        // Re-enable the option in the select dropdown
-        var option = $('#add_more_variant').find('option[value="' + removedValue + '"]');
-        option.prop('disabled', false);
-
-        // Refresh the select2 dropdown to reflect the changes
-        $('#add_more_variant').select2();
-
-        // Remove the row from the table
-        row.remove();
-        // toastr.success("Product Variant remove");
-    });
+            // Remove the row from the table
+            row.remove();
+            // toastr.success("Product Variant remove");
+        });
 
 
         function calculateRow(row, changed) {
@@ -1743,14 +1795,14 @@
                 delimiter: ',',
             });
 
-            // Flatpicker Plugin
-            $(".offer_start_date").flatpickr({
-                minDate: "today"
-            });
+            // // Flatpicker Plugin
+            // $(".offer_start_date").flatpickr({
+            //     minDate: "today"
+            // });
 
-            $(".offer_end_date").flatpickr({
-                minDate: "today"
-            });
+            // $(".offer_end_date").flatpickr({
+            //     minDate: "today"
+            // });
 
             //____ category_id Select2 ____//
             $('#units').select2({

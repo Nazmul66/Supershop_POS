@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
     <link href="{{ asset('public/admin/assets/css/select2.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('public/admin/assets/css/lightbox.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/daterangepicker.css') }}" />
 
     <style>
@@ -128,16 +129,17 @@
             opacity: 0;
             transform: translateY(-10px);
             pointer-events: none;
-            transition: all 0.3s ease;
+            transition: all 0.3s ease-in-out;
         }
         .cus_address_list.active {
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
         }
-        .cus_address_list ul li{
-
+        .lb-data .lb-details {
+            display: none !important;
         }
+
     </style>
 @endpush
 
@@ -502,7 +504,12 @@
                     <div class="card border border-2 mb-3">
                         <div class="card-header">
                            <div class="d-flex align-items-center gap-2">
-                               <img src="{{ asset('public/admin/assets/images/Lichu-Modhu-500g_with-box_v2.webp') }}" alt="" width="85">
+                                <a class="image_overflow" href="{{ asset('public/admin/assets/images/Lichu-Modhu-500g_with-box_v2.webp') }}" data-lightbox="image-1">
+                                    <img src="{{ asset('public/admin/assets/images/Lichu-Modhu-500g_with-box_v2.webp') }}" alt="" width="85">
+
+                                    <i class="ti ti-adjustments-alt"></i>
+                                </a>
+
                                <div class="">
                                   <h4 class="mb-2">লিচু ফুলের মধু/Lichu Flower Honey</h4>
                                   <p><strong>SKU:</strong> A000121</p>
@@ -533,7 +540,12 @@
                     <div class="card border border-2 mb-3">
                         <div class="card-header">
                            <div class="d-flex align-items-center gap-2">
-                               <img src="{{ asset('public/admin/assets/images/WhatsApp_Image_2025-11-04_at_18.51.14_1.webp') }}" alt="" width="85">
+                               <a class="image_overflow" href="{{ asset('public/admin/assets/images/WhatsApp_Image_2025-11-04_at_18.51.14_1.webp') }}" data-lightbox="image-1">
+                                    <img src="{{ asset('public/admin/assets/images/WhatsApp_Image_2025-11-04_at_18.51.14_1.webp') }}" alt="" width="85">
+
+                                    <i class="ti ti-adjustments-alt"></i>
+                                </a>
+
                                <div class="">
                                   <h4 class="mb-2">সুন্দরবনের মধু/Sundarban Honey</h4>
                                   <p><strong>SKU:</strong> A000251</p>
@@ -594,7 +606,12 @@
                     <div class="card border border-2 mb-3">
                         <div class="card-header">
                            <div class="d-flex align-items-center gap-2">
-                               <img src="{{ asset('public/admin/assets/images/Lichu-Modhu-500g_with-box_v2.webp') }}" alt="" width="85">
+                               <a class="image_overflow" href="{{ asset('public/admin/assets/images/Lichu-Modhu-500g_with-box_v2.webp') }}" data-lightbox="image-1">
+                                    <img src="{{ asset('public/admin/assets/images/Lichu-Modhu-500g_with-box_v2.webp') }}"  alt="" width="85">
+
+                                    <i class="ti ti-adjustments-alt"></i>
+                               </a>
+
                                <div class="">
                                   <h4 class="mb-2">লিচু ফুলের মধু/Lichu Flower Honey</h4>
                                   <p class="mb-2"><strong>SKU:</strong> A000121</p>
@@ -640,7 +657,12 @@
                     <div class="card border border-2 mb-3">
                         <div class="card-header">
                            <div class="d-flex align-items-center gap-2">
-                               <img src="{{ asset('public/admin/assets/images/WhatsApp_Image_2025-11-04_at_18.51.14_1.webp') }}" alt="" width="85">
+                                <a class="image_overflow" href="{{ asset('public/admin/assets/images/WhatsApp_Image_2025-11-04_at_18.51.14_1.webp') }}" data-lightbox="image-1">
+                                   <img src="{{ asset('public/admin/assets/images/WhatsApp_Image_2025-11-04_at_18.51.14_1.webp') }}" alt="" width="85">
+
+                                     <i class="ti ti-adjustments-alt"></i>
+                                </a>
+
                                <div class="">
                                   <h4 class="mb-2">সুন্দরবনের মধু/Sundarban Honey</h4>
                                   <p class="mb-2"><strong>SKU:</strong> A000251</p>
@@ -1485,6 +1507,7 @@
 
 @push('add-js')
     <script src="{{ asset('public/admin/assets/js/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('public/admin/assets/js/lightbox.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
 
@@ -1492,6 +1515,15 @@
         window.onbeforeunload = function () {
             window.scrollTo(0, 0);
         };
+
+        lightbox.option({
+            'maxWidth': 500,
+            'maxHeight': 500
+            'fitImagesInViewport': true,
+            'imageFadeDuration': 700,
+            'fadeDuration': 700,
+            'resizeDuration': 700,
+        })
     </script>
 
 <script>

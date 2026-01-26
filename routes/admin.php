@@ -75,6 +75,7 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     
     Route::get('/cc', [AdminController::class, "cacheClear"])->name('cacheClear');
     Route::get('/dashboard', [AdminController::class, "dashboard"])->name('dashboard');
+    
 
     Route::get('/orderDetails', function(){
         return view('admin.pages.gb.orderDetails');

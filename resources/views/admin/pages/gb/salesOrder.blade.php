@@ -108,6 +108,36 @@
         .copyright-footer{
             padding: 40px 24px 40px;
         }
+        .customer_address .ti-chevron-down{
+            position: absolute;
+            top: 50%;
+            right: 0;
+            font-size: 30px;
+            transform: translateY(-50%);
+        }
+        .cus_address_list{
+            position: absolute;
+            top: 50px;
+            left: 0;
+            width: 100%;
+            background: #FFF;
+            z-index: 111;
+            box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
+            border-radius: 6PX;
+            padding: 20px 16px;
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .cus_address_list.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .cus_address_list ul li{
+
+        }
     </style>
 @endpush
 
@@ -586,7 +616,14 @@
                             </div>
     
                             <div class="d-flex align-items-center justify-content-between gap-4 mt-4">
-                                <button class="btn btn-outline-success mb-0">Add Discount</button>
+                                <div class="">
+                                    <input type="number" class="discount_form form-control d-none" name="discount">
+                                    <div class="btn_discount">
+                                        <button class="btn btn-outline-success mb-0">Add Discount</button>
+                                    </div>
+                                </div>
+
+
                                 <div class="d-flex align-items-center gap-2">
                                     <h6 class="text-nowrap">BDT 600.00</h6>
                                     <div class="wg-quantity">
@@ -610,7 +647,7 @@
                                   <div class="d-flex align-items-center gap-2">
                                       <h5>BDT 1550.00</h5>
                                       <del>
-                                        <h5>BDT 1700.00</h5>
+                                        <h5 style="font-size: 12px;">BDT 1700.00</h5>
                                       </del>
                                   </div>
                                </div>
@@ -654,10 +691,6 @@
                         <button class="btn btn-square btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#orderDetails" aria-controls="orderDetails">Next</button>
                    </div>
                 </div>
-
-                <div class="">
-
-                </div>
             </div>
         </div>
     </div>
@@ -679,7 +712,7 @@
                         <div class="bg-input-field">
                             <label for="cus_type" class="form_labels">Customer Type</label>
                             <select name="cus_type" id="cus_type" class="form-select select_form mt-2">
-                                <option value="" selected>Ecommerce Type Customer</option>
+                                <option value="ecommerce_type" selected>Ecommerce Type Customer</option>
                             </select>
                         </div>
                     </div>
@@ -709,8 +742,39 @@
                         <div class="bg-input-field">
                             <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
 
-                            <div class="input-addon-right position-relative">
-                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
+                            <div class="customer_address input-addon-right position-relative">
+                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2" readonly></textarea>
+
+                                <i class="ti ti-chevron-down address_chevron" style="cursor: pointer;"></i>
+
+                                <div class="cus_address_list">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="d-flex align-items-center justify-content-between mb-2 gap-3">
+                                                <p class="mb-0 fw-bold" style="width: 95%; white-space: nowrap; overflow:hidden;">কে-৩৯/৫, ১২২৯ কুড়িল - এনএসইউ রোড</p>
+
+                                                <div class="d-flex align-items-center">
+                                                    <i class="ti ti-edit" style="font-size: 20px; cursor: pointer;" data-bs-toggle="offcanvas"  data-bs-target="#update_customer_address" aria-controls="offcanvasRight"></i>
+                                                    <i class="ti ti-trash ms-1" style="font-size: 20px; cursor: pointer;"></i>
+                                                </div>
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                           <a href="#" class="d-flex align-items-center justify-content-between gap-3">
+                                                <p class="mb-0 fw-bold" style="width: 95%; white-space: nowrap; overflow:hidden;">k-39/5, 1229 Kuril - NSU Rd k-39/5, 1229 Kuril - NSU Rd k-39/5, 1229 Kuril - NSU Rd</p>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="ti ti-edit" style="font-size: 20px; cursor: pointer;" data-bs-toggle="offcanvas"  data-bs-target="#update_customer_address" aria-controls="offcanvasRight"></i>
+                                                    <i class="ti ti-trash ms-1" style="font-size: 20px; cursor: pointer;"></i>
+                                                </div>
+                                           </a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="text-center mt-3">
+                                        <button type="button"  data-bs-toggle="offcanvas"  data-bs-target="#create_customer_address" aria-controls="offcanvasRight" class="btn btn-secondary"><i class="ti ti-user-plus"></i> Add New Address</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -786,6 +850,146 @@
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
                         </select>
+                    </div>
+    
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
+    
+                        <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Customer Address Create Modal -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="create_customer_address" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h3 id="offcanvasRightLabel">Create Customer Address</h3>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body">
+            <div class="row">
+                <form id="createForm" enctype="multipart/form-data">
+                    @csrf
+    
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
+
+                            <div class="customer_address input-addon-right position-relative">
+                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="map_location" class="form_labels">Map Location <span class="text-danger"> *</span></label>
+
+                            <div class="input-addon-right">
+                                <textarea name="map_location" class="form-control form_inputs" id="map_location" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="mb-4">
+                        <label for="" class="form-label">Save As</label>
+    
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                                <label class="form-check-label" for="home">
+                                    Home
+                                </label>
+                            </div>
+    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                                <label class="form-check-label" for="work">
+                                    Work
+                                </label>
+                            </div>
+    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
+                                <label class="form-check-label" for="other">
+                                    Other
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
+    
+                        <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Customer Address Update Modal -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="update_customer_address" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h3 id="offcanvasRightLabel">Update Customer Address</h3>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body">
+            <div class="row">
+                <form id="createForm" enctype="multipart/form-data">
+                    @csrf
+    
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
+
+                            <div class="customer_address input-addon-right position-relative">
+                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="map_location" class="form_labels">Map Location <span class="text-danger"> *</span></label>
+
+                            <div class="input-addon-right">
+                                <textarea name="map_location" class="form-control form_inputs" id="map_location" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="mb-4">
+                        <label for="" class="form-label">Save As</label>
+    
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                                <label class="form-check-label" for="home">
+                                    Home
+                                </label>
+                            </div>
+    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                                <label class="form-check-label" for="work">
+                                    Work
+                                </label>
+                            </div>
+    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
+                                <label class="form-check-label" for="other">
+                                    Other
+                                </label>
+                            </div>
+                        </div>
                     </div>
     
                     <div class="d-flex justify-content-end align-items-center">
@@ -1397,7 +1601,6 @@
         });
     });
 
-
     // Clear Product Search
     document.addEventListener('DOMContentLoaded', function () {
         const clear_search = document.getElementById('clear_search');
@@ -1456,6 +1659,74 @@
                 }
             });
         });
+    });
+
+    // Customer address dropdown show
+    const chevron = document.querySelector('.address_chevron');
+    const addressBox = document.querySelector('.cus_address_list');
+    const wrapper = document.querySelector('.customer_address');
+
+    chevron.addEventListener('click', function (e) {
+        e.stopPropagation();
+        addressBox.classList.toggle('active');
+    });
+
+    // click outside to close
+    document.addEventListener('click', function (e) {
+        if (!wrapper.contains(e.target)) {
+            addressBox.classList.remove('active');
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const discount_form = document.querySelector('.discount_form');
+        const btnContainer = document.querySelector('.btn_discount');
+
+        // Initial Add Note click
+        btnContainer.addEventListener('click', function (e) {
+            if (e.target.closest('.btn-outline-success')) {
+                enableNote();
+            }
+
+            if (e.target.closest('.btn-danger')) {
+                cancelNote();
+            }
+
+            if (e.target.closest('.btn-success')) {
+                saveNote();
+            }
+        });
+
+        function enableNote() {
+            discount_form.classList.remove('d-none');
+            discount_form.classList.add('mb-2');
+
+            btnContainer.innerHTML = `
+                <button type="button" class="btn btn-sm btn-danger">Cancel</button>
+                <button type="button" class="btn btn-sm btn-success ms-1">Save</button>
+            `;
+        }
+
+        function cancelNote() {
+            discount_form.value = '';
+            discount_form.classList.add('d-none');
+            discount_form.classList.remove('mb-2');
+
+            btnContainer.innerHTML = `
+                <button type="button" class="btn btn-outline-success mb-0">Add Discount</button>
+            `;
+        }
+
+        function saveNote() {
+            discount_form.classList.add('d-none');
+            discount_form.classList.add('mb-2');
+            // 🔹 Add AJAX / form submit here if needed
+            btnContainer.innerHTML = `
+                <button type="button" class="btn btn-outline-success mb-0">Add Discount</button>
+            `;
+        }
     });
 </script>
 

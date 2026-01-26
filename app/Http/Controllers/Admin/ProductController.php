@@ -64,7 +64,7 @@ class ProductController extends Controller
         $subCategories     = Subcategory::get_data();
         $childCategories   = ChildCategory::get_data();
         $brands            = Brand::get_data();
-        return view('backend.pages.products.create', compact('categories', 'subCategories', 'childCategories', 'brands'));
+        return view('admin.pages.product.create', compact('categories', 'subCategories', 'childCategories', 'brands'));
     }
 
     public function getData(Request $request)

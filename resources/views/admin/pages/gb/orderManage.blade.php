@@ -164,6 +164,9 @@
         .form_labels{
             color: #BEC1C4;
         }
+        a:hover{
+            color: #000 !important;
+        }
         .select2-container--default .select2-selection--single {
             border: 1px solid transparent !important;
             background-color: transparent !important;
@@ -298,6 +301,11 @@
         <a class="nav-link" data-bs-toggle="tab" role="tab" href="#nav-offers" aria-selected="false" tabindex="-1">Flagged</a>
         <a class="nav-link" data-bs-toggle="tab" role="tab" href="#nav-offers" aria-selected="false" tabindex="-1">Cancelled</a>
     </nav>
+
+    {{-- Button --}}
+    <a href="#" class="border border-2 border-secondary p-2 d-inline-block mw-fit fw-bold rounded">
+        Multiple Order <span class="badge bg-primary">0</span> with the same phone number <span class="badge bg-success">0</span>
+    </a>
 
     {{-- Table Responsive --}}
     <div class="mb-0 border-1">

@@ -35,10 +35,9 @@
         .additional_box{
             position: relative;
         }
-        .additional_box .btn_note{
-            position: absolute;
-            top: -38px;
-            right: 0;
+        .btn_note{
+            text-align: right;
+            margin-bottom: 6px;
         }
         #copyNumber i{
            font-size: 22px;
@@ -83,11 +82,14 @@
             top: 15px;
             right: 15px;
         }
+        .additional_message ul ol{
+            font-size: 12px;
+        }
     </style>
 @endpush
 
 {{-- Active sidebar --}}
-@section('faq', 'active')
+@section('', 'active')
 
 
 @section('body-content')
@@ -97,7 +99,7 @@
         <div class="add-item d-flex">
             <div class="page-title">
                 <h4 class="fw-bold">Order Details</h4>
-                <h6>Manage your Faqs</h6>
+                <h6>Manage your </h6>
             </div>
         </div>
 
@@ -110,7 +112,7 @@
         <div class="card-body">
             <div class="row">
                 {{-- Left Column Start --}}
-                <div class="col-lg-4">
+                <div class="col-lg-7">
                     <div class="d-flex align-items-center mb-4">
                         <p class="badge badge-xl bg-soft-info my-1 me-2">
                             <span id="copyName">GB-4658</span> <span id="copyId" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy" class="text-success ms-2" style="cursor: pointer;"><i class="ti ti-copy"></i></span>
@@ -131,9 +133,9 @@
 
                     <p class="mb-2"><strong>Shipping Date :</strong> Dec 12-2025 09:10 P.M</p>
                     <p class="mb-2"><strong>Follow Up Date :</strong> Dec 12-2025 09:10 P.M</p>
-                    <p class="mb-2"><strong>On Hold Reason :</strong> Dec 12-2025 09:10 P.M</p>
-                    <p class="mb-2"><strong>Cancelled Reason :</strong> Dec 12-2025 09:10 P.M</p>
                     <p class="mb-2"><strong>Auto approve date :</strong> Dec 12-2025 09:10 P.M</p>
+                    <p class="mb-2"><strong>On Hold Reason :</strong> Can not Answer</p>
+                    <p class="mb-2"><strong>Cancelled Reason :</strong> Duplicate Order</p>
                     <div class="mb-2 d-flex align-items-center gap-1"><strong>Assign to delivery partner :</strong> <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" width="20"> Steadfast </div>
                     <div class="mb-2 d-flex align-items-center gap-1"><strong>Source :</strong>  Website <img src="{{ asset('public/admin/assets/img/logo-small.png') }}" alt="" width="20"> </div>
 
@@ -146,14 +148,31 @@
                         </a>
                     </div>
 
-                    <p class="mb-2"><strong>Delivery Type :</strong> Regular / New</p>
+                    <p class="mb-2"><strong>Delivery Type :</strong> Regular / Express</p>
                     <p class="mb-2"><strong>Source Info :</strong> https://ghorerbazar.com/collections/dates</p>
+                    <p class="mb-2"><strong>Website Order Id :</strong> 562102</p>
                     <p class="mb-4"><strong>Delivery Note :</strong> dgdfgsdfdfds sddsfsd sdfsdfsdf sdfsdfsf</p>
-                    <p class="mb-2"><strong>Internal Note :</strong></p>
-                    <div class="additional_box">
-                        <textarea name="" class="form-control" id="additional_form" cols="30" rows="4" disabled></textarea>
-                        <div class="btn_note">
-                            <button class="btn btn-square btn-secondary">Add Note</button>
+
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="mb-2"><strong>Internal Note :</strong></p>
+                                <div class="btn_note">
+                                    <button class="btn btn-sm btn-secondary">Add Note</button>
+                                </div>
+                            </div>
+
+                            <div class="additional_box border border-2 p-2">
+                                <textarea name="" class="form-control mb-1 d-none" id="additional_form" cols="30" rows="3" disabled></textarea>
+        
+                                <div class="additional_message">
+                                    <ul>
+                                        <ol><strong>1.</strong> Working On it ( At 05:30 A.M on 2 Dec, 2026 by Nazmul Hassan ).</ol>
+                                        <ol><strong>2.</strong> cnr ( At 05:32 A.M on 2 Dec, 2026 by Nazmul Hassan ).</ol>
+                                        <ol><strong>3.</strong> busy ( At 06:32 A.M on 2 Dec, 2026 by Nazmul Hassan ).</ol>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -161,7 +180,7 @@
 
 
                 {{-- Right Column Start --}}
-                <div class="col-lg-4 offset-lg-4 text-end">
+                <div class="col-lg-4 offset-lg-1 text-end">
                     <div class="d-flex align-items-center justify-content-end gap-1 mb-2">
                         <i class="ti ti-info-circle text-info" data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" aria-controls="offcanvasRight"></i>
                         <h2>Mahtab</h2>
@@ -452,7 +471,9 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <input type="checkbox" id="approve_status" disabled="true">
 
-                                        <span>Auto-Approve Status</span>
+                                        <label for="approve_status">
+                                            <span style="color: #000; cursor: pointer;">Auto-Approve Status</span>
+                                        </label>
                                     </div>
                                 </div>
 
@@ -469,7 +490,7 @@
                                     <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3"
                                         data-bs-dismiss="modal">Close </button>
 
-                                    <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Save changes</button>
+                                    <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light">Confirm</button>
                                 </div>
                             </form>
                         </div>
@@ -1027,9 +1048,10 @@
     <script type="text/javascript">
         // Multiple Date Range
         $(function() {
-            function initDateRangePicker(selector){
+            function initDateRangePicker(selector, position){
                 $(selector).daterangepicker({
                     singleDatePicker: true,
+                    drops: position,
                     timePicker: true,
                     timePicker24Hour: false,
                     timePickerIncrement: 1,
@@ -1041,8 +1063,8 @@
                 });
             }
             // Initialize both inputs
-            initDateRangePicker('#followUp_date');
-            initDateRangePicker('#approve_date');
+            initDateRangePicker('#followUp_date', 'down');
+            initDateRangePicker('#approve_date', 'up');
         });
 
     </script>
@@ -1112,32 +1134,33 @@
         });
 
         function enableNote() {
+            textarea.classList.remove('d-none');
             textarea.removeAttribute('disabled');
             textarea.setAttribute('placeholder', 'Write here...');
 
             btnContainer.innerHTML = `
-                <button type="button" class="btn btn-square btn-danger">Cancel</button>
-                <button type="button" class="btn btn-square btn-success ms-2">Save</button>
+                <button type="button" class="btn btn-sm btn-danger">Cancel</button>
+                <button type="button" class="btn btn-sm btn-success ms-1">Save</button>
             `;
         }
 
         function cancelNote() {
             textarea.value = '';
+            textarea.classList.add('d-none');
             textarea.setAttribute('disabled', true);
             textarea.removeAttribute('placeholder');
 
             btnContainer.innerHTML = `
-                <button type="button" class="btn btn-square btn-secondary">Add Note</button>
+                <button type="button" class="btn btn-sm btn-secondary">Add Note</button>
             `;
         }
 
         function saveNote() {
             textarea.setAttribute('disabled', true);
-
+            textarea.classList.add('d-none');
             // 🔹 Add AJAX / form submit here if needed
-
             btnContainer.innerHTML = `
-                <button type="button" class="btn btn-square btn-secondary">Add Note</button>
+                <button type="button" class="btn btn-sm btn-secondary">Add Note</button>
             `;
         }
     });

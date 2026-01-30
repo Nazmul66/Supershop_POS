@@ -21,16 +21,20 @@ class CreateProductRequest extends FormRequest
         $discountType   = $this->input('discount_type'); // Access input directly
         $purchase_price = $this->input('purchase_price'); // Access input directly
         $selling_price  = $this->input('selling_price'); // Access input directly
-        $startDate      = $this->input('offer_start_date');   // Access the offer_start_date
-        $endDate        = $this->input('offer_end_date'); // Access the offer_end_date
 
         return [
             'name'            => ['required', 'unique:products,name', 'max:255'],
             'thumb_image'     => ['required', 'image', 'mimes:png,jpg,jpeg,webp', 'max:4096'],
             'sku'             => ['required', 'max:155'],
             'category_id'     => ['required', 'numeric'],
-            'subCategory_id'  => ['numeric'],
+            'subCategory_id'  => ['required', 'numeric'],
             'brand_id'        => ['numeric'],
+            'unit_id'         => ['required','numeric'],
+            'warranties_id'   => ['numeric'],
+            'qty'             => ['required', 'numeric', 'min:0'],
+            'alert_qty'       => ['required', 'numeric', 'min:0'],
+            'short_description' => ['required', 'max: 450'],
+            'long_description' => ['required'],
             'purchase_price'  => [
                 'required',
                 'numeric',
@@ -51,8 +55,7 @@ class CreateProductRequest extends FormRequest
                     }
                 },
             ],
-            'qty'   => ['required', 'numeric', 'min:0'],
-            'units' => ['required', 'string'],
+
             'discount_type' => ['in:none,amount,percent'],
             'discount_value' => [
                 'nullable',
@@ -67,28 +70,10 @@ class CreateProductRequest extends FormRequest
                     }
                 },
             ],
-            'offer_start_date' => [
+            'discount_date' => [
                 'nullable',
-                'date',
                 'required_if:discount_type,amount,percent',
-                function ($attribute, $value, $fail) use ($endDate) {
-                    if (date('d', strtotime($value)) >= date('d', strtotime($endDate)) ) {
-                        $fail('The start date must be at least one day before the end date.');
-                    }
-                },
             ],
-            'offer_end_date' => [
-                'nullable',
-                'date',
-                'required_if:discount_type,amount,percent',
-                function ($attribute, $value, $fail) use ($startDate) {
-                    if (date('d', strtotime($value)) <= date('d', strtotime($startDate)) )  {
-                        $fail('The end date must be at least one day after the start date.');
-                    }
-                },
-            ],
-            'short_description' => ['required', 'max: 350'],
-            'long_description' => ['required'],
         ];
     }
 
@@ -115,13 +100,7 @@ class CreateProductRequest extends FormRequest
             'discount_value.numeric' => 'The discount value must be a valid number.',
             'discount_value.*' => 'Invalid discount value for the selected discount type.',
     
-            'offer_start_date.required_if' => 'The offer start date is required when a discount type is selected.',
-            'offer_start_date.date' => 'The offer start date must be a valid date.',
-            'offer_start_date.*' => 'The offer start date must be before the offer end date.',
-    
-            'offer_end_date.required_if' => 'The offer end date is required when a discount type is selected.',
-            'offer_end_date.date' => 'The offer end date must be a valid date.',
-            'offer_end_date.*' => 'The offer end date must be after the offer start date.',
+            'discount_date.required_if' => 'Discount date is required when discount type is amount or percent.',
 
             'purchase_price.required' => 'The purchase price is required.',
             'purchase_price.numeric' => 'The purchase price must be a valid number.',

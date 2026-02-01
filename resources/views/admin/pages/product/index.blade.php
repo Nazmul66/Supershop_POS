@@ -119,7 +119,7 @@
     </div>
     
 
-    <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
+    <form id="createForm" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="row">
@@ -177,7 +177,7 @@
                                     </div>
                                 </div>
 
-                                <span id="unit_validate" class="text-danger validation-error mt-1"></span>
+                                <span id="unit_id_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -357,7 +357,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group mb-1">
-                                    <label class="col-4" for="condition"><b>Condition</b> <span class="text-danger">*</span></label>
+                                    <label class="col-4" for="condition"><b>Condition</b></label>
 
                                     <div class="col-8">
                                         <select class="form-select" id="condition" name="condition">
@@ -478,9 +478,7 @@
                                     <textarea class="form-control" id="long_description" name="long_description" rows="8" placeholder="Long Description....">{{ old('long_description') }}</textarea>
                                 </div>
                 
-                                <span id="long_validate" class="text-danger mt-1">
-                                    @error('long_description'){{ $message }}@enderror
-                                </span>
+                                <span id="long_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -492,9 +490,7 @@
                                 <label class="form-label" for="short"><b>Short Description</b> <span class="text-danger">*</span></label>
                                 <textarea class="form-control" id="short" class="" name="short_description" rows="7" placeholder="Short Description....">{{ old('short_description') }}</textarea>
                 
-                                <span id="short_validate" class="text-danger mt-2">
-                                    @error('short_description'){{ $message }}@enderror
-                                </span>
+                                <span id="short_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="col-md-12 mb-2">
@@ -521,9 +517,7 @@
                                     <input type="file" class="form-control" name="thumb_image" id="thumb_image" required data-allowed-file-extensions="png jpeg jpg gif webp" >
                                 </div>
                 
-                                <span id="image_validate" class="text-danger mt-2">
-                                    @error('thumb_image'){{ $message }}@enderror
-                                </span>
+                                <span id="image_validate" class="text-danger validation-error mt-1"></span>
                             </div>
                         </div>
                     </div>
@@ -707,7 +701,7 @@
             </div>
 
             <div class="col-lg-12 mb-5">
-                <button type="submit" class="btn btn-secondary waves-effect me-3">Save Changes </button>
+                <button type="submit" id="submitBtn" class="btn btn-secondary waves-effect me-3">Save Changes </button>
             </div>
         </div>
     </form>
@@ -1890,6 +1884,77 @@
             };
         });
 
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            // Create
+            $('#createForm').submit(function (e) {
+                e.preventDefault();
+
+                let formData = new FormData(this);
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{ route('admin.product.store') }}",
+                    data: formData,
+                    processData: false,  // Prevent jQuery from processing the data
+                    contentType: false,  // Prevent jQuery from setting contentType
+                    beforeSend: function () {
+                        $('#submitBtn').prop('disabled', true);
+                        $('#submitBtn').html(`
+                            <i class="fas fa-spinner fa-spin me-2"></i> Loading...
+                        `);
+                    },
+                    success: function (res) {
+                        // console.log(res);
+                        if (res.status === true) {
+                            $('#createForm')[0].reset();
+                            $('.validation-error').html('');
+
+                            swal.fire({
+                                title: "Success",
+                                text: `${res.message}`,
+                                icon: "success"
+                            })
+                        }
+                    },
+                    error: function (err) {
+                        let error = err.responseJSON.errors;
+                        $('#name_validate').empty().html(error.holiday_name);
+                        $('#code_validate').empty().html(error.holiday_name);
+                        $('#unit_id_validate').empty().html(error.holiday_name);
+                        $('#category_id_validate').empty().html(error.holiday_name);
+                        $('#subCategory_id_validate').empty().html(error.holiday_name);
+                        $('#brand_id_validate').empty().html(error.holiday_name);
+                        $('#alert_qty_validate').empty().html(error.holiday_name);
+                        $('#stock_validate').empty().html(error.holiday_name);
+                        $('#long_validate').empty().html(error.holiday_name);
+                        $('#short_validate').empty().html(error.holiday_name);
+                        $('#image_validate').empty().html(error.holiday_name);
+                        $('#unit_cost_validate').empty().html(error.holiday_name);
+                        $('#profit_margin_validate').empty().html(error.holiday_name);
+                        $('#unit_price_validate').empty().html(error.holiday_name);
+
+                        $('#submitBtn').prop('disabled', false);
+                        $('#submitBtn').html(`Save Changes`);
+
+                        swal.fire({
+                            title: "Failed",
+                            text: "Something Went Wrong !",
+                            icon: "error"
+                        })
+                    },
+                    // 🔹 Always runs (success or error)
+                    complete: function () {
+                        $('#submitBtn').prop('disabled', false);
+                        $('#submitBtn').html(`Save Changes`);
+                    }
+                });
+            })
+        })
     </script>
 
 @endpush

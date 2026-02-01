@@ -310,7 +310,15 @@ class ProductController extends Controller
 
         DB::commit();
         Toastr::success('Product Create Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return redirect()->route('admin.product.index');
+        // return redirect()->route('admin.product.index');
+        return response()->json([
+            'status' => true,
+            'message' => 'Successfully Product Created!',
+            'product' => [
+                'id' => $product->id,
+                'name' => $product->name,
+            ]
+        ]);
     }
 
     /**

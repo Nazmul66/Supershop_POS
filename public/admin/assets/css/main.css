@@ -1055,4 +1055,9 @@ label:not(.form-check-label):not(.custom-file-label) {
     opacity: 1;
     transform: scale(1);
 }
+.validation-error{
+    font-size: .875em;
+    color: #dc3545;
+    font-weight: 500;
+}
 

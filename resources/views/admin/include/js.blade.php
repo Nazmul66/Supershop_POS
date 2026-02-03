@@ -40,7 +40,7 @@
 <script src="{{ asset('public/admin/assets/plugins/apexchart/chart-data.js') }}"></script>
 
  <!-- Sweetalert js -->
-{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Color Picker JS -->
 <script src="{{ asset('public/admin/assets/plugins/@simonwep/pickr/pickr.es5.min.js') }}"></script>

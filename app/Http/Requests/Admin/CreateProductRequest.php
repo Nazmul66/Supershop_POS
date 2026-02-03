@@ -28,9 +28,10 @@ class CreateProductRequest extends FormRequest
             'sku'             => ['required', 'max:155'],
             'category_id'     => ['required', 'numeric'],
             'subCategory_id'  => ['required', 'numeric'],
-            'brand_id'        => ['numeric'],
+            'brand_id'        => ['required', 'numeric'],
             'unit_id'         => ['required','numeric'],
             'warranties_id'   => ['numeric'],
+            'profit_margin'   => ['required','numeric'],
             'qty'             => ['required', 'numeric', 'min:0'],
             'alert_qty'       => ['required', 'numeric', 'min:0'],
             'short_description' => ['required', 'max: 450'],
@@ -65,7 +66,7 @@ class CreateProductRequest extends FormRequest
                     if ($discountType === 'percent' && ($value < 1 || $value > 100)) {
                         $fail('The discount value must be between 1 and 100 for percent type.');
                     }
-                    if ($discountType === 'amount' && $value < 0) {
+                    if ($discountType === 'amount' && $value < 1) {
                         $fail('The discount value must be greater than or equal to 0 for amount type.');
                     }
                 },

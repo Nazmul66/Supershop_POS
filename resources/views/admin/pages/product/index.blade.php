@@ -74,6 +74,9 @@
         .table thead tr th {
             font-size: 12px; !important
         }
+        .select2-invalid .select2-selection--single {
+    border: 1px solid #dc3545 !important;
+}
     </style>
 @endpush
 
@@ -133,11 +136,11 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="name"><b>Product Name</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="text" name="name" class="form-control" id="name" required=""  placeholder="Product Name" value="{{ old('name') }}">
+                                        <input type="text" name="name" class="form-control name_validate" id="name"  placeholder="Product Name" value="{{ old('name') }}">
+
+                                        <span id="name_validate" class="invalid-feedback mt-1"></span>
                                     </div>
                                 </div>
-
-                                <span id="name_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -147,11 +150,11 @@
                                             <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp text-info" data-bs-original-title="Also known as SKU. If you leave this field empty, it will be generated automatically." aria-label="Also known as SKU. If you leave this field empty, it will be generated automatically."></i></b>
                                     </label>
                                     <div class="col-8">
-                                        <input type="text" name="code" class="form-control" autocomplete="off" id="code" placeholder="Product Code" value="{{ old('code') }}">
+                                        <input type="text" name="sku" class="form-control sku_validate" autocomplete="off" id="code" placeholder="Product Code" value="{{ old('sku') }}">
+
+                                        <span id="sku_validate" class="invalid-feedback mt-1"></span>
                                     </div>
                                 </div>
-
-                                <span id="code_validate" class="text-danger validation-error mt-1"></span>
                             </div>
                         </div>
 
@@ -174,10 +177,10 @@
                                                 <i class="fas fa-plus input_i"></i>
                                             </button>
                                         </div>
+
+                                        <span id="unit_id_validate" class="validation-error mt-1"></span>
                                     </div>
                                 </div>
-
-                                <span id="unit_id_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -188,10 +191,10 @@
                                             <option value="" disabled selected>Select</option>
                                             <option value="c128">Code 128 (C128)</option>
                                         </select>
+
+                                        <span id="barcode_type_validate" class="validation-error mt-1"></span>
                                     </div>
                                 </div>
-
-                                <span id="barcode_type_validate" class="text-danger validation-error mt-1"></span>
                             </div>
                         </div>
                         
@@ -203,7 +206,7 @@
 
                                         <div class="d-flex">
                                             <div class="" style="width: 100%;">
-                                                <select class="form-select" id="category_id" name="category_id">
+                                                <select class="form-select category_id_validate" id="category_id" name="category_id">
                                                     <option value="" disabled selected>Select</option>
                                                     @foreach ($categories as $row)
                                                         <option value="{{ $row->id }}" 
@@ -219,9 +222,8 @@
                                             </button>
                                         </div>
 
+                                        <span id="category_id_validate" class="validation-error mt-1"></span>
                                     </div>
-
-                                    <span id="category_id_validate" class="text-danger validation-error mt-1"></span>
                                 </div>
                             </div>
 
@@ -229,7 +231,6 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="subCategory_id"><b>SubCategory</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-
                                         <div class="d-flex">
                                             <div class="" style="width: 100%;">
                                                 <select class="form-select" id="subCategory_id" name="subCategory_id">
@@ -248,9 +249,8 @@
                                             </button>
                                         </div>
 
+                                        <span id="subCategory_id_validate" class="validation-error mt-1"></span>
                                     </div>
-
-                                    <span id="subCategory_id_validate" class="text-danger validation-error mt-1"></span>
                                 </div>
                             </div>
                         </div>
@@ -279,7 +279,7 @@
 
                                     </div>
 
-                                    <span id="warranties_id_validate" class="text-danger validation-error mt-1"></span>
+                                    <span id="warranties_id_validate" class="validation-error mt-1"></span>
                                 </div>
                             </div>
 
@@ -307,7 +307,7 @@
 
                                     </div>
 
-                                    <span id="childCategory_id_validate" class="text-danger validation-error mt-1"></span>
+                                    <span id="childCategory_id_validate" class="validation-error mt-1"></span>
                                 </div>
                             </div>
                         </div>
@@ -317,7 +317,6 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="brand_id"><b>Brand</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-
                                         <div class="d-flex">
                                             <div class="" style="width: 100%;">
                                                 <select class="form-select" id="brand_id" name="brand_id">
@@ -336,9 +335,8 @@
                                             </button>
                                         </div>
 
+                                        <span id="brand_id_validate" class="validation-error mt-1"></span>
                                     </div>
-
-                                    <span id="brand_id_validate" class="text-danger validation-error mt-1"></span>
                                 </div>
                             </div>
 
@@ -346,10 +344,10 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="alert_qty"><b>Alert Quantity</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="number" name="alert_qty" class="form-control" id="alert_qty" min="1" required="" value="{{ old('alert_qty') }}">
-                                    </div>
+                                        <input type="number" name="alert_qty" class="form-control alert_qty_validate" id="alert_qty" min="1" value="{{ old('alert_qty') }}">
 
-                                    <span id="alert_qty_validate" class="text-danger validation-error mt-1"></span>
+                                        <span id="alert_qty_validate" class="invalid-feedback mt-1"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -374,11 +372,11 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="stocks"><b>Stock</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="number" name="qty" class="form-control" id="stocks" required="" min="1" value="{{ old('stock') }}">
+                                        <input type="number" name="qty" class="form-control qty_validate" id="stocks" min="1" value="{{ old('stock') }}">
+
+                                        <span id="qty_validate" class="invalid-feedback mt-1"></span>
                                     </div>
                                 </div>
-
-                                <span id="stock_validate" class="text-danger validation-error mt-1"></span>
                             </div>
                         </div>
                     </div>
@@ -475,10 +473,10 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label" for="long_description"><b>Long Description</b> <span class="text-danger">*</span></label>
-                                    <textarea class="form-control" id="long_description" name="long_description" rows="8" placeholder="Long Description....">{{ old('long_description') }}</textarea>
+                                    <textarea class="form-control long_description_validate" id="long_description" name="long_description" rows="8" placeholder="Long Description....">{{ old('long_description') }}</textarea>
+
+                                    <span id="long_description_validate" class="invalid-feedback mt-1"></span>
                                 </div>
-                
-                                <span id="long_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -488,9 +486,9 @@
                 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label" for="short"><b>Short Description</b> <span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="short" class="" name="short_description" rows="7" placeholder="Short Description....">{{ old('short_description') }}</textarea>
+                                <textarea class="form-control short_description_validate" id="short" class="" name="short_description" rows="7" placeholder="Short Description....">{{ old('short_description') }}</textarea>
                 
-                                <span id="short_validate" class="text-danger validation-error mt-1"></span>
+                                <span id="short_description_validate" class="invalid-feedback mt-1"></span>
                             </div>
 
                             <div class="col-md-12 mb-2">
@@ -512,12 +510,12 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="mb-3">
+                                <div class="mb-1">
                                     <label class="form-label" for="thumb_image"><b>Thumbnail Photo</b> <span class="text-danger">*</span></label>
-                                    <input type="file" class="form-control" name="thumb_image" id="thumb_image" required data-allowed-file-extensions="png jpeg jpg gif webp" >
+                                    <input type="file" class="form-control" name="thumb_image" id="thumb_image" data-allowed-file-extensions="png jpeg jpg gif webp" >
                                 </div>
                 
-                                <span id="image_validate" class="text-danger validation-error mt-1"></span>
+                                <span id="thumb_image_validate" class="text-danger validation-error mt-1"></span>
                             </div>
                         </div>
                     </div>
@@ -582,11 +580,11 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="unit_cost"><b>Unit Cost (Exc. Tax)</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="number" name="purchase_price" class="form-control" id="unit_cost" required="" placeholder="0.00" min="1" value="{{ old('purchase_price') }}">
+                                        <input type="number" name="purchase_price" class="form-control purchase_price_validate" id="unit_cost" placeholder="0.00" min="1" value="{{ old('purchase_price') }}">
+
+                                        <span id="purchase_price_validate" class="invalid-feedback mt-1"></span>
                                     </div>
                                 </div>
-
-                                <span id="unit_cost_validate" class="text-danger validation-error mt-1"></span>
                             </div>
                         </div>
 
@@ -595,22 +593,22 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="profit_margin"><b>Profit Margin(%)</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="number" name="profit_margin" class="form-control" id="profit_margin" required="" placeholder="0.00" min="1" value="{{ old('profit_margin') }}">
+                                        <input type="number" name="profit_margin" class="form-control profit_margin_validate" id="profit_margin" placeholder="0.00" min="1" value="{{ old('profit_margin') }}">
+
+                                        <span id="profit_margin_validate" class="invalid-feedback mt-1"></span>
                                     </div>
                                 </div>
-
-                                <span id="profit_margin_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="col-md-12 mb-2">
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="unit_price"><b>Unit Price (Exc. Tax)</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="number" name="selling_price" class="form-control" id="unit_price" required="" placeholder="0.00" min="1" value="{{ old('selling_price') }}">
+                                        <input type="number" name="selling_price" class="form-control selling_price_validate" id="unit_price" placeholder="0.00" min="1" value="{{ old('selling_price') }}">
+
+                                        <span id="selling_price_validate" class="spainvalid-feedback mt-1"></span>
                                     </div>
                                 </div>
-
-                                <span id="unit_price_validate" class="text-danger validation-error mt-1"></span>
                             </div>
                         </div>
                     </div>
@@ -649,7 +647,9 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="discount_value"><b>Discount Value</b></label>
                                     <div class="col-8">
-                                        <input class="form-control" type="number" id="discount_value" name="discount_value" value="{{ old('discount_value') }}"  placeholder="Discount Value....">
+                                        <input class="form-control discount_value_validate" type="number" id="discount_value" name="discount_value" value="{{ old('discount_value') }}"  placeholder="Discount Value....">
+
+                                        <span id="discount_value_validate" class="spainvalid-feedback mt-1"></span>
                                     </div>
                                 </div>
                             </div>
@@ -667,7 +667,9 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="discount_date"><b>Discount Date</b></label>
                                     <div class="col-8">
-                                        <input class="form-control offer_end_date" type="text" id="discount_date" name="discount_date" value="" placeholder="Select a date....">
+                                        <input class="form-control offer_end_date discount_date_validate" type="text" id="discount_date" name="discount_date" value="" placeholder="Select a date....">
+
+                                        <span id="discount_date_validate" class="spainvalid-feedback mt-1"></span>
                                     </div>
                                 </div>
                             </div>
@@ -1922,21 +1924,23 @@
                         }
                     },
                     error: function (err) {
-                        let error = err.responseJSON.errors;
-                        $('#name_validate').empty().html(error.holiday_name);
-                        $('#code_validate').empty().html(error.holiday_name);
-                        $('#unit_id_validate').empty().html(error.holiday_name);
-                        $('#category_id_validate').empty().html(error.holiday_name);
-                        $('#subCategory_id_validate').empty().html(error.holiday_name);
-                        $('#brand_id_validate').empty().html(error.holiday_name);
-                        $('#alert_qty_validate').empty().html(error.holiday_name);
-                        $('#stock_validate').empty().html(error.holiday_name);
-                        $('#long_validate').empty().html(error.holiday_name);
-                        $('#short_validate').empty().html(error.holiday_name);
-                        $('#image_validate').empty().html(error.holiday_name);
-                        $('#unit_cost_validate').empty().html(error.holiday_name);
-                        $('#profit_margin_validate').empty().html(error.holiday_name);
-                        $('#unit_price_validate').empty().html(error.holiday_name);
+                        let errors = err.responseJSON?.errors || {};
+
+                        // clear all previous validation messages
+                        $('[id$="_validate"]').html('');
+                        $('input, select, textarea').removeClass('is-invalid');
+
+                        // show validation errors dynamically
+                        $.each(errors, function (key, value) {
+                            let $field = $('.' + key + '_validate');
+                            $('#' + key + '_validate').html(value[0]);
+                            $field.addClass('is-invalid');
+
+                            // 🔥 select2 handling
+                            if ($field.hasClass('select2')) {
+                                    $field.next('.select2-container').find('.select2-selection--single').css('border', '1px solid #dc3545');
+                                }
+                            });
 
                         $('#submitBtn').prop('disabled', false);
                         $('#submitBtn').html(`Save Changes`);

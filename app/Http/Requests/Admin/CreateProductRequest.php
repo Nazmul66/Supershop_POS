@@ -75,6 +75,36 @@ class CreateProductRequest extends FormRequest
                 'nullable',
                 'required_if:discount_type,amount,percent',
             ],
+
+            // ==================================================
+            // 🔥 VARIANT VALIDATION (IMPORTANT PART)
+            // ==================================================
+
+            'has_variant' => 'required|in:yes,no',
+
+            'variant_id' => ['required_if:has_variant,yes','array','min:1'],
+            'variant_id.*' => ['required_if:has_variant,yes','numeric'],
+
+            'variant_name' => ['required_if:has_variant,yes','array'],
+            'variant_name.*' => ['required_if:has_variant,yes','string','max:100'],
+
+            'variant_codes' => ['required_if:has_variant,yes','array'],
+            'variant_codes.*' => ['required_if:has_variant,yes','string','max:100'],
+
+            'variant_qty' => ['required_if:has_variant,yes','array'],
+            'variant_qty.*' => ['required_if:has_variant,yes','numeric','min:0'],
+
+            'variant_alert_qty' => ['required_if:has_variant,yes','array'],
+            'variant_alert_qty.*' => ['required_if:has_variant,yes','numeric','min:0'],
+
+            'variant_costs' => ['required_if:has_variant,yes','array'],
+            'variant_costs.*' => ['required_if:has_variant,yes','numeric','min:0'],
+
+            'variant_profits' => ['required_if:has_variant,yes','array'],
+            'variant_profits.*' => ['required_if:has_variant,yes','numeric','min:0','max:100'],
+
+            'variant_prices' => ['required_if:has_variant,yes','array'],
+            'variant_prices.*' => ['required_if:has_variant,yes','numeric','min:0'],
         ];
     }
 

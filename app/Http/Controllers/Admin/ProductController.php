@@ -220,7 +220,7 @@ class ProductController extends Controller
             throw UnauthorizedException::forPermissions(['create.product']);
         }
 
-        // dd($request->all());
+        dd($request->all());
         DB::beginTransaction();
         try {
             $product = new Product();
@@ -280,9 +280,12 @@ class ProductController extends Controller
             // dd($product);
             $product->save();
 
+            // Check if product has variants and request has variant data
+            $hasVariants = $request->has('variant_name') && $request->has('variant_id') 
+               && count(array_filter($request->variant_name)) > 0;
 
             // Product Variants add
-            if( $product->has_variant === 'yes' && $request->has('variant_name') &&  $request->has('variant_id') ){
+            if( $product->has_variant === 'yes' && $hasVariants ){
                 foreach ($request->variant_name as $index => $variantName) {
                     if (!empty($variantName)) {
                         ProductVariant::create([
@@ -299,6 +302,11 @@ class ProductController extends Controller
                         ]);
                     }
                 }
+            }
+            else {
+                // No valid variants were provided, update product's has_variant to 'no'
+                $product->has_variant = 'no';
+                $product->save();
             }
         }
 

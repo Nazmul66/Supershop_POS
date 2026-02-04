@@ -75,8 +75,8 @@
             font-size: 12px; !important
         }
         .select2-invalid .select2-selection--single {
-    border: 1px solid #dc3545 !important;
-}
+            border: 1px solid #dc3545 !important;
+        }
     </style>
 @endpush
 
@@ -166,7 +166,7 @@
                                     <div class="col-8">
                                         <div class="d-flex">
                                             <div class="" style="width: 100%;">
-                                                <select class="form-select" id="unit_id" name="unit_id">
+                                                <select class="form-select unit_id_validate" id="unit_id" name="unit_id">
                                                     <option value="" disabled selected>Select</option>
                                                     @foreach ($units as $row)
                                                         <option value="{{ $row->id }}">{{ $row->unit }} ( {{ $row->short_name }} )</option>
@@ -178,7 +178,7 @@
                                             </button>
                                         </div>
 
-                                        <span id="unit_id_validate" class="validation-error mt-1"></span>
+                                        <span id="unit_id_validate" class="invalid-feedback mt-1"></span>
                                     </div>
                                 </div>
                             </div>
@@ -606,7 +606,7 @@
                                     <div class="col-8">
                                         <input type="number" name="selling_price" class="form-control selling_price_validate" id="unit_price" placeholder="0.00" min="1" value="{{ old('selling_price') }}">
 
-                                        <span id="selling_price_validate" class="spainvalid-feedback mt-1"></span>
+                                        <span id="selling_price_validate" class="invalid-feedback mt-1"></span>
                                     </div>
                                 </div>
                             </div>
@@ -649,7 +649,7 @@
                                     <div class="col-8">
                                         <input class="form-control discount_value_validate" type="number" id="discount_value" name="discount_value" value="{{ old('discount_value') }}"  placeholder="Discount Value....">
 
-                                        <span id="discount_value_validate" class="spainvalid-feedback mt-1"></span>
+                                        <span id="discount_value_validate" class="invalid-feedback mt-1"></span>
                                     </div>
                                 </div>
                             </div>
@@ -669,7 +669,7 @@
                                     <div class="col-8">
                                         <input class="form-control offer_end_date discount_date_validate" type="text" id="discount_date" name="discount_date" value="" placeholder="Select a date....">
 
-                                        <span id="discount_date_validate" class="spainvalid-feedback mt-1"></span>
+                                        <span id="discount_date_validate" class="invalid-feedback mt-1"></span>
                                     </div>
                                 </div>
                             </div>
@@ -1134,6 +1134,18 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
+
+     $(document).ready(function(){
+        let select2Loaded = false;
+
+        $('.select2').one('focus', function () {
+            if (!select2Loaded) {
+                $(this).select2();
+                select2Loaded = true;
+            }
+        });
+     })
+
         // Multiple Date Range
         $(function() {
             function initDateRangePicker(selector, position){
@@ -1200,40 +1212,42 @@
                 // Trigger the Select2 to refresh the dropdown options
                 $('#add_more_variant').select2();
 
+                let index = $('.variant_row').length;
+
                 // Prepend the new size row to the table
                 $('.dynamic_variant_body').prepend(`
-                    <tr class="variant_row" data-value="${selectedValue}">
+                    <tr class="variant_row" data-index="${index}" data-value="${selectedValue}">
                         <td>
                             <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
                         </td>
 
                         <td>
                             <input type="hidden" class="form-control" value="${selectId}" name="variant_id[]" id="variant_id">
-                            <input type="text" class="form-control variant_name" value="${selectedValue}" name="variant_name[]" id="variant_name" readonly required>
+                            <input type="text" class="form-control variant_name" value="${selectedValue}" name="variant_name[]" id="variant_name" readonly>
                         </td>
 
                         <td>
-                            <input type="text" name="variant_codes[]" class="form-control variant_code fw-bold" value="" placeholder="Variant Code" required="">
+                            <input type="text" name="variant_codes[]" class="form-control variant_code fw-bold variant_codes_error" value="">
                         </td>
 
                         <td class="text-start">
-                            <input type="number" name="variant_qty[]" class="form-control variant_qty fw-bold" id="variant_qty" value="1" min="1" required="">
+                            <input type="number" name="variant_qty[]" class="form-control variant_qty fw-bold variant_qty_error" id="variant_qty" value="1" min="1">
                         </td>
 
                         <td class="text-start">
-                            <input type="number" name="variant_alert_qty[]" class="form-control variant_qty fw-bold" id="variant_alert_qty" value="1" min="1" required="">
+                            <input type="number" name="variant_alert_qty[]" class="form-control variant_qty fw-bold variant_alert_qty_error" id="variant_alert_qty" value="1" min="1">
                         </td>
 
                         <td>
-                            <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost fw-bold" value="${unitCost}" placeholder="0.00" required="">
+                            <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost fw-bold variant_costs_error" value="${unitCost}" placeholder="0.00">
                         </td>
 
                         <td>
-                            <input type="number" name="variant_profits[]" step="any" class="form-control variant_profit fw-bold" value="${profitMargin}" placeholder="0.00" required="">
+                            <input type="number" name="variant_profits[]" step="any" class="form-control variant_profit fw-bold variant_profits_error" value="${profitMargin}" placeholder="0.00">
                         </td>
 
                         <td>
-                            <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold" value="${unitPrice}" placeholder="0.00" required="">
+                            <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold variant_prices_error" value="${unitPrice}" placeholder="0.00">
                         </td>
                     </tr>
                 `);
@@ -1755,6 +1769,7 @@
                 }
             });
 
+
             function toggleDiscountDivs() {
                 const selectedValue = $('#discount_type').val();
 
@@ -1920,7 +1935,12 @@
                                 title: "Success",
                                 text: `${res.message}`,
                                 icon: "success"
-                            })
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Reload the current page
+                                    location.reload();
+                                }
+                            });
                         }
                     },
                     error: function (err) {
@@ -1928,6 +1948,7 @@
 
                         // clear all previous validation messages
                         $('[id$="_validate"]').html('');
+                        $('[id$="_error"]').html('');
                         $('input, select, textarea').removeClass('is-invalid');
 
                         // show validation errors dynamically
@@ -1936,19 +1957,26 @@
                             $('#' + key + '_validate').html(value[0]);
                             $field.addClass('is-invalid');
 
-                            // 🔥 select2 handling
-                            if ($field.hasClass('select2')) {
-                                    $field.next('.select2-container').find('.select2-selection--single').css('border', '1px solid #dc3545');
-                                }
-                            });
+                            // 🔥 handle array errors (variant_codes.0 etc)
+                            if (key.includes('.')) {
+                                let parts = key.split('.');
+                                let fields = parts[0]; // variant_codes
+                                let index = parts[1]; // 0
+
+                                let row = $('.variant_row').eq(index);
+                                row.find(`.${fields}_error`).html(value[0]);
+                                row.find(`[name="${fields}[]"]`).addClass('is-invalid');
+                            } 
+                        });
 
                         $('#submitBtn').prop('disabled', false);
                         $('#submitBtn').html(`Save Changes`);
 
                         swal.fire({
-                            title: "Failed",
-                            text: "Something Went Wrong !",
-                            icon: "error"
+                            title: "Validation Error",
+                            text: "Please correct the highlighted fields and try again.",
+                            icon: "warning",
+                            confirmButtonText: "Okay"
                         })
                     },
                     // 🔹 Always runs (success or error)

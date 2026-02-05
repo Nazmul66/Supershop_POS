@@ -61,11 +61,14 @@ class ProductController extends Controller
             throw UnauthorizedException::forPermissions(['create.product']);
         }
 
-        $categories        = Category::get_data();
-        $subCategories     = Subcategory::get_data();
-        $childCategories   = ChildCategory::get_data();
-        $brands            = Brand::get_data();
-        return view('admin.pages.product.create', compact('categories', 'subCategories', 'childCategories', 'brands'));
+        $categories           = Category::get_data();
+        $subCategories        = Subcategory::get_data();
+        $childCategories      = ChildCategory::get_data();
+        $brands               = Brand::get_data();
+        $units                = Unit::get_data();
+        $warranties           = Warranty::get_data();
+        $tax_rates            = TaxRate::get_data();
+        return view('admin.pages.product.create', compact('categories', 'subCategories', 'childCategories', 'brands', 'tax_rates', 'warranties', 'units'));
     }
 
     public function getData(Request $request)
@@ -220,7 +223,7 @@ class ProductController extends Controller
             throw UnauthorizedException::forPermissions(['create.product']);
         }
 
-        dd($request->all());
+        // dd($request->all());
         DB::beginTransaction();
         try {
             $product = new Product();

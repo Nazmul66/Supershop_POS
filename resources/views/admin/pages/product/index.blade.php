@@ -1,81 +1,198 @@
 @extends('admin.layout.master')
 
 @push('title')
-    Create Product
+    Manage Product List
 @endpush
 
 
 @push('add-css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/daterangepicker.css') }}" />
-    <link rel="stylesheet" href="{{ asset('public/admin/assets/css/dropify.min.css') }}">
 
     <style>
-        label{
-            font-size: 13px;
-            color: #1d1c1c;
-            font-weight: 600;
+                body{
+            font-family: "Arimo", sans-serif !important;
         }
-        .table thead tr th {
-            background-color: #092C4C !important;
+        .page-wrapper .nav-pills .nav-link {
+            background-color: transparent;
+            font-size: 12px;
+            font-weight: 700;
+            color: #4f8290;
         }
-        .variants_body{
-            height: 0;
+        .nav.nav-style-1 .nav-link.active:hover {
+            background-color: #ddebf0 !important;
+            color: #2892af !important;
+        }
+        .nav.nav-style-1 .nav-link:hover {
+            background-color: #ddebf0 !important;
+            color: #2892af !important;
+        }
+        .page-wrapper .nav-pills .nav-link.active {
+            background-color: #ddebf0 !important;
+            color: #2892af !important;
+        }
+        .search_box{
+            position: relative;
+            width: 260px;
+            padding: 0;
+            border-radius: 2px;
+        }
+        .search_box .search_filter{
+            border: 1px solid #ebebeb;
+            width: 100%;
+            height: 40px;
+            padding-left: 15px;
+            color: #212B36;
+            padding-right: 60px;
+        }
+        .search_box .search_filter::-webkit-input-placeholder,
+        .search_box .search_filter::-moz-placeholder,
+        .search_box .search_filter::-ms-input-placeholder{
+            color: #CACACA;
+        }
+        .search_box #clear_search_filter{
+            position: absolute;
+            top: 50%;
+            right: 42px;
+            transform: translate(0, -50%);
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .search_sub_container{
+            position: relative;
+        }
+        .search_sub_container .cus_history_box{
+            position: absolute;
+            top: 40px;
+            left: 0px;
+            padding: 20px 12px 12px;
+            border-radius: 6px;
+            background: #FFF;
+            z-index: 50;
+            width: 100%;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             opacity: 0;
-            transform: translateX(-125%);
-            pointer-events: none;
-            transition: all 0.5s ease-in-out; 
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
         }
-        .variants_body.actives{
-            height: 310px;
+        .search_sub_container .cus_history_box.show {
             opacity: 1;
-            transform: translateX(0%);
-            pointer-events: auto;
+            visibility: visible;
+            transform: translateY(0);
         }
-        .form-control {
-            padding: 0.45rem 0.45rem !important;
+
+        .search_box .ti-search{
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: #092C4C;
+            color: #FFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
         }
-        .table td {
-            padding: 10px 4px !important;
+        .filter_name{
+            font-size: 16px;
         }
-        .dropify-message .file-icon p{
-            line-height: 40px !important;
-            font-size: 37px !important;
+        .all_icons{
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 18px;
         }
-        .dropify-message .file-icon::before{
-            display: none !important;
+        .cursor-pointer {
+            cursor: pointer;
         }
-        input.form-control, input.form-select {
-            border-color: #E6EAEd;
+        .ti-copy,
+        .ti-edit,
+        .ti-printer{
+            color: #1e857a;
+        }
+        .ti-plus{
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .user_icon{
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50px;
+            background: #e0eef9;
+            margin: 0 auto 12px;
+        }
+        .user_icon .ti-user{
+            font-size: 30px;
+            color: #212B36;
+        }
+        th .checkboxs .checkmarks, td .checkboxs .checkmarks {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #8c8686 !important;
+        }
+        .form-check-input {
+            border: 1px solid #000;
+        }
+        .form-check-input[type=checkbox] {
+            border-radius: 0px;
+        }
+        .form-check-input:focus {
+            border: 1px solid #000;
+            border: 1px solid #FE9F43;
+        }
+        .calender_icon{
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #9292a9;
+            cursor: pointer;
+            background: #F7F7F7;
+        }
+        .form_labels{
+            color: #BEC1C4;
+        }
+        a:hover{
+            color: #000 !important;
         }
         .select2-container--default .select2-selection--single {
-            border: 1px solid #E6EAED !important;
+            border: 1px solid transparent !important;
+            background-color: transparent !important;
+        }
+
+        .table thead tr th{
+            font-size: 13px !important;
+        }
+        .table tbody tr td{
+            font-size: 12px !important;
+        }
+        .table thead tr th{
+            font-weight: 700;
+        }
+        .popup_table thead tr th,
+        .popup_table tbody tr td{
+            font-size: 10px !important;
+            font-weight: 600;
+            padding: .5rem .5rem;
         }
         @media (min-width: 1240px) and (max-width: 1560px) {
             .table-responsive {
-                overflow-x: inherit;
-                overflow-y: auto;
-                height: 220px;
+                overflow-x: auto !important;
             }
         }
-        .add_more_btn{
-            width: 170px;
-        }
-        .form-control:disabled, .form-control[readonly] {
-            background-color: #e9e9ef;
-            opacity: 1;
-        }
-        .table th {
-            white-space: normal;
-        }
-        .table thead tr th {
-            font-size: 12px; !important
-        }
-        .select2-invalid .select2-selection--single {
-            border: 1px solid #dc3545 !important;
+        @media (min-width: 1561px) and (max-width: 1920px) {
+            .table-responsive {
+                overflow-x: auto !important;
+            }
         }
     </style>
 @endpush
@@ -116,1036 +233,627 @@
         </ul>
         <div class="page-btn">
             @if(auth("admin")->user()->can("create.brand"))
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add FAQ</button>
+                <a href="" class="btn btn-teal"><i class="ti ti-circle-plus me-1"></i>Add Product</a>
              @endif
         </div>
     </div>
     
 
-    <form id="createForm" method="POST" enctype="multipart/form-data">
-        @csrf
-
-        <div class="row">
-            <div class="col-lg-8">
-                <!-- 1st Row Content part Start -->
-                <div class="card">
-                    <div class="card-body">
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="name"><b>Product Name</b> <span class="text-danger">*</span></label>
-                                    <div class="col-8">
-                                        <input type="text" name="name" class="form-control name_validate" id="name"  placeholder="Product Name" value="{{ old('name') }}">
-
-                                        <span id="name_validate" class="invalid-feedback mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="code">
-                                        <b>Product Code
-                                            <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp text-info" data-bs-original-title="Also known as SKU. If you leave this field empty, it will be generated automatically." aria-label="Also known as SKU. If you leave this field empty, it will be generated automatically."></i></b>
-                                    </label>
-                                    <div class="col-8">
-                                        <input type="text" name="sku" class="form-control sku_validate" autocomplete="off" id="code" placeholder="Product Code" value="{{ old('sku') }}">
-
-                                        <span id="sku_validate" class="invalid-feedback mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="unit_id"><b>Unit</b> <span class="text-danger">*</span></label>
-
-                                    <div class="col-8">
-                                        <div class="d-flex">
-                                            <div class="" style="width: 100%;">
-                                                <select class="form-select unit_id_validate" id="unit_id" name="unit_id">
-                                                    <option value="" disabled selected>Select</option>
-                                                    @foreach ($units as $row)
-                                                        <option value="{{ $row->id }}">{{ $row->unit }} ( {{ $row->short_name }} )</option>
-                                                    @endforeach
-                                                </select>
+        {{-- Table Responsive --}}
+        <div class="mb-0 border-1">
+            <div class="row">
+                <div class="mt-0">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-hover table-nowrap mb-0 datatables">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label class="checkboxs">
+                                            <input type="checkbox" id="select-all">
+                                            <span class="checkmarks"></span>
+                                        </label>
+                                    </th>
+                                    <th>Invoice No.</th>
+                                    <th>Date</th>
+                                    <th>Follow Up Date</th>
+                                    <th>Auto-Approve Date</th>
+                                    <th>Customer</th>
+                                    <th>Pick Up Address</th>
+                                    <th>Payment Info</th>
+                                    <th>Order Status</th>
+                                    <th>Delivery Partner</th>
+                                    <th>Delivery Fee</th>
+                                    <th>
+                                        <span style="text-wrap: auto;">Cancel Reason</span>
+                                    </th>
+                                    <th>Internal Notes</th>
+                                </tr>
+                            </thead>
+    
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label class="checkboxs">
+                                            <input type="checkbox" id="select-all">
+                                            <span class="checkmarks"></span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <div class="copy-row">
+                                            <div class="all_icons mb-2">
+                                                <i data-tooltip="tip1" class="ti ti-info-circle cursor-pointer tooltip-trigger"></i>
+    
+                                                <i class="ti ti-copy cursor-pointer copy_name" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy"></i>
+    
+                                                <i class="ti ti-printer cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Print"></i>
+    
+                                                <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Edit"></i>
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#unitModal">
-                                                <i class="fas fa-plus input_i"></i>
-                                            </button>
-                                        </div>
-
-                                        <span id="unit_id_validate" class="invalid-feedback mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="barcode_type"><b>Barcode Type</b></label>
-                                    <div class="col-8">
-                                        <select class="form-select" id="barcode_type" name="barcode_type">
-                                            <option value="" disabled selected>Select</option>
-                                            <option value="c128">Code 128 (C128)</option>
-                                        </select>
-
-                                        <span id="barcode_type_validate" class="validation-error mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="category_id"><b>Category</b> <span class="text-danger">*</span></label>
-                                    <div class="col-8">
-
-                                        <div class="d-flex">
-                                            <div class="" style="width: 100%;">
-                                                <select class="form-select category_id_validate" id="category_id" name="category_id">
-                                                    <option value="" disabled selected>Select</option>
-                                                    @foreach ($categories as $row)
-                                                        <option value="{{ $row->id }}" 
-                                                            data-image-url="{{ asset($row->category_img) }}"
-                                                            {{ old('category_id') }}
-                                                            >{{ $row->category_name }}</option>
-                                                    @endforeach
-                                                </select>
-
+    
+                                            <a href="#" class="mb-2 d-block">
+                                                <p class="text-teal font-bold copy_element">GB-9632541</p>
+                                            </a>
+    
+                                            <div class="">
+                                                <span class="badge bg-success">Whatsapp</span>
+                                                {{-- <span class="badge bg-primary">Website</span>
+                                                <span class="badge bg-success">Phone Call</span>
+                                                <span class="badge bg-info">Facebook</span>
+                                                <span class="badge bg-dark">Instagram</span> --}}
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#categoryModal">
-                                                <i class="fas fa-plus input_i"></i>
-                                            </button>
                                         </div>
-
-                                        <span id="category_id_validate" class="validation-error mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="subCategory_id"><b>SubCategory</b> <span class="text-danger">*</span></label>
-                                    <div class="col-8">
-                                        <div class="d-flex">
-                                            <div class="" style="width: 100%;">
-                                                <select class="form-select" id="subCategory_id" name="subCategory_id">
-                                                    <option value="" disabled selected>Select</option>
-                                                    @foreach ($subCategories as $row)
-                                                        <option value="{{ $row->id }}" 
-                                                            data-image-url="{{ asset($row->subcategory_img) }}"
-                                                            {{ old('subCategory_id') }}
-                                                            >{{ $row->subcategory_name }}</option>
-                                                    @endforeach
-                                                </select>
-
+                                    </td>
+    
+                                    <td>
+                                       <div class="d-flex flex-column">
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Created:</span> Jan 1, 2026 09:49 A.M</p>
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Shipping:</span> Jan 1, 2026 09:49 A.M</p>
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Approved:</span> Jan 1, 2026 09:49 A.M</p>
+                                       </div>
+                                    </td>
+    
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <div class="copy-row">
+                                            <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
+                                            <div class="d-flex align-items-center gap-1 mb-1">
+                                                <span class="badge badge-sm bg-primary">New</span>
+                                                <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#subCategoryModal">
-                                                <i class="fas fa-plus input_i"></i>
-                                            </button>
-                                        </div>
-
-                                        <span id="subCategory_id_validate" class="validation-error mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="warranties_id"><b>Warranties</b></label>
-                                    <div class="col-8">
-
-                                        <div class="d-flex">
-                                            <div class="" style="width: 100%;">
-                                                <select class="form-select" id="warranties_id" name="warranties_id">
-                                                    <option value="" disabled selected>Select</option>
-                                                    @foreach ($warranties as $row)
-                                                        <option value="{{ $row->id }}" 
-                                                            >{{ $row->duration }}  {{ Str::ucfirst($row->period) }}</option>
-                                                    @endforeach
-                                                </select>
-
+    
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <strong><span class="copyNumber">+8801833220886</span></strong>
+                                                <span data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy" class="text-success" style="cursor: pointer;"><i class="ti ti-copy copyIcon" style="font-size: 18px;"></i></span>
+                                                <a href="https://wa.me/01833220886" target="_blank" style="width: 18px;">
+                                                    <img src="{{ asset('public/admin/assets/images/whatsapp.png') }}" alt="" width="18">
+                                                </a>
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#warrantyModal">
-                                                <i class="fas fa-plus input_i"></i>
-                                            </button>
-                                        </div>
-
-                                    </div>
-
-                                    <span id="warranties_id_validate" class="validation-error mt-1"></span>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="childCategory_id"><b>ChildCategory</b></label>
-                                    <div class="col-8">
-
-                                        <div class="d-flex">
-                                            <div class="" style="width: 100%;">
-                                                <select class="form-select" id="childCategory_id" name="childCategory_id">
-                                                    <option value="" disabled selected>Select</option>
-                                                    @foreach ($childCategories as $row)
-                                                        <option value="{{ $row->id }}" 
-                                                            data-image-url="{{ asset($row->img) }}"
-                                                            >{{ $row->name }}</option>
-                                                    @endforeach
-                                                </select>
-
+    
+                                            <div style="text-wrap: auto;">
+                                                <p style="font-weight: 500;">K-39/5, KURIL VATARA - 1229 K-39/5, KURIL VATARA - 1229</p>
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#childCategoryModal">
-                                                <i class="fas fa-plus input_i"></i>
-                                            </button>
                                         </div>
-
-                                    </div>
-
-                                    <span id="childCategory_id_validate" class="validation-error mt-1"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="brand_id"><b>Brand</b> <span class="text-danger">*</span></label>
-                                    <div class="col-8">
-                                        <div class="d-flex">
-                                            <div class="" style="width: 100%;">
-                                                <select class="form-select" id="brand_id" name="brand_id">
-                                                    <option value="" disabled selected>Select</option>
-                                                    @foreach ($brands as $row)
-                                                        <option value="{{ $row->id }}" 
-                                                            data-image-url="{{ asset($row->image) }}"
-                                                            {{ old('brand_id') }}
-                                                            >{{ $row->brand_name  }}</option>
-                                                    @endforeach
-                                                </select>
-
+                                    </td>
+    
+                                    <td>
+                                        <div class="">
+                                            <span class="badge bg-soft-secondary">Warehouse</span>
+                                            <p class="mt-1" style="color: #1e857a;"><strong>Banasree Warehouse (1055)</strong></p>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <div class="">
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Sales Amount:</span> BDT 1150.00</p>
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Paid Amount:</span> BDT 0.00</p>
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Due Amount:</span> BDT 1280.00</p>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-secondary">Pending</button>
+                                        {{-- <button type="button" class="btn btn-sm btn-warning">On Hold</button>
+                                        <button type="button" class="btn btn-sm btn-primary">Approved</button>
+                                        <button type="button" class="btn btn-sm btn-dark">Flagged</button>
+                                        <button type="button" class="btn btn-sm btn-success">Ready To Ship</button>
+                                        <button type="button" class="btn btn-sm btn-info">In-Transit</button>
+                                        <button type="button" class="btn btn-sm btn-danger">Cancelled</button>
+                                        <button type="button" class="btn btn-sm btn-success">Delivered</button> --}}
+                                    </td>
+    
+                                    <td>
+                                        <div class="d-flex align-items-center gap-1"> 
+                                            <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" style="width: 20px; border-radius: 50px;"> 
+                                            <p class="mb-0">Steadfast</p> 
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <p>BDT 130.00</p>
+                                    </td>
+    
+                                    <td style="text-wrap: auto;">
+                                        
+                                    </td>
+    
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-plus"></i> 
+                                        </div>
+                                    </td>
+                                </tr>
+    
+                                <tr>
+                                    <td>
+                                        <label class="checkboxs">
+                                            <input type="checkbox" id="select-all">
+                                            <span class="checkmarks"></span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <div class="copy-row">
+                                            <div class="all_icons mb-2">
+                                                <i data-tooltip="tip1" class="ti ti-info-circle cursor-pointer tooltip-trigger"></i>
+    
+                                                <i class="ti ti-copy cursor-pointer copy_name" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy"></i>
+    
+                                                <i class="ti ti-printer cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Print"></i>
+    
+                                                <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Edit"></i>
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#brandModal">
-                                                <i class="fas fa-plus input_i"></i>
-                                            </button>
+    
+                                            <a href="#" class="mb-2 d-block">
+                                                <p class="text-teal font-bold copy_element">GB-9632541</p>
+                                            </a>
+    
+                                            <div class="">
+                                                <span class="badge bg-success">Whatsapp</span>
+                                                {{-- <span class="badge bg-primary">Website</span>
+                                                <span class="badge bg-success">Phone Call</span>
+                                                <span class="badge bg-info">Facebook</span>
+                                                <span class="badge bg-dark">Instagram</span> --}}
+                                            </div>
                                         </div>
-
-                                        <span id="brand_id_validate" class="validation-error mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="alert_qty"><b>Alert Quantity</b> <span class="text-danger">*</span></label>
-                                    <div class="col-8">
-                                        <input type="number" name="alert_qty" class="form-control alert_qty_validate" id="alert_qty" min="1" value="{{ old('alert_qty') }}">
-
-                                        <span id="alert_qty_validate" class="invalid-feedback mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="condition"><b>Condition</b></label>
-
-                                    <div class="col-8">
-                                        <select class="form-select" id="condition" name="condition">
-                                            <option value="new" selected>New</option>
-                                            <option value="used">Used</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <span id="condition_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="stocks"><b>Stock</b> <span class="text-danger">*</span></label>
-                                    <div class="col-8">
-                                        <input type="number" name="qty" class="form-control qty_validate" id="stocks" min="1" value="{{ old('stock') }}">
-
-                                        <span id="qty_validate" class="invalid-feedback mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                    </td>
+    
+                                    <td>
+                                       <div class="d-flex flex-column">
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Created:</span> Jan 1, 2026 09:49 A.M</p>
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Shipping:</span> Jan 1, 2026 09:49 A.M</p>
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Approved:</span> Jan 1, 2026 09:49 A.M</p>
+                                       </div>
+                                    </td>
+    
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <div class="copy-row">
+                                            <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
+                                            <div class="d-flex align-items-center gap-1 mb-1">
+                                                <span class="badge badge-sm bg-primary">New</span>
+                                                <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
+                                            </div>
+    
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <strong><span class="copyNumber">+8801833220886</span></strong>
+                                                <span data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy" class="text-success" style="cursor: pointer;"><i class="ti ti-copy copyIcon" style="font-size: 18px;"></i></span>
+                                                <a href="https://wa.me/01833220886" target="_blank" style="width: 18px;">
+                                                    <img src="{{ asset('public/admin/assets/images/whatsapp.png') }}" alt="" width="18">
+                                                </a>
+                                            </div>
+    
+                                            <div style="text-wrap: auto;">
+                                                <p style="font-weight: 500;">K-39/5, KURIL VATARA - 1229 K-39/5, KURIL VATARA - 1229</p>
+                                            </div>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <div class="">
+                                            <span class="badge bg-soft-secondary">Warehouse</span>
+                                            <p class="mt-1" style="color: #1e857a;"><strong>Banasree Warehouse (1055)</strong></p>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <div class="">
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Sales Amount:</span> BDT 1150.00</p>
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Paid Amount:</span> BDT 0.00</p>
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Due Amount:</span> BDT 1280.00</p>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-secondary">Pending</button>
+                                        {{-- <button type="button" class="btn btn-sm btn-warning">On Hold</button>
+                                        <button type="button" class="btn btn-sm btn-primary">Approved</button>
+                                        <button type="button" class="btn btn-sm btn-dark">Flagged</button>
+                                        <button type="button" class="btn btn-sm btn-success">Ready To Ship</button>
+                                        <button type="button" class="btn btn-sm btn-info">In-Transit</button>
+                                        <button type="button" class="btn btn-sm btn-danger">Cancelled</button>
+                                        <button type="button" class="btn btn-sm btn-success">Delivered</button> --}}
+                                    </td>
+    
+                                    <td>
+                                        <div class="d-flex align-items-center gap-1"> 
+                                            <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" style="width: 20px; border-radius: 50px;"> 
+                                            <p class="mb-0">Steadfast</p> 
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <p>BDT 130.00</p>
+                                    </td>
+    
+                                    <td style="text-wrap: auto;">
+                                        
+                                    </td>
+    
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-plus"></i> 
+                                        </div>
+                                    </td>
+                                </tr>
+    
+                                <tr>
+                                    <td>
+                                        <label class="checkboxs">
+                                            <input type="checkbox" id="select-all">
+                                            <span class="checkmarks"></span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <div class="copy-row">
+                                            <div class="all_icons mb-2">
+                                                <i data-tooltip="tip1" class="ti ti-info-circle cursor-pointer tooltip-trigger"></i>
+    
+                                                <i class="ti ti-copy cursor-pointer copy_name" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy"></i>
+    
+                                                <i class="ti ti-printer cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Print"></i>
+    
+                                                <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Edit"></i>
+                                            </div>
+    
+                                            <a href="#" class="mb-2 d-block">
+                                                <p class="text-teal font-bold copy_element">GB-9632541</p>
+                                            </a>
+    
+                                            <div class="">
+                                                <span class="badge bg-success">Whatsapp</span>
+                                                {{-- <span class="badge bg-primary">Website</span>
+                                                <span class="badge bg-success">Phone Call</span>
+                                                <span class="badge bg-info">Facebook</span>
+                                                <span class="badge bg-dark">Instagram</span> --}}
+                                            </div>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                       <div class="d-flex flex-column">
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Created:</span> Jan 1, 2026 09:49 A.M</p>
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Shipping:</span> Jan 1, 2026 09:49 A.M</p>
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Approved:</span> Jan 1, 2026 09:49 A.M</p>
+                                       </div>
+                                    </td>
+    
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <div class="copy-row">
+                                            <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
+                                            <div class="d-flex align-items-center gap-1 mb-1">
+                                                <span class="badge badge-sm bg-primary">New</span>
+                                                <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
+                                            </div>
+    
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <strong><span class="copyNumber">+8801833220886</span></strong>
+                                                <span data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy" class="text-success" style="cursor: pointer;"><i class="ti ti-copy copyIcon" style="font-size: 18px;"></i></span>
+                                                <a href="https://wa.me/01833220886" target="_blank" style="width: 18px;">
+                                                    <img src="{{ asset('public/admin/assets/images/whatsapp.png') }}" alt="" width="18">
+                                                </a>
+                                            </div>
+    
+                                            <div style="text-wrap: auto;">
+                                                <p style="font-weight: 500;">K-39/5, KURIL VATARA - 1229 K-39/5, KURIL VATARA - 1229</p>
+                                            </div>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <div class="">
+                                            <span class="badge bg-soft-secondary">Warehouse</span>
+                                            <p class="mt-1" style="color: #1e857a;"><strong>Banasree Warehouse (1055)</strong></p>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <div class="">
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Sales Amount:</span> BDT 1150.00</p>
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Paid Amount:</span> BDT 0.00</p>
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Due Amount:</span> BDT 1280.00</p>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-secondary">Pending</button>
+                                        {{-- <button type="button" class="btn btn-sm btn-warning">On Hold</button>
+                                        <button type="button" class="btn btn-sm btn-primary">Approved</button>
+                                        <button type="button" class="btn btn-sm btn-dark">Flagged</button>
+                                        <button type="button" class="btn btn-sm btn-success">Ready To Ship</button>
+                                        <button type="button" class="btn btn-sm btn-info">In-Transit</button>
+                                        <button type="button" class="btn btn-sm btn-danger">Cancelled</button>
+                                        <button type="button" class="btn btn-sm btn-success">Delivered</button> --}}
+                                    </td>
+    
+                                    <td>
+                                        <div class="d-flex align-items-center gap-1"> 
+                                            <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" style="width: 20px; border-radius: 50px;"> 
+                                            <p class="mb-0">Steadfast</p> 
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <p>BDT 130.00</p>
+                                    </td>
+    
+                                    <td style="text-wrap: auto;">
+                                        
+                                    </td>
+    
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-plus"></i> 
+                                        </div>
+                                    </td>
+                                </tr>
+    
+                                <tr>
+                                    <td>
+                                        <label class="checkboxs">
+                                            <input type="checkbox" id="select-all">
+                                            <span class="checkmarks"></span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <div class="copy-row">
+                                            <div class="all_icons mb-2">
+                                                <i data-tooltip="tip1" class="ti ti-info-circle cursor-pointer tooltip-trigger"></i>
+    
+                                                <i class="ti ti-copy cursor-pointer copy_name" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy"></i>
+    
+                                                <i class="ti ti-printer cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Print"></i>
+    
+                                                <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Edit"></i>
+                                            </div>
+    
+                                            <a href="#" class="mb-2 d-block">
+                                                <p class="text-teal font-bold copy_element">GB-9632541</p>
+                                            </a>
+    
+                                            <div class="">
+                                                <span class="badge bg-success">Whatsapp</span>
+                                                {{-- <span class="badge bg-primary">Website</span>
+                                                <span class="badge bg-success">Phone Call</span>
+                                                <span class="badge bg-info">Facebook</span>
+                                                <span class="badge bg-dark">Instagram</span> --}}
+                                            </div>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                       <div class="d-flex flex-column">
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Created:</span> Jan 1, 2026 09:49 A.M</p>
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Shipping:</span> Jan 1, 2026 09:49 A.M</p>
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Approved:</span> Jan 1, 2026 09:49 A.M</p>
+                                       </div>
+                                    </td>
+    
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <div class="copy-row">
+                                            <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
+                                            <div class="d-flex align-items-center gap-1 mb-1">
+                                                <span class="badge badge-sm bg-primary">New</span>
+                                                <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
+                                            </div>
+    
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <strong><span class="copyNumber">+8801833220886</span></strong>
+                                                <span data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy" class="text-success" style="cursor: pointer;"><i class="ti ti-copy copyIcon" style="font-size: 18px;"></i></span>
+                                                <a href="https://wa.me/01833220886" target="_blank" style="width: 18px;">
+                                                    <img src="{{ asset('public/admin/assets/images/whatsapp.png') }}" alt="" width="18">
+                                                </a>
+                                            </div>
+    
+                                            <div style="text-wrap: auto;">
+                                                <p style="font-weight: 500;">K-39/5, KURIL VATARA - 1229 K-39/5, KURIL VATARA - 1229</p>
+                                            </div>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <div class="">
+                                            <span class="badge bg-soft-secondary">Warehouse</span>
+                                            <p class="mt-1" style="color: #1e857a;"><strong>Banasree Warehouse (1055)</strong></p>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <div class="">
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Sales Amount:</span> BDT 1150.00</p>
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Paid Amount:</span> BDT 0.00</p>
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Due Amount:</span> BDT 1280.00</p>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-secondary">Pending</button>
+                                        {{-- <button type="button" class="btn btn-sm btn-warning">On Hold</button>
+                                        <button type="button" class="btn btn-sm btn-primary">Approved</button>
+                                        <button type="button" class="btn btn-sm btn-dark">Flagged</button>
+                                        <button type="button" class="btn btn-sm btn-success">Ready To Ship</button>
+                                        <button type="button" class="btn btn-sm btn-info">In-Transit</button>
+                                        <button type="button" class="btn btn-sm btn-danger">Cancelled</button>
+                                        <button type="button" class="btn btn-sm btn-success">Delivered</button> --}}
+                                    </td>
+    
+                                    <td>
+                                        <div class="d-flex align-items-center gap-1"> 
+                                            <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" style="width: 20px; border-radius: 50px;"> 
+                                            <p class="mb-0">Steadfast</p> 
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <p>BDT 130.00</p>
+                                    </td>
+    
+                                    <td style="text-wrap: auto;">
+                                        
+                                    </td>
+    
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-plus"></i> 
+                                        </div>
+                                    </td>
+                                </tr>
+    
+                                <tr>
+                                    <td>
+                                        <label class="checkboxs">
+                                            <input type="checkbox" id="select-all">
+                                            <span class="checkmarks"></span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <div class="copy-row">
+                                            <div class="all_icons mb-2">
+                                                <i data-tooltip="tip1" class="ti ti-info-circle cursor-pointer tooltip-trigger"></i>
+    
+                                                <i class="ti ti-copy cursor-pointer copy_name" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy"></i>
+    
+                                                <i class="ti ti-printer cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Print"></i>
+    
+                                                <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Edit"></i>
+                                            </div>
+    
+                                            <a href="#" class="mb-2 d-block">
+                                                <p class="text-teal font-bold copy_element">GB-9632541</p>
+                                            </a>
+    
+                                            <div class="">
+                                                <span class="badge bg-success">Whatsapp</span>
+                                                {{-- <span class="badge bg-primary">Website</span>
+                                                <span class="badge bg-success">Phone Call</span>
+                                                <span class="badge bg-info">Facebook</span>
+                                                <span class="badge bg-dark">Instagram</span> --}}
+                                            </div>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                       <div class="d-flex flex-column">
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Created:</span> Jan 1, 2026 09:49 A.M</p>
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Shipping:</span> Jan 1, 2026 09:49 A.M</p>
+                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Approved:</span> Jan 1, 2026 09:49 A.M</p>
+                                       </div>
+                                    </td>
+    
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <div class="copy-row">
+                                            <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
+                                            <div class="d-flex align-items-center gap-1 mb-1">
+                                                <span class="badge badge-sm bg-primary">New</span>
+                                                <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
+                                            </div>
+    
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <strong><span class="copyNumber">+8801833220886</span></strong>
+                                                <span data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy" class="text-success" style="cursor: pointer;"><i class="ti ti-copy copyIcon" style="font-size: 18px;"></i></span>
+                                                <a href="https://wa.me/01833220886" target="_blank" style="width: 18px;">
+                                                    <img src="{{ asset('public/admin/assets/images/whatsapp.png') }}" alt="" width="18">
+                                                </a>
+                                            </div>
+    
+                                            <div style="text-wrap: auto;">
+                                                <p style="font-weight: 500;">K-39/5, KURIL VATARA - 1229 K-39/5, KURIL VATARA - 1229</p>
+                                            </div>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <div class="">
+                                            <span class="badge bg-soft-secondary">Warehouse</span>
+                                            <p class="mt-1" style="color: #1e857a;"><strong>Banasree Warehouse (1055)</strong></p>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <div class="">
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Sales Amount:</span> BDT 1150.00</p>
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Paid Amount:</span> BDT 0.00</p>
+                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Due Amount:</span> BDT 1280.00</p>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-secondary">Pending</button>
+                                        {{-- <button type="button" class="btn btn-sm btn-warning">On Hold</button>
+                                        <button type="button" class="btn btn-sm btn-primary">Approved</button>
+                                        <button type="button" class="btn btn-sm btn-dark">Flagged</button>
+                                        <button type="button" class="btn btn-sm btn-success">Ready To Ship</button>
+                                        <button type="button" class="btn btn-sm btn-info">In-Transit</button>
+                                        <button type="button" class="btn btn-sm btn-danger">Cancelled</button>
+                                        <button type="button" class="btn btn-sm btn-success">Delivered</button> --}}
+                                    </td>
+    
+                                    <td>
+                                        <div class="d-flex align-items-center gap-1"> 
+                                            <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" style="width: 20px; border-radius: 50px;"> 
+                                            <p class="mb-0">Steadfast</p> 
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <p>BDT 130.00</p>
+                                    </td>
+    
+                                    <td style="text-wrap: auto;">
+                                        
+                                    </td>
+    
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-plus"></i> 
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
-                <!-- 3rd Row Content part Start -->
-                <div class="card variants_body">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="row align-items-end">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <p class="fw-bold" style="background: #7dd9f8; display: inline; padding: 2px 7px;">Create Variant</p>
-
-                                    <div class="add_more_btn">
-                                        <select class="form-control variants" id="add_more_variant">
-                                            <option value="" disabled selected>Select Options</option>
-                                            <option value="db" data-id="1">Db</option>
-                                            <option value="size" data-id="2">Size</option>
-                                            <option value="color" data-id="3">Color</option>
-                                            <option value="data" data-id="4">Data</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            
-                                <div class="col-md-12">
-                                    <div class="table-responsive mt-1">
-                                        <div class="data-table-wrapper">
-                                            <table class="table table-border">
-                                                <thead>
-                                                    <tr class="text-center bg-primary variant_header">
-                                                        <th><i class="fas fa-trash-alt text-white"></i></th>
-                                                        <th class="text-white text-start">Variant Name</th>
-                                                        <th class="text-white text-start">Variant Code <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp" data-bs-original-title="Also known as SKU. Variant code(SKU) must be unique." aria-label="Also known as SKU. Variant code(SKU) must be unique."></i></th>
-                                                        <th class="text-white text-start" id="variant_qty">Qty</th>
-                                                        <th class="text-white text-start" id="variant_qty">Alert Qty</th>
-                                                        <th class="text-white text-start" id="variant_cost_label">Unit Cost (Exc. Tax)</th>
-                                                        <th class="text-white text-start">Profit(%)</th>
-                                                        <th class="text-white text-start" id="variant_price_label">Unit Price (Exc. Tax)</th>
-                                                        {{-- <th class="text-white text-start">Variant Photo</th> --}}
-                                                        
-                                                    </tr>
-                                                </thead>
-                                
-                                                <tbody class="dynamic_variant_body">
-                                                    {{-- <tr id="variant_row" class="variant_row">
-                                                        <td class="text-start">
-                                                            <input type="hidden" class="form-control" value="" name="variant_id[]" id="variant_id">
-                                                            
-                                                            <input type="text" class="form-control reqireable" value="" id="variant_name" name="variant_name[]" readonly required>
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="text" name="variant_codes[]" id="variant_code" class="form-control reqireable fw-bold" placeholder="Variant Code" required="">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost requireable fw-bold" placeholder="0.00" id="variant_cost" required="">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="number" step="any" name="variant_profits[]" class="form-control requireable variant_profit fw-bold" placeholder="0.00" id="variant_profit">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="number" step="any" name="variant_prices[]" class="form-control requireable variant_price  fw-bold" placeholder="0.00" id="variant_price" required="">
-                                                        </td>
-
-                                                        <td class="text-start">
-                                                            <input type="number" name="variant_qty[]" class="form-control requireable variant_qty fw-bold" value="1" min="1" id="variant_qty" required="">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="file" name="variant_image[]" class="form-control" id="variant_image" required="">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
-                                                        </td>
-                                                    </tr> --}}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 6th Row Content part Start -->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label" for="long_description"><b>Long Description</b> <span class="text-danger">*</span></label>
-                                    <textarea class="form-control long_description_validate" id="long_description" name="long_description" rows="8" placeholder="Long Description....">{{ old('long_description') }}</textarea>
-
-                                    <span id="long_description_validate" class="invalid-feedback mt-1"></span>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" for="video_link"><b>Video Link</b></label>
-                                <textarea class="form-control" id="video_link" name="video_link"  rows="7" placeholder="Link Paste Here....">{{ old('video_link') }}</textarea>
-                            </div>
-                
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" for="short"><b>Short Description</b> <span class="text-danger">*</span></label>
-                                <textarea class="form-control short_description_validate" id="short" class="" name="short_description" rows="7" placeholder="Short Description....">{{ old('short_description') }}</textarea>
-                
-                                <span id="short_description_validate" class="invalid-feedback mt-1"></span>
-                            </div>
-
-                            <div class="col-md-12 mb-2">
-                                <div class="input-group mb-1">
-                                    <label class="form-label col-3" for="product_size"><strong>Multiple Products Tag</strong></label>
-                                    <div class="col-9">
-                                        <input type="text" class="product-tags" value="{{ old('tags') }}" name="tags" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <!-- 5th Row Content part Start -->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="mb-1">
-                                    <label class="form-label" for="thumb_image"><b>Thumbnail Photo</b> <span class="text-danger">*</span></label>
-                                    <input type="file" class="form-control" name="thumb_image" id="thumb_image" data-allowed-file-extensions="png jpeg jpg gif webp" >
-                                </div>
-                
-                                <span id="thumb_image_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2nd Row Content part Start -->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12 mb-2">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="name"><b>Applicable Tax</b></label>
-                                    <div class="col-8">
-                                        <div class="d-flex gap-2">
-                                            <div class="" style="width: 100%;">
-                                                <select class="form-select" id="" name="apply_tax_percentage">
-                                                    <option value="none" selected>None</option>
-                                                    @foreach ($tax_rates as $row)
-                                                        <option value="{{ $row->id }}" selected>{{ $row->tax_name }} ({{ $row->percentage }}%)</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="" style="width: 100%;">
-                                                <select class="form-select" id="" name="apply_tax_type">
-                                                    <option value="exclusive" selected>Exclusive</option>
-                                                    <option value="inclusive">Inclusive</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 mb-2">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="apply_tax_for"><b>Tax Applicable For</b></label>
-                                    <div class="col-8">
-                                        <select class="form-select" id="apply_tax_for" name="apply_tax_for">
-                                            <option value="exclusive" selected>For Selling Price</option>
-                                            <option value="inclusive">For Cost & Selling Price</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12 mb-2">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="variant"><b>Has Variant?</b></label>
-                                    <div class="col-8">
-                                        <select class="form-select has_variant" id="variant" name="has_variant">
-                                            <option value="no" selected>No</option>
-                                            <option value="yes">Yes</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 mb-2">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="unit_cost"><b>Unit Cost (Exc. Tax)</b> <span class="text-danger">*</span></label>
-                                    <div class="col-8">
-                                        <input type="number" name="purchase_price" class="form-control purchase_price_validate" id="unit_cost" placeholder="0.00" min="1" value="{{ old('purchase_price') }}">
-
-                                        <span id="purchase_price_validate" class="invalid-feedback mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12 mb-2">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="profit_margin"><b>Profit Margin(%)</b> <span class="text-danger">*</span></label>
-                                    <div class="col-8">
-                                        <input type="number" name="profit_margin" class="form-control profit_margin_validate" id="profit_margin" placeholder="0.00" min="1" value="{{ old('profit_margin') }}">
-
-                                        <span id="profit_margin_validate" class="invalid-feedback mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 mb-2">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="unit_price"><b>Unit Price (Exc. Tax)</b> <span class="text-danger">*</span></label>
-                                    <div class="col-8">
-                                        <input type="number" name="selling_price" class="form-control selling_price_validate" id="unit_price" placeholder="0.00" min="1" value="{{ old('selling_price') }}">
-
-                                        <span id="selling_price_validate" class="invalid-feedback mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4th Row Content part Start -->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12 mb-2">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="discount_type"><b>Discount Type</b></label>
-                                    <div class="col-8">
-                                        <select class="form-select" id="discount_type" name="discount_type">
-                                            <option value="none">Select Discount Type</option>
-                                            <option value="amount">Amount ( TK )</option>
-                                            <option value="percent">Percent ( % )</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 mb-2">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="display_ecom"><b>Displayed In E-com</b></label>
-                                    <div class="col-8">
-                                        <select class="form-select" id="display_ecom" name="display_ecommerce">
-                                            <option value="0" selected>No</option>
-                                            <option value="1">Yes</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 mb-2 discount_value d-none">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="discount_value"><b>Discount Value</b></label>
-                                    <div class="col-8">
-                                        <input class="form-control discount_value_validate" type="number" id="discount_value" name="discount_value" value="{{ old('discount_value') }}"  placeholder="Discount Value....">
-
-                                        <span id="discount_value_validate" class="invalid-feedback mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- <div class="col-md-12 mb-2 offer_start_value d-none">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="offer_start_date"><b>Offer Start Date</b></label>
-                                    <div class="col-8">
-                                        <input class="form-control offer_start_date" type="date" id="offer_start_date" name="offer_start_date" placeholder="Select a date...." value="{{ old('offer_start_date') }}">
-                                    </div>
-                                </div>
-                            </div> --}}
-
-                            <div class="col-md-12 mb-2 offer_end_value d-none">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="discount_date"><b>Discount Date</b></label>
-                                    <div class="col-8">
-                                        <input class="form-control offer_end_date discount_date_validate" type="text" id="discount_date" name="discount_date" value="" placeholder="Select a date....">
-
-                                        <span id="discount_date_validate" class="invalid-feedback mt-1"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 mb-2">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="is_featured"><b>Is Featured</b></label>
-                                    <div class="col-8">
-                                        <select class="form-select" id="is_featured" name="is_featured">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 mb-2">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="is_sale"><b>Is For Sale</b></label>
-                                    <div class="col-8">
-                                        <select class="form-select" id="is_sale" name="is_sale">
-                                            <option value="1" selected>Yes</option>
-                                            <option value="0">No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-12 mb-5">
-                <button type="submit" id="submitBtn" class="btn btn-secondary waves-effect me-3">Save Changes </button>
             </div>
         </div>
-    </form>
-
-
-
-    <!-- Category Create Modal -->
-    <div id="categoryModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-    style="display: none;" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Create Category</h5>
-
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form id="categoryForm" enctype="multipart/form-data">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label for="category_name" class="form-label">Name <span class="text-danger">*</span></label>
-                            <input class="form-control" id="category_name" type="text" name="category_name" placeholder="Category Name">
-
-                            <span id="cat_name_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="category_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(160px x 160px)</sup></label>
-                            <input type="file" class="form-control" name="category_img" id="category_img" accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'cat_image_preview')">
-
-                            <span id="cat_image_validate" class="text-danger validation-error mt-1"></span>
-
-                            <div id="cat_image_preview" class="mt-3">
-                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Status <span class="text-danger">*</span></label>
-                            <select class="form-select" name="status">
-                                <option value="1" selected>Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-
-                            <span id="status_validate" class="text-danger mt-1"></span>
-                        </div>
-
-                        <div class="d-flex justify-content-end align-items-center">
-                            <button type="button" class="btn btn-secondary waves-effect me-3"
-                                    data-bs-dismiss="modal">Close
-                            </button>
-
-                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
-                                Save Changes
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
-    <!-- /End Category Create Modal  -->
-   
-   
-    <!-- SubCategory Create Modal -->
-    <div id="subCategoryModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-    style="display: none;" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Create SubCategory</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                </div>
-
-                <div class="modal-body">
-                    {{-- method="POST" action="{{ route('admin.category.store') }}" --}}
-                    <form id="subcategoryForm" enctype="multipart/form-data">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label class="form-label">Category Name <span class="text-danger">*</span>
-                            </label>
-                            <select class="form-select" name="category_id" id="second_category_id">
-                                <option value="" disabled selected>Select</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}" data-image-url="{{ asset($category->category_img) }}">{{ $category->category_name }}</option>
-                                    @endforeach
-                            </select>
-
-                            <span id="cats_name_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="subcategory_name" class="form-label">SubCategory Name <span class="text-danger">*</span>
-                            </label>
-                            <input class="form-control" id="subcategory_name" type="text" name="subcategory_name" placeholder="SubCategory Name">
-
-                            <span id="subCats_name_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="subcategory_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(160px x 160px)</sup></label>
-                            <input type="file" class="form-control" name="subcategory_img" id="subcategory_img" accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'sub_image_preview')">
-
-                            <span id="subCats_image_validate" class="text-danger validation-error mt-1"></span>
-
-                                <div id="sub_image_preview" class="mt-3">
-                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Status <span class="text-danger">*</span>
-                            </label>
-                            <select class="form-select" name="status">
-                                <option value="1" selected>Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-
-                            <span id="status_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="d-flex justify-content-end align-items-center">
-                            <button type="button" class="btn btn-secondary waves-effect me-3"
-                                data-bs-dismiss="modal">Close </button>
-
-                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save Changes </button>
-                        </div>
-                    </form>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
-    <!-- /End SubCategory Create Modal  -->
-   
-   
-    <!-- ChildCategory Create Modal -->
-    <div id="childCategoryModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-    style="display: none;" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Create Child-Category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form id="childCategoryForm" enctype="multipart/form-data">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label class="form-label">Category Name <span class="text-danger">*</span></label>
-                            <select class="form-select category_id" name="category_id" id="third_category_id">
-                                <option value="" disabled selected>Select</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}" data-image-url="{{ asset($category->category_img) }}">{{ $category->category_name }}</option>
-                                    @endforeach
-                            </select>
-
-                            <span id="catName3_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">SubCategory Name <span class="text-danger">*</span></label>
-                            <select class="form-select subCategory_id" name="subCategory_id" id="second_subCategory_id">
-                                <option value="" disabled selected>Select </option>
-                                    @foreach ($subCategories as $subCat)
-                                        <option value="{{ $subCat->id }}" data-image-url="{{ asset($subCat->subcategory_img) }}">{{ $subCat->subcategory_name }}</option>
-                                    @endforeach
-                            </select>
-
-                            <span id="subCatName3_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="childCategory_name" class="form-label">ChildCategory Name <span class="text-danger">*</span></label>
-                            <input class="form-control" id="childCategory_name" type="text" name="name" placeholder="ChildCategory Name">
-
-                            <span id="childCat_name_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="childCategory_img" class="form-label">Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
-                            <input type="file" class="form-control" name="img" id="childCategory_img" accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'child_image_preview')">
-
-                            <span id="child_image_validate" class="text-danger validation-error mt-1"></span>
-
-                            <div id="child_image_preview" class="mt-3">
-                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Status <span class="text-danger">*</span></label>
-                            <select class="form-select" name="status">
-                                <option value="1" selected>Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-
-                        <div class="d-flex justify-content-end align-items-center">
-                            <button type="button" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="modal">Close
-                            </button>
-
-                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
-                                Save Changes
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
-    <!-- /End ChildCategory Create Modal  -->
-   
-   
-    <!-- Brand Create Modal  -->
-    <div id="brandModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-    style="display: none;" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Create Brand</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form id="brandForm" enctype="multipart/form-data">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label for="brand_name" class="form-label">Brand Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="brand_name" name="brand_name" placeholder="Brand name">
-
-                            <span id="brand_name_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="image" class="form-label">Brand Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
-                            <input type="file" class="form-control" name="image" id="image"  accept=".png, .jpeg, .jpg, .webp" onchange="showImagePreview(event, 'brand_image_preview')">
-
-                            <span id="brand_image_validate" class="text-danger validation-error mt-1"></span>
-
-                            <div id="brand_image_preview" class="mt-3">
-                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Status <span class="text-danger">*</span></label>
-                            <select class="form-select" name="status">
-                                <option value="1" selected>Active</option>
-                                <option value="0">Deactive</option>
-                            </select>
-
-                            <span id="featured_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="d-flex justify-content-end align-items-center">
-                            <button type="button" class="btn btn-secondary waves-effect me-3"
-                                data-bs-dismiss="modal">Close </button>
-
-                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save changes</button>
-                        </div>
-                    </form>
-                </div>
-
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
-    <!-- /End Brand Create Modal  -->
-   
-   
-    <!-- Unit Create Modal  -->
-    <div id="unitModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-        style="display: none;" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Create Unit</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form id="unitForm" enctype="multipart/form-data">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="unit" name="unit" placeholder="Unit">
-
-                            <span id="units_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label for="short_name" class="form-label">Short Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="short_name" name="short_name" placeholder="Short Name">
-
-                            <span id="short_name_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label class="form-label">Status <span class="text-danger">*</span></label>
-                            <select class="form-select" name="status">
-                                <option value="1" selected>Active</option>
-                                <option value="0">Deactive</option>
-                            </select>
-
-                            <span id="featured_validate" class="text-danger validation-error mt-1"></span>
-                        </div>
-
-                        <div class="d-flex justify-content-end align-items-center">
-                            <button type="button" class="btn btn-secondary waves-effect me-3"
-                                data-bs-dismiss="modal">Close </button>
-
-                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Save changes</button>
-                        </div>
-                    </form>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
-    <!-- /End Unit Create Modal  -->
-   
-   
-    <!-- Create Warrenty Modal -->
-    <div id="warrantyModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-    style="display: none;" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Create Warranty</h5>
-
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form id="warrantyForm" enctype="multipart/form-data">
-                        @csrf
-
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label for="warranty" class="form-label">Warranty <span class="text-danger">*</span></label>
-                                    <input class="form-control" id="warranty" type="text" name="warranty">
     
-                                    <span id="warranty_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="duration">Duration<span class="text-danger ms-1">*</span></label>
-                                    <input class="form-control" id="duration" type="number" name="duration">
-
-                                    <span id="duration_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6" >
-                                <div class="mb-3">
-                                    <label class="form-label" for="period">Period<span class="text-danger ms-1">*</span></label>
-                                    <select class="select form-control" id="period" name="period">
-                                        <option value="" selected disabled>Select</option>
-                                        <option value="day">Day</option>
-                                        <option value="month">Month</option>
-                                        <option value="year">Year</option>
-                                    </select>
-
-                                    <span id="period_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label" for="description">Description<span class="text-danger ms-1">*</span></label>
-                                    <textarea class="form-control" id="description" name="description"></textarea>
-
-                                    <span id="description_validate" class="text-danger validation-error mt-1"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Status <span class="text-danger">*</span></label>
-                            <select class="form-select" name="status">
-                                <option value="1" selected>Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-
-                        <div class="d-flex justify-content-end align-items-center">
-                            <button type="button" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="modal">Close
-                            </button>
-
-                            <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
-                                Save Changes
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
-    <!-- /End Create Warrenty Modal  -->
 
 @endsection
 
 @push('add-js')
-
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.6/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.6/js/buttons.dataTables.js"></script>
+    <script src="{{ asset('public/admin/assets/js/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
-    <script src="{{ asset('public/admin/assets/js/dropify.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
-
-     $(document).ready(function(){
-        let select2Loaded = false;
-
-        $('.select2').one('focus', function () {
-            if (!select2Loaded) {
-                $(this).select2();
-                select2Loaded = true;
-            }
-        });
-     })
-
         // Multiple Date Range
         $(function() {
             function initDateRangePicker(selector, position){
@@ -1190,698 +898,88 @@
         });
     </script>
 
-    <script>   
-    
-        $(document).ready(function() {
-            // Initialize Select2 plugin
-            $('#add_more_variant').select2();
-        
-            // When a new value is selected
-            $('#add_more_variant').on('select2:select', function (e) {
-                let unitCost     = parseFloat($('#unit_cost').val()) || 0;
-                let unitPrice    = parseFloat($('#unit_price').val()) || 0;
-                let profitMargin = parseFloat($('#profit_margin').val()) || 0;
-
-                var selectedValue = e.params.data.id; // Get the selected value (ID)
-                var selectId = $('#add_more_variant').find('option[value="' + selectedValue + '"]').data('id');
-
-                // Disable the selected option in the dropdown
-                var option = $('#add_more_variant').find('option[value="' + selectedValue + '"]');
-                option.prop('disabled', true);
-
-                // Trigger the Select2 to refresh the dropdown options
-                $('#add_more_variant').select2();
-
-                let index = $('.variant_row').length;
-
-                // Prepend the new size row to the table
-                $('.dynamic_variant_body').prepend(`
-                    <tr class="variant_row" data-index="${index}" data-value="${selectedValue}">
-                        <td>
-                            <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
-                        </td>
-
-                        <td>
-                            <input type="hidden" class="form-control" value="${selectId}" name="variant_id[]" id="variant_id">
-                            <input type="text" class="form-control variant_name" value="${selectedValue}" name="variant_name[]" id="variant_name" readonly>
-                        </td>
-
-                        <td>
-                            <input type="text" name="variant_codes[]" class="form-control variant_code fw-bold variant_codes_error" value="">
-                        </td>
-
-                        <td class="text-start">
-                            <input type="number" name="variant_qty[]" class="form-control variant_qty fw-bold variant_qty_error" id="variant_qty" value="1" min="1">
-                        </td>
-
-                        <td class="text-start">
-                            <input type="number" name="variant_alert_qty[]" class="form-control variant_qty fw-bold variant_alert_qty_error" id="variant_alert_qty" value="1" min="1">
-                        </td>
-
-                        <td>
-                            <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost fw-bold variant_costs_error" value="${unitCost}" placeholder="0.00">
-                        </td>
-
-                        <td>
-                            <input type="number" name="variant_profits[]" step="any" class="form-control variant_profit fw-bold variant_profits_error" value="${profitMargin}" placeholder="0.00">
-                        </td>
-
-                        <td>
-                            <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold variant_prices_error" value="${unitPrice}" placeholder="0.00">
-                        </td>
-                    </tr>
-                `);
-
-                // Reset the select dropdown after a value is appended
-                $('#add_more_variant').val('').trigger('change');
-            })
-        });
-        
-
-        // Remove row
-        $(document).on('click', '.variant_remove_btn', function() {
-            var row = $(this).closest('tr');  // Find the closest row (tr)
-            var removedValue = row.data('value'); // Get the value from the row
-
-            // Re-enable the option in the select dropdown
-            var option = $('#add_more_variant').find('option[value="' + removedValue + '"]');
-            option.prop('disabled', false);
-
-            // Refresh the select2 dropdown to reflect the changes
-            $('#add_more_variant').select2();
-
-            // Remove the row from the table
-            row.remove();
-            // toastr.success("Product Variant remove");
-        });
-
-
-        function calculateRow(row, changed) {
-            let costInput   = row.querySelector(".variant_cost");
-            let profitInput = row.querySelector(".variant_profit");
-            let priceInput  = row.querySelector(".variant_price");
-
-            let cost   = parseFloat(costInput.value) || 0;
-            let profit = parseFloat(profitInput.value) || 0;
-            let price  = parseFloat(priceInput.value) || 0;
-
-            if (changed === "cost" || changed === "price") {
-                if (cost <= 0 || price <= 0) {
-                    profitInput.value = "";
-                    return;
-                }
-                // Profit Margin = ((Price - Cost) / Cost) * 100
-                let profitMargin = ((price - cost) / cost) * 100;
-                profitInput.value = profitMargin.toFixed(2);
-            }
-
-            if (changed === "profit") {
-                if (cost <= 0) {
-                    priceInput.value = "";
-                    return;
-                }
-                // Price = Cost + (Cost * Profit% / 100)
-                let newPrice = cost + (cost * profit / 100);
-                priceInput.value = newPrice.toFixed(2);
-            }
-        }
-
-        // Listen on ALL dynamic rows
-        document.addEventListener("input", function(e) {
-            if (
-                e.target.classList.contains("variant_cost") ||
-                e.target.classList.contains("variant_profit") ||
-                e.target.classList.contains("variant_price")
-            ) {
-                let row = e.target.closest(".variant_row");
-
-                if (e.target.classList.contains("variant_cost")) calculateRow(row, "cost");
-                if (e.target.classList.contains("variant_price")) calculateRow(row, "price");
-                if (e.target.classList.contains("variant_profit")) calculateRow(row, "profit");
-            }
-        });
-    </script>
-
-    <script>
-        function showImagePreview(event, previewId) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = e => document.getElementById(previewId).innerHTML = `
-                <img src="${e.target.result}" width="100" height="100">`;
-                reader.readAsDataURL(file);
-            }
-        }
-
-
-        // Select Variant Options
-        document.getElementById("variant").addEventListener("change", function () {
-            let unitCost  = document.getElementById("unit_cost").value.trim();
-            let unitPrice = document.getElementById("unit_price").value.trim();
-            let profitMargin = document.getElementById("profit_margin").value.trim();
-            // console.log(this.value, unitCost, unitPrice);
-
-            if (this.value === "yes") {
-
-                if ( unitCost === "" || unitCost === "0" || 
-                    unitPrice === "" || unitPrice === "0" ){
-
-                    alert("Before creating the variant, product cost and product price field must not be empty.");
-
-                    // reset dropdown back to "No"
-                    this.value = "no";
-                }
-                else {
-                    // let costInput   = document.querySelector(".variant_cost").value = unitCost;
-                    // let profitInput = document.querySelector(".variant_profit").value = profitMargin;
-                    // let priceInput  = document.querySelector(".variant_price").value = unitPrice;
-                    document.querySelector(".variants_body").classList.add('actives');
-                }
-            }
-            else{
-                document.querySelector(".variants_body").classList.remove('actives');
-            }
-        });
-
-        // for unit Price
-        const unitPriceInput = document.getElementById("unit_price");
-        const unitCostInput  = document.getElementById("unit_cost");
-        const profitMarginInput = document.getElementById("profit_margin");
-        const variantInput = document.getElementById("variant"); 
-
-        // Calculate and update fields
-        function updateValues(changed) {
-            let price = parseFloat(unitPriceInput.value) || 0;
-            let cost  = parseFloat(unitCostInput.value) || 0;
-            let margin = parseFloat(profitMarginInput.value) || 0;
-
-            // If either price or cost is empty, set variant to "no"
-            if (!unitPriceInput.value || !unitCostInput.value) {
-                variantInput.value = "no";
-                document.querySelector(".variants_body").classList.remove('actives');
-            }
-
-            if (changed === "price" || changed === "cost") {
-                if (cost <= 0 || price <= 0) {
-                    profitMarginInput.value = "";
-                    return;
-                }
-                // Profit Margin (%) = ((Price - Cost) / Cost) * 100
-                profitMarginInput.value = ((price - cost) / cost * 100).toFixed(2);
-            } 
-            else if (changed === "margin") {
-                if (cost <= 0) {
-                    unitPriceInput.value = "";
-                    return;
-                }
-                let price = ( cost * margin ) / 100;
-                unitPriceInput.value = (cost + price).toFixed(2);
-            }
-        }
-
-        // Event listeners
-        unitPriceInput.addEventListener("input", () => updateValues("price"));
-        unitCostInput.addEventListener("input", () => updateValues("cost"));
-        profitMarginInput.addEventListener("input", () => updateValues("margin"));
-    </script>
-
     <script>
         $(document).ready(function () {
-            // Create Category Data
-            $('#categoryForm').submit(function (e) {
-                e.preventDefault();
 
-                let formData = new FormData(this);
-
-                $.ajax({
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            // Show Data through Datatable
+            let datatables = $('.datatables').DataTable({
+                pageLength: 25,
+                layout: {
+                    topStart: {
+                        buttons: [
+                            {
+                                text: `<i class="ti ti-refresh"></i>`,
+                                className: 'btn btn-outline-secondary refresh_btn',
+                                action: function (e, dt, node, config) {
+                                    alert('Button activated');
+                                }
+                            },
+                            {
+                                text: '<i class="ti ti-adjustments"></i> Filter Column',
+                                className: 'btn btn-secondary filter-column-btn',
+                                action: function () {
+                                    // Bootstrap dropdown will handle it
+                                }
+                            }
+                        ],
+                        pageLength: {
+                            menu: [10, 25, 50, 100, 250, -1]
+                        },
                     },
-                    url: "{{ route('admin.category.store') }}",
-                    data: formData,
-                    processData: false,  // Prevent jQuery from processing the data
-                    contentType: false,  // Prevent jQuery from setting contentType
-                    success: function (res) {
-                        console.log(res);
-                        if (res.status === true) {
-                            // Add new category to dropdown
-                            $('#category_id').append(
-                                `<option value="${res.category.id}" data-image-url="${res.category.image}">
-                                    ${res.category.name}
-                                </option>`
-                            );
-
-                            // Optional: auto-select the newly added option
-                            $('#category_id').val(res.category.id).trigger('change');
-
-                            $('#cat_image_preview').html(`
-                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                            `);
-
-                            $('#categoryModal').modal('hide');
-                            $('#categoryForm')[0].reset();
-                            $('.validation-error').html('');
-
-                            swal.fire({
-                                title: "Success",
-                                text: `${res.message}`,
-                                icon: "success"
-                            })
-                        }
-                    },
-                    error: function (err) {
-                        console.log(err);
-                        let error = err.responseJSON.errors;
-
-                        $('#cat_name_validate').empty().html(error.category_name);
-                        $('#cat_image_validate').empty().html(error.category_img);
-
-                        swal.fire({
-                            title: "Failed",
-                            text: "Something Went Wrong !",
-                            icon: "error"
-                        })
+                    topEnd: {
+                        paging: true,
                     }
-                });
-            })
+                },
+                language: {
+                    lengthMenu: "Show _MENU_"
+                },
+                initComplete: function () {
+                    let table = this.api(); // Safe reference to DataTable
 
-            // Create SubCategory Data
-            $('#subcategoryForm').submit(function (e) {
-                e.preventDefault();
+                    // Inject dropdown HTML AFTER table initialization
+                    $('.filter-column-btn').replaceWith(`
+                        <div class="dropdown">
+                            <button class="btn btn-secondary border dropdown-toggle filter-column-btn"
+                                    data-bs-toggle="dropdown">
+                                <i class="ti ti-adjustments"></i> Filter Column
+                            </button>
+                            <div class="dropdown-menu filter-column-menu p-2"></div>
+                        </div>
+                    `);
 
-                let formData = new FormData(this);
+                    let columnMenu = $('.filter-column-menu');
 
-                $.ajax({
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{ route('admin.subcategory.store') }}",
-                    data: formData,
-                    processData: false,  // Prevent jQuery from processing the data
-                    contentType: false,  // Prevent jQuery from setting contentType
-                    success: function (res) {
-                        console.log(res);
-                        if (res.status === true) {
-                            // Add new subCategory to dropdown
-                            $('#subCategory_id').append(
-                                `<option value="${res.subCategory.id}" data-image-url="${res.subCategory.image}">
-                                    ${res.subCategory.name}
-                                </option>`
-                            );
+                    // Build checkboxes for all columns
+                    table.columns().every(function (index) {
+                        let column = this;
+                        let title = $(column.header()).text().trim();
+                        if (!title) return;
 
-                            // Optional: auto-select the newly added option
-                            $('#subCategory_id').val(res.subCategory.id).trigger('change');
-                            $('#second_category_id').val('').trigger('change');
+                        columnMenu.append(`
+                            <div class="form-check mb-1">
+                                <input class="form-check-input toggle-column"
+                                    type="checkbox"
+                                    data-column="${index}"
+                                    checked>
+                                <label class="form-check-label">${title}</label>
+                            </div>
+                        `);
+                    });
 
-                            $('#sub_image_preview').html(`
-                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                            `);
-
-                            $('#subCategoryModal').modal('hide');
-                            $('#subcategoryForm')[0].reset();
-                            $('.validation-error').html('');
-
-                            swal.fire({
-                                title: "Success",
-                                text: `${res.message}`,
-                                icon: "success"
-                            })
-                        }
-                    },
-                    error: function (err) {
-                        let error = err.responseJSON.errors;
-
-                        $('#cats_name_validate').empty().html(error.category_id);
-                        $('#subCats_name_validate').empty().html(error.subcategory_name);
-                        $('#subCats_image_validate').empty().html(error.subcategory_img);
-
-                        swal.fire({
-                            title: "Failed",
-                            text: "Something Went Wrong !",
-                            icon: "error"
-                        })
-                    }
-                });
-            })
-
-            // Create Data
-            $('#childCategoryForm').submit(function (e) {
-                e.preventDefault();
-                let formData = new FormData(this);
-
-                $.ajax({
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{ route('admin.childCategory.store') }}",
-                    data: formData,
-                    processData: false,  // Prevent jQuery from processing the data
-                    contentType: false,  // Prevent jQuery from setting contentType
-                    success: function (res) {
-                        console.log(res);
-                        if (res.status === true) {
-                            // Add new subCategory to dropdown
-                            $('#childCategory_id').append(
-                                `<option value="${res.childCategory.id}" data-image-url="${res.childCategory.image}">
-                                    ${res.childCategory.name}
-                                </option>`
-                            );
-
-                            // Optional: auto-select the newly added option
-                            $('#third_category_id').val('').trigger('change');
-                            $('#second_subCategory_id ').val('').trigger('change');
-                            $('#childCategory_id').val(res.childCategory.id).trigger('change');
-
-                            $('#child_image_preview').html(`
-                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                            `);
-
-                            $('#childCategoryModal').modal('hide');
-                            $('#childCategoryForm')[0].reset();
-                            $('.validation-error').html('');
-
-                            swal.fire({
-                                title: "Success",
-                                text: `${res.message}`,
-                                icon: "success"
-                            })
-                        }
-                    },
-                    error: function (err) {
-                        let error = err.responseJSON.errors;
-
-                        $('#catName3_validate').empty().html(error.category_id);
-                        $('#subCatName3_validate').empty().html(error.subCategory_id);
-                        $('#childCat_name_validate').empty().html(error.name);
-                        $('#child_image_validate').empty().html(error.img);
-
-                        swal.fire({
-                            title: "Failed",
-                            text: "Something Went Wrong !",
-                            icon: "error"
-                        })
-                    }
-                });
-            })
-
-            // Create Brand Data
-            $('#brandForm').submit(function (e) {
-                e.preventDefault();
-
-                let formData = new FormData(this);
-
-                $.ajax({
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{ route('admin.brand.store') }}",
-                    data: formData,
-                    processData: false,  // Prevent jQuery from processing the data
-                    contentType: false,  // Prevent jQuery from setting contentType
-                    success: function (res) {
-                        console.log(res);
-                        if (res.status === true) {
-                             // Add new subCategory to dropdown
-                             $('#brand_id').append(
-                                `<option value="${res.brand.id}" data-image-url="${res.brand.image}">
-                                    ${res.brand.name}
-                                </option>`
-                            );
-
-                            // Optional: auto-select the newly added option
-                            $('#brand_id').val(res.brand.id).trigger('change');
-
-                            $('#brand_image_preview').html(`
-                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                            `);
-
-                            $('#brandModal').modal('hide');
-                            $('#brandForm')[0].reset();
-                            $('.validation-error').html('');
-
-                            swal.fire({
-                                title: "Success",
-                                text: `${res.message}`,
-                                icon: "success"
-                            })
-                        }
-                    },
-                    error: function (err) {
-                        let error = err.responseJSON.errors;
-
-                        $('#brand_name_validate').empty().html(error.brand_name);
-                        $('#brand_image_validate').empty().html(error.image);
-
-                        swal.fire({
-                            title: "Failed",
-                            text: "Something Went Wrong !",
-                            icon: "error"
-                        })
-                    }
-                });
-            })
-
-            // Create Unit Data
-            $('#unitForm').submit(function (e) {
-                e.preventDefault();
-
-                let formData = new FormData(this);
-
-                $.ajax({
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{ route('admin.unit.store') }}",
-                    data: formData,
-                    processData: false,  // Prevent jQuery from processing the data
-                    contentType: false,  // Prevent jQuery from setting contentType
-                    success: function (res) {
-                        console.log(res);
-                        if (res.status === true) {
-                            // Add new brand to dropdown
-                            $('#unit_id').append(
-                                `<option value="${res.units.id}">
-                                    ${res.units.unit} (${res.units.short_name})
-                                </option>`
-                            );
-
-                            // Optional: auto-select the newly added option
-                            $('#unit_id').val(res.units.id).trigger('change');
-
-                            $('#unitModal').modal('hide');
-                            $('#unitForm')[0].reset();
-                            $('.validation-error').html('');
-
-                            swal.fire({
-                                title: "Success",
-                                text: `${res.message}`,
-                                icon: "success"
-                            })
-                        }
-                    },
-                    error: function (err) {
-                        let error = err.responseJSON.errors;
-                        console.log(error);
-
-                        $('#units_validate').empty().html(error.unit);
-                        $('#short_name_validate').empty().html(error.short_name);
-
-                        swal.fire({
-                            title: "Failed",
-                            text: "Something Went Wrong !",
-                            icon: "error"
-                        })
-                    }
-                });
-            })
-
-            // Create Warrenty Data
-            $('#warrantyForm').submit(function (e) {
-                e.preventDefault();
-
-                let formData = new FormData(this);
-
-                $.ajax({
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{ route('admin.warranties.store') }}",
-                    data: formData,
-                    processData: false,  // Prevent jQuery from processing the data
-                    contentType: false,  // Prevent jQuery from setting contentType
-                    success: function (res) {
-                        // console.log(res);
-                        if (res.status === true) {
-                            // Add new brand to dropdown
-                            $('#warranties_id ').append(
-                                `<option value="${res.warranties.id}">
-                                    ${res.warranties.duration} ${res.warranties.period}
-                                </option>`
-                            );
-
-                            // Optional: auto-select the newly added option
-                            $('#warranties_id').val(res.warranties.id).trigger('change');
-
-                            $('#warrantyModal').modal('hide');
-                            $('#warrantyForm')[0].reset();
-                            $('.validation-error').html('');
-
-                            swal.fire({
-                                title: "Success",
-                                text: `${res.message}`,
-                                icon: "success"
-                            })
-                        }
-                    },
-                    error: function (err) {
-                        let error = err.responseJSON.errors;
-
-                        $('#warranty_validate').empty().html(error.warranty);
-                        $('#duration_validate').empty().html(error.duration);
-                        $('#period_validate').empty().html(error.period);
-                        $('#description_validate').empty().html(error.description);
-
-                        swal.fire({
-                            title: "Failed",
-                            text: "Something Went Wrong !",
-                            icon: "error"
-                        })
-                    }
-                });
-            })
-        })
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $('#thumb_image').dropify({
-                messages: {
-                    'default': "Drag and drop a file here or click",
-                    'replace': "Drag and drop or click to replace",
-                    'remove': "Remove",
-                    'error': "Oops, something wrong happened."
+                    // Bind toggle event
+                    $(document).on('change', '.toggle-column', function () {
+                        let columnIndex = $(this).data('column');
+                        let visible = $(this).is(':checked');
+                        table.column(columnIndex).visible(visible);
+                    });
                 }
             });
-
-
-            function toggleDiscountDivs() {
-                const selectedValue = $('#discount_type').val();
-
-                if (selectedValue === 'amount' || selectedValue === 'percent') {
-                    // Show all related divs
-                    $('.discount_value').removeClass('d-none'); // Show discount value div (if it exists)
-                    $('.offer_start_value').removeClass('d-none'); // Show offer start date div
-                    $('.offer_end_value').removeClass('d-none'); // Show offer end date div
-                } else {
-                    // Hide all related divs
-                    $('.discount_value').addClass('d-none');
-                    $('.offer_start_value').addClass('d-none');
-                    $('.offer_end_value').addClass('d-none');
-                }
-            }
-
-            // Initial check on page load
-            toggleDiscountDivs();
-
-            // Event listener for changes to #discount_type
-            $('#discount_type').on('change', function () {
-                toggleDiscountDivs();
-            });
-
-            // Ckeditor 5 plugin
-            let jReq;
-            ClassicEditor
-                .create(document.querySelector('#long_description'))
-                .then(newEditor => {
-                    jReq = newEditor;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-
-            // Choice.js plugin
-            const product_tags = new Choices('.product-tags',{
-                removeItems: true,
-                duplicateItemsAllowed: false,
-                removeItemButton: true,
-                delimiter: ',',
-            });
-
-            // // Flatpicker Plugin
-            // $(".offer_start_date").flatpickr({
-            //     minDate: "today"
-            // });
-
-            // $(".offer_end_date").flatpickr({
-            //     minDate: "today"
-            // });
 
             //____ category_id Select2 ____//
             $('#units').select2({
                 templateResult: formatState,       
                 templateSelection: formatState, 
             });
-
-            //____ category_id Select2 ____//
-            $('#category_id').select2({
-                templateResult: formatState,       
-                templateSelection: formatState, 
-            });
-
-            //____ second_category_id Select2 ____//
-            $('#second_category_id').select2({
-                templateResult: formatState,       
-                templateSelection: formatState, 
-            });
-
-            //____ third_category_id Select2 ____//
-            $('#third_category_id').select2({
-                templateResult: formatState,       
-                templateSelection: formatState, 
-            });
-
-            //____ subCategory_id Select2 ____//
-            $('#subCategory_id').select2({
-                templateResult: formatState,       
-                templateSelection: formatState, 
-            });
-
-            //____ second_subCategory_id Select2 ____//
-            $('#second_subCategory_id').select2({
-                templateResult: formatState,       
-                templateSelection: formatState, 
-            });
-
-            //____ childCategory_id Select2 ____//
-            $('#childCategory_id').select2({
-                templateResult: formatState,       
-                templateSelection: formatState, 
-            });
-
-            //____ brand_id Select2 ____//
-            $('#brand_id').select2({
-                templateResult: formatState,       
-                templateSelection: formatState, 
-            });
-
-            //____ warranties_id Select2 ____//
-            $('#warranties_id ').select2({
-                templateResult: formatState,       
-                templateSelection: formatState, 
-            });
-
-            //____ warranties_id Select2 ____//
-            $('#add_more_variant').select2({
-                templateResult: formatState,       
-                templateSelection: formatState, 
-            });
-
 
             function formatState (state) {
                 if (!state.id) {
@@ -1901,92 +999,6 @@
             };
         });
 
-    </script>
-
-    <script>
-        $(document).ready(function(){
-            // Create
-            $('#createForm').submit(function (e) {
-                e.preventDefault();
-
-                let formData = new FormData(this);
-                $.ajax({
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{ route('admin.product.store') }}",
-                    data: formData,
-                    processData: false,  // Prevent jQuery from processing the data
-                    contentType: false,  // Prevent jQuery from setting contentType
-                    beforeSend: function () {
-                        $('#submitBtn').prop('disabled', true);
-                        $('#submitBtn').html(`
-                            <i class="fas fa-spinner fa-spin me-2"></i> Loading...
-                        `);
-                    },
-                    success: function (res) {
-                        // console.log(res);
-                        if (res.status === true) {
-                            $('#createForm')[0].reset();
-                            $('.validation-error').html('');
-
-                            swal.fire({
-                                title: "Success",
-                                text: `${res.message}`,
-                                icon: "success"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    // Reload the current page
-                                    location.reload();
-                                }
-                            });
-                        }
-                    },
-                    error: function (err) {
-                        let errors = err.responseJSON?.errors || {};
-
-                        // clear all previous validation messages
-                        $('[id$="_validate"]').html('');
-                        $('[id$="_error"]').html('');
-                        $('input, select, textarea').removeClass('is-invalid');
-
-                        // show validation errors dynamically
-                        $.each(errors, function (key, value) {
-                            let $field = $('.' + key + '_validate');
-                            $('#' + key + '_validate').html(value[0]);
-                            $field.addClass('is-invalid');
-
-                            // 🔥 handle array errors (variant_codes.0 etc)
-                            if (key.includes('.')) {
-                                let parts = key.split('.');
-                                let fields = parts[0]; // variant_codes
-                                let index = parts[1]; // 0
-
-                                let row = $('.variant_row').eq(index);
-                                row.find(`.${fields}_error`).html(value[0]);
-                                row.find(`[name="${fields}[]"]`).addClass('is-invalid');
-                            } 
-                        });
-
-                        $('#submitBtn').prop('disabled', false);
-                        $('#submitBtn').html(`Save Changes`);
-
-                        swal.fire({
-                            title: "Validation Error",
-                            text: "Please correct the highlighted fields and try again.",
-                            icon: "warning",
-                            confirmButtonText: "Okay"
-                        })
-                    },
-                    // 🔹 Always runs (success or error)
-                    complete: function () {
-                        $('#submitBtn').prop('disabled', false);
-                        $('#submitBtn').html(`Save Changes`);
-                    }
-                });
-            })
-        })
     </script>
 
 @endpush

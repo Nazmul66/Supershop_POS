@@ -48,7 +48,7 @@ class ChildCategoryController extends Controller
     public function getData()
     {
         // get all data
-        $childCategories= ChildCategory::join('categories', 'child_categories.category_id', '=', 'categories.id')->join('subcategories', 'child_categories.subCategory_id', '=', 'subcategories.id')
+        $childCategories= ChildCategory::leftJoin('categories', 'child_categories.category_id', '=', 'categories.id')->leftJoin('subcategories', 'child_categories.subCategory_id', '=', 'subcategories.id')
             ->select('categories.category_name', 'subcategories.subcategory_name', 'child_categories.name', 'child_categories.*')
             ->get();
 

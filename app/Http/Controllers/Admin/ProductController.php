@@ -78,7 +78,8 @@ class ProductController extends Controller
            $query = Product::leftJoin('categories', 'categories.id', 'products.category_id')
                     ->leftJoin('subcategories', 'subcategories.id', 'products.subCategory_id')
                     ->leftJoin('child_categories', 'child_categories.id', 'products.childCategory_id')
-                    ->leftJoin('brands', 'brands.id', 'products.brand_id');
+                    ->leftJoin('brands', 'brands.id', 'products.brand_id')
+                    ->leftJoin('units', 'units.id', 'products.unit_id');
                    
                     if( !empty($request->category_id) ){
                         $query->where('products.category_id', $request->category_id);
@@ -102,43 +103,87 @@ class ProductController extends Controller
                         }
                     }
 
-            $products = $query->select('products.*', 'categories.category_name as cat_name', 'subcategories.subcategory_name as subCat_name', 'child_categories.name as childCat_name', 'brands.brand_name')
+            $products = $query->select('products.*', 'categories.category_name as cat_name', 'subcategories.subcategory_name as subCat_name', 'child_categories.name as childCat_name', 'brands.brand_name', 'units.short_name')
                     ->orderBy('products.id', "DESC")
                     ->get();
 
         return DataTables::of($products)
             ->addIndexColumn()
+            ->addColumn('checkbox', function ($product) {
+                return ' <label class="checkboxs">
+                        <input type="checkbox" id="select-all">
+                        <span class="checkmarks"></span>
+                    </label>';
+            })
+            ->addColumn('action', function ($product) {
+                $actionHtml = Blade::render('<div class="copy-row">
+                    <div class="all_icons mb-2">
+                        <i class="ti ti-settings cursor-pointer text-secondary" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Multi Product Image"></i>
+
+                        <a href="'. route('admin.product.show', $product->id) .'">
+                            <i data-tooltip="tip1" class="ti ti-eye cursor-pointer tooltip-trigger"
+                            data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="View"></i>
+                        </a>
+
+                        @if(auth("admin")->user()->can("update.product"))
+                            <a href="'. route('admin.product.edit', $product->id) .'">
+                                <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-info" data-bs-placement="top" data-bs-original-title="Edit"></i>
+                            </a>
+                        @endif
+
+                        @if(auth("admin")->user()->can("delete.product"))
+                            <a href="javascript:void(0)" data-id="'.$product->id.'" id="deleteBtn">
+                                <i class="ti ti-trash cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-danger" data-bs-placement="top" title="Delete"></i>
+                            </a>
+                        @endif
+                    </div>
+                </div>', ['product' => $product]);
+                return $actionHtml;
+            })
+            ->addColumn('product_name', function ($product) {
+                return '<div class="copy-row">
+                    <h6 style="color: #1e857a;" class="mb-1"><strong>'. $product->name .'</strong></h6>
+
+                    <div class="d-flex align-items-center gap-1 mb-1">
+                        <span class="badge badge-sm bg-primary">New</span>
+                        <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
+                    </div>
+                </div>';
+            })
             ->addColumn('product_img', function ($product) {
                 return ' <a href="'.asset( $product->thumb_image ).'" target="__blank">
-                      <img src="'.asset( $product->thumb_image ).'" width="100px" height="100px">
+                      <img src="'.asset( $product->thumb_image ).'" width="45px" height="45px">
                 </a>';
             })
-            ->addColumn('categorized', function ($product) {
+            ->addColumn('product_details', function ($product) {
                 $subCat = $product->subCat_name ?? 'N/A';
                 return '<div class="">
-                       <h6>Category Name: <span class="badge bg-success">'. $product->cat_name .'</span></h6> 
-                       <h6>SubCategory Name : <span class="badge bg-success">'. $subCat .'</span></h6>
+                    <p class="mb-1"><span class="text-dark" style="font-weight: 600;">Category Name:</span> '. $product->cat_name .'</p>
+
+                    <p class="mb-1"><span class="text-dark" style="font-weight: 600;">SubCategory Name:</span> '. $subCat .'</p>
+
+                    <p class="mb-1"><span class="text-dark" style="font-weight: 600;">ChildCategory Name:</span> '. ($product->childCat_name ?: 'N/A') .'</p>
+
+                    <p class="mb-1"><span class="text-dark" style="font-weight: 600;">Brand Name:</span> '. $product->brand_name .'</p>
                 </div>';
             })
-            ->addColumn('special_featured', function ($product) {
-                $is_top = $product->is_top == 1 ? "Yes" : 'No';
-                $is_best = $product->is_best == 1 ? "Yes" : 'No';
-                $is_featured = $product->is_featured == 1 ? "Yes" : 'No';
+            ->addColumn('date_info', function ($product) {
+                $created_by = \App\Models\Admin::find($product->created_by)?->name ?? 'Unknown';
+                $updated_by = \App\Models\Admin::find($product->updated_by)?->name ?? 'Unknown';
 
                 return '<div class="">
-                       <h6>Top Product: <span class="badge bg-success">'. $is_top .'</span></h6> 
-                       <h6>Best Product : <span class="badge bg-success">'. $is_best .'</span></h6>
-                       <h6>Featured Product : <span class="badge bg-success">'. $is_featured .'</span></h6>
-                </div>';
-            })
-            ->addColumn('product_details', function ($product) {
-                return '<div class="">
-                       <h6><span class="text-dark">'. $product->name .'</span></h6> 
+                    <p class="mb-1"><span class="text-dark" style="font-weight: 600;">Created at:</span> '. $product->created_at->format('M j, Y h:i A') .'</p>
+
+                    <p class="mb-1"><span class="text-dark" style="font-weight: 600;">Updated at:</span> '. $product->updated_at->format('M j, Y h:i A') .'</p>
+
+                    <p class="mb-1"><span class="text-dark" style="font-weight: 600;">Created by:</span> '. $created_by.'</p>
+
+                    <p class="mb-1"><span class="text-dark" style="font-weight: 600;">Updated by:</span> '. $updated_by .'</p>
                 </div>';
             })
             ->addColumn('quantity', function ($product) {
                 return '<div class="">
-                       <h6><span class="text-dark">'. $product->qty .' Pcs</span></h6>
+                       <h6><span class="text-dark">'. $product->qty .' '. Str::title($product->short_name) .' </span></h6>
                 </div>';
             })
             ->addColumn('status', function ($product) {
@@ -146,49 +191,19 @@ class ProductController extends Controller
                     if ($product->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$product->id.'" data-status="'.$product->status.'"> <i
-                                class="fa-solid fa-toggle-on fa-2x"></i>
+                                class="fa-solid fa-toggle-on fa-2x text-success"></i>
                         </a>';
                     } else {
                         return '<a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$product->id.'" data-status="'.$product->status.'"> <i
-                                class="fa-solid fa-toggle-off fa-2x" style="color: grey"></i>
+                                class="fa-solid fa-toggle-off fa-2x text-danger"></i>
                         </a>';
                     }
                 else{
                     return '<span class="badge bg-info">N/A</span>'; 
                 }
             })
-            ->addColumn('action', function ($product) {
-                $actionHtml = Blade::render('
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Actions <i class="mdi mdi-chevron-down"></i>
-                        </button>
-
-                        <div class="dropdown-menu dropdownmenu-primary" style="">
-                            <a class="dropdown-item text-info" href="'. route('admin.product.show', $product->id) .'"><i class="fas fa-eye"></i> View</a>
-
-                            @if(auth("admin")->user()->can("update.product"))
-                                <a class="dropdown-item text-primary" href="'. route('admin.product.edit', $product->id) .'"><i class="fas fa-edit"></i> Edit</a>
-                            @endif
-
-                            @if(auth("admin")->user()->can("delete.product"))
-                                <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$product->id.'" id="deleteBtn">
-                                    <i class="fas fa-trash"></i> Delete
-                                </a>
-                            @endif
-
-                            @if(auth("admin")->user()->can("variant.product"))
-                                <a class="dropdown-item text-success" href="'. route('admin.product-variant', $product->id) .'" ><i class="bx bx-cog"></i>
-                                Product Variants
-                                </a>
-                            @endif
-                        </div>
-                    </div>
-                ', ['product' => $product]);
-                return $actionHtml;
-            })
-
-            ->rawColumns(['categorized', 'quantity', 'special_featured', 'product_details', 'product_img', 'status', 'action'])
+            ->rawColumns(['checkbox', 'product_name', 'quantity', 'date_info', 'product_details', 'product_img', 'status', 'action'])
             ->make(true);
     }
 

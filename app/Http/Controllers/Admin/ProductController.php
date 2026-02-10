@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\ChildCategory;
 use App\Models\Product;
+use App\Models\Admin;
 use App\Models\Brand;
 use App\Models\Unit;
 use App\Models\TaxRate;
@@ -44,6 +45,8 @@ class ProductController extends Controller
 
     public function index()
     {
+        $admins               = Admin::where('status', 1)->get();
+        $products             = Product::where('status', 1)->get();
         $categories           = Category::get_data();
         $subCategories        = Subcategory::get_data();
         $childCategories      = ChildCategory::get_data();
@@ -52,7 +55,7 @@ class ProductController extends Controller
         $warranties           = Warranty::get_data();
         $tax_rates            = TaxRate::get_data();
 
-        return view('admin.pages.product.index', compact('categories', 'subCategories', 'childCategories', 'brands', 'units', 'warranties', 'tax_rates'));
+        return view('admin.pages.product.index', compact('categories', 'subCategories', 'childCategories', 'brands', 'units', 'warranties', 'tax_rates', 'products', 'admins'));
     }
 
     public function create()
@@ -73,6 +76,7 @@ class ProductController extends Controller
 
     public function getData(Request $request)
     {
+        dd($request->all());
         // get all data
         $products = "";
            $query = Product::leftJoin('categories', 'categories.id', 'products.category_id')

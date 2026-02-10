@@ -1868,11 +1868,13 @@
         
 
         $('#agent_user').select2({
+            dropdownParent: $('#filterDrawer'),
             templateResult: formatState,       
             templateSelection: formatState, 
         });
 
         $('#courier_agent').select2({
+            dropdownParent: $('#filterDrawer'),
             templateResult: formatState,       
             templateSelection: formatState, 
         });

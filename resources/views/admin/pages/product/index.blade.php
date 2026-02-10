@@ -244,6 +244,8 @@
             </li>
         </ul>
         <div class="page-btn">
+            <button type="button" class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer" aria-controls="offcanvasExample"><i class="ti ti-filter me-1"></i>Filter</button>
+
             @if(auth("admin")->user()->can("create.brand"))
                 <a href="" class="btn btn-teal"><i class="ti ti-circle-plus me-1"></i>Add Product</a>
              @endif
@@ -251,140 +253,323 @@
     </div>
     
 
-        {{-- Table Responsive --}}
-        <div class="mb-0 border-1">
-            <div class="row">
-                <div class="mt-0">
-                    <div class="table-responsive pb-3">
-                        <table class="table table-hover table-nowrap mb-0 datatables">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <label class="checkboxs">
-                                            <input type="checkbox" id="select-all">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </th>
-                                    <th>Action</th>
-                                    <th>Image</th>
-                                    <th>Product Name</th>
-                                    <th>Product Details</th>
-                                    <th>Quantity</th>
-                                    <th>Date Info</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-    
-                            <tbody>
-                                {{-- <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox" id="select-all">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
+    {{-- Table Responsive --}}
+    <div class="mb-0 border-1">
+        <div class="row">
+            <div class="mt-0">
+                <div class="table-responsive pb-3">
+                    <table class="table table-hover table-nowrap mb-0 datatables">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <label class="checkboxs">
+                                        <input type="checkbox" id="select-all">
+                                        <span class="checkmarks"></span>
+                                    </label>
+                                </th>
+                                <th>Action</th>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Product Details</th>
+                                <th>Quantity</th>
+                                <th>Date Info</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
 
-                                    <td>
-                                        <div class="copy-row">
-                                            <div class="all_icons mb-2">
-                                                <i class="ti ti-copy cursor-pointer copy_name" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy"></i>
+                        <tbody>
+                            {{-- <tr>
+                                <td>
+                                    <label class="checkboxs">
+                                        <input type="checkbox" id="select-all">
+                                        <span class="checkmarks"></span>
+                                    </label>
+                                </td>
 
-                                                <i data-tooltip="tip1" class="ti ti-eye cursor-pointer tooltip-trigger"
-                                                data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="View"></i>
-    
-                                                <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-info" data-bs-placement="top" data-bs-original-title="Edit"></i>
+                                <td>
+                                    <div class="copy-row">
+                                        <div class="all_icons mb-2">
+                                            <i class="ti ti-copy cursor-pointer copy_name" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy"></i>
 
-                                                <i class="ti ti-trash cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-danger" data-bs-placement="top" data-bs-original-title="Delete"></i>
-                                            </div>
-    
-                                            <a href="#" class="mb-2 d-block">
-                                                <p class="text-teal font-bold copy_element">GB-9632541</p>
+                                            <i data-tooltip="tip1" class="ti ti-eye cursor-pointer tooltip-trigger"
+                                            data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="View"></i>
+
+                                            <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-info" data-bs-placement="top" data-bs-original-title="Edit"></i>
+
+                                            <i class="ti ti-trash cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-danger" data-bs-placement="top" data-bs-original-title="Delete"></i>
+                                        </div>
+
+                                        <a href="#" class="mb-2 d-block">
+                                            <p class="text-teal font-bold copy_element">GB-9632541</p>
+                                        </a>
+
+                                        <div class="">
+                                            <span class="badge bg-success">Whatsapp</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <img src="{{ asset('public/admin/images/employee/20250921_221542_68d024ae052c3.jpg') }}" alt="">
+                                </td>
+
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Created:</span> Jan 1, 2026 09:49 A.M</p>
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Shipping:</span> Jan 1, 2026 09:49 A.M</p>
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Approved:</span> Jan 1, 2026 09:49 A.M</p>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="copy-row">
+                                        <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
+                                        <div class="d-flex align-items-center gap-1 mb-1">
+                                            <span class="badge badge-sm bg-primary">New</span>
+                                            <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
+                                        </div>
+
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <strong><span class="copyNumber">+8801833220886</span></strong>
+                                            <span data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy" class="text-success" style="cursor: pointer;"><i class="ti ti-copy copyIcon" style="font-size: 18px;"></i></span>
+                                            <a href="https://wa.me/01833220886" target="_blank" style="width: 18px;">
+                                                <img src="{{ asset('public/admin/assets/images/whatsapp.png') }}" alt="" width="18">
                                             </a>
-    
-                                            <div class="">
-                                                <span class="badge bg-success">Whatsapp</span>
-                                            </div>
                                         </div>
-                                    </td>
 
-                                    <td>
-                                        <img src="{{ asset('public/admin/images/employee/20250921_221542_68d024ae052c3.jpg') }}" alt="">
-                                    </td>
-    
-                                    <td>
-                                       <div class="d-flex flex-column">
-                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Created:</span> Jan 1, 2026 09:49 A.M</p>
-                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Shipping:</span> Jan 1, 2026 09:49 A.M</p>
-                                           <p class="mb-1"><span class="text-dark" style="font-weight: 700;">Approved:</span> Jan 1, 2026 09:49 A.M</p>
-                                       </div>
-                                    </td>
+                                        <div style="text-wrap: auto;">
+                                            <p style="font-weight: 500;">K-39/5, KURIL VATARA - 1229 K-39/5, KURIL VATARA - 1229</p>
+                                        </div>
+                                    </div>
+                                </td>
 
-                                    <td>
-                                        <div class="copy-row">
-                                            <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
-                                            <div class="d-flex align-items-center gap-1 mb-1">
-                                                <span class="badge badge-sm bg-primary">New</span>
-                                                <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
-                                            </div>
-    
-                                            <div class="d-flex align-items-center gap-2 mb-1">
-                                                <strong><span class="copyNumber">+8801833220886</span></strong>
-                                                <span data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Copy" class="text-success" style="cursor: pointer;"><i class="ti ti-copy copyIcon" style="font-size: 18px;"></i></span>
-                                                <a href="https://wa.me/01833220886" target="_blank" style="width: 18px;">
-                                                    <img src="{{ asset('public/admin/assets/images/whatsapp.png') }}" alt="" width="18">
-                                                </a>
-                                            </div>
-    
-                                            <div style="text-wrap: auto;">
-                                                <p style="font-weight: 500;">K-39/5, KURIL VATARA - 1229 K-39/5, KURIL VATARA - 1229</p>
-                                            </div>
-                                        </div>
-                                    </td>
-    
-                                    <td>
-                                        <div class="">
-                                            <span class="badge bg-soft-secondary">Warehouse</span>
-                                            <p class="mt-1" style="color: #1e857a;"><strong>Banasree Warehouse (1055)</strong></p>
-                                        </div>
-                                    </td>
-    
-                                    <td>
-                                        <div class="">
-                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Sales Amount:</span> BDT 1150.00</p>
-                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Paid Amount:</span> BDT 0.00</p>
-                                            <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Due Amount:</span> BDT 1280.00</p>
-                                        </div>
-                                    </td>
-    
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-secondary">Pending</button>
-                                    </td>
-    
-                                    <td>
-                                        <div class="d-flex align-items-center gap-1"> 
-                                            <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" style="width: 20px; border-radius: 50px;"> 
-                                            <p class="mb-0">Steadfast</p> 
-                                        </div>
-                                    </td>
-    
-                                    <td>
-                                        <p>BDT 130.00</p>
-                                    </td>
-    
-                                    <td>
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <i class="ti ti-plus"></i> 
-                                        </div>
-                                    </td>
-                                </tr> --}}
+                                <td>
+                                    <div class="">
+                                        <span class="badge bg-soft-secondary">Warehouse</span>
+                                        <p class="mt-1" style="color: #1e857a;"><strong>Banasree Warehouse (1055)</strong></p>
+                                    </div>
+                                </td>
 
-                            </tbody>
-                        </table>
-                    </div>
+                                <td>
+                                    <div class="">
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Sales Amount:</span> BDT 1150.00</p>
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Paid Amount:</span> BDT 0.00</p>
+                                        <p class="mb-1"><span class="text-dark" style="font-weight: 500;">Due Amount:</span> BDT 1280.00</p>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-secondary">Pending</button>
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center gap-1"> 
+                                        <img src="{{ asset('public/admin/assets/images/steadfast.png') }}" alt="" style="width: 20px; border-radius: 50px;"> 
+                                        <p class="mb-0">Steadfast</p> 
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <p>BDT 130.00</p>
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-plus"></i> 
+                                    </div>
+                                </td>
+                            </tr> --}}
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
     
+
+    {{-- Filter Drawer Option --}}
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="filterDrawer" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h4 class="offcanvas-title" id="offcanvasExampleLabel">Product Filter</h4>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div> <!-- end offcanvas-header-->
+
+        <div class="offcanvas-body">
+            <form action="" method="" id="filterForm" enctype="multipart/form-data">
+                <div class="mb-4">
+                    <h4 class="text-dark mb-2" style="font-weight: 700;">Product Name</h4>
+
+                    <div class="bg-input-field ">
+                        <select name="product_name" id="product_name" class="form-select">
+                            <option value="" selected disabled>Select Product</option>
+
+                            @foreach ($products as $index => $row)
+                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->thumb_image) }}">{{ $row->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="text-dark mb-2" style="font-weight: 700;">Category</h4>
+
+                    <div class="bg-input-field ">
+                        <select name="category_id" id="category_id" class="form-select">
+                            <option value="" selected disabled>Select Category</option>
+
+                            @foreach ($categories as $index => $row)
+                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->category_img) }}">{{ $row->category_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="text-dark mb-2" style="font-weight: 700;">SubCategory</h4>
+
+                    <div class="bg-input-field ">
+                        <select name="subCategory_id" id="subCategory_id" class="form-select">
+                            <option value="" selected disabled>Select SubCategory</option>
+
+                            @foreach ($subCategories as $index => $row)
+                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->subcategory_img) }}">{{ $row->subcategory_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="text-dark mb-2" style="font-weight: 700;">Brand</h4>
+
+                    <div class="bg-input-field ">
+                        <select name="brand_id" id="brand_id" class="form-select">
+                            <option value="" selected disabled>Select Brand</option>
+
+                            @foreach ($brands as $index => $row)
+                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->image) }}">{{ $row->brand_name  }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="text-dark mb-2" style="font-weight: 700;">Quantity</h4>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="bg-input-field ">
+                            <label for="" class="form_labels">Min</label>
+                            <input type="number" id="min_order_value" min="1" name="min_order_value" class="form-control form_inputs" placeholder="" />
+                        </div>
+
+                        <div class="bg-input-field ">
+                            <label for="" class="form_labels">Max</label>
+                            <input type="number" id="max_order_value" min="1" name="max_order_value" class="form-control form_inputs" placeholder="" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="text-dark mb-2" style="font-weight: 700;">Creation Date Range</h4>
+
+                    <div class="bg-input-field">
+                        <div class="position-relative">
+                            <input type="text" id="creation_date" name="creation_date" class="form-control form_inputs" placeholder="Select date range" />
+                            <label for="creation_date" class="calender_icon">
+                                <i class="ti ti-calendar-event"></i>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="text-dark mb-2" style="font-weight: 700;">Admin User</h4>
+
+                    <div class="bg-input-field ">
+                        <select name="admin_user[]" id="admin_user" class="form-select" multiple>
+                            @foreach ($admins as $index => $row)
+                                <option value="{{ $row->id }}">{{ $row->name  }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" value="admin_status" id="admin_status">
+                        <label class="form-check-label" for="admin_status">
+                            Select All
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="text-dark mb-2" style="font-weight: 700;">Product Has Variant</h4>
+
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" name="product_variant" type="checkbox" value="" id="product_variant_yes">
+                            <label class="form-check-label" for="product_variant_yes">
+                                Yes
+                            </label>
+                        </div>
+        
+                        <div class="form-check">
+                            <input class="form-check-input" name="product_variant" type="checkbox" value="" id="product_variant_no">
+                            <label class="form-check-label" for="product_variant_no">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="text-dark mb-2" style="font-weight: 700;">Display Ecommerce</h4>
+
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="display_ecom" value="yes" id="dcom-yes">
+                            <label class="form-check-label" for="dcom-yes">
+                                Yes
+                            </label>
+                        </div>
+        
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="display_ecom" value="no" id="dcom-no">
+                            <label class="form-check-label" for="dcom-no">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <h4 class="text-dark mb-2" style="font-weight: 700;">Product Status</h4>
+
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="status" value="active" id="status_active">
+                            <label class="form-check-label" for="status_active">
+                                Active
+                            </label>
+                        </div>
+        
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="status" value="deactive" id="status_deactive">
+                            <label class="form-check-label" for="status_deactive">
+                                Deactive
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex align-items-center justify-content-end gap-3">
+                        <button type="button" id="resetFilter" class="btn btn-danger">Reset Filter</button>
+                        <button type="submit" class="btn btn-secondary">Apply Filter</button>
+                    </div>
+                </div>
+            </form>
+        </div> <!-- end offcanvas-body-->
+    </div>
 
 @endsection
 
@@ -438,6 +623,108 @@
             }
             // Initialize both inputs
             initDateRangePicker('#discount_date', "down");
+            initDateRangePicker('#creation_date', "auto");
+            initDateRangePicker('#shipping_date', "auto");
+            initDateRangePicker('#transition_date', "auto");
+        });
+    </script>
+
+    <script>
+        $('#product_name').select2({
+            dropdownParent: $('#filterDrawer'),
+            templateResult: formatState,       
+            templateSelection: formatState, 
+        });
+
+        $('#category_id').select2({
+            dropdownParent: $('#filterDrawer'),
+            templateResult: formatState,       
+            templateSelection: formatState, 
+        });
+
+        $('#subCategory_id').select2({
+            dropdownParent: $('#filterDrawer'),
+            templateResult: formatState,       
+            templateSelection: formatState, 
+        });
+
+        $('#brand_id').select2({
+            dropdownParent: $('#filterDrawer'),
+            templateResult: formatState,       
+            templateSelection: formatState, 
+        });
+        
+        $('#admin_user').select2({
+            placeholder: "Select users",
+            closeOnSelect: false,
+        });
+
+        $('#cus_tag').select2({
+            placeholder: "Select Customer Tag",
+            closeOnSelect: false,
+        });
+
+        function formatState (state) {
+            if (!state.id) {
+                return state.text; // Return text for disabled option
+            }
+
+            var imageUrl = $(state.element).data('image-url'); // Access image URL from data attribute
+
+            if (!imageUrl) {
+                return state.text; // Return text if no image URL is available
+            }
+
+            var $state = $(
+                '<span><img src="' + imageUrl + '" style="width: 30px; height: 30px; border-radius: 6px; margin-right: 8px;" /> ' + state.text + '</span>'
+            );
+            return $state;
+        };
+
+
+        /* -------- SELECT ALL -------- */
+        $('#admin_status').on('change', function () {
+            if ($(this).is(':checked')) {
+                let allValues = [];
+
+                $('#admin_user option').each(function () {
+                    allValues.push($(this).val());
+                });
+
+                $('#admin_user').val(allValues).trigger('change');
+            } else {
+                $('#admin_user').val(null).trigger('change');
+            }
+        });
+
+        /* -------- ON SELECT / UNSELECT -------- */
+        $('#admin_user').on('change', function () {
+            let total = $('#admin_user option').length;
+            let selected = $('#admin_user option:selected').length;
+
+            $('#admin_status').prop('checked', total === selected);
+        });
+
+
+
+        // Reset Filter
+        $('#resetFilter').on('click', function () {
+            $('.form-check-input').prop('checked', false);
+            $('.form_inputs').val('');
+            $('.select_form').val('');
+
+            /* ---DATE RANGE PICKER  --- */
+            if ($('.daterange').length) {
+                $('.daterange').val('');
+            }
+
+            /* -----SELECT2 RESET ---- */
+            $('.select2-hidden-accessible').each(function () {
+                $(this).val(null).trigger('change');
+            });
+
+            /* ----- MULTI SELECT / SELECT2 ----- */
+            $('select[multiple]').val(null).trigger('change');
         });
     </script>
 
@@ -461,10 +748,22 @@
                 "ajax": {
                     "url" : "{{ route('admin.product-data') }}",
                     "data": function(e){
-                        e.category_id     = $('#category_id').val();
-                        e.subCategory_id  = $('#subCategory_id').val();
-                        e.product_qty     = $('#product_qty').val();
-                        e.product_price   = $('#product_price').val();
+                        e.product_name     = $('#product_name').val();
+                        e.category_id      = $('#category_id').val();
+                        e.subCategory_id   = $('#subCategory_id').val();
+                        e.brand_id         = $('#brand_id').val();
+
+                        e.min_qty          = $('#min_order_value').val();
+                        e.max_qty          = $('#max_order_value').val();
+
+                        e.creation_date    = $('#creation_date').val();
+                        e.admin_user       = $('#admin_user').val(); // array (select2 multiple)
+
+                        e.product_variant  = $('input[name="product_variant"]:checked').val() ?? null;
+
+                        e.display_ecom     = $('input[name="display_ecom"]:checked').val() ?? null;
+
+                        e.status           = $('input[name="status"]:checked').val() ?? null;
                     }
                 },
                 pageLength: 10,
@@ -509,9 +808,6 @@
                             {
                                 text: `<i class="ti ti-refresh"></i>`,
                                 className: 'btn btn-outline-secondary refresh_btn',
-                                action: function (e, dt, node, config) {
-                                    alert('Button activated');
-                                }
                             },
                             {
                                 text: '<i class="ti ti-adjustments"></i> Filter Column',
@@ -519,7 +815,7 @@
                                 action: function () {
                                     // Bootstrap dropdown will handle it
                                 }
-                            }
+                            },
                         ],
                         pageLength: {
                             menu: [10, 25, 50, 100, 250, -1]
@@ -574,6 +870,16 @@
                 }
             });
 
+            $('#filterForm').on('submit', function (e) {
+                e.preventDefault(); // 🔥 stop page reload
+                datatables.ajax.reload(); // 🔥 reload datatable with filters
+            });
+
+            // refresh the datatables data
+            $(document).on('click', '.refresh_btn', function (e) {
+                e.preventDefault();
+                datatables.ajax.reload(null, false); // 🔥 correct
+            });
 
             // status updates
             $(document).on('click', '#status', function () {
@@ -658,30 +964,6 @@
                     }
                 })
             })
-
-
-            //____ category_id Select2 ____//
-            $('#units').select2({
-                templateResult: formatState,       
-                templateSelection: formatState, 
-            });
-
-            function formatState (state) {
-                if (!state.id) {
-                    return state.text; // Return text for disabled option
-                }
-
-                var imageUrl = $(state.element).data('image-url'); // Access image URL from data attribute
-
-                if (!imageUrl) {
-                    return state.text; // Return text if no image URL is available
-                }
-
-                var $state = $(
-                    '<span><img src="' + imageUrl + '" style="width: 35px; height: 30px; margin-right: 8px;" /> ' + state.text + '</span>'
-                );
-                return $state;
-            };
         });
 
     </script>

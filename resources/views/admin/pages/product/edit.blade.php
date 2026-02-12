@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @push('title')
-    Create Product
+    Update Product
 @endpush
 
 
@@ -110,7 +110,7 @@
     </div>
     
 
-    <form id="createForm" method="POST" enctype="multipart/form-data">
+    <form id="updateForm" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="row">
@@ -124,7 +124,7 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="name"><b>Product Name</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="text" name="name" class="form-control name_validate" id="name"  placeholder="Product Name" value="{{ old('name') }}">
+                                        <input type="text" name="name" class="form-control name_validate" id="name"  placeholder="Product Name" value="{{ old('name', $product->name) }}">
 
                                         <span id="name_validate" class="invalid-feedback mt-1"></span>
                                     </div>
@@ -138,7 +138,7 @@
                                             <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp text-info" data-bs-original-title="Also known as SKU. If you leave this field empty, it will be generated automatically." aria-label="Also known as SKU. If you leave this field empty, it will be generated automatically."></i></b>
                                     </label>
                                     <div class="col-8">
-                                        <input type="text" name="sku" class="form-control sku_validate" autocomplete="off" id="code" placeholder="Product Code" value="{{ old('sku') }}">
+                                        <input type="text" name="sku" class="form-control sku_validate" autocomplete="off" id="code" placeholder="Product Code" value="{{ old('sku', $product->sku) }}">
 
                                         <span id="sku_validate" class="invalid-feedback mt-1"></span>
                                     </div>
@@ -157,7 +157,7 @@
                                                 <select class="form-select unit_id_validate" id="unit_id" name="unit_id">
                                                     <option value="" disabled selected>Select</option>
                                                     @foreach ($units as $row)
-                                                        <option value="{{ $row->id }}">{{ $row->unit }} ( {{ $row->short_name }} )</option>
+                                                        <option value="{{ $row->id }}" {{ $product->unit_id == $row->id ? 'selected' : '' }}>{{ $row->unit }} ( {{ $row->short_name }} )</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -199,7 +199,7 @@
                                                     @foreach ($categories as $row)
                                                         <option value="{{ $row->id }}" 
                                                             data-image-url="{{ asset($row->category_img) }}"
-                                                            {{ old('category_id') }}
+                                                            {{ $product->category_id == $row->id ? 'selected' : '' }}
                                                             >{{ $row->category_name }}</option>
                                                     @endforeach
                                                 </select>
@@ -226,7 +226,7 @@
                                                     @foreach ($subCategories as $row)
                                                         <option value="{{ $row->id }}" 
                                                             data-image-url="{{ asset($row->subcategory_img) }}"
-                                                            {{ old('subCategory_id') }}
+                                                            {{ $product->subCategory_id == $row->id ? 'selected' : '' }}
                                                             >{{ $row->subcategory_name }}</option>
                                                     @endforeach
                                                 </select>
@@ -255,6 +255,7 @@
                                                     <option value="" disabled selected>Select</option>
                                                     @foreach ($warranties as $row)
                                                         <option value="{{ $row->id }}" 
+                                                            {{ $product->warranties_id == $row->id ? 'selected' : '' }}
                                                             >{{ $row->duration }}  {{ Str::ucfirst($row->period) }}</option>
                                                     @endforeach
                                                 </select>
@@ -282,7 +283,7 @@
                                                     <option value="" disabled selected>Select</option>
                                                     @foreach ($childCategories as $row)
                                                         <option value="{{ $row->id }}" 
-                                                            data-image-url="{{ asset($row->img) }}"
+                                                            data-image-url="{{ asset($row->img) }}" {{ $product->childCategory_id == $row->id ? 'selected' : '' }}
                                                             >{{ $row->name }}</option>
                                                     @endforeach
                                                 </select>
@@ -312,7 +313,7 @@
                                                     @foreach ($brands as $row)
                                                         <option value="{{ $row->id }}" 
                                                             data-image-url="{{ asset($row->image) }}"
-                                                            {{ old('brand_id') }}
+                                                            {{ $product->brand_id == $row->id ? 'selected' : '' }}
                                                             >{{ $row->brand_name  }}</option>
                                                     @endforeach
                                                 </select>
@@ -332,7 +333,7 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="alert_qty"><b>Alert Quantity</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="number" name="alert_qty" class="form-control alert_qty_validate" id="alert_qty" min="1" value="{{ old('alert_qty') }}">
+                                        <input type="number" name="alert_qty" class="form-control alert_qty_validate" id="alert_qty" min="1" value="{{ old('alert_qty', $product->alert_qty) }}">
 
                                         <span id="alert_qty_validate" class="invalid-feedback mt-1"></span>
                                     </div>
@@ -360,7 +361,7 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="stocks"><b>Stock</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="number" name="qty" class="form-control qty_validate" id="stocks" min="1" value="{{ old('qty') }}">
+                                        <input type="number" name="qty" class="form-control qty_validate" id="stocks" min="1" value="{{ old('qty', $product->qty) }}">
 
                                         <span id="qty_validate" class="invalid-feedback mt-1"></span>
                                     </div>
@@ -461,7 +462,7 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label" for="long_description"><b>Long Description</b> <span class="text-danger">*</span></label>
-                                    <textarea class="form-control long_description_validate" id="long_description" name="long_description" rows="8" placeholder="Long Description....">{{ old('long_description') }}</textarea>
+                                    <textarea class="form-control long_description_validate" id="long_description" name="long_description" rows="8" placeholder="Long Description....">{{ old('long_description', $product->long_description) }}</textarea>
 
                                     <span id="long_description_validate" class="invalid-feedback mt-1"></span>
                                 </div>
@@ -469,12 +470,12 @@
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label" for="video_link"><b>Video Link</b></label>
-                                <textarea class="form-control" id="video_link" name="video_link"  rows="7" placeholder="Link Paste Here....">{{ old('video_link') }}</textarea>
+                                <textarea class="form-control" id="video_link" name="video_link"  rows="7" placeholder="Link Paste Here....">{{ old('video_link', $product->video_link) }}</textarea>
                             </div>
                 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label" for="short"><b>Short Description</b> <span class="text-danger">*</span></label>
-                                <textarea class="form-control short_description_validate" id="short" class="" name="short_description" rows="7" placeholder="Short Description....">{{ old('short_description') }}</textarea>
+                                <textarea class="form-control short_description_validate" id="short" class="" name="short_description" rows="7" placeholder="Short Description....">{{ old('short_description', $product->short_description) }}</textarea>
                 
                                 <span id="short_description_validate" class="invalid-feedback mt-1"></span>
                             </div>
@@ -483,7 +484,7 @@
                                 <div class="input-group mb-1">
                                     <label class="form-label col-3" for="product_size"><strong>Multiple Products Tag</strong></label>
                                     <div class="col-9">
-                                        <input type="text" class="product-tags" value="{{ old('tags') }}" name="tags" />
+                                        <input type="text" class="product-tags" value="{{ old('tags', $product->tags) }}" name="tags" />
                                     </div>
                                 </div>
                             </div>

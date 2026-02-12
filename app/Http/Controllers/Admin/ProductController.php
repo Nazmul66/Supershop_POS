@@ -169,40 +169,13 @@ class ProductController extends Controller
                        <h6><span class="text-dark">'. $product->final_qty .' '. Str::title($product->short_name) .' </span></h6>
                 </div>';
             })
-            ->addColumn('action', function ($product) {
-                $actionHtml = Blade::render('<div class="copy-row">
-                    <div class="all_icons mb-2">
-                        <i class="ti ti-settings cursor-pointer text-secondary" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Multi Product Image"></i>
-
-                        <a href="'. route('admin.product.show', $product->id) .'">
-                            <i data-tooltip="tip1" class="ti ti-eye cursor-pointer tooltip-trigger"
-                            data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="View"></i>
-                        </a>
-
-                        @if(auth("admin")->user()->can("update.product"))
-                            <a href="'. route('admin.product.edit', $product->id) .'">
-                                <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-info" data-bs-placement="top" data-bs-original-title="Edit"></i>
-                            </a>
-                        @endif
-
-                        @if(auth("admin")->user()->can("delete.product"))
-                            <a href="javascript:void(0)" data-id="'.$product->id.'" id="deleteBtn">
-                                <i class="ti ti-trash cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-danger" data-bs-placement="top" title="Delete"></i>
-                            </a>
-                        @endif
-                    </div>
-                </div>', ['product' => $product]);
-                return $actionHtml;
-            })
             ->addColumn('product_name', function ($product) {
                 $icon = '';
 
                 if (!is_null($product->variant_qty)) {
-                    $icon = '<i data-bs-effect="effect-scale"
-                                data-bs-toggle="modal"
-                                href="#customer_history"
-                                class="ti ti-info-circle cursor-pointer"
-                                style="font-size: 18px;"></i>';
+                    $icon = '<i data-bs-toggle="tooltip" data-bs-custom-class="tooltip-dark" data-bs-placement="top" data-bs-original-title="Product Variants"
+                        class="ti ti-info-circle cursor-pointer"
+                        style="font-size: 18px;"></i>';
                 }
 
                 return '<div class="copy-row">
@@ -210,7 +183,7 @@ class ProductController extends Controller
 
                     <div class="d-flex align-items-center gap-1 mb-1">
                         <span class="badge badge-sm bg-primary">New</span>
-                        '.$icon.'
+                        <span class="variant_icon" data-id='. $product->id .'>'.$icon.'</span>
                     </div>
                 </div>';
             })
@@ -261,6 +234,31 @@ class ProductController extends Controller
                 else{
                     return '<span class="badge bg-info">N/A</span>'; 
                 }
+            })
+            ->addColumn('action', function ($product) {
+                $actionHtml = Blade::render('<div class="copy-row">
+                    <div class="all_icons mb-2">
+                        <i class="ti ti-settings cursor-pointer text-secondary" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Multi Product Image"></i>
+
+                        <a href="'. route('admin.product.show', $product->id) .'">
+                            <i data-tooltip="tip1" class="ti ti-eye cursor-pointer tooltip-trigger"
+                            data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="View"></i>
+                        </a>
+
+                        @if(auth("admin")->user()->can("update.product"))
+                            <a href="'. route('admin.product.edit', $product->id) .'">
+                                <i class="ti ti-edit cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-info" data-bs-placement="top" data-bs-original-title="Edit"></i>
+                            </a>
+                        @endif
+
+                        @if(auth("admin")->user()->can("delete.product"))
+                            <a href="javascript:void(0)" data-id="'.$product->id.'" id="deleteBtn">
+                                <i class="ti ti-trash cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-danger" data-bs-placement="top" title="Delete"></i>
+                            </a>
+                        @endif
+                    </div>
+                </div>', ['product' => $product]);
+                return $actionHtml;
             })
             ->rawColumns(['checkbox', 'product_name', 'quantity', 'date_info', 'product_details', 'product_img', 'status', 'action'])
             ->make(true);
@@ -416,13 +414,16 @@ class ProductController extends Controller
         }
 
         // dd($product);
-        $categories        = Category::get_data();
-        $subCategories     = Subcategory::get_data();
-        $childCategories   = ChildCategory::get_data();
-        $brands            = Brand::get_data();
-        $product           = Product::findOrFail($id);
+        $product              = Product::findOrFail($id);
+        $categories           = Category::get_data();
+        $subCategories        = Subcategory::get_data();
+        $childCategories      = ChildCategory::get_data();
+        $brands               = Brand::get_data();
+        $units                = Unit::get_data();
+        $warranties           = Warranty::get_data();
+        $tax_rates            = TaxRate::get_data();
 
-        return view('backend.pages.products.edit', compact('categories', 'subCategories', 'childCategories', 'brands', 'product'));
+        return view('admin.pages.product.edit', compact('categories', 'subCategories', 'childCategories', 'brands', 'tax_rates', 'warranties', 'units', 'product'));
     }
 
     /**
@@ -513,6 +514,25 @@ class ProductController extends Controller
         return response()->json(['message' => 'Product has been deleted.'], 200);
     }
 
+
+    public function product_variant_show(Request $request)
+    {
+        // dd($request->id);
+        $product = Product::leftJoin('categories', 'categories.id', 'products.category_id')
+                ->leftJoin('subcategories', 'subcategories.id', 'products.subCategory_id')
+                ->leftJoin('child_categories', 'child_categories.id', 'products.childCategory_id')
+                ->leftJoin('brands', 'brands.id', 'products.brand_id')
+                ->leftJoin('units', 'units.id', 'products.unit_id')
+                ->select('products.*', 'categories.category_name as cat_name', 'subcategories.subcategory_name as subCat_name', 'child_categories.name as childCat_name', 'brands.brand_name', 'units.short_name')
+                ->where('products.id', $request->id)
+                ->first();
+
+        $variants = ProductVariant::where('product_id', $request->id)->get();
+        return response()->json([
+            'success' => $variants,
+            'product' => $product,
+        ]);
+    }
     // public function getSubCategories(Request $request, Category $category)
     // {
     //     $subcats= SubCategory::where('category_id', $category->id)->get();
@@ -553,7 +573,8 @@ class ProductController extends Controller
                 ->leftJoin('subcategories', 'subcategories.id', 'products.subCategory_id')
                 ->leftJoin('child_categories', 'child_categories.id', 'products.childCategory_id')
                 ->leftJoin('brands', 'brands.id', 'products.brand_id')
-                ->select('products.*', 'categories.category_name as cat_name', 'subcategories.subcategory_name as subCat_name', 'child_categories.name as childCat_name', 'brands.brand_name')
+                ->leftJoin('units', 'units.id', 'products.unit_id')
+                ->select('products.*', 'categories.category_name as cat_name', 'subcategories.subcategory_name as subCat_name', 'child_categories.name as childCat_name', 'brands.brand_name', 'units.short_name')
                 ->where('products.id', $id)
                 ->first();
 

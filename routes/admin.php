@@ -150,6 +150,7 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     //______ Product _____//
     Route::resource('/product', ProductController::class)->names('product');
     Route::get('/product-data', [ProductController::class, 'getData'])->name('product-data');
+    Route::get('/product-variant', [ProductController::class, 'product_variant_show'])->name('product-variant');
     Route::post('/change-product-status', [ProductController::class, 'changeProductStatus'])->name('product.status');
 
 

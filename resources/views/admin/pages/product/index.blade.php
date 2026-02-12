@@ -404,10 +404,10 @@
 
                     <div class="bg-input-field ">
                         <select name="category_id" id="category_id" class="form-select">
-                            <option value="" selected disabled>Select Category</option>
-
+                            <option value=" " selected  data-image-url="{{ asset('public/admin/assets/images/select_option.png') }}">Select Category</option>
+                                                        
                             @foreach ($categories as $index => $row)
-                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->category_img) }}" {{ request('category_id') == $row->id ? 'selected' : '' }}>{{ $row->category_name }}</option>
+                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->category_img) }}" {{ request('category_id') == $row->id ? 'selected' : '' }}><strong>{{ $row->category_name }}</strong></option>
                             @endforeach
                         </select>
                     </div>
@@ -418,7 +418,7 @@
 
                     <div class="bg-input-field ">
                         <select name="subCategory_id" id="subCategory_id" class="form-select">
-                            <option value="" selected disabled>Select SubCategory</option>
+                            <option value=" " selected data-image-url="{{ asset('public/admin/assets/images/select_option.png') }}">Select SubCategory</option>
 
                             @foreach ($subCategories as $index => $row)
                                 <option value="{{ $row->id }}" data-image-url="{{ asset($row->subcategory_img) }}" {{ request('subCategory_id') == $row->id ? 'selected' : '' }}>{{ $row->subcategory_name }}</option>
@@ -432,7 +432,7 @@
 
                     <div class="bg-input-field ">
                         <select name="brand_id" id="brand_id" class="form-select">
-                            <option value="" selected disabled>Select Brand</option>
+                            <option value=" " selected data-image-url="{{ asset('public/admin/assets/images/select_option.png') }}">Select Brand</option>
 
                             @foreach ($brands as $index => $row)
                                 <option value="{{ $row->id }}" data-image-url="{{ asset($row->image) }}"  {{ request('brand_id') == $row->id ? 'selected' : '' }}>{{ $row->brand_name  }}</option>
@@ -563,6 +563,43 @@
                 </div>
             </form>
         </div> <!-- end offcanvas-body-->
+    </div>
+
+    {{-- Product Variant Modal --}}
+    <div id="variant_history" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+    style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content modal_loader">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Product Variants</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="table-responsive pb-3">
+                        <table class="table table-hover table-nowrap mb-0">
+                            <thead>
+                                <tr>
+                                    <th>#Sl No.</th>
+                                    <th>Variant Name</th>
+                                    <th>Variant Code</th>
+                                    <th>Qty</th>
+                                    <th>Alert Qty</th>
+                                    <th>Cost Price</th>
+                                    <th>Profit Margin</th>
+                                    <th>Selling Price</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+    
+                            <tbody id="t_product_variants">
+                            
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
     </div>
 
 @endsection
@@ -915,7 +952,7 @@
 
                 /* -----SELECT2 RESET ---- */
                 $('.select2-hidden-accessible').each(function () {
-                    $(this).val(null).trigger('change');
+                    $(this).val(' ').trigger('change');
                 });
 
                 /* ----- MULTI SELECT / SELECT2 ----- */
@@ -928,6 +965,74 @@
                 // Reload Datatables
                 datatables.ajax.reload();
             });
+
+            // Product Variant Show
+            $(document).on("click", '.variant_icon', function (e) {
+                let id = $(this).attr('data-id');
+                // alert(id);
+
+                // Show the modal first
+                $('#variant_history').modal('show');
+
+                // Save original modal content to restore later
+                let originalContent = $('.modal_loader').html();
+
+                $.ajax({
+                    type: 'GET',
+                    url: "{{ route('admin.product-variant') }}",
+                    data: { id: id }, // send product id
+                    beforeSend: function() {
+                        // show loader
+                        $('#variant_history .modal-dialog')
+                            .removeClass('modal-lg') // remove large
+                            .addClass('modal-sm'); 
+
+                        $('.modal_loader').html(`
+                            <div class="loader_measurement">
+                                <div class="spinning_loader"</div>    
+                            </div>
+                        `);
+                    },
+                    success: function (res) {
+                        let data = res.success;
+                        let product = res.product;
+
+                        $('#variant_history .modal-dialog')
+                            .removeClass('modal-sm') // remove small
+                            .addClass('modal-lg'); 
+
+                        let html = '';
+
+                        if (data.length > 0) {
+                            data.forEach((v, index) => {
+                                html += `<tr>
+                                    <td>${index + 1}</td>
+                                    <td>${v.variant_name}</td>
+                                    <td>${v.variant_code}</td>
+                                    <td>${v.qty} ${product.short_name ? product.short_name.charAt(0).toUpperCase() + product.short_name.slice(1): ''}</td>
+                                    <td>${v.alert_qty} ${product.short_name ? product.short_name.charAt(0).toUpperCase() + product.short_name.slice(1): ''}</td>
+                                    <td>{{ getSetting()->currency_name }} ${v.purchase_price}</td>
+                                    <td>${v.profit_margin} %</td>
+                                    <td>{{ getSetting()->currency_name }} ${v.selling_price}</td>
+                                    <td>${v.status == 1 ? '<button class="btn btn-success btn-sm">Active</button>' : '<button class="btn btn-success btn-sm">Deactive</button>'}</td>
+                                </tr>`;
+                            });
+                        } else {
+                            html = '<tr><td colspan="9" class="text-center">No variants found</td></tr>';
+                        }
+
+                        // Restore original modal content
+                        $('.modal_loader').html(originalContent);
+
+                        // Inject table rows
+                        $('#t_product_variants').html(html);
+                    },
+                    error: function (error) {
+                        console.log('error');
+                    }
+                    /* HTML: <div class="loader"></div> */
+                });
+            })
 
             // status updates
             $(document).on('click', '#status', function () {

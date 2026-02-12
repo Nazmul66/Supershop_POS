@@ -20,6 +20,7 @@ use App\Models\Warranty;
 use App\Models\ProductVariant;
 use Brian2694\Toastr\Facades\Toastr;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
@@ -76,38 +77,82 @@ class ProductController extends Controller
 
     public function getData(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         // get all data
         $products = "";
            $query = Product::leftJoin('categories', 'categories.id', 'products.category_id')
                     ->leftJoin('subcategories', 'subcategories.id', 'products.subCategory_id')
                     ->leftJoin('child_categories', 'child_categories.id', 'products.childCategory_id')
                     ->leftJoin('brands', 'brands.id', 'products.brand_id')
-                    ->leftJoin('units', 'units.id', 'products.unit_id');
+                    ->leftJoin('units', 'units.id', 'products.unit_id')
+                    ->leftJoin(
+                        DB::raw('(SELECT product_id, SUM(qty) as variant_total_qty 
+                                  FROM product_variants 
+                                  GROUP BY product_id) as pv'),
+                        'pv.product_id','=','products.id'
+                    );
                    
+                    // Category
                     if( !empty($request->category_id) ){
                         $query->where('products.category_id', $request->category_id);
                     }
 
+                    // Subcategory
                     if( !empty($request->subCategory_id) ){
                         $query->where('products.subCategory_id', $request->subCategory_id);
                     }
 
-                    if( !empty($request->product_qty) ){
-                        $qtyRange = explode('-', $request->product_qty);
-                        if (count($qtyRange) === 2) {
-                            $query->whereBetween('qty', [$qtyRange[0], $qtyRange[1]]);
+                    // Brand
+                    if( !empty($request->brand_id) ){
+                        $query->where('products.brand_id', $request->brand_id);
+                    }
+
+                    if( $request->filled(['min_qty', 'max_qty']) ) {
+                        $query->whereBetween(
+                            DB::raw('COALESCE(pv.variant_total_qty, products.qty)'),
+                            [$request->min_qty, $request->max_qty]);
+                    }
+
+                    // Date Range created_at
+                    if (!empty($request->creation_date)) {
+
+                        $dates = explode(' - ', $request->creation_date);
+                    
+                        if (count($dates) === 2) {
+                            $start = Carbon::parse($dates[0])->startOfDay();
+                            $end   = Carbon::parse($dates[1])->endOfDay();
+                    
+                            $query->whereBetween('products.created_at', [$start, $end]);
                         }
                     }
 
-                    if( !empty($request->product_price) ){
-                        $priceRange = explode('-', $request->product_price);
-                        if (count($priceRange) === 2) {
-                            $query->whereBetween('selling_price', [$priceRange[0], $priceRange[1]]);
-                        }
+                    // Admin User
+                    if (!empty($request->admin_user)) {
+                        $query->whereIn('products.created_by', $request->admin_user);
                     }
 
-            $products = $query->select('products.*', 'categories.category_name as cat_name', 'subcategories.subcategory_name as subCat_name', 'child_categories.name as childCat_name', 'brands.brand_name', 'units.short_name')
+                    // Product Variant
+                    if (!empty($request->product_variant)) {
+                        $query->whereIn('products.has_variant', $request->product_variant);
+                    }
+
+                    // Display Ecommerce
+                    if (!empty($request->display_ecom)) {
+                        $query->whereIn('products.display_ecommerce', $request->display_ecom);
+                    }
+
+                    // Status
+                    if (!empty($request->status)) {
+                        $query->whereIn('products.status', $request->status);
+                    }
+
+            $products = $query->select('products.*', 
+                    'categories.category_name as cat_name', 
+                    'subcategories.subcategory_name as subCat_name', 
+                    'child_categories.name as childCat_name', 
+                    'brands.brand_name', 'units.short_name',
+                    DB::raw('pv.variant_total_qty as variant_qty'),
+                    DB::raw('COALESCE(pv.variant_total_qty, products.qty) as final_qty'))
                     ->orderBy('products.id', "DESC")
                     ->get();
 
@@ -118,6 +163,11 @@ class ProductController extends Controller
                         <input type="checkbox" id="select-all">
                         <span class="checkmarks"></span>
                     </label>';
+            })
+            ->addColumn('quantity', function ($product) {
+                return '<div class="">
+                       <h6><span class="text-dark">'. $product->final_qty .' '. Str::title($product->short_name) .' </span></h6>
+                </div>';
             })
             ->addColumn('action', function ($product) {
                 $actionHtml = Blade::render('<div class="copy-row">
@@ -145,12 +195,22 @@ class ProductController extends Controller
                 return $actionHtml;
             })
             ->addColumn('product_name', function ($product) {
+                $icon = '';
+
+                if (!is_null($product->variant_qty)) {
+                    $icon = '<i data-bs-effect="effect-scale"
+                                data-bs-toggle="modal"
+                                href="#customer_history"
+                                class="ti ti-info-circle cursor-pointer"
+                                style="font-size: 18px;"></i>';
+                }
+
                 return '<div class="copy-row">
                     <h6 style="color: #1e857a;" class="mb-1"><strong>'. $product->name .'</strong></h6>
 
                     <div class="d-flex align-items-center gap-1 mb-1">
                         <span class="badge badge-sm bg-primary">New</span>
-                        <i data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer_history" class="ti ti-info-circle cursor-pointer" style="font-size: 18px;"></i>
+                        '.$icon.'
                     </div>
                 </div>';
             })
@@ -183,11 +243,6 @@ class ProductController extends Controller
                     <p class="mb-1"><span class="text-dark" style="font-weight: 600;">Created by:</span> '. $created_by.'</p>
 
                     <p class="mb-1"><span class="text-dark" style="font-weight: 600;">Updated by:</span> '. $updated_by .'</p>
-                </div>';
-            })
-            ->addColumn('quantity', function ($product) {
-                return '<div class="">
-                       <h6><span class="text-dark">'. $product->qty .' '. Str::title($product->short_name) .' </span></h6>
                 </div>';
             })
             ->addColumn('status', function ($product) {

@@ -215,6 +215,8 @@
 
 @section('body-content')
 
+
+{{-- @dd(request('category_id'), request('subCategory_id'), request('brand_id'), request('admin_user'), request('product_variant')); --}}
     <!-- Breadcrumb -->
     <div class="page-header">
         <div class="add-item d-flex">
@@ -247,7 +249,7 @@
             <button type="button" class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer" aria-controls="offcanvasExample"><i class="ti ti-filter me-1"></i>Filter</button>
 
             @if(auth("admin")->user()->can("create.brand"))
-                <a href="" class="btn btn-teal"><i class="ti ti-circle-plus me-1"></i>Add Product</a>
+                <a href="{{ route('admin.product.create') }}" class="btn btn-teal"><i class="ti ti-circle-plus me-1"></i>Add Product</a>
              @endif
         </div>
     </div>
@@ -396,21 +398,7 @@
         </div> <!-- end offcanvas-header-->
 
         <div class="offcanvas-body">
-            <form action="" method="" id="filterForm" enctype="multipart/form-data">
-                <div class="mb-4">
-                    <h4 class="text-dark mb-2" style="font-weight: 700;">Product Name</h4>
-
-                    <div class="bg-input-field ">
-                        <select name="product_name" id="product_name" class="form-select">
-                            <option value="" selected disabled>Select Product</option>
-
-                            @foreach ($products as $index => $row)
-                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->thumb_image) }}">{{ $row->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
+            <form method="GET" action="{{ route('admin.product.index') }}" id="filterForm" enctype="multipart/form-data">
                 <div class="mb-4">
                     <h4 class="text-dark mb-2" style="font-weight: 700;">Category</h4>
 
@@ -419,7 +407,7 @@
                             <option value="" selected disabled>Select Category</option>
 
                             @foreach ($categories as $index => $row)
-                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->category_img) }}">{{ $row->category_name }}</option>
+                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->category_img) }}" {{ request('category_id') == $row->id ? 'selected' : '' }}>{{ $row->category_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -433,7 +421,7 @@
                             <option value="" selected disabled>Select SubCategory</option>
 
                             @foreach ($subCategories as $index => $row)
-                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->subcategory_img) }}">{{ $row->subcategory_name }}</option>
+                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->subcategory_img) }}" {{ request('subCategory_id') == $row->id ? 'selected' : '' }}>{{ $row->subcategory_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -447,7 +435,7 @@
                             <option value="" selected disabled>Select Brand</option>
 
                             @foreach ($brands as $index => $row)
-                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->image) }}">{{ $row->brand_name  }}</option>
+                                <option value="{{ $row->id }}" data-image-url="{{ asset($row->image) }}"  {{ request('brand_id') == $row->id ? 'selected' : '' }}>{{ $row->brand_name  }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -459,12 +447,12 @@
                     <div class="d-flex align-items-center gap-2">
                         <div class="bg-input-field ">
                             <label for="" class="form_labels">Min</label>
-                            <input type="number" id="min_order_value" min="1" name="min_order_value" class="form-control form_inputs" placeholder="" />
+                            <input type="number" id="min_qty" min="1" name="min_qty" class="form-control form_inputs" value="{{ request('min_qty') }}" placeholder="" />
                         </div>
 
                         <div class="bg-input-field ">
                             <label for="" class="form_labels">Max</label>
-                            <input type="number" id="max_order_value" min="1" name="max_order_value" class="form-control form_inputs" placeholder="" />
+                            <input type="number" id="max_qty" min="1" name="max_qty" class="form-control form_inputs" value="{{ request('max_qty') }}" placeholder="" />
                         </div>
                     </div>
                 </div>
@@ -474,7 +462,7 @@
 
                     <div class="bg-input-field">
                         <div class="position-relative">
-                            <input type="text" id="creation_date" name="creation_date" class="form-control form_inputs" placeholder="Select date range" />
+                            <input type="text" id="creation_date" name="creation_date" class="form-control form_inputs" value="{{ request('creation_date') }}" placeholder="Select date range" />
                             <label for="creation_date" class="calender_icon">
                                 <i class="ti ti-calendar-event"></i>
                             </label>
@@ -488,13 +476,19 @@
                     <div class="bg-input-field ">
                         <select name="admin_user[]" id="admin_user" class="form-select" multiple>
                             @foreach ($admins as $index => $row)
-                                <option value="{{ $row->id }}">{{ $row->name  }}</option>
+                                <option value="{{ $row->id }}" {{ in_array($row->id, request('admin_user', [])) ? 'selected' : '' }}>{{ $row->name  }}</option>
                             @endforeach
                         </select>
                     </div>
 
+                    @php
+                        $selectedAdmins = request('admin_user', []);
+                        $allAdminIds = $admins->pluck('id')->toArray();
+                        $isAllSelected = count($selectedAdmins) === count($allAdminIds) && count($allAdminIds) > 0;
+                    @endphp
+
                     <div class="form-check mt-2">
-                        <input class="form-check-input" type="checkbox" value="admin_status" id="admin_status">
+                        <input class="form-check-input" type="checkbox" value="admin_status" id="admin_status" {{ $isAllSelected ? 'checked' : '' }}>
                         <label class="form-check-label" for="admin_status">
                             Select All
                         </label>
@@ -506,14 +500,14 @@
 
                     <div class="d-flex align-items-center gap-3">
                         <div class="form-check">
-                            <input class="form-check-input" name="product_variant" type="checkbox" value="" id="product_variant_yes">
+                            <input class="form-check-input" name="product_variant[]" type="checkbox" value="yes" id="product_variant_yes" {{ in_array('yes', request('product_variant', [])) ? 'checked' : '' }}>
                             <label class="form-check-label" for="product_variant_yes">
                                 Yes
                             </label>
                         </div>
         
                         <div class="form-check">
-                            <input class="form-check-input" name="product_variant" type="checkbox" value="" id="product_variant_no">
+                            <input class="form-check-input" name="product_variant[]" type="checkbox" value="no" id="product_variant_no" {{ in_array('no', request('product_variant', [])) ? 'checked' : '' }}>
                             <label class="form-check-label" for="product_variant_no">
                                 No
                             </label>
@@ -526,14 +520,14 @@
 
                     <div class="d-flex align-items-center gap-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="display_ecom" value="yes" id="dcom-yes">
+                            <input class="form-check-input" type="checkbox" name="display_ecom[]" value="1" id="dcom-yes" {{ in_array('1', request('display_ecom', [])) ? 'checked' : '' }}>
                             <label class="form-check-label" for="dcom-yes">
                                 Yes
                             </label>
                         </div>
         
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="display_ecom" value="no" id="dcom-no">
+                            <input class="form-check-input" type="checkbox" name="display_ecom[]" value="0" id="dcom-no" {{ in_array('0', request('display_ecom', [])) ? 'checked' : '' }}>
                             <label class="form-check-label" for="dcom-no">
                                 No
                             </label>
@@ -546,14 +540,14 @@
 
                     <div class="d-flex align-items-center gap-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="status" value="active" id="status_active">
+                            <input class="form-check-input" type="checkbox" name="status[]" value="1" id="status_active" {{ in_array('1', request('status', [])) ? 'checked' : '' }}>
                             <label class="form-check-label" for="status_active">
                                 Active
                             </label>
                         </div>
         
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="status" value="deactive" id="status_deactive">
+                            <input class="form-check-input" type="checkbox" name="status[]" value="0" id="status_deactive" {{ in_array('0', request('status', [])) ? 'checked' : '' }}>
                             <label class="form-check-label" for="status_deactive">
                                 Deactive
                             </label>
@@ -704,28 +698,6 @@
 
             $('#admin_status').prop('checked', total === selected);
         });
-
-
-
-        // Reset Filter
-        $('#resetFilter').on('click', function () {
-            $('.form-check-input').prop('checked', false);
-            $('.form_inputs').val('');
-            $('.select_form').val('');
-
-            /* ---DATE RANGE PICKER  --- */
-            if ($('.daterange').length) {
-                $('.daterange').val('');
-            }
-
-            /* -----SELECT2 RESET ---- */
-            $('.select2-hidden-accessible').each(function () {
-                $(this).val(null).trigger('change');
-            });
-
-            /* ----- MULTI SELECT / SELECT2 ----- */
-            $('select[multiple]').val(null).trigger('change');
-        });
     </script>
 
     <script>
@@ -748,22 +720,27 @@
                 "ajax": {
                     "url" : "{{ route('admin.product-data') }}",
                     "data": function(e){
+                        function getCheckedValues(name) {
+                            return $(`input[name="${name}[]"]:checked`).map(function () {
+                                    return this.value;
+                                }).get();
+                        }
+
+                        let displayValues         = getCheckedValues('display_ecom');
+                        let productVariantValues = getCheckedValues('product_variant');
+                        let statusValues          = getCheckedValues('status');
+            
                         e.product_name     = $('#product_name').val();
                         e.category_id      = $('#category_id').val();
                         e.subCategory_id   = $('#subCategory_id').val();
                         e.brand_id         = $('#brand_id').val();
-
-                        e.min_qty          = $('#min_order_value').val();
-                        e.max_qty          = $('#max_order_value').val();
-
+                        e.min_qty          = $('#min_qty').val();
+                        e.max_qty          = $('#max_qty').val();
                         e.creation_date    = $('#creation_date').val();
                         e.admin_user       = $('#admin_user').val(); // array (select2 multiple)
-
-                        e.product_variant  = $('input[name="product_variant"]:checked').val() ?? null;
-
-                        e.display_ecom     = $('input[name="display_ecom"]:checked').val() ?? null;
-
-                        e.status           = $('input[name="status"]:checked').val() ?? null;
+                        e.product_variant  = productVariantValues;
+                        e.display_ecom     = displayValues;
+                        e.status           = statusValues;
                     }
                 },
                 pageLength: 10,
@@ -872,13 +849,84 @@
 
             $('#filterForm').on('submit', function (e) {
                 e.preventDefault(); // 🔥 stop page reload
-                datatables.ajax.reload(); // 🔥 reload datatable with filters
+
+                let params = new URLSearchParams();
+
+                // Dropdowns
+                if ($('#category_id').val())
+                    params.append('category_id', $('#category_id').val());
+
+                if ($('#subCategory_id').val())
+                    params.append('subCategory_id', $('#subCategory_id').val());
+
+                if ($('#brand_id').val())
+                    params.append('brand_id', $('#brand_id').val());
+
+                if ($('#min_qty').val())
+                    params.append('min_qty', $('#min_qty').val());
+
+                if ($('#max_qty').val())
+                    params.append('max_qty', $('#max_qty').val());
+
+                if ($('#creation_date').val())
+                    params.append('creation_date', $('#creation_date').val());
+
+                // Select2 multiple
+                let adminUsers = $('#admin_user').val();
+                if (adminUsers)
+                    adminUsers.forEach(val => params.append('admin_user[]', val));
+
+                // Checkboxes
+                $('input[name="product_variant[]"]:checked').each(function () {
+                    params.append('product_variant[]', $(this).val());
+                });
+
+                $('input[name="display_ecom[]"]:checked').each(function () {
+                    params.append('display_ecom[]', $(this).val());
+                });
+
+                $('input[name="status[]"]:checked').each(function () {
+                    params.append('status[]', $(this).val());
+                });
+
+                // Update URL
+                let newUrl = window.location.pathname + '?' + params.toString();
+                window.history.pushState({}, '', newUrl);
+
+                datatables.ajax.reload();
             });
 
             // refresh the datatables data
             $(document).on('click', '.refresh_btn', function (e) {
                 e.preventDefault();
                 datatables.ajax.reload(null, false); // 🔥 correct
+            });
+
+            // Reset Filter
+            $('#resetFilter').on('click', function () {
+                $('.form-check-input').prop('checked', false);
+                $('.form_inputs').val('');
+                $('.select_form').val('');
+
+                /* ---DATE RANGE PICKER  --- */
+                if ($('.daterange').length) {
+                    $('.daterange').val('');
+                }
+
+                /* -----SELECT2 RESET ---- */
+                $('.select2-hidden-accessible').each(function () {
+                    $(this).val(null).trigger('change');
+                });
+
+                /* ----- MULTI SELECT / SELECT2 ----- */
+                $('select[multiple]').val(null).trigger('change');
+
+                // --- REMOVE URL PARAMETERS AND RELOAD PAGE ---
+                const cleanUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+
+                // Reload Datatables
+                datatables.ajax.reload();
             });
 
             // status updates
@@ -919,7 +967,6 @@
 
                 })
             })
-
 
             // Delete
             $(document).on("click", "#deleteBtn", function () {

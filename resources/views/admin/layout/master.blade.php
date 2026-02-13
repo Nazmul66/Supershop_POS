@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en" data-layout-mode="light_mode">
+<html lang="en" data-layout-mode="light_mode" data-sidebar="light" data-color="brightblue" data-topbar="white">
 
 <head>
 

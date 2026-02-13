@@ -574,11 +574,25 @@ class ProductController extends Controller
                 ->leftJoin('child_categories', 'child_categories.id', 'products.childCategory_id')
                 ->leftJoin('brands', 'brands.id', 'products.brand_id')
                 ->leftJoin('units', 'units.id', 'products.unit_id')
-                ->select('products.*', 'categories.category_name as cat_name', 'subcategories.subcategory_name as subCat_name', 'child_categories.name as childCat_name', 'brands.brand_name', 'units.short_name')
+                ->leftJoin(
+                    DB::raw('(SELECT product_id, SUM(qty) as variant_total_qty 
+                            FROM product_variants 
+                            GROUP BY product_id) as pv'),
+                    'pv.product_id','=','products.id'
+                )
+                ->select('products.*', 
+                    'categories.category_name as cat_name', 
+                    'subcategories.subcategory_name as subCat_name', 
+                    'child_categories.name as childCat_name', 
+                    'brands.brand_name', 'units.short_name',
+                    DB::raw('pv.variant_total_qty as variant_qty'),
+                    DB::raw('COALESCE(pv.variant_total_qty, products.qty) as final_qty'))
                 ->where('products.id', $id)
                 ->first();
 
-       return view('backend.pages.products.view', compact('product'));
+        $variants = ProductVariant::where('product_id', $id)->get();
+
+        return view('admin.pages.product.view', compact('product', 'variants'));
     }
 
 

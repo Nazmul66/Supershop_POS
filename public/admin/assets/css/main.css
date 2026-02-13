@@ -90,8 +90,9 @@
     display: block;
     margin: 0 auto;
     max-width: 100%;
-    width: 350px;
-    height: auto;
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
 }
 .product_qrcode span{
     display: block;
@@ -1094,5 +1095,11 @@ label:not(.form-check-label):not(.custom-file-label) {
   
   @keyframes l12 { 
     100%{transform: rotate(.5turn)}
+  }
+
+  .cards{
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+    border-top: 5px solid #009688 !important;
+    border-radius: 6px;
   }
 

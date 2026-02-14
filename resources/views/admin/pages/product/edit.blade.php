@@ -344,17 +344,16 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group mb-1">
-                                    <label class="col-4" for="condition"><b>Condition</b></label>
+                                    <label class="col-4" for="stock_type"><b>Stock Type</b></label>
 
                                     <div class="col-8">
-                                        <select class="form-select" id="condition" name="condition">
-                                            <option value="new" selected>New</option>
-                                            <option value="used">Used</option>
+                                        <select class="form-select" id="stock_type" name="stock_type">
+                                            <option value="" selected disabled>Select option</option>
+                                            <option value="pre_order">Pre-Order</option>
+                                            <option value="limited_stock">Limited Stock</option>
                                         </select>
                                     </div>
                                 </div>
-
-                                <span id="condition_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="col-md-6">
@@ -1164,6 +1163,15 @@
             }
             // Initialize both inputs
             initDateRangePicker('#discount_date', "down");
+
+            let newRow = $('.dynamic_variant_body tr:last .variant_dis_date');
+            initDateRangePicker(newRow, "auto");
+
+            $(document).on('focus', '.variant_dis_date', function(){
+                if (!$(this).data('daterangepicker')) {
+                    initDateRangePicker(this, "auto");
+                }
+            });
         });
     </script>
 
@@ -1225,6 +1233,22 @@
 
                         <td>
                             <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold variant_prices_error" value="${unitPrice}" placeholder="0.00">
+                        </td>
+
+                        <td>
+                            <select class="form-select" id="variant_dis_type" name="variant_dis_type[]">
+                                <option value="none">None</option>
+                                <option value="amount">Amount ( TK )</option>
+                                <option value="percent">Percent ( % )</option>
+                            </select>
+                        </td>
+
+                        <td>
+                            <input class="form-control" type="number" id="variant_dis_value" name="variant_dis_value[]" value=""  placeholder="Discount Value....">
+                        </td>
+
+                        <td>
+                             <input class="form-control variant_dis_date" type="text" id="variant_dis_date" name="variant_dis_date[]" value="" placeholder="Select a date....">
                         </td>
                     </tr>
                 `);

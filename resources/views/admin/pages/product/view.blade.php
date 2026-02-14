@@ -44,6 +44,12 @@
             font-weight: 600;
             padding: .5rem .5rem;
         }
+        @media (min-width: 1240px) and (max-width: 1560px) {
+            .table-responsive {
+                overflow-x: inherit;
+                overflow-y: auto;
+            }
+        }
     </style>
 @endpush
 
@@ -88,6 +94,12 @@
                       <button class="nav-link active" id="pills-main-tab" data-bs-toggle="pill" data-bs-target="#pills-main" type="button" role="tab" aria-controls="pills-main" aria-selected="true">Main Info</button>
                     </li>
 
+                    @if (!empty($product->variant_qty))
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-product-variants-tab" data-bs-toggle="pill" data-bs-target="#pills-product-variants" type="button" role="tab" aria-controls="pills-product-variants" aria-selected="false">Product Variants</button>
+                        </li>
+                    @endif
+
                     <li class="nav-item" role="presentation">
                       <button class="nav-link" id="pills-long-description-tab" data-bs-toggle="pill" data-bs-target="#pills-long-description" type="button" role="tab" aria-controls="pills-long-description" aria-selected="false">Long Description</button>
                     </li>
@@ -102,8 +114,7 @@
 
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="pills-video-link-tab" data-bs-toggle="pill" data-bs-target="#pills-video-link" type="button" role="tab" aria-controls="pills-video-link" aria-selected="false">Video Link</button>
-                      </li>
-
+                    </li>
                   </ul>
             </div>
         </div>
@@ -128,27 +139,27 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Name</td>
+                                            <td class="fw-bold">Name</td>
                                             <td>{{ $product->name }}</td>
                                         </tr>
         
                                         <tr>
-                                            <td>Slug</td>
+                                            <td class="fw-bold">Slug</td>
                                             <td>{{ $product->slug }}</td>
                                         </tr>
         
                                         <tr>
-                                            <td>Category Name</td>
+                                            <td class="fw-bold">Category Name</td>
                                             <td>{{ $product->cat_name }}</td>
                                         </tr>
         
                                         <tr>
-                                            <td>SubCategory Name</td>
+                                            <td class="fw-bold">SubCategory Name</td>
                                             <td>{{ $product->subCat_name }}</td>
                                         </tr>
         
                                         <tr>
-                                            <td>ChildCategory Name</td>
+                                            <td class="fw-bold">ChildCategory Name</td>
                                             <td>
                                                 @if ( !empty( $product->childCat_name ) )
                                                     {{ $product->childCat_name }}
@@ -159,14 +170,42 @@
                                         </tr>
         
                                         <tr>
-                                            <td>Brand Name</td>
+                                            <td class="fw-bold">Brand Name</td>
                                             <td>
-                                                <span class="text-dark">{{ $product->brand_name }}</span>
+                                                <span >{{ $product->brand_name }}</span>
                                             </td>
                                         </tr>
-        
+
                                         <tr>
-                                            <td>Is Top Product</td>
+                                            <td class="fw-bold">Warranty Name</td>
+                                            <td>
+                                                <span >{{ $product->duration .' '. $product->period}}</span>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="fw-bold">Product Type</td>
+                                            <td>
+                                                <span >New</span>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="fw-bold">Total Product Sold</td>
+                                            <td>
+                                                <span class="badge bg-secondary">{{ $product->product_sold }}</span>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="fw-bold">Total Product View</td>
+                                            <td>
+                                                <span class="badge bg-secondary">{{ $product->product_view }}</span>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="fw-bold">Is Sale Product</td>
                                             <td>
                                                 @if ( $product->is_top == 1)
                                                     <span class="badge badge-md bg-primary">Yes</span>
@@ -177,7 +216,18 @@
                                         </tr>
         
                                         <tr>
-                                            <td>Is Best Product</td>
+                                            <td class="fw-bold">Is Top Product</td>
+                                            <td>
+                                                @if ( $product->is_top == 1)
+                                                    <span class="badge badge-md bg-primary">Yes</span>
+                                                @else
+                                                   <span class="badge badge-md bg-danger">No</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+        
+                                        <tr>
+                                            <td class="fw-bold">Is Best Product</td>
                                             <td>
                                                 @if ( $product->is_best == 1)
                                                     <span class="badge badge-md bg-primary">Yes</span>
@@ -188,7 +238,7 @@
                                         </tr>
         
                                         <tr>
-                                            <td>Is Featured Product</td>
+                                            <td class="fw-bold">Is Featured Product</td>
                                             <td>
                                                 @if ( $product->is_featured == 1)
                                                    <span class="badge badge-md bg-primary">Yes</span>
@@ -199,7 +249,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td>Display Ecommerce</td>
+                                            <td class="fw-bold">Display Ecommerce</td>
                                             <td>
                                                 @if ( $product->display_ecommerce == 1)
                                                    <span class="badge badge-md bg-primary">Yes</span>
@@ -210,7 +260,7 @@
                                         </tr>
         
                                         <tr>
-                                            <td>Is Approved</td>
+                                            <td class="fw-bold">Is Approved</td>
                                             <td>
                                                 @if ( $product->is_approved == 1)
                                                     <span class="badge badge-md bg-info">Approved</span>
@@ -221,7 +271,7 @@
                                         </tr>
         
                                         <tr>
-                                            <td>Status</td>
+                                            <td class="fw-bold">Status</td>
                                             <td>
                                                 @if ( $product->status == 1)
                                                     <span class="badge badge-md bg-primary">Active</span>
@@ -232,29 +282,7 @@
                                         </tr>
         
                                         <tr>
-                                            <td>Offer Date Start</td>
-                                            <td>
-                                                @if ( !empty($product->offer_start_date) )
-                                                    {{ date('d M, Y', strtotime($product->offer_start_date)) }}
-                                                @else
-                                                   <span class="text-danger">N/A</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-        
-                                        <tr>
-                                            <td>Offer Date End</td>
-                                            <td>
-                                                @if ( !empty($product->offer_end_date) )
-                                                    {{ date('d M, Y', strtotime($product->offer_end_date)) }}
-                                                @else
-                                                    <span class="text-danger">N/A</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-        
-                                        <tr>
-                                            <td>Tags</td>
+                                            <td class="fw-bold">Tags</td>
                                             <td>
                                                 @if($product->tags)
                                                     @foreach(explode(',', $product->tags) as $tag)
@@ -267,17 +295,17 @@
                                         </tr>
         
                                         <tr>
-                                            <td>Short Description</td>
+                                            <td class="fw-bold">Short Description</td>
                                             <td>{{ $product->short_description }}</td>
                                         </tr>
 
                                         <tr>
-                                            <td>Created Date</td>
+                                            <td class="fw-bold">Created Date</td>
                                             <td>{{ date('M d, Y - h:i:s A', strtotime($product->created_at)) }}</td>
                                         </tr>
         
                                         <tr>
-                                            <td>Updated Date</td>
+                                            <td class="fw-bold">Updated Date</td>
                                             <td>{{ date('M d, Y - h:i:s A', strtotime($product->updated_at)) }}</td>
                                         </tr>
 
@@ -289,7 +317,7 @@
                                                 $adminImage = \App\Models\Admin::find($product->created_by)?->image ?? 'Unknown';
                                             @endphp
 
-                                            <td>Created By</td>
+                                            <td class="fw-bold">Created By</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <img  class="rounded-circle me-2" width="40"  height="40" src="{{ asset($adminImage)}}" />
@@ -302,7 +330,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td>Meta Title</td>
+                                            <td class="fw-bold">Meta Title</td>
                                             <td>
                                                 @if ( !empty($product->seo_title) )
                                                     <span class="text-dark">{{ $product->seo_title }}</span>
@@ -313,7 +341,7 @@
                                         </tr>
         
                                         <tr>
-                                            <td>Meta Description</td>
+                                            <td class="fw-bold">Meta Description</td>
                                             <td>
                                                 @if ( !empty($product->seo_description) )
                                                     <span class="text-dark">{{ $product->seo_description }}</span>
@@ -364,65 +392,93 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Barcode</td>
+                                            <td class="fw-bold">Barcode</td>
                                             <td>
                                                 <span>{!! DNS1D::getBarcodeHTML($product->barcode, 'EAN13', 2, 50, 'black', true) !!}</span>
                                                 <p>Code: {{ $product->barcode }}</p>
                                             </td>
                                         </tr>
         
-                                        <tr>
-                                            <td>SKU</td>
-                                            <td>{{ $product->sku }}</td>
-                                        </tr>
-                                        
-                                        <tr>
-                                            <td>Quantity</td>
-                                            <td>{{ $product->final_qty .' '. Str::title($product->short_name) }}</td>
-                                        </tr>
-        
-                                        <tr>
-                                            <td>Purchase Price</td>
-                                            <td>{{ getSetting()->currency_name }} {{ $product->purchase_price }} </td>
-                                        </tr>
-        
-                                        <tr>
-                                            <td>Selling Price</td>
-                                            <td>{{ getSetting()->currency_name }} {{ $product->selling_price }} </td>
-                                        </tr>
-        
-                                        <tr>
-                                            <td>Discount Type</td>
-                                            <td>{{ ucwords($product->discount_type) }}</td>
-                                        </tr>
-        
-                                        <tr>
-                                            <td>Discount Value</td>
-                                            <td>
-                                                @if ( $product->discount_type === "amount" )
-                                                {{ getSetting()->currency_name }} {{ $product->discount_value }}
-                                                @elseif ( $product->discount_type === "percent" )
-                                                    {{ $product->discount_value }}%
-                                                @else
-                                                    <span class="text-danger">N/A</span>
-                                                @endif
-                                            </td>
-                                        </tr>
+                                        @if (empty($product->variant_qty))
+                                            <tr>
+                                                <td class="fw-bold">SKU</td>
+                                                <td>{{ $product->sku }}</td>
+                                            </tr>
+                                        @endif
 
-                                        <tr>
-                                            <td>Discount Date</td>
-                                            <td>
-                                                @php
-                                                     $dates = explode(' - ', $product->discount_date);
-                                                @endphp
-                                                @if ( !empty($product->discount_date) )
-                                                    <span><strong>Start:</strong> {{ date('M d, Y - h:i:s A', strtotime($dates[0])) }}</span> <br />
-                                                    <span><strong>End:</strong> {{ date('M d, Y - h:i:s A', strtotime($dates[1])) }}</span>
-                                                @else
-                                                    <span class="text-danger">N/A</span>
-                                                @endif
-                                            </td>
-                                        </tr>
+                                        @if (empty($product->variant_qty))
+                                            <tr>
+                                                <td class="fw-bold">Quantity</td>
+                                                <td>{{ $product->final_qty .' '. Str::title($product->short_name) }}</td>
+                                            </tr>
+                                        @endif
+
+                                        @if (empty($product->variant_qty))
+                                            <tr>
+                                                <td class="fw-bold">Alert Quantity</td>
+                                                <td>{{ $product->alert_qty .' '. Str::title($product->short_name) }}</td>
+                                            </tr>
+                                        @endif
+        
+                                        @if (empty($product->variant_qty))
+                                            <tr>
+                                                <td class="fw-bold">Purchase Price</td>
+                                                <td>{{ getSetting()->currency_name }} {{ $product->purchase_price }} </td>
+                                            </tr>
+                                        @endif
+
+                                        @if (empty($product->variant_qty))
+                                            <tr>
+                                                <td class="fw-bold">Profit Margin</td>
+                                                <td>{{ $product->profit_margin }}% </td>
+                                            </tr>
+                                        @endif
+        
+                                        @if (empty($product->variant_qty))
+                                            <tr>
+                                                <td class="fw-bold">Selling Price</td>
+                                                <td>{{ getSetting()->currency_name }} {{ $product->selling_price }} </td>
+                                            </tr>
+                                        @endif
+        
+                                        @if (empty($product->variant_qty))
+                                            <tr>
+                                                <td class="fw-bold">Discount Type</td>
+                                                <td>{{ ucwords($product->discount_type) }}</td>
+                                            </tr>
+                                        @endif
+        
+                                        @if (empty($product->variant_qty))
+                                            <tr>
+                                                <td class="fw-bold">Discount Value</td>
+                                                <td>
+                                                    @if ( $product->discount_type === "amount" )
+                                                    {{ getSetting()->currency_name }} {{ $product->discount_value }}
+                                                    @elseif ( $product->discount_type === "percent" )
+                                                        {{ $product->discount_value }}%
+                                                    @else
+                                                        <span class="text-danger">N/A</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endif
+
+                                        @if (empty($product->variant_qty))
+                                            <tr>
+                                                <td class="fw-bold">Discount Date</td>
+                                                <td>
+                                                    @php
+                                                        $dates = explode(' - ', $product->discount_date);
+                                                    @endphp
+                                                    @if ( !empty($product->discount_date) )
+                                                        <span><strong>Start:</strong> {{ date('M d, Y - h:i:s A', strtotime($dates[0])) }}</span> <br />
+                                                        <span><strong>End:</strong> {{ date('M d, Y - h:i:s A', strtotime($dates[1])) }}</span>
+                                                    @else
+                                                        <span class="text-danger">N/A</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -431,6 +487,66 @@
                 </div>
             </div>
         </div>
+
+        {{-- Product Variants --}}
+        @if (!empty($product->variant_qty))
+            <div class="tab-pane fade" id="pills-product-variants" role="tabpanel" aria-labelledby="pills-product-variants-tab" tabindex="0">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card cards">
+                            <div class="card-body">
+                                <h4 class="mb-3">Product Variants</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered border-primary mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>#Sl No.</th>
+                                                <th>Variant Name</th>
+                                                <th>Variant Code</th>
+                                                <th>Qty</th>
+                                                <th>Alert Qty</th>
+                                                <th>Cost Price</th>
+                                                <th>Profit Margin</th>
+                                                <th>Selling Price</th>
+                                                <th>Discount Type</th>
+                                                <th>Discount Value</th>
+                                                <th>Discount Date</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach ($variants as $index => $row)
+                                                <tr>
+                                                    <td>{{ $index + 1}}</td>
+                                                    <td>{{ $row->variant_name}}</td>
+                                                    <td>{{ $row->variant_code}}</td>
+                                                    <td>{{ $row->qty .' '. Str::title($row->short_name) }}</td>
+                                                    <td>{{ $row->alert_qty .' '. Str::title($row->short_name) }}</td>
+                                                    <td>{{ getSetting()->currency_name }} {{$row->purchase_price}}</td>
+                                                    <td>{{$row->profit_margin}} %</td>
+                                                    <td>{{ getSetting()->currency_name }} {{$row->selling_price}}</td>
+                                                    <td>
+                                                        @if ( $row->status == 1 )
+                                                            <button class="btn btn-success btn-sm">Active</button>
+                                                        @else
+                                                            <button class="btn btn-danger btn-sm">Deactive</button>
+                                                        @endif
+                                                    </td>
+                                                    <td>{{$row->variant_dis_type}}</td>
+                                                    <td>{{$row->variant_dis_value}}</td>
+                                                    <td>{{$row->variant_dis_date}}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
 
 
         <div class="tab-pane fade" id="pills-long-description" role="tabpanel" aria-labelledby="pills-long-description-tab" tabindex="0">

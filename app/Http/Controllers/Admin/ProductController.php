@@ -160,7 +160,7 @@ class ProductController extends Controller
             ->addIndexColumn()
             ->addColumn('checkbox', function ($product) {
                 return ' <label class="checkboxs">
-                        <input type="checkbox" id="select-all">
+                        <input type="checkbox" class="row-checkbox" value="'.$product->id.'">
                         <span class="checkmarks"></span>
                     </label>';
             })
@@ -373,6 +373,9 @@ class ProductController extends Controller
                             'purchase_price'    => $request->variant_costs[$index],
                             'profit_margin'     => $request->variant_profits[$index],
                             'selling_price'     => $request->variant_prices[$index],
+                            'variant_dis_type'  => $request->variant_dis_type[$index],
+                            'variant_dis_value' => $request->variant_dis_value[$index],
+                            'variant_dis_date'  => $request->variant_dis_date[$index],
                             'status'            => 1,
                         ]);
                     }
@@ -504,6 +507,9 @@ class ProductController extends Controller
             throw UnauthorizedException::forPermissions(['delete.product']);
         }
 
+        // 1️⃣ Delete all variants
+        ProductVariant::where('product_id', $product->id)->delete();
+
         if ($product->thumb_image) {
             if (file_exists($product->thumb_image)) {
                 unlink($product->thumb_image);
@@ -511,6 +517,7 @@ class ProductController extends Controller
         }
 
         $product->delete();
+
         return response()->json(['message' => 'Product has been deleted.'], 200);
     }
 
@@ -533,6 +540,64 @@ class ProductController extends Controller
             'product' => $product,
         ]);
     }
+
+    public function product_bulk_action(Request $request)
+    {
+        $ids = $request->ids;
+        $count = count($ids);
+        $action = $request->action;
+        $message = '';
+
+        $products = Product::whereIn('id', $ids)->get();
+            
+        foreach ($products as $row) {
+            if ($row->thumb_image) {
+                $fullPath = public_path($row->thumb_image);
+                if (file_exists($fullPath)) {
+                    // @unlink($fullPath);
+                    dd($fullPath);
+                }
+            }
+        }
+
+        if ($action == 'delete') {
+            DB::transaction(function () use ($ids) {
+
+                // 1️⃣ Delete all variants
+                ProductVariant::whereIn('product_id', $ids)->delete();
+            
+                // 2️⃣ Fetch products to delete their images
+                $products = Product::whereIn('id', $ids)->get();
+            
+                foreach ($products as $row) {
+                    if ($row->thumb_image) {
+                        $fullPath = public_path($row->thumb_image);
+                        if (file_exists($fullPath)) {
+                            @unlink($fullPath);
+                        }
+                    }
+                }
+            
+                // 3️⃣ Delete products
+                Product::whereIn('id', $ids)->delete();
+            });
+
+            $message= "$count product(s) have been deleted successfully.";
+        }
+
+        if ($action == 'active') {
+            Product::whereIn('id', $ids)->update(['status' => 1]);
+            $message = "$count product(s) marked as Active successfully.";
+        }
+
+        if ($action == 'inactive') {
+            Product::whereIn('id', $ids)->update(['status' => 0]);
+            $message = "$count product(s) marked as Inactive successfully.";
+        }
+
+        return response()->json(['success' => true, 'message' => $message]);
+    }
+
     // public function getSubCategories(Request $request, Category $category)
     // {
     //     $subcats= SubCategory::where('category_id', $category->id)->get();
@@ -569,11 +634,13 @@ class ProductController extends Controller
 
     public function show($id)
     {
+        // dd($id);
         $product = Product::leftJoin('categories', 'categories.id', 'products.category_id')
                 ->leftJoin('subcategories', 'subcategories.id', 'products.subCategory_id')
                 ->leftJoin('child_categories', 'child_categories.id', 'products.childCategory_id')
                 ->leftJoin('brands', 'brands.id', 'products.brand_id')
                 ->leftJoin('units', 'units.id', 'products.unit_id')
+                ->leftJoin('warranties', 'warranties.id', 'products.warranties_id')
                 ->leftJoin(
                     DB::raw('(SELECT product_id, SUM(qty) as variant_total_qty 
                             FROM product_variants 
@@ -585,6 +652,7 @@ class ProductController extends Controller
                     'subcategories.subcategory_name as subCat_name', 
                     'child_categories.name as childCat_name', 
                     'brands.brand_name', 'units.short_name',
+                    'warranties.duration', 'warranties.period',
                     DB::raw('pv.variant_total_qty as variant_qty'),
                     DB::raw('COALESCE(pv.variant_total_qty, products.qty) as final_qty'))
                 ->where('products.id', $id)

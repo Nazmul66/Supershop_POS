@@ -19,6 +19,9 @@ class ProductVariant extends Model
         'purchase_price',
         'profit_margin',
         'selling_price',
+        'variant_dis_type',
+        'variant_dis_value',
+        'variant_dis_date',
         'status',
     ];
 }

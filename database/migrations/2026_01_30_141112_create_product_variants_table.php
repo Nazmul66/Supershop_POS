@@ -22,6 +22,9 @@ return new class extends Migration
             $table->integer('purchase_price');
             $table->integer('profit_margin');
             $table->integer('selling_price');
+            $table->integer('variant_dis_type')->nullable();
+            $table->integer('variant_dis_value')->nullable();
+            $table->integer('variant_dis_date')->nullable();
             $table->boolean('status')->default(1)->comment('1=active, 0=Deactive');
             $table->timestamps();
         });

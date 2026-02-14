@@ -215,8 +215,6 @@
 
 @section('body-content')
 
-
-{{-- @dd(request('category_id'), request('subCategory_id'), request('brand_id'), request('admin_user'), request('product_variant')); --}}
     <!-- Breadcrumb -->
     <div class="page-header">
         <div class="add-item d-flex">
@@ -247,6 +245,18 @@
         </ul>
         <div class="page-btn">
             <button type="button" class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer" aria-controls="offcanvasExample"><i class="ti ti-filter me-1"></i>Filter</button>
+
+            
+           <div class="btn-group d-none" id="bulk-action-box">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Bulk Action
+                </button>
+                <ul class="dropdown-menu dropdown-menu-secondary" style="">
+                    <li><a class="dropdown-item bulk-delete" href="#">Bulk Delete</a></li>
+                    <li><a class="dropdown-item bulk-active" href="#">Mark as Active</a></li>
+                    <li><a class="dropdown-item bulk-inactive" href="#">Mark as Inactive</a></li>
+                </ul>
+            </div> 
 
             @if(auth("admin")->user()->can("create.brand"))
                 <a href="{{ route('admin.product.create') }}" class="btn btn-teal"><i class="ti ti-circle-plus me-1"></i>Add Product</a>
@@ -1116,8 +1126,91 @@
                     }
                 })
             })
-        });
 
+            // Select All
+            $('#select-all').on('change', function () {
+                $('.row-checkbox').prop('checked', this.checked);
+                toggleBulkBox();
+            });
+
+            // Individual checkbox
+            $(document).on('change', '.row-checkbox', function () {
+                $('#select-all').prop(
+                    'checked',
+                    $('.row-checkbox').length === $('.row-checkbox:checked').length
+                );
+                toggleBulkBox();
+            });
+
+            // Show / Hide bulk action
+            function toggleBulkBox() {
+                if ($('.row-checkbox:checked').length > 0) {
+                    $('#bulk-action-box').removeClass('d-none');
+                } else {
+                    $('#bulk-action-box').addClass('d-none');
+                }
+            }
+
+            $('.bulk-delete, .bulk-active, .bulk-inactive').on('click', function (e) {
+                e.preventDefault();
+
+                let action = '';
+
+                if ($(this).hasClass('bulk-delete')) action = 'delete';
+                if ($(this).hasClass('bulk-active')) action = 'active';
+                if ($(this).hasClass('bulk-inactive')) action = 'inactive';
+
+                bulkAction(action);
+            });
+
+            function bulkAction(action) {
+                let ids = [];
+
+                $('.row-checkbox:checked').each(function () {
+                    ids.push($(this).val());
+                });
+
+                if (!ids.length) return;
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: `You are about to ${action} ${ids.length} product(s).`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#218838",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: `Yes, ${action}`,
+                    cancelButtonText: "Cancel"
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('admin.product-bulk-action') }}",
+                            method: 'POST',
+                            data: {
+                                _token: $('meta[name="csrf-token"]').attr('content'),
+                                ids: ids,
+                                action: action
+                            },
+                            success: function (res) {
+                                $('#select-all').prop('checked', false);
+                                datatables.ajax.reload();
+
+                                if (res.success === true) {
+                                    Swal.fire({
+                                        position: "center-center",
+                                        icon: "success",
+                                        title: `${res.message}`,
+                                        timer: 4500,
+                                        draggable: true
+                                    });
+                                } 
+                            }
+                        });
+                    }
+                });
+            }
+        })
     </script>
 
 @endpush

@@ -68,9 +68,9 @@
             background-color: #e9e9ef;
             opacity: 1;
         }
-        .table th {
+        /* .table th {
             white-space: normal;
-        }
+        } */
         .table thead tr th {
             font-size: 12px; !important
         }
@@ -343,17 +343,16 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group mb-1">
-                                    <label class="col-4" for="condition"><b>Condition</b></label>
+                                    <label class="col-4" for="stock_type"><b>Stock Type</b></label>
 
                                     <div class="col-8">
-                                        <select class="form-select" id="condition" name="condition">
-                                            <option value="new" selected>New</option>
-                                            <option value="used">Used</option>
+                                        <select class="form-select" id="stock_type" name="stock_type">
+                                            <option value="" selected disabled>Select option</option>
+                                            <option value="pre_order">Pre-Order</option>
+                                            <option value="limited_stock">Limited Stock</option>
                                         </select>
                                     </div>
                                 </div>
-
-                                <span id="condition_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="col-md-6">
@@ -396,15 +395,16 @@
                                                 <thead>
                                                     <tr class="text-center bg-primary variant_header">
                                                         <th><i class="fas fa-trash-alt text-white"></i></th>
-                                                        <th class="text-white text-start">Variant Name</th>
+                                                        <th class="text-white text-start">Variant Name <span class="text-danger">*</span></th>
                                                         <th class="text-white text-start">Variant Code <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp" data-bs-original-title="Also known as SKU. Variant code(SKU) must be unique." aria-label="Also known as SKU. Variant code(SKU) must be unique."></i></th>
-                                                        <th class="text-white text-start" id="variant_qty">Qty</th>
-                                                        <th class="text-white text-start" id="variant_qty">Alert Qty</th>
-                                                        <th class="text-white text-start" id="variant_cost_label">Unit Cost (Exc. Tax)</th>
-                                                        <th class="text-white text-start">Profit(%)</th>
-                                                        <th class="text-white text-start" id="variant_price_label">Unit Price (Exc. Tax)</th>
-                                                        {{-- <th class="text-white text-start">Variant Photo</th> --}}
-                                                        
+                                                        <th class="text-white text-start" id="variant_qty">Qty <span class="text-danger">*</span></th>
+                                                        <th class="text-white text-start" id="variant_qty">Alert Qty <span class="text-danger">*</span></th>
+                                                        <th class="text-white text-start" id="variant_cost_label">Unit Cost (Exc. Tax) <span class="text-danger">*</span></th>
+                                                        <th class="text-white text-start">Profit(%) <span class="text-danger">*</span></th>
+                                                        <th class="text-white text-start" id="variant_price_label">Unit Price (Exc. Tax) <span class="text-danger">*</span></th>
+                                                        <th class="text-white text-start" id="variant_discount_type">Discount Type</th>
+                                                        <th class="text-white text-start" id="variant_discount_value">Discount Value</th>
+                                                        <th class="text-white text-start" id="variant_discount_date">Discount Date</th>
                                                     </tr>
                                                 </thead>
                                 
@@ -608,12 +608,11 @@
                         <div class="row">
                             <div class="col-md-12 mb-2">
                                 <div class="input-group mb-1">
-                                    <label class="col-4" for="discount_type"><b>Discount Type</b></label>
+                                    <label class="col-4" for="display_ecom"><b>Displayed In E-com</b></label>
                                     <div class="col-8">
-                                        <select class="form-select" id="discount_type" name="discount_type">
-                                            <option value="none">Select Discount Type</option>
-                                            <option value="amount">Amount ( TK )</option>
-                                            <option value="percent">Percent ( % )</option>
+                                        <select class="form-select" id="display_ecom" name="display_ecommerce">
+                                            <option value="0" selected>No</option>
+                                            <option value="1">Yes</option>
                                         </select>
                                     </div>
                                 </div>
@@ -621,11 +620,12 @@
 
                             <div class="col-md-12 mb-2">
                                 <div class="input-group mb-1">
-                                    <label class="col-4" for="display_ecom"><b>Displayed In E-com</b></label>
+                                    <label class="col-4" for="discount_type"><b>Discount Type</b></label>
                                     <div class="col-8">
-                                        <select class="form-select" id="display_ecom" name="display_ecommerce">
-                                            <option value="0" selected>No</option>
-                                            <option value="1">Yes</option>
+                                        <select class="form-select" id="discount_type" name="discount_type">
+                                            <option value="none">Select Discount Type</option>
+                                            <option value="amount">Amount ( TK )</option>
+                                            <option value="percent">Percent ( % )</option>
                                         </select>
                                     </div>
                                 </div>
@@ -641,15 +641,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            {{-- <div class="col-md-12 mb-2 offer_start_value d-none">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="offer_start_date"><b>Offer Start Date</b></label>
-                                    <div class="col-8">
-                                        <input class="form-control offer_start_date" type="date" id="offer_start_date" name="offer_start_date" placeholder="Select a date...." value="{{ old('offer_start_date') }}">
-                                    </div>
-                                </div>
-                            </div> --}}
 
                             <div class="col-md-12 mb-2 offer_end_value d-none">
                                 <div class="input-group mb-1">
@@ -1163,11 +1154,20 @@
             }
             // Initialize both inputs
             initDateRangePicker('#discount_date', "down");
+
+            let newRow = $('.dynamic_variant_body tr:last .variant_dis_date');
+            initDateRangePicker(newRow, "auto");
+
+            $(document).on('focus', '.variant_dis_date', function(){
+                if (!$(this).data('daterangepicker')) {
+                    initDateRangePicker(this, "auto");
+                }
+            });
         });
+
     </script>
 
-    <script>   
-    
+    <script>    
         $(document).ready(function() {
             // Initialize Select2 plugin
             $('#add_more_variant').select2();
@@ -1225,14 +1225,29 @@
                         <td>
                             <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold variant_prices_error" value="${unitPrice}" placeholder="0.00">
                         </td>
+
+                        <td>
+                            <select class="form-select" id="variant_dis_type" name="variant_dis_type[]">
+                                <option value="none">None</option>
+                                <option value="amount">Amount ( TK )</option>
+                                <option value="percent">Percent ( % )</option>
+                            </select>
+                        </td>
+
+                        <td>
+                            <input class="form-control" type="number" id="variant_dis_value" name="variant_dis_value[]" value=""  placeholder="Discount Value....">
+                        </td>
+
+                        <td>
+                             <input class="form-control variant_dis_date" type="text" id="variant_dis_date" name="variant_dis_date[]" value="" placeholder="Select a date....">
+                        </td>
                     </tr>
                 `);
 
                 // Reset the select dropdown after a value is appended
                 $('#add_more_variant').val('').trigger('change');
             })
-        });
-        
+        }); 
 
         // Remove row
         $(document).on('click', '.variant_remove_btn', function() {
@@ -1250,7 +1265,6 @@
             row.remove();
             // toastr.success("Product Variant remove");
         });
-
 
         function calculateRow(row, changed) {
             let costInput   = row.querySelector(".variant_cost");
@@ -1309,7 +1323,6 @@
             }
         }
 
-
         // Select Variant Options
         document.getElementById("variant").addEventListener("change", function () {
             let unitCost  = document.getElementById("unit_cost").value.trim();
@@ -1328,9 +1341,6 @@
                     this.value = "no";
                 }
                 else {
-                    // let costInput   = document.querySelector(".variant_cost").value = unitCost;
-                    // let profitInput = document.querySelector(".variant_profit").value = profitMargin;
-                    // let priceInput  = document.querySelector(".variant_price").value = unitPrice;
                     document.querySelector(".variants_body").classList.add('actives');
                 }
             }
@@ -1744,7 +1754,6 @@
                 }
             });
 
-
             function toggleDiscountDivs() {
                 const selectedValue = $('#discount_type').val();
 
@@ -1787,15 +1796,6 @@
                 removeItemButton: true,
                 delimiter: ',',
             });
-
-            // // Flatpicker Plugin
-            // $(".offer_start_date").flatpickr({
-            //     minDate: "today"
-            // });
-
-            // $(".offer_end_date").flatpickr({
-            //     minDate: "today"
-            // });
 
             //____ category_id Select2 ____//
             $('#units').select2({
@@ -1875,7 +1875,6 @@
                 return $state;
             };
         });
-
     </script>
 
     <script>

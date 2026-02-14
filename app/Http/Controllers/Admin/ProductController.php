@@ -552,10 +552,9 @@ class ProductController extends Controller
             
         foreach ($products as $row) {
             if ($row->thumb_image) {
-                $fullPath = public_path($row->thumb_image);
-                if (file_exists($fullPath)) {
-                    // @unlink($fullPath);
-                    dd($fullPath);
+                $imagePath = public_path(str_replace('public/', '', $row->thumb_image));
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
                 }
             }
         }

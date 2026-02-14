@@ -18,9 +18,10 @@ class CreateProductRequest extends FormRequest
 
     public function rules(): array
     {
-        $discountType   = $this->input('discount_type'); // Access input directly
-        $purchase_price = $this->input('purchase_price'); // Access input directly
-        $selling_price  = $this->input('selling_price'); // Access input directly
+        $variantDisType = $this->input('variant_dis_type', []); 
+        $discountType   = $this->input('discount_type'); 
+        $purchase_price = $this->input('purchase_price'); 
+        $selling_price  = $this->input('selling_price'); 
 
         return [
             'name'            => ['required', 'unique:products,name', 'max:255'],
@@ -76,6 +77,7 @@ class CreateProductRequest extends FormRequest
                 'required_if:discount_type,amount,percent',
             ],
 
+
             // ==================================================
             // 🔥 VARIANT VALIDATION (IMPORTANT PART)
             // ==================================================
@@ -105,6 +107,9 @@ class CreateProductRequest extends FormRequest
 
             'variant_prices' => ['required_if:has_variant,yes','array'],
             'variant_prices.*' => ['required_if:has_variant,yes','numeric','min:0'],
+          
+            'variant_dis_type' => ['required_if:has_variant,yes', 'array'],
+            'variant_dis_type.*' => ['required_if:has_variant,yes', 'in:none,amount,percent'],
         ];
     }
 

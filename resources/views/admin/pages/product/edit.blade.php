@@ -68,9 +68,6 @@
             background-color: #e9e9ef;
             opacity: 1;
         }
-        .table th {
-            white-space: normal;
-        }
         .table thead tr th {
             font-size: 12px; !important
         }
@@ -205,7 +202,7 @@
                                                 </select>
 
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                                            <button type="button" class="add_input" data-bs-toggle="modal" data-bs-target="#categoryModal">
                                                 <i class="fas fa-plus input_i"></i>
                                             </button>
                                         </div>
@@ -232,7 +229,7 @@
                                                 </select>
 
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#subCategoryModal">
+                                            <button type="button" class="add_input" data-bs-toggle="modal" data-bs-target="#subCategoryModal">
                                                 <i class="fas fa-plus input_i"></i>
                                             </button>
                                         </div>
@@ -261,7 +258,7 @@
                                                 </select>
 
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#warrantyModal">
+                                            <button type="button" class="add_input" data-bs-toggle="modal" data-bs-target="#warrantyModal">
                                                 <i class="fas fa-plus input_i"></i>
                                             </button>
                                         </div>
@@ -289,7 +286,7 @@
                                                 </select>
 
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#childCategoryModal">
+                                            <button type="button" class="add_input" data-bs-toggle="modal" data-bs-target="#childCategoryModal">
                                                 <i class="fas fa-plus input_i"></i>
                                             </button>
                                         </div>
@@ -319,7 +316,7 @@
                                                 </select>
 
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#brandModal">
+                                            <button type="button" class="add_input" data-bs-toggle="modal" data-bs-target="#brandModal">
                                                 <i class="fas fa-plus input_i"></i>
                                             </button>
                                         </div>
@@ -347,8 +344,9 @@
                                     <label class="col-4" for="stock_type"><b>Stock Type</b></label>
 
                                     <div class="col-8">
-                                        <select class="form-select" id="stock_type" name="stock_type">
-                                            <option value="" selected disabled>Select option</option>
+                                        <select class="form-select" id="stock_type" name="stock_type">                    
+                                            <option value="in_stock" selected>In Stock</option>
+                                            <option value="out_of_stock">Out Of Stock</option>
                                             <option value="pre_order">Pre-Order</option>
                                             <option value="limited_stock">Limited Stock</option>
                                         </select>
@@ -371,7 +369,7 @@
                 </div>
 
                 <!-- 3rd Row Content part Start -->
-                <div class="card variants_body">
+                <div class="card variants_body @if( $product->has_variant == 'yes' ) actives @endif">
                     <div class="card-body">
                         <div class="row">
                             <div class="row align-items-end">
@@ -396,54 +394,77 @@
                                                 <thead>
                                                     <tr class="text-center bg-primary variant_header">
                                                         <th><i class="fas fa-trash-alt text-white"></i></th>
-                                                        <th class="text-white text-start">Variant Name</th>
+                                                        <th class="text-white text-start">Variant Name <span class="text-danger">*</span></th>
                                                         <th class="text-white text-start">Variant Code <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp" data-bs-original-title="Also known as SKU. Variant code(SKU) must be unique." aria-label="Also known as SKU. Variant code(SKU) must be unique."></i></th>
-                                                        <th class="text-white text-start" id="variant_qty">Qty</th>
-                                                        <th class="text-white text-start" id="variant_qty">Alert Qty</th>
-                                                        <th class="text-white text-start" id="variant_cost_label">Unit Cost (Exc. Tax)</th>
-                                                        <th class="text-white text-start">Profit(%)</th>
-                                                        <th class="text-white text-start" id="variant_price_label">Unit Price (Exc. Tax)</th>
-                                                        {{-- <th class="text-white text-start">Variant Photo</th> --}}
-                                                        
+                                                        <th class="text-white text-start" id="variant_qty">Qty <span class="text-danger">*</span></th>
+                                                        <th class="text-white text-start" id="variant_qty">Alert Qty <span class="text-danger">*</span></th>
+                                                        <th class="text-white text-start" id="variant_cost_label">Unit Cost (Exc. Tax) <span class="text-danger">*</span></th>
+                                                        <th class="text-white text-start">Profit(%) <span class="text-danger">*</span></th>
+                                                        <th class="text-white text-start" id="variant_price_label">Unit Price (Exc. Tax) <span class="text-danger">*</span></th>
+                                                        <th class="text-white text-start" id="variant_discount_type">Discount Type</th>
+                                                        <th class="text-white text-start" id="variant_discount_value">Discount Value</th>
+                                                        <th class="text-white text-start" id="variant_discount_date">Discount Date</th>
                                                     </tr>
                                                 </thead>
                                 
                                                 <tbody class="dynamic_variant_body">
-                                                    {{-- <tr id="variant_row" class="variant_row">
-                                                        <td class="text-start">
-                                                            <input type="hidden" class="form-control" value="" name="variant_id[]" id="variant_id">
-                                                            
-                                                            <input type="text" class="form-control reqireable" value="" id="variant_name" name="variant_name[]" readonly required>
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="text" name="variant_codes[]" id="variant_code" class="form-control reqireable fw-bold" placeholder="Variant Code" required="">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost requireable fw-bold" placeholder="0.00" id="variant_cost" required="">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="number" step="any" name="variant_profits[]" class="form-control requireable variant_profit fw-bold" placeholder="0.00" id="variant_profit">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="number" step="any" name="variant_prices[]" class="form-control requireable variant_price  fw-bold" placeholder="0.00" id="variant_price" required="">
-                                                        </td>
+                                                    @foreach ($variants as $index => $row)
+                                                        <tr class="variant_row" data-index="{{ $index }}" data-value="{{ $row->variant_name }}">
+                                                            <td>
+                                                                <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
+                                                            </td>
+                                    
+                                                            <td>
+                                                                <input type="hidden" class="form-control" value="{{ $row->variant_id }}" name="variant_id[]" id="variant_id">
 
-                                                        <td class="text-start">
-                                                            <input type="number" name="variant_qty[]" class="form-control requireable variant_qty fw-bold" value="1" min="1" id="variant_qty" required="">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="file" name="variant_image[]" class="form-control" id="variant_image" required="">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
-                                                        </td>
-                                                    </tr> --}}
+                                                                <input type="text" class="form-control variant_name" value="{{ $row->variant_name }}" name="variant_name[]" id="variant_name" readonly>
+                                                            </td>
+                                    
+                                                            <td>
+                                                                <input type="text" name="variant_codes[]" class="form-control variant_code fw-bold variant_codes_error" value="{{ $row->variant_code }}">
+                                                            </td>
+                                    
+                                                            <td class="text-start">
+                                                                <input type="number" name="variant_qty[]" class="form-control variant_qty fw-bold variant_qty_error" id="variant_qty" value="{{ $row->qty }}" min="1">
+                                                            </td>
+                                    
+                                                            <td class="text-start">
+                                                                <input type="number" name="variant_alert_qty[]" class="form-control variant_qty fw-bold variant_alert_qty_error" id="variant_alert_qty" 
+                                                                value="{{ $row->alert_qty }}" min="1">
+                                                            </td>
+                                    
+                                                            <td>
+                                                                <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost fw-bold variant_costs_error" 
+                                                                value="{{ $row->purchase_price }}" placeholder="0.00">
+                                                            </td>
+                                    
+                                                            <td>
+                                                                <input type="number" name="variant_profits[]" step="any" class="form-control variant_profit fw-bold variant_profits_error" value="{{ $row->profit_margin }}" placeholder="0.00">
+                                                            </td>
+                                    
+                                                            <td>
+                                                                <input type="number" name="variant_prices[]" step="any" class="form-control variant_price fw-bold variant_prices_error" value="{{ $row->selling_price }}" placeholder="0.00">
+                                                            </td>
+                                    
+                                                            <td>
+                                                                <select class="form-select variant_dis_type_error" id="variant_dis_type" name="variant_dis_type[]">
+                                                                    <option value="none" @if( $row->variant_dis_type == "none" ) selected @endif>None</option>
+                                                                    <option value="amount" @if( $row->variant_dis_type == "amount" ) selected @endif>Amount ( TK )</option>
+                                                                    <option value="percent" @if( $row->variant_dis_type == "percent" ) selected @endif>Percent ( % )</option>
+                                                                </select>
+                                                            </td>
+                                    
+                                                            <td>
+                                                                <input class="form-control variant_dis_value_error" type="number" id="variant_dis_value" name="variant_dis_value[]" 
+                                                                value="{{ $row->variant_dis_value }}"  placeholder="Discount Value....">
+                                                            </td>
+                                    
+                                                            <td>
+                                                                <input class="form-control variant_dis_date" type="text" id="variant_dis_date" name="variant_dis_date[]" 
+                                                                value="{{ $row->variant_dis_date }}" placeholder="Select a date....">
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -500,7 +521,12 @@
                             <div class="col-md-12">
                                 <div class="mb-1">
                                     <label class="form-label" for="thumb_image"><b>Thumbnail Photo</b> <span class="text-danger">*</span></label>
-                                    <input type="file" class="form-control" name="thumb_image" id="thumb_image" data-allowed-file-extensions="png jpeg jpg gif webp" >
+                                    <input type="file" class="form-control" name="thumb_image" id="thumb_image" 
+                                    data-allowed-file-extensions="png jpeg jpg gif webp"
+                                    @if(isset($product) && $product->thumb_image)
+                                        data-default-file="{{ asset($product->thumb_image) }}"
+                                    @endif
+                                    >
                                 </div>
                 
                                 <span id="thumb_image_validate" class="text-danger validation-error mt-1"></span>
@@ -557,8 +583,8 @@
                                     <label class="col-4" for="variant"><b>Has Variant?</b></label>
                                     <div class="col-8">
                                         <select class="form-select has_variant" id="variant" name="has_variant">
-                                            <option value="no" selected>No</option>
-                                            <option value="yes">Yes</option>
+                                            <option value="no" @if( $product->has_variant == "no" ) selected @endif>No</option>
+                                            <option value="yes" @if( $product->has_variant == 'yes' ) selected @endif>Yes</option>
                                         </select>
                                     </div>
                                 </div>
@@ -568,7 +594,7 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="unit_cost"><b>Unit Cost (Exc. Tax)</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="number" name="purchase_price" class="form-control purchase_price_validate" id="unit_cost" placeholder="0.00" min="1" value="{{ old('purchase_price') }}">
+                                        <input type="number" name="purchase_price" class="form-control purchase_price_validate" id="unit_cost" placeholder="0.00" min="1" value="{{ old('purchase_price', $product->purchase_price) }}">
 
                                         <span id="purchase_price_validate" class="invalid-feedback mt-1"></span>
                                     </div>
@@ -581,7 +607,7 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="profit_margin"><b>Profit Margin(%)</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="number" name="profit_margin" class="form-control profit_margin_validate" id="profit_margin" placeholder="0.00" min="1" value="{{ old('profit_margin') }}">
+                                        <input type="number" name="profit_margin" class="form-control profit_margin_validate" id="profit_margin" placeholder="0.00" min="1" value="{{ old('profit_margin', $product->profit_margin) }}">
 
                                         <span id="profit_margin_validate" class="invalid-feedback mt-1"></span>
                                     </div>
@@ -592,7 +618,7 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="unit_price"><b>Unit Price (Exc. Tax)</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="number" name="selling_price" class="form-control selling_price_validate" id="unit_price" placeholder="0.00" min="1" value="{{ old('selling_price') }}">
+                                        <input type="number" name="selling_price" class="form-control selling_price_validate" id="unit_price" placeholder="0.00" min="1" value="{{ old('selling_price', $product->selling_price) }}">
 
                                         <span id="selling_price_validate" class="invalid-feedback mt-1"></span>
                                     </div>
@@ -608,12 +634,11 @@
                         <div class="row">
                             <div class="col-md-12 mb-2">
                                 <div class="input-group mb-1">
-                                    <label class="col-4" for="discount_type"><b>Discount Type</b></label>
+                                    <label class="col-4" for="display_ecom"><b>Displayed In E-com</b></label>
                                     <div class="col-8">
-                                        <select class="form-select" id="discount_type" name="discount_type">
-                                            <option value="none">Select Discount Type</option>
-                                            <option value="amount">Amount ( TK )</option>
-                                            <option value="percent">Percent ( % )</option>
+                                        <select class="form-select" id="display_ecom" name="display_ecommerce">
+                                            <option value="0" @if( $product->display_ecommerce == 0 ) selected @endif>No</option>
+                                            <option value="1" @if( $product->display_ecommerce == 1 ) selected @endif>Yes</option>
                                         </select>
                                     </div>
                                 </div>
@@ -621,41 +646,48 @@
 
                             <div class="col-md-12 mb-2">
                                 <div class="input-group mb-1">
-                                    <label class="col-4" for="display_ecom"><b>Displayed In E-com</b></label>
+                                    <label class="col-4" for="discount_type"><b>Discount Type</b></label>
                                     <div class="col-8">
-                                        <select class="form-select" id="display_ecom" name="display_ecommerce">
-                                            <option value="0" selected>No</option>
-                                            <option value="1">Yes</option>
+                                        <select class="form-select" id="discount_type" name="discount_type">
+                                            <option value="none" @if( $product->discount_type == "none" ) selected @endif>Select Discount Type</option>
+                                            <option value="amount" @if( $product->discount_type == "amount" ) selected @endif>Amount ( TK )</option>
+                                            <option value="percent" @if( $product->discount_type == "percent" ) selected @endif>Percent ( % )</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-12 mb-2 discount_value d-none">
+                            <div class="col-md-12 mb-2 discount_value 
+                                @if(isset($product) && ($product->discount_type == 'amount' || $product->discount_type == 'percent')) 
+                                    {{-- no d-none --}}
+                                @else 
+                                    d-none 
+                                @endif
+                            ">
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="discount_value"><b>Discount Value</b></label>
                                     <div class="col-8">
-                                        <input class="form-control discount_value_validate" type="number" id="discount_value" name="discount_value" value="{{ old('discount_value') }}"  placeholder="Discount Value....">
+                                        <input class="form-control discount_value_validate" type="number" id="discount_value" name="discount_value" value="{{ old('discount_value', $product->discount_value) }}"  
+                                        placeholder="Discount Value....">
 
                                         <span id="discount_value_validate" class="invalid-feedback mt-1"></span>
                                     </div>
                                 </div>
                             </div>
 
-                            {{-- <div class="col-md-12 mb-2 offer_start_value d-none">
-                                <div class="input-group mb-1">
-                                    <label class="col-4" for="offer_start_date"><b>Offer Start Date</b></label>
-                                    <div class="col-8">
-                                        <input class="form-control offer_start_date" type="date" id="offer_start_date" name="offer_start_date" placeholder="Select a date...." value="{{ old('offer_start_date') }}">
-                                    </div>
-                                </div>
-                            </div> --}}
-
-                            <div class="col-md-12 mb-2 offer_end_value d-none">
+                            <div class="col-md-12 mb-2 offer_end_value
+                                @if(isset($product) && ($product->discount_type == 'amount' || $product->discount_type == 'percent')) 
+                                    {{-- no d-none --}}
+                                @else 
+                                    d-none 
+                                @endif
+                            ">
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="discount_date"><b>Discount Date</b></label>
                                     <div class="col-8">
-                                        <input class="form-control offer_end_date discount_date_validate" type="text" id="discount_date" name="discount_date" value="" placeholder="Select a date....">
+                                        <input class="form-control offer_end_date discount_date_validate" type="text" id="discount_date" name="discount_date" 
+                                        value="{{ old('discount_date', $product->discount_date) }}"
+                                        placeholder="Select a date....">
 
                                         <span id="discount_date_validate" class="invalid-feedback mt-1"></span>
                                     </div>
@@ -667,8 +699,8 @@
                                     <label class="col-4" for="is_featured"><b>Is Featured</b></label>
                                     <div class="col-8">
                                         <select class="form-select" id="is_featured" name="is_featured">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" @if( $product->is_featured == 1 ) selected @endif>Yes</option>
+                                            <option value="0" @if( $product->is_featured == 0 ) selected @endif>No</option>
                                         </select>
                                     </div>
                                 </div>
@@ -679,8 +711,8 @@
                                     <label class="col-4" for="is_sale"><b>Is For Sale</b></label>
                                     <div class="col-8">
                                         <select class="form-select" id="is_sale" name="is_sale">
-                                            <option value="1" selected>Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" @if( $product->is_sale == 1 ) selected @endif>Yes</option>
+                                            <option value="0" @if( $product->is_sale == 0 ) selected @endif>No</option>
                                         </select>
                                     </div>
                                 </div>
@@ -1124,6 +1156,13 @@
     <script>
         // Multiple Date Range
         $(function() {
+            // Disable already selected Product variant on page load
+            @foreach($variants as $item)
+                var selectedVariant = "{{ $item->variant_name }}";
+                var option = $('#add_more_variant').find('option[value="' + selectedVariant + '"]');
+                option.prop('disabled', true);
+            @endforeach
+
             function initDateRangePicker(selector, position){
                 var start = moment().subtract(29, 'days');
                 var end = moment();
@@ -1173,10 +1212,10 @@
                 }
             });
         });
+
     </script>
 
-    <script>   
-    
+    <script>    
         $(document).ready(function() {
             // Initialize Select2 plugin
             $('#add_more_variant').select2();
@@ -1236,7 +1275,7 @@
                         </td>
 
                         <td>
-                            <select class="form-select" id="variant_dis_type" name="variant_dis_type[]">
+                            <select class="form-select variant_dis_type_error" id="variant_dis_type" name="variant_dis_type[]">
                                 <option value="none">None</option>
                                 <option value="amount">Amount ( TK )</option>
                                 <option value="percent">Percent ( % )</option>
@@ -1244,11 +1283,11 @@
                         </td>
 
                         <td>
-                            <input class="form-control" type="number" id="variant_dis_value" name="variant_dis_value[]" value=""  placeholder="Discount Value....">
+                            <input class="form-control variant_dis_value_error" type="number" id="variant_dis_value" name="variant_dis_value[]" value=""  placeholder="Discount Value....">
                         </td>
 
                         <td>
-                             <input class="form-control variant_dis_date" type="text" id="variant_dis_date" name="variant_dis_date[]" value="" placeholder="Select a date....">
+                             <input class="form-control variant_dis_date_error" type="text" id="variant_dis_date" name="variant_dis_date[]" value="" placeholder="Select a date....">
                         </td>
                     </tr>
                 `);
@@ -1256,8 +1295,7 @@
                 // Reset the select dropdown after a value is appended
                 $('#add_more_variant').val('').trigger('change');
             })
-        });
-        
+        }); 
 
         // Remove row
         $(document).on('click', '.variant_remove_btn', function() {
@@ -1275,7 +1313,6 @@
             row.remove();
             // toastr.success("Product Variant remove");
         });
-
 
         function calculateRow(row, changed) {
             let costInput   = row.querySelector(".variant_cost");
@@ -1334,7 +1371,6 @@
             }
         }
 
-
         // Select Variant Options
         document.getElementById("variant").addEventListener("change", function () {
             let unitCost  = document.getElementById("unit_cost").value.trim();
@@ -1353,9 +1389,6 @@
                     this.value = "no";
                 }
                 else {
-                    // let costInput   = document.querySelector(".variant_cost").value = unitCost;
-                    // let profitInput = document.querySelector(".variant_profit").value = profitMargin;
-                    // let priceInput  = document.querySelector(".variant_price").value = unitPrice;
                     document.querySelector(".variants_body").classList.add('actives');
                 }
             }
@@ -1769,19 +1802,16 @@
                 }
             });
 
-
             function toggleDiscountDivs() {
                 const selectedValue = $('#discount_type').val();
 
                 if (selectedValue === 'amount' || selectedValue === 'percent') {
                     // Show all related divs
                     $('.discount_value').removeClass('d-none'); // Show discount value div (if it exists)
-                    $('.offer_start_value').removeClass('d-none'); // Show offer start date div
                     $('.offer_end_value').removeClass('d-none'); // Show offer end date div
                 } else {
                     // Hide all related divs
                     $('.discount_value').addClass('d-none');
-                    $('.offer_start_value').addClass('d-none');
                     $('.offer_end_value').addClass('d-none');
                 }
             }
@@ -1812,15 +1842,6 @@
                 removeItemButton: true,
                 delimiter: ',',
             });
-
-            // // Flatpicker Plugin
-            // $(".offer_start_date").flatpickr({
-            //     minDate: "today"
-            // });
-
-            // $(".offer_end_date").flatpickr({
-            //     minDate: "today"
-            // });
 
             //____ category_id Select2 ____//
             $('#units').select2({
@@ -1900,7 +1921,6 @@
                 return $state;
             };
         });
-
     </script>
 
     <script>
@@ -1966,7 +1986,10 @@
                                 let row = $('.variant_row').eq(index);
                                 row.find(`.${fields}_error`).html(value[0]);
                                 row.find(`[name="${fields}[]"]`).addClass('is-invalid');
-                            } 
+                            } else {
+                                $(`[name="${key}"]`).addClass('is-invalid');
+                                $(`#${key}_validate`).text(value[0]);
+                            }
                         });
 
                         $('#submitBtn').prop('disabled', false);

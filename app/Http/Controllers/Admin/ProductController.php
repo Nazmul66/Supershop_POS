@@ -313,6 +313,7 @@ class ProductController extends Controller
             $product->warranties_id             = $request->warranties_id;
             $product->qty                       = $request->qty;
             $product->alert_qty                 = $request->alert_qty;
+            $product->stock_type                = $request->stock_type ?? "in_stock";
             $product->apply_tax_percentage      = $request->apply_tax_percentage;
             $product->apply_tax_type            = $request->apply_tax_type;
             $product->apply_tax_for             = $request->apply_tax_for;
@@ -425,8 +426,9 @@ class ProductController extends Controller
         $units                = Unit::get_data();
         $warranties           = Warranty::get_data();
         $tax_rates            = TaxRate::get_data();
+        $variants             = ProductVariant::where('product_id', $product->id)->get();
 
-        return view('admin.pages.product.edit', compact('categories', 'subCategories', 'childCategories', 'brands', 'tax_rates', 'warranties', 'units', 'product'));
+        return view('admin.pages.product.edit', compact('categories', 'subCategories', 'childCategories', 'brands', 'tax_rates', 'warranties', 'units', 'product', 'variants'));
     }
 
     /**
@@ -506,7 +508,6 @@ class ProductController extends Controller
         if (!$this->user || !$this->user->can('delete.product')) {
             throw UnauthorizedException::forPermissions(['delete.product']);
         }
-
         // 1️⃣ Delete all variants
         ProductVariant::where('product_id', $product->id)->delete();
 
@@ -517,7 +518,6 @@ class ProductController extends Controller
         }
 
         $product->delete();
-
         return response()->json(['message' => 'Product has been deleted.'], 200);
     }
 

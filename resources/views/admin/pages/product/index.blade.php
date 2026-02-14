@@ -598,6 +598,9 @@
                                     <th>Cost Price</th>
                                     <th>Profit Margin</th>
                                     <th>Selling Price</th>
+                                    <th>Discount Type</th>
+                                    <th>Discount Value</th>
+                                    <th>Discount Date</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -1022,8 +1025,17 @@
                                     <td>${v.qty} ${product.short_name ? product.short_name.charAt(0).toUpperCase() + product.short_name.slice(1): ''}</td>
                                     <td>${v.alert_qty} ${product.short_name ? product.short_name.charAt(0).toUpperCase() + product.short_name.slice(1): ''}</td>
                                     <td>{{ getSetting()->currency_name }} ${v.purchase_price}</td>
-                                    <td>${v.profit_margin} %</td>
+                                    <td>${v.profit_margin}%</td>
                                     <td>{{ getSetting()->currency_name }} ${v.selling_price}</td>
+                                    <td>${v.variant_dis_type}</td>
+                                    <td>
+                                        ${v.variant_dis_type === "amount" 
+                                            ? `{{ getSetting()->currency_name }} ${v.variant_dis_value}` 
+                                            : v.variant_dis_type === "percent" 
+                                                ? `${v.variant_dis_value}%` 
+                                                : 'N/A'}
+                                        </td>
+                                    <td>${v.variant_dis_date}</td>
                                     <td>${v.status == 1 ? '<button class="btn btn-success btn-sm">Active</button>' : '<button class="btn btn-success btn-sm">Deactive</button>'}</td>
                                 </tr>`;
                             });

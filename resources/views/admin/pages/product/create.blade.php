@@ -68,9 +68,6 @@
             background-color: #e9e9ef;
             opacity: 1;
         }
-        /* .table th {
-            white-space: normal;
-        } */
         .table thead tr th {
             font-size: 12px; !important
         }
@@ -161,7 +158,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#unitModal">
+                                            <button type="button" class="add_input" data-bs-toggle="modal" data-bs-target="#unitModal">
                                                 <i class="fas fa-plus input_i"></i>
                                             </button>
                                         </div>
@@ -205,7 +202,7 @@
                                                 </select>
 
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                                            <button type="button" class="add_input" data-bs-toggle="modal" data-bs-target="#categoryModal">
                                                 <i class="fas fa-plus input_i"></i>
                                             </button>
                                         </div>
@@ -232,7 +229,7 @@
                                                 </select>
 
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#subCategoryModal">
+                                            <button type="button" class="add_input" data-bs-toggle="modal" data-bs-target="#subCategoryModal">
                                                 <i class="fas fa-plus input_i"></i>
                                             </button>
                                         </div>
@@ -260,7 +257,7 @@
                                                 </select>
 
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#warrantyModal">
+                                            <button type="button" class="add_input" data-bs-toggle="modal" data-bs-target="#warrantyModal">
                                                 <i class="fas fa-plus input_i"></i>
                                             </button>
                                         </div>
@@ -288,7 +285,7 @@
                                                 </select>
 
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#childCategoryModal">
+                                            <button type="button" class="add_input" data-bs-toggle="modal" data-bs-target="#childCategoryModal">
                                                 <i class="fas fa-plus input_i"></i>
                                             </button>
                                         </div>
@@ -318,7 +315,7 @@
                                                 </select>
 
                                             </div>
-                                            <button class="add_input" data-bs-toggle="modal" data-bs-target="#brandModal">
+                                            <button type="button" class="add_input" data-bs-toggle="modal" data-bs-target="#brandModal">
                                                 <i class="fas fa-plus input_i"></i>
                                             </button>
                                         </div>
@@ -346,8 +343,9 @@
                                     <label class="col-4" for="stock_type"><b>Stock Type</b></label>
 
                                     <div class="col-8">
-                                        <select class="form-select" id="stock_type" name="stock_type">
-                                            <option value="" selected disabled>Select option</option>
+                                        <select class="form-select" id="stock_type" name="stock_type">                    
+                                            <option value="in_stock" selected>In Stock</option>
+                                            <option value="out_of_stock">Out Of Stock</option>
                                             <option value="pre_order">Pre-Order</option>
                                             <option value="limited_stock">Limited Stock</option>
                                         </select>
@@ -409,41 +407,7 @@
                                                 </thead>
                                 
                                                 <tbody class="dynamic_variant_body">
-                                                    {{-- <tr id="variant_row" class="variant_row">
-                                                        <td class="text-start">
-                                                            <input type="hidden" class="form-control" value="" name="variant_id[]" id="variant_id">
-                                                            
-                                                            <input type="text" class="form-control reqireable" value="" id="variant_name" name="variant_name[]" readonly required>
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="text" name="variant_codes[]" id="variant_code" class="form-control reqireable fw-bold" placeholder="Variant Code" required="">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="number" name="variant_costs[]" step="any" class="form-control variant_cost requireable fw-bold" placeholder="0.00" id="variant_cost" required="">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="number" step="any" name="variant_profits[]" class="form-control requireable variant_profit fw-bold" placeholder="0.00" id="variant_profit">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="number" step="any" name="variant_prices[]" class="form-control requireable variant_price  fw-bold" placeholder="0.00" id="variant_price" required="">
-                                                        </td>
 
-                                                        <td class="text-start">
-                                                            <input type="number" name="variant_qty[]" class="form-control requireable variant_qty fw-bold" value="1" min="1" id="variant_qty" required="">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <input type="file" name="variant_image[]" class="form-control" id="variant_image" required="">
-                                                        </td>
-                            
-                                                        <td class="text-start">
-                                                            <button class="btn btn-xs btn-sm btn-danger variant_remove_btn">X</button>
-                                                        </td>
-                                                    </tr> --}}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -1227,7 +1191,7 @@
                         </td>
 
                         <td>
-                            <select class="form-select" id="variant_dis_type" name="variant_dis_type[]">
+                            <select class="form-select variant_dis_type_error" id="variant_dis_type" name="variant_dis_type[]">
                                 <option value="none">None</option>
                                 <option value="amount">Amount ( TK )</option>
                                 <option value="percent">Percent ( % )</option>
@@ -1235,11 +1199,11 @@
                         </td>
 
                         <td>
-                            <input class="form-control" type="number" id="variant_dis_value" name="variant_dis_value[]" value=""  placeholder="Discount Value....">
+                            <input class="form-control variant_dis_value_error" type="number" id="variant_dis_value" name="variant_dis_value[]" value=""  placeholder="Discount Value....">
                         </td>
 
                         <td>
-                             <input class="form-control variant_dis_date" type="text" id="variant_dis_date" name="variant_dis_date[]" value="" placeholder="Select a date....">
+                             <input class="form-control variant_dis_date_error" type="text" id="variant_dis_date" name="variant_dis_date[]" value="" placeholder="Select a date....">
                         </td>
                     </tr>
                 `);
@@ -1940,7 +1904,10 @@
                                 let row = $('.variant_row').eq(index);
                                 row.find(`.${fields}_error`).html(value[0]);
                                 row.find(`[name="${fields}[]"]`).addClass('is-invalid');
-                            } 
+                            } else {
+                                $(`[name="${key}"]`).addClass('is-invalid');
+                                $(`#${key}_validate`).text(value[0]);
+                            }
                         });
 
                         $('#submitBtn').prop('disabled', false);

@@ -397,7 +397,6 @@ class ProductController extends Controller
 
         DB::commit();
         Toastr::success('Product Create Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        // return redirect()->route('admin.product.index');
         return response()->json([
             'status' => true,
             'message' => 'Successfully Product Created!',
@@ -440,53 +439,111 @@ class ProductController extends Controller
             throw UnauthorizedException::forPermissions(['update.product']);
         }
 
+        // dd('kaj kore');
         $product  = Product::find($id);
+        // dd($product);
 
         DB::beginTransaction();
         try {
-
             $product->name                      = $request->name;
             $product->slug                      = Str::slug($request->name);
             $product->sku                       = $request->sku;
-            // $product->barcode                   = 730 . rand(100000000, 999999999);
-            // $product->vender_id                 = 1;  // Note 1=admin, 2=vendor
+            $product->barcode                   = 730 . rand(100000000, 999999999);
+            $product->unit_id                   = $request->unit_id;
+            // $product->vender_id                 = 1;  
             $product->category_id               = $request->category_id;
             $product->subCategory_id            = $request->subCategory_id;
             $product->childCategory_id          = $request->childCategory_id;
             $product->brand_id                  = $request->brand_id;
+            $product->warranties_id             = $request->warranties_id;
             $product->qty                       = $request->qty;
-            $product->units                     = $request->units;
+            $product->alert_qty                 = $request->alert_qty;
+            $product->stock_type                = $request->stock_type ?? "in_stock";
+            $product->apply_tax_percentage      = $request->apply_tax_percentage;
+            $product->apply_tax_type            = $request->apply_tax_type;
+            $product->apply_tax_for             = $request->apply_tax_for;
+
             $product->video_link                = $request->video_link;
             $product->tags                      = $request->tags;
             $product->purchase_price            = $request->purchase_price;
+            $product->profit_margin             = $request->profit_margin;
             $product->selling_price             = $request->selling_price;
             $product->discount_type             = $request->discount_type;
+
             if( $request->discount_type === "none" ){
                 $product->discount_value        = null;
             }
-            else{
-                $product->discount_value        = $request->discount_value;
-            }
-            $product->offer_start_date          = $request->offer_start_date;
-            $product->offer_end_date            = $request->offer_end_date;
+
+            $product->has_variant               = $request->has_variant;
+            $product->discount_value            = $request->discount_value;
+            $product->discount_date             = $request->discount_date;
             $product->short_description         = $request->short_description;
             $product->long_description          = $request->long_description;
+            $product->display_ecommerce         = $request->display_ecommerce;
             $product->return_policy             = $request->return_policy;
-            $product->shipping_return           = $request->shipping_return;
-            // $product->type                      = $request->type ?? 1;
-            $product->is_top                    = $request->is_top;
-            $product->is_best                   = $request->is_best;
+            $product->shipping_return           = $request->shipping_return;   
+            $product->is_sale                   = $request->is_sale;
+            $product->is_top                    = $request->is_top ?? 0;
+            $product->is_best                   = $request->is_best ?? 0;
             $product->is_featured               = $request->is_featured;
-            $product->is_approved               = 1;  // Note 0=Not Approve, 1=Approve
-            $product->seo_title                 = $request->seo_title;
-            $product->seo_description           = $request->seo_description;
-            $product->status                    = 1;
+            $product->is_approved               = 0;  // Note 0=Not Approve, 1=Approve
+            $product->status                    = 1;  
+            $product->created_by                = Auth::guard('admin')->id();  
+            $product->created_at                = now();   
+            $product->updated_at                = now();   
+            $product->seo_title                 = $request->seo_title ?? '';
+            $product->seo_description           = $request->seo_description ?? '';
     
             // Handle image with ImageUploadTraits function
             $uploadImages                     = $this->deleteImageAndUpload($request, 'thumb_image', 'product', $product->thumb_image );
             $product->thumb_image           =  $uploadImages;
         
-            $product->update();
+            // dd($product);
+            $product->save();
+
+            $hasVariants = $request->has('variant_name') && $request->has('variant_id') &&
+               count(array_filter($request->variant_name)) > 0;
+
+            if ($product->has_variant === 'yes' && $hasVariants) {
+                $variantIds = [];
+                foreach ($request->variant_name as $index => $variantName) {
+                    if (!empty($variantName)) {
+                        $variant = ProductVariant::updateOrCreate(
+                            // Condition (find by ID if exists)
+                            ['id' => $request->variant_row_id[$index] ?? null],
+                            // Data to update or insert
+                            [
+                                'product_id'        => $product->id,
+                                'variant_id'        => $request->variant_id[$index],
+                                'variant_name'      => $variantName,
+                                'variant_code'      => $request->variant_codes[$index],
+                                'qty'               => $request->variant_qty[$index],
+                                'alert_qty'         => $request->variant_alert_qty[$index],
+                                'purchase_price'    => $request->variant_costs[$index],
+                                'profit_margin'     => $request->variant_profits[$index],
+                                'selling_price'     => $request->variant_prices[$index],
+                                'variant_dis_type'  => $request->variant_dis_type[$index],
+                                'variant_dis_value' => $request->variant_dis_value[$index],
+                                'variant_dis_date'  => $request->variant_dis_date[$index],
+                                'status'            => 1,
+                            ]
+                        );
+                        $variantIds[] = $variant->id;
+                    }
+                }
+
+                // 🔥 Delete removed variants
+                ProductVariant::where('product_id', $product->id)
+                    ->whereNotIn('id', $variantIds)
+                    ->delete();
+            }
+            else {
+                // No variants → remove all
+                ProductVariant::where('product_id', $product->id)->delete();
+                $product->has_variant = 'no';
+                $product->save();
+            }
+
         }
         catch(Exception $ex){
             DB::rollBack();
@@ -495,9 +552,15 @@ class ProductController extends Controller
         }
 
         DB::commit();
-        Toastr::success('Product updated successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return redirect()->route('admin.product.index');
-        // return response()->json(['message'=> "Successfully Product Updated!", 'status' => true]);
+        Toastr::success('Product Update Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return response()->json([
+            'status' => true,
+            'message' => 'Successfully Product Updated!',
+            'product' => [
+                'id' => $product->id,
+                'name' => $product->name,
+            ]
+        ]);
     }
 
     /**

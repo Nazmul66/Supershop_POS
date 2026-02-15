@@ -110,6 +110,8 @@
     <form id="updateForm" method="POST" enctype="multipart/form-data">
         @csrf
 
+        <input type="hidden" name="id" id="prdt_id" value="{{ $product->id }}">
+
         <div class="row">
             <div class="col-lg-8">
                 <!-- 1st Row Content part Start -->
@@ -415,6 +417,9 @@
                                                             </td>
                                     
                                                             <td>
+                                                                <input type="hidden" name="variant_row_id[]" value="{{ $row->id }}">
+
+                                                                
                                                                 <input type="hidden" class="form-control" value="{{ $row->variant_id }}" name="variant_id[]" id="variant_id">
 
                                                                 <input type="text" class="form-control variant_name" value="{{ $row->variant_name }}" name="variant_name[]" id="variant_name" readonly>
@@ -546,17 +551,18 @@
                                         <div class="d-flex gap-2">
                                             <div class="" style="width: 100%;">
                                                 <select class="form-select" id="" name="apply_tax_percentage">
-                                                    <option value="0" selected>None</option>
+                                                    <option value="0" {{ ($product->apply_tax_percentage ?? 0) == 0 ? 'selected' : '' }}>None</option>
+
                                                     @foreach ($tax_rates as $row)
-                                                        <option value="{{ $row->id }}" selected>{{ $row->tax_name }} ({{ $row->percentage }}%)</option>
+                                                        <option value="{{ $row->id }}" {{ ($product->apply_tax_percentage ?? '') == $row->id ? 'selected' : '' }}>{{ $row->tax_name }} ({{ $row->percentage }}%)</option>
                                                     @endforeach
                                                 </select>
                                             </div>
 
                                             <div class="" style="width: 100%;">
                                                 <select class="form-select" id="" name="apply_tax_type">
-                                                    <option value="exclusive" selected>Exclusive</option>
-                                                    <option value="inclusive">Inclusive</option>
+                                                    <option value="exclusive" @if( $product->apply_tax_type === 'exclusive' ) selected @endif>Exclusive</option>
+                                                    <option value="inclusive" @if( $product->apply_tax_type === 'inclusive' ) selected @endif>Inclusive</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -569,8 +575,8 @@
                                     <label class="col-4" for="apply_tax_for"><b>Tax Applicable For</b></label>
                                     <div class="col-8">
                                         <select class="form-select" id="apply_tax_for" name="apply_tax_for">
-                                            <option value="exclusive" selected>For Selling Price</option>
-                                            <option value="inclusive">For Cost & Selling Price</option>
+                                            <option value="selling_price" @if( $product->apply_tax_for === 'selling_price' ) selected @endif>For Selling Price</option>
+                                            <option value="selling_cost_price" @if( $product->apply_tax_for === 'selling_cost_price' ) selected @endif>For Cost & Selling Price</option>
                                         </select>
                                     </div>
                                 </div>
@@ -723,7 +729,7 @@
             </div>
 
             <div class="col-lg-12 mb-5">
-                <button type="submit" id="submitBtn" class="btn btn-secondary waves-effect me-3">Save Changes </button>
+                <button type="submit" id="submitBtn" class="btn btn-secondary waves-effect me-3">Update Changes </button>
             </div>
         </div>
     </form>
@@ -1926,16 +1932,19 @@
     <script>
         $(document).ready(function(){
             // Create
-            $('#createForm').submit(function (e) {
+            $('#updateForm').submit(function (e) {
                 e.preventDefault();
 
+                let id = $('#prdt_id').val();
                 let formData = new FormData(this);
+                formData.append('_method', 'PUT'); // 🔥 important
+
                 $.ajax({
                     type: "POST",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ route('admin.product.store') }}",
+                    url: "{{ url('admin/product') }}/" + id,
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
@@ -1948,7 +1957,7 @@
                     success: function (res) {
                         // console.log(res);
                         if (res.status === true) {
-                            $('#createForm')[0].reset();
+                            $('#updateForm')[0].reset();
                             $('.validation-error').html('');
 
                             swal.fire({
@@ -2005,7 +2014,7 @@
                     // 🔹 Always runs (success or error)
                     complete: function () {
                         $('#submitBtn').prop('disabled', false);
-                        $('#submitBtn').html(`Save Changes`);
+                        $('#submitBtn').html(`Update Changes`);
                     }
                 });
             })

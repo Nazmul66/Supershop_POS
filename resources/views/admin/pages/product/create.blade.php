@@ -507,8 +507,8 @@
                                     <label class="col-4" for="apply_tax_for"><b>Tax Applicable For</b></label>
                                     <div class="col-8">
                                         <select class="form-select" id="apply_tax_for" name="apply_tax_for">
-                                            <option value="exclusive" selected>For Selling Price</option>
-                                            <option value="inclusive">For Cost & Selling Price</option>
+                                            <option value="selling_price" selected>For Selling Price</option>
+                                            <option value="selling_cost_price">For Cost & Selling Price</option>
                                         </select>
                                     </div>
                                 </div>

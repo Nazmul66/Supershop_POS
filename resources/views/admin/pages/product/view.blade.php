@@ -526,6 +526,9 @@
                                                     <td>{{ getSetting()->currency_name }} {{$row->purchase_price}}</td>
                                                     <td>{{$row->profit_margin}} %</td>
                                                     <td>{{ getSetting()->currency_name }} {{$row->selling_price}}</td>
+                                                    <td>{{$row->variant_dis_type}}</td>
+                                                    <td>{{$row->variant_dis_value}}</td>
+                                                    <td>{{$row->variant_dis_date}}</td>
                                                     <td>
                                                         @if ( $row->status == 1 )
                                                             <button class="btn btn-success btn-sm">Active</button>
@@ -533,9 +536,6 @@
                                                             <button class="btn btn-danger btn-sm">Deactive</button>
                                                         @endif
                                                     </td>
-                                                    <td>{{$row->variant_dis_type}}</td>
-                                                    <td>{{$row->variant_dis_value}}</td>
-                                                    <td>{{$row->variant_dis_date}}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

@@ -14,6 +14,7 @@ use App\Models\ChildCategory;
 use App\Models\Product;
 use App\Models\Admin;
 use App\Models\Brand;
+use App\Models\ProductUpdate;
 use App\Models\Unit;
 use App\Models\TaxRate;
 use App\Models\Warranty;
@@ -22,7 +23,10 @@ use Brian2694\Toastr\Facades\Toastr;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Jenssegers\Agent\Agent;
+use Stevebauman\Location\Facades\Location;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
@@ -282,6 +286,40 @@ class ProductController extends Controller
         $page = Product::findOrFail($id);
         $page->status = $status;
         $page->save();
+
+
+
+        $agent = new Agent();
+        // Get changed fields
+        $changes = $page->getChanges(); // only changed fields
+
+        if (!empty($changes)) {
+            $changes = Arr::except($changes, ['created_at', 'updated_at']);
+            $fields = array_keys($changes);
+        
+            // Convert snake_case to normal words
+            $formattedFields = array_map(function ($field) {
+                return ucwords(str_replace('_', ' ', $field));
+            }, $fields);
+        
+            // Make sentence
+            $message = 'Product information has been updated. Modified fields:' . implode(', ', $formattedFields) . '.';
+
+            // dd($changes);
+            $productUpdate = new ProductUpdate();
+
+            $productUpdate->product_id   = $page->id;
+            $productUpdate->admin_id     = Auth::guard('admin')->id();
+            $productUpdate->ip_address   = $request->ip();
+            $productUpdate->device       = $agent->browser();
+            $productUpdate->user_agent   = $request->userAgent();
+            $productUpdate->country      = Location::get($request->ip())->countryName ?? null;
+            $productUpdate->changes      = $message;
+            $productUpdate->updated_at   = now();
+
+            // dd($productUpdate);
+            $productUpdate->save();
+        }
 
         return response()->json(['message' => 'success', 'status' => $status, 'id' => $id]);
     }
@@ -544,9 +582,42 @@ class ProductController extends Controller
                 $product->save();
             }
 
+            $agent = new Agent();
+            // Get changed fields
+            $changes = $product->getChanges(); // only changed fields
+
+            if (!empty($changes)) {
+                $changes = Arr::except($changes, ['created_at', 'updated_at']);
+                $fields = array_keys($changes);
+            
+                // Convert snake_case to normal words
+                $formattedFields = array_map(function ($field) {
+                    return ucwords(str_replace('_', ' ', $field));
+                }, $fields);
+            
+                // Make sentence
+                $message = 'Product information has been updated. Modified fields:' . implode(', ', $formattedFields) . '.';
+
+                // dd($changes);
+                $productUpdate = new ProductUpdate();
+
+                $productUpdate->product_id   = $product->id;
+                $productUpdate->admin_id     = Auth::guard('admin')->id();
+                $productUpdate->ip_address   = $request->ip();
+                $productUpdate->device       = $agent->browser();
+                $productUpdate->user_agent   = $request->userAgent();
+                $productUpdate->country      = Location::get($request->ip())->countryName ?? null;
+                $productUpdate->changes      = $message;
+                $productUpdate->updated_at   = now();
+
+                // dd($productUpdate);
+                $productUpdate->save();
+            }
+
         }
         catch(Exception $ex){
             DB::rollBack();
+            // dd($ex);
             // throw $ex;
             Toastr::error('Product updated error', 'Error', ["positionClass" => "toast-top-right"]);
         }
@@ -611,17 +682,6 @@ class ProductController extends Controller
         $action = $request->action;
         $message = '';
 
-        $products = Product::whereIn('id', $ids)->get();
-            
-        foreach ($products as $row) {
-            if ($row->thumb_image) {
-                $imagePath = public_path(str_replace('public/', '', $row->thumb_image));
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
-                }
-            }
-        }
-
         if ($action == 'delete') {
             DB::transaction(function () use ($ids) {
 
@@ -660,40 +720,6 @@ class ProductController extends Controller
         return response()->json(['success' => true, 'message' => $message]);
     }
 
-    // public function getSubCategories(Request $request, Category $category)
-    // {
-    //     $subcats= SubCategory::where('category_id', $category->id)->get();
-    //     return response()->json(['message' => 'success', 'data' => $subcats], 200);
-    // }
-
-
-    // public function get_product_subCategory_data(Request $request)
-    // {
-    //     // dd($request->all());
-    //     $subCategories = Subcategory::where('category_id', $request->id)->where('status', 1)->get();
-
-    //     // 'subcategory_img' is the column name where image filename is stored
-    //     foreach ($subCategories as $subCategory) {
-    //         $subCategory->image_url = asset($subCategory->subcategory_img); 
-    //     }
-
-    //     return response()->json(['status' => true, 'data' => $subCategories]);
-    // }
-
-    // public function get_product_childCategory_data(Request $request)
-    // {
-    //     // dd($request->all());
-    //     $childCategories = ChildCategory::where('subCategory_id', $request->id)->where('status', 1)->get();
-
-    //     // 'subcategory_img' is the column name where image filename is stored
-    //     foreach ($childCategories as $childCategory) {
-    //         $childCategory->image_url = asset($childCategory->img); 
-    //     }
-
-    //     return response()->json(['status' => true, 'data' => $childCategories]);
-    // }
-
-
     public function show($id)
     {
         // dd($id);
@@ -721,169 +747,9 @@ class ProductController extends Controller
                 ->first();
 
         $variants = ProductVariant::where('product_id', $id)->get();
+        $productUpdates = ProductUpdate::where('product_id', $id)->get();
 
-        return view('admin.pages.product.view', compact('product', 'variants'));
+        return view('admin.pages.product.view', compact('product', 'variants', 'productUpdates'));
     }
 
-
-    // public function product_variant($product_id)
-    // {
-    //     if (!$this->user || !$this->user->can('variant.product')) {
-    //         throw UnauthorizedException::forPermissions(['variant.product']);
-    //     }
-
-    //     // Product Color
-    //     $data['product_id']       = $product_id;
-    //     $data['size_value']       = AttributeValue::where('attribute', "size")->where('status', 1)->get();
-    //     $data['color_value']      = AttributeValue::where('attribute', "color")->where('status', 1)->get();
-    //     $data['productImages']    = ProductImage::where('product_id', $product_id)->orderBy('order_id', 'asc')->get();
-    //     $data['productSizes']     = ProductSize::where('product_id', $product_id)->get();
-    //     $data['productColors']    = ProductColor::where('product_id', $product_id)->get();
-
-    //     return view('backend.pages.products.product_variant', $data);
-    // }
-    
-    
-    // public function update_product_variant(Request $request, $id)
-    // {
-    //     // Handle Product sizes
-    //     if ($request->has('size_name') && $request->has('size_price')) {
-    //         foreach ($request->size_name as $index => $sizeName) {
-    //             if (!empty($sizeName)) {
-    //                 // Find existing ProductSize by size_id, or create a new one
-    //                 ProductSize::updateOrCreate(
-    //                     [
-    //                         'product_id' => $id, 
-    //                         'size_id' => $request->size_id[$index] // Match on product_id and size_id
-    //                     ],
-    //                     [
-    //                         'size_name' => $sizeName, // Update or set size_name
-    //                         'size_price' => $request->size_price[$index], // Update or set size_price
-    //                         'stock' => $request->stock[$index] // Update or set stock
-    //                     ]
-    //                 );
-    //             }
-    //         }
-    //     }
-
-
-    //     // Handle Product Colors
-    //     if ($request->has('color_name')) {
-    //         foreach ($request->color_name as $row => $colorName) {
-    //             if (!empty($colorName)) {
-    //                 // Find existing ProductColor by color_id, or create a new one
-    //                 $productColor = ProductColor::updateOrCreate(
-    //                     [
-    //                         'product_id' => $id, 
-    //                         'color_id' => $request->color_id[$row] // Match on product_id and color_id
-    //                     ],
-    //                     [
-    //                         'color_name' => $colorName, // Update or set color_name
-    //                         'color_price' => $request->color_price[$row], // Update or set color_price
-    //                         'color_code' => $request->color_code[$row] // Update or set color_code
-    //                     ]
-    //                 );
-    //             }
-    //         }
-    //     }
-
-
-    //     Toastr::success('Product variation successfully updated', 'Success', ["positionClass" => "toast-top-right"]);
-    //    return redirect()->back();
-    // }
-
-    // public function product_images_store(Request $request, $id)
-    // {
-    //     // Multiple images store
-    //     if($request->hasFile('images')) {
-    //         foreach($request->file('images') as $image) {
-
-    //             $productImages = new ProductImage();
-    //             $productImages->product_id = $id;
-    
-    //             // Generate unique image name
-    //             $imageName = $request->slug . rand(1, 99999999) . '.' . $image->getClientOriginalExtension();
-    //             $imagePath = 'public/backend/images/multiple-image/';
-    //             $image->move($imagePath, $imageName);
-    //             $productImages->images   =  $imagePath . $imageName;
-
-    //             $productImages->save();
-    //         }
-    //     }
-
-    //     Toastr::success('Product image successfully updated', 'Success', ["positionClass" => "toast-top-right"]);
-    //     return redirect()->back();
-    // }
-
-    // public function product_images_sortable(Request $request)
-    // {
-    //     //  dd($request->photo_id);
-    //     if( !empty($request->photo_id) ){
-    //         $i = 1;
-    //         foreach( $request->photo_id as $image_id ){
-    //             $productImage = ProductImage::findOrFail($image_id);
-
-    //             $productImage->order_id = $i;
-    //             $productImage->save();
-
-    //             $i++;
-    //         }
-    //     }
-    //     return response()->json(['status' => 'success']);
-    // }
-
-    // // Delete Multiple Product images variants
-    // public function delete_multiple_image($id)
-    // {
-    //     try {
-    //         $productImg = ProductImage::findOrFail($id);
-    //         if( !is_null( $productImg ) ){
-    //             if( file_exists( $productImg->images )){
-    //                 unlink($productImg->images);
-    //             }
-    //             $productImg->delete();
-    //         }
-
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'Image deleted successfully.',
-    //         ]);
-    //     } 
-    //     catch (\Exception $e) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Failed to delete the image.',
-    //         ]);
-    //     }
-    // }
-
-    // // Delete Multiple Product size variants
-    // public function delete_size_variants(Request $request)
-    // {
-    //     // dd($request->all());
-    //     $productSize = ProductSize::findOrFail($request->id);
-    //     if( !is_null( $productSize ) ){
-    //         $productSize->delete();
-    //     }
-
-    //    return response()->json([
-    //         'status' => true,
-    //         'message' => "Product Variant remove",
-    //    ]);
-    // }
-
-
-    // // Delete Multiple Product color variants
-    // public function delete_color_variants(Request $request)
-    // {
-    //     $productColor = ProductColor::findOrFail($request->id);
-    //     if( !is_null( $productColor ) ){
-    //         $productColor->delete();
-    //     }
-
-    //    return response()->json([
-    //         'status' => true,
-    //         'message' => "Product Variant remove",
-    //    ]);
-    // }
 }

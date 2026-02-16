@@ -24,6 +24,12 @@
         .nav-link:hover {
             color: #009688 !important;
         }
+        .user_agent{
+            white-space: normal;
+            width: 240px;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
         .table.table-bordered.border-primary tbody, .table.table-bordered.border-primary td, .table.table-bordered.border-primary tfoot, .table.table-bordered.border-primary th, .table.table-bordered.border-primary thead, .table.table-bordered.border-primary tr {
             border-color: #b7b7b7;
             border-width: 1px;
@@ -55,6 +61,11 @@
 
 @php
     use Illuminate\Support\Str;
+
+    $adminName = \App\Models\Admin::find($product->created_by)?->name ?? 'Unknown';
+    $adminEmail = \App\Models\Admin::find($product->created_by)?->email ?? 'Unknown';
+    $maskMail = Str::mask($adminEmail, '*', -18, 8);
+    $adminImage = \App\Models\Admin::find($product->created_by)?->image ?? 'Unknown';
 @endphp
 
 {{-- Active sidebar --}}
@@ -114,6 +125,10 @@
 
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="pills-video-link-tab" data-bs-toggle="pill" data-bs-target="#pills-video-link" type="button" role="tab" aria-controls="pills-video-link" aria-selected="false">Video Link</button>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-log-tab" data-bs-toggle="pill" data-bs-target="#pills-log" type="button" role="tab" aria-controls="pills-log" aria-selected="false">Logs</button>
                     </li>
                   </ul>
             </div>
@@ -310,13 +325,6 @@
                                         </tr>
 
                                         <tr>
-                                            @php
-                                                $adminName = \App\Models\Admin::find($product->created_by)?->name ?? 'Unknown';
-                                                $adminEmail = \App\Models\Admin::find($product->created_by)?->email ?? 'Unknown';
-                                                $maskMail = Str::mask($adminEmail, '*', -18, 8);
-                                                $adminImage = \App\Models\Admin::find($product->created_by)?->image ?? 'Unknown';
-                                            @endphp
-
                                             <td class="fw-bold">Created By</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
@@ -593,6 +601,61 @@
                     <div class="card-body">
                         <div class="multi_description">
                             {!! $product->video_link !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="pills-log" role="tabpanel" aria-labelledby="pills-log-tab" tabindex="0">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card cards">
+                        <div class="card-body">
+                            <h4 class="mb-3">Product Update Log</h4>
+                            <div class="table-responsive">
+                                <table class="table border-primary mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Created At</th>
+                                            <th>Log Details</th>
+                                            <th>Device Track</th>
+                                            <th>User</th>
+                                            <th>Country</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach ($productUpdates as $index => $row)
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img  class="rounded-circle me-2" width="40"  height="40" src="{{ asset($adminImage)}}" />
+                                                        <div>
+                                                            <p class="mb-0">{{ $adminName }}</p> 
+                                                            <p class="mb-0">{{ $adminEmail }}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{{ date('M d, Y - h:i:s A', strtotime($row->updated_at)) }}</td>
+                                                <td> <p class="user_agent mb-0">{{ $row->changes }}</p></td>
+                                                <td>
+                                                    <div class="">
+                                                        <p class="mb-1"><strong>Ip Address: </strong>{{ $row->ip_address }}</p>
+                                                        <p class="mb-1"><strong>Device:</strong> {{ $row->device }}</p>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <p class="user_agent mb-0">{{ $row->user_agent }}</p>
+                                                </td>
+                                                <td>{{ $row->country }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

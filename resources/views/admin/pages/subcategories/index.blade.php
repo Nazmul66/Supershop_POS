@@ -82,7 +82,7 @@
         <!-- Create Modal -->
         <div id="createModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
              style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="myModalLabel">Create SubCategory</h5>
@@ -153,7 +153,7 @@
         <!-- Edit Modal -->
         <div id="editModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
              style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="myModalLabel">Update SubCategory</h5>
@@ -434,6 +434,13 @@
                     success: function (res) {
                         console.log(res);
                         if (res.status === true) {
+                            // Optional: auto-select the newly added option
+                            $('#category_id').val('').trigger('change');
+
+                            $('#image_preview').html(`
+                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                            `);
+
                             $('#createModal').modal('hide');
                             $('#createForm')[0].reset();
                             $('.validation-error').html('');

@@ -69,7 +69,7 @@
 @endphp
 
 {{-- Active sidebar --}}
-@section('Product', 'active')
+@section('product', 'active')
 
 
 @section('body-content')

@@ -1,7 +1,7 @@
-@extends('backend.layout.master')
+@extends('admin.layout.master')
 
 @push('title')
-    List Attribute
+    List Attribute Value
 @endpush
 
 @push('add-css')
@@ -10,16 +10,19 @@
 
 @section('body-content')
 
+{{-- Active sidebar --}}
+@section('variant-value', 'active')
+
     <!-- Breadcrumb -->
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Attribute List</h4>
+                <h4 class="mb-sm-0 font-size-18">Variant List</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboards') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Attribute</li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Variant</li>
                     </ol>
                 </div>
             </div>
@@ -30,7 +33,7 @@
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-                <h4 class="card-title">Attribute Values List</h4>
+                <h4 class="card-title">Variant Values List</h4>
 
                 @if(auth("admin")->user()->can("create.attribute"))
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
@@ -65,9 +68,9 @@
              style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header bg-primary">
-                        <h5 class="modal-title" id="myModalLabel">Create Attribute</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">Create Variant Value</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
                     <div class="modal-body">
@@ -75,18 +78,17 @@
                             @csrf
 
                             <div class="mb-3">
-                                <label for="attribute" class="form-label">Attribute <span class="text-danger">*</span></label>
-                                <select class="form-select" name="attribute" id="attribute">
-                                    <option value="color">Color</option>
-                                    <option value="size">Size</option>
-                                    <option value="weight">Weight</option>
-                                    <option value="tag">Tag</option>
+                                <label for="variant_name_id" class="form-label">Variant Name <span class="text-danger">*</span></label>
+                                <select class="form-select" name="variant_name" id="variant_name">
+                                    @foreach ($variant_names as $row)
+                                        <option value="{{ $row->name }}" data-type="{{ $row->name }}">{{ $row->name }}</option>
+                                    @endforeach
                                 </select>
 
-                                <span id="attribute_validate" class="text-danger error-validate mt-1"></span>
+                                <span id="variant_name_validate" class="text-danger error-validate mt-1"></span>
                             </div>
 
-                            <div class="mb-3 color_val">
+                            <div class="mb-3 color_val d-none">
                                 <label for="color_value" class="form-label">Color Name</label>
                                 <input type="color" class="form-control" id="color_value" name="color_value" style="height: 36px;" value="#5d61e1">
 
@@ -94,10 +96,10 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="value" class="form-label">Value <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="value" name="value" >
+                                <label for="variant_value" class="form-label">Value <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="variant_value" name="variant_value" >
 
-                                <span id="value_validate" class="text-danger error-validate mt-1"></span>
+                                <span id="variant_value_validate" class="text-danger error-validate mt-1"></span>
                             </div>
 
 
@@ -120,9 +122,9 @@
              style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header bg-primary">
-                        <h5 class="modal-title" id="myModalLabel">Update Attribute</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">Update Variant Value</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
                     <div class="modal-body">
@@ -130,32 +132,31 @@
                             @csrf
                             @method("PUT")
 
-                            <input type="text" name="id" id="id" hidden>
+                            <input type="text" name="id" id="up_id" hidden>
 
                             <div class="mb-3">
-                                <label for="up_attribute" class="form-label">Attribute <span class="text-danger">*</span></label>
-                                <select class="form-select" name="attribute" id="up_attribute">
-                                    <option value="color">Color</option>
-                                    <option value="size">Size</option>
-                                    <option value="weight">Weight</option>
-                                    <option value="tag">Tag</option>
+                                <label for="up_variant_name" class="form-label">Variant Name <span class="text-danger">*</span></label>
+                                <select class="form-select" name="variant_name" id="up_variant_name">
+                                    @foreach ($variant_names as $row)
+                                        <option value="{{ $row->name }}" data-type="{{ $row->name }}">{{ $row->name }}</option>
+                                    @endforeach
                                 </select>
 
-                                <span id="up_attribute_validate" class="text-danger error-validate mt-1"></span>
+                                <span id="up_variant_name_validate" class="text-danger error-validate mt-1"></span>
                             </div>
 
-                            <div class="mb-3 color_val d-none">
+                            <div class="mb-3 up_color_val d-none">
                                 <label for="up_color_value" class="form-label">Color Name</label>
-                                <input type="color" class="form-control" id="up_color_value" name="color_value" style="height: 36px;">
+                                <input type="color" class="form-control" id="up_color_value" name="color_value" style="height: 36px;" value="#5d61e1">
 
                                 <span id="up_color_value_validate" class="text-danger error-validate mt-1"></span>
                             </div>
 
                             <div class="mb-3">
-                                <label for="up_value" class="form-label">Value <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="up_value" name="value" >
+                                <label for="up_variant_value" class="form-label">Value <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="up_variant_value" name="variant_value" >
 
-                                <span id="up_value_validate" class="text-danger error-validate mt-1"></span>
+                                <span id="up_variant_value_validate" class="text-danger error-validate mt-1"></span>
                             </div>
 
                             <div class="d-flex justify-content-end align-items-center">
@@ -225,51 +226,62 @@
 
 @endsection
 
-@push('add-script')
+@push('add-js')
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        
+            const variantSelect = document.getElementById('variant_name');
+            const colorDiv = document.querySelector('.color_val');
+        
+            function toggleColorField() {
+                const selectedOption = variantSelect.options[variantSelect.selectedIndex];
+                const type = selectedOption.getAttribute('data-type');
+
+                if (type === 'Color') {
+                    colorDiv.classList.remove('d-none');
+                } else {
+                    colorDiv.classList.add('d-none');
+                }
+            }
+        
+            // Run on page load (for edit mode default selection)
+            toggleColorField();
+        
+            // Run when selection changes
+            variantSelect.addEventListener('change', toggleColorField);
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const upVariantSelect = document.getElementById('up_variant_name');
+            const colorUpDiv = document.querySelector('.up_color_val');
+
+            function toggleField() {
+
+                if (!upVariantSelect) return;
+
+                const selectedOption = upVariantSelect.options[upVariantSelect.selectedIndex];
+                const type = selectedOption?.getAttribute('data-type');
+
+                if (type && type.toLowerCase() === 'color') {
+                    colorUpDiv.classList.remove('d-none');
+                } else {
+                    colorUpDiv.classList.add('d-none');
+                }
+            }
+
+            // Run when selection changes
+            upVariantSelect.addEventListener('change', toggleField);
+
+            // Make it globally accessible (IMPORTANT)
+            window.toggleUpColorField = toggleField;
+        });
+    </script>
+
+    <script>
         // yajra datatables
-        $(document).ready(function () {
-
-            function toggleColorVal() {
-                const selectedValue = $('#attribute').val();
-                const colorInput = $('#color_value');
-                
-                if (selectedValue === 'color') {
-                    $('.color_val').removeClass('d-none'); 
-                    colorInput.prop('disabled', false);  
-                } else {
-                    $('.color_val').addClass('d-none');  
-                    colorInput.prop('disabled', true);   
-                    colorInput.val('');                  
-                }
-            }
-
-            // Call the function initially to handle default selection
-            toggleColorVal();
-            $('#attribute').on('change', toggleColorVal);
-
-
-            function toggleUpColorVal() {
-                const selectedValue = $('#up_attribute').val();
-                const colorInput = $('#up_color_value');
-                
-                if (selectedValue === 'color') {
-                    $('.color_val').removeClass('d-none');
-                    colorInput.prop('disabled', false);   
-                } else {
-                    $('.color_val').addClass('d-none');  
-                    colorInput.prop('disabled', true);    
-                    colorInput.val('');                  
-                }
-            }
-
-            // Call the function initially to handle default selection
-            toggleUpColorVal();
-            $('#up_attribute').on('change', toggleUpColorVal);
-
-
+        $(document).ready(function () {  
             // Show Data through Datatable
             let datatables = $('#datatables').DataTable({
                 order: [
@@ -277,7 +289,7 @@
                 ],
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin.attribute-value.data') }}",
+                ajax: "{{ route('admin.variant-value.data') }}",
                 columns: [
                     { 
                         data: 'DT_RowIndex', 
@@ -286,10 +298,10 @@
                         searchable: false 
                     },
                     {
-                        data: 'attribute',
+                        data: 'variant_name',
                     },
                     {
-                        data: 'value',
+                        data: 'variant_value',
                     },
                     {
                         data: 'color_value',
@@ -317,7 +329,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('admin.attribute-value.status') }}",
+                    url: "{{ route('admin.variant-value.status') }}",
                     data: {
                         // '_token': token,
                         id: id,
@@ -359,17 +371,17 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ route('admin.attribute.value.store') }}",
+                    url: "{{ route('admin.variant.value.store') }}",
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.status === true) {
+                            datatables.ajax.reload();
                             $('#createModal').modal('hide');
                             $('#createForm')[0].reset();
                             $('.error-validate').html('');
-                            datatables.ajax.reload();
 
                             swal.fire({
                                 title: "Success",
@@ -381,9 +393,9 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#attribute_validate').empty().html(error.attribute);
+                        $('#variant_name_validate').empty().html(error.variant_name);
                         $('#color_value_validate').empty().html(error.color_value);
-                        $('#value_validate').empty().html(error.value);
+                        $('#variant_value_validate').empty().html(error.variant_value);
 
                         swal.fire({
                             title: "Failed",
@@ -405,17 +417,21 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/attribute-value') }}/" + id + "/edit",
+                    url: "{{ url('admin/variant-value') }}/" + id + "/edit",
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
-                        console.log(data);
 
-                        $('#id').val(data.id);
-                        $('#up_attribute').val(data.attribute);
+                        $('#up_id').val(data.id);
+                        $('#up_variant_name').val(data.variant_name);
                         $('#up_color_value').val(data.color_value);
-                        $('#up_value').val(data.value);
+                        $('#up_variant_value').val(data.variant_value);
+
+                        // 🔥 FIX: Manually trigger toggle after setting value
+                        if (typeof toggleUpColorField === "function") {
+                            toggleUpColorField();
+                        }
                     },
                     error: function (error) {
                         console.log('error');
@@ -428,7 +444,7 @@
             $("#EditForm").submit(function (e) {
                 e.preventDefault();
 
-                let id = $('#id').val();
+                let id = $('#up_id').val();
                 let formData = new FormData(this);
 
                 $.ajax({
@@ -436,14 +452,14 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ url('admin/attribute-value') }}/" + id,
+                    url: "{{ url('admin/variant-value') }}/" + id,
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         swal.fire({
                             title: "Success",
-                            text: "Attribute Value Edited",
+                            text: "Variant Value Edited",
                             icon: "success"
                         })
 
@@ -454,11 +470,11 @@
                     },
                     error: function (err) {
                         let error = err.responseJSON.errors;
-                        console.log(error);
+                        // console.log(error);
 
-                        $('#up_attribute_validate').empty().html(error.attribute);
+                        $('#up_variant_name_validate').empty().html(error.variant_name);
                         $('#up_color_value_validate').empty().html(error.color_value);
-                        $('#up_value_validate').empty().html(error.value);
+                        $('#up_variant_value_validate').empty().html(error.variant_value);
 
                         swal.fire({
                             title: "Failed",
@@ -489,7 +505,7 @@
                         $.ajax({
                             type: 'DELETE',
 
-                            url: "{{ url('admin/attribute-value') }}/" + id,
+                            url: "{{ url('admin/variant-value') }}/" + id,
                             data: {
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

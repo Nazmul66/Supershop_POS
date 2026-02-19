@@ -33,78 +33,79 @@ class VariantValueController extends Controller
             throw UnauthorizedException::forPermissions(['index.attribute']);
         }
 
-        return view('admin.pages.variant.variant_values');
+        $variant_names = VariantName::where('status', 1)->get();
+        return view('admin.pages.variant.variant_values', compact('variant_names'));
     }
 
     public function getData()
     {
         // get all data
-        $attrValues = VariantValue::get();
+        $variantValues = VariantValue::get();
 
-        return DataTables::of($attrValues)
+        return DataTables::of($variantValues)
             ->addIndexColumn()
-            ->addColumn('attribute', function ($attrValue) {
-                return '<span class="btn btn-dark">'. $attrValue->attribute .'</span>';
+            ->addColumn('variant_name', function ($variantValue) {
+                return '<span class="btn btn-dark">'. $variantValue->variant_name .'</span>';
             })
-            ->addColumn('color_value', function ($attrValue) {
-                if ($attrValue->attribute === 'color') {
+            ->addColumn('color_value', function ($variantValue) {
+                if ($variantValue->variant_name === 'Color') {
                     return '<div class="d-flex gap-2 align-items-center">
-                            <div class="circle_rounded" style="background:'. $attrValue->color_value .'"></div>
-                            <span class="text-dark">' . $attrValue->color_value . '</span>
+                            <div class="circle_rounded" style="background:'. $variantValue->color_value .'"></div>
+                            <span class="text-dark">' . $variantValue->color_value . '</span>
                         </div>
                     ';
                 } else {
                     return '<span class="btn btn-danger">N/A</span>';
                 }
             })
-            ->addColumn('value', function ($attrValue) {
-                return '<span class="btn btn-secondary">'. $attrValue->value .'</span>';
+            ->addColumn('variant_value', function ($variantValue) {
+                return '<span class="btn btn-secondary">'. $variantValue->variant_value .'</span>';
             })
-            ->addColumn('status', function ($attrName) {
+            ->addColumn('status', function ($variantValue) {
                 if(auth("admin")->user()->can("status.attribute"))
-                    if ($attrName->status == 1) {
+                    if ($variantValue->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
-                            data-id="'.$attrName->id.'" data-status="'.$attrName->status.'"> <i
-                                class="fa-solid fa-toggle-on fa-2x"></i>
+                            data-id="'.$variantValue->id.'" data-status="'.$variantValue->status.'"> <i
+                                class="fa-solid fa-toggle-on fa-2x text-success"></i>
                         </a>';
                     } else {
                         return '<a class="status" id="status" href="javascript:void(0)"
-                            data-id="'.$attrName->id.'" data-status="'.$attrName->status.'"> <i
-                                class="fa-solid fa-toggle-off fa-2x" style="color: grey"></i>
+                            data-id="'.$variantValue->id.'" data-status="'.$variantValue->status.'"> <i
+                                class="fa-solid fa-toggle-off fa-2x text-danger"></i>
                         </a>';
                     }
                 else{
                     return '<span class="badge bg-info">N/A</span>'; 
                 }
             })
-            ->addColumn('action', function ($attrName) {
+            ->addColumn('action', function ($variantValue) {
                 $actionHtml = Blade::render('
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Actions <i class="mdi mdi-chevron-down"></i>
                         </button>
 
                         <div class="dropdown-menu dropdownmenu-primary" style="">
-                            <a class="dropdown-item text-info" id="viewButton" href="javascript:void(0)" data-id="'.$attrName->id.'" data-bs-toggle="modal" data-bs-target="#viewModal">
+                            <a class="dropdown-item text-info" id="viewButton" href="javascript:void(0)" data-id="'.$variantValue->id.'" data-bs-toggle="modal" data-bs-target="#viewModal">
                                 <i class="fas fa-eye"></i> View
                             </a>
 
                             @if(auth("admin")->user()->can("update.attribute"))
-                                <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$attrName->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
+                                <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$variantValue->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
                             @if(auth("admin")->user()->can("delete.attribute"))
-                                <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$attrName->id.'" id="deleteBtn">
+                                <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$variantValue->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
                             @endif
                         </div>
                     </div>
-                ', ['attrName' => $attrName]);
+                ', ['variantValue' => $variantValue]);
                 return $actionHtml;
             })
-            ->rawColumns(['attribute', 'color_value', 'value', 'status', 'action'])
+            ->rawColumns(['variant_name', 'color_value', 'variant_value', 'status', 'action'])
             ->make(true);
     }
 
@@ -140,33 +141,34 @@ class VariantValueController extends Controller
             throw UnauthorizedException::forPermissions(['create.attribute']);
         }
 
+        // dd($request->all());
         $request->validate(
             [
                 'color_value' => ['nullable'],
-                'value' => ['required', 'max:255', 'unique:attribute_values,value' ],
+                'variant_value' => ['required', 'max:255', 'unique:variant_values,variant_value' ],
             ],
             [
-                'value.required' => 'Please fill up the value',
-                'value.max' => 'Character might be 255 word',
-                'value.unique' => 'Character might be unique',
+                'variant_value.required' => 'Please fill up the variant value',
+                'variant_value.max' => 'Character might be 255 word',
+                'variant_value.unique' => 'Character might be unique',
             ]
         );
 
         DB::beginTransaction();
         try {
-            $attributeValue = new VariantValue();
+            $variantValue = new VariantValue();
 
-            $attributeValue->attribute             = $request->attribute;
-            if( $request->attribute === 'color' ){
-                $attributeValue->color_value	    = $request->color_value;
+            $variantValue->variant_name       = $request->variant_name;
+            if( $request->variant_name === 'Color' ){
+                $variantValue->color_value	  = $request->color_value;
             }
             else{
-                $attributeValue->color_value	    = null;
+                $variantValue->color_value	  = null;
             }
-            $attributeValue->value          	    = convertToSlug($request->value);
-            $attributeValue->status                 = 1;
-            // dd($attributeValue);
-            $attributeValue->save();
+            $variantValue->variant_value      = ucwords($request->variant_value);
+            $variantValue->status             = 1;
+            // dd($variantValue);
+            $variantValue->save();
         }
         catch(\Exception $ex){
             DB::rollBack();
@@ -175,18 +177,18 @@ class VariantValueController extends Controller
         }
 
         DB::commit();
-        return response()->json(['message'=> "Successfully Attribute Value Created!", 'status' => true]);
+        return response()->json(['message'=> "Successfully Variant Value Created!", 'status' => true]);
     }
 
 
-    public function edit(VariantValue $attributeValue)
+    public function edit(VariantValue $variantValue)
     {
         if (!$this->user || !$this->user->can('update.attribute')) {
             throw UnauthorizedException::forPermissions(['update.attribute']);
         }
 
-        // dd($attributeValue);
-        return response()->json(['success' => $attributeValue]);
+        // dd($variantValue);
+        return response()->json(['success' => $variantValue]);
     }
 
     /**
@@ -198,34 +200,35 @@ class VariantValueController extends Controller
             throw UnauthorizedException::forPermissions(['update.attribute']);
         }
 
-        $attributeValue  = VariantValue::find($id);
-        // dd($request->all(), $attributeValue);
+        $variantValue  = VariantValue::find($id);
+        // dd($request->all(), $variantValue);
 
         $request->validate(
             [
                 'color_value' => ['nullable'],
-                'value' => ['required', 'max:255', 'unique:attribute_values,value,'. $attributeValue->id ],
+                'variant_value' => ['required', 'max:255', 'unique:variant_values,variant_value,'. $variantValue->id ],
             ],
             [
-                'value.required' => 'Please fill up the value',
-                'value.max' => 'Character might be 255 word',
-                'value.unique' => 'Character might be unique',
+                'variant_value.required' => 'Please fill up the value',
+                'variant_value.max' => 'Character might be 255 word',
+                'variant_value.unique' => 'Character might be unique',
             ]
         );
 
         DB::beginTransaction();
         try {
             // Handle image with ImageUploadTraits function
-            $attributeValue->attribute              = $request->attribute;
-            if( $request->attribute === 'color' ){
-                $attributeValue->color_value	    = $request->color_value;
+            $variantValue->variant_name       = $request->variant_name;
+            if( $request->variant_name === 'Color' ){
+                $variantValue->color_value	  = $request->color_value;
             }
             else{
-                $attributeValue->color_value	    = null;
+                $variantValue->color_value	  = null;
             }
-            $attributeValue->value          	    = convertToSlug($request->value);
-            // dd($attributeValue);
-            $attributeValue->save();
+            $variantValue->variant_value      = ucwords($request->variant_value);
+            $variantValue->status             = 1;
+            // dd($variantValue);
+            $variantValue->save();
         }
         catch(\Exception $ex){
             DB::rollBack();
@@ -239,14 +242,14 @@ class VariantValueController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(VariantValue $attributeValue)
+    public function destroy(VariantValue $variantValue)
     {
         if (!$this->user || !$this->user->can('delete.attribute')) {
             throw UnauthorizedException::forPermissions(['delete.attribute']);
         }
 
-        $attributeValue->delete();
-        return response()->json(['message' => 'Attribute Value has been deleted.'], 200);
+        $variantValue->delete();
+        return response()->json(['message' => 'Variant Value has been deleted.'], 200);
     }
 
 

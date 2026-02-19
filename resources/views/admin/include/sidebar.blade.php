@@ -106,7 +106,7 @@
                                 <a href="javascript:void(0);" class="@yield('application')"><i class="ti ti-brand-apple-arcade  fs-16 me-2"></i><span>Variants</span><span class="menu-arrow"></span></a>
                                 <ul>
                                     <li><a href="{{ route('admin.variant.name.index') }}" class="@yield('variant-name')">Variant Name</a></li>
-                                    <li><a href="" class="">Variant Value</a></li>
+                                    <li><a href="{{ route('admin.variant.value.index') }}" class="@yield('variant-value')" class="">Variant Value</a></li>
                                 </ul>
                             </li>
                         @endif

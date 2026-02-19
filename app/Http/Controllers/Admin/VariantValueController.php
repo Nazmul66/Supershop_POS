@@ -61,6 +61,20 @@ class VariantValueController extends Controller
             ->addColumn('variant_value', function ($variantValue) {
                 return '<span class="btn btn-secondary">'. $variantValue->variant_value .'</span>';
             })
+            ->addColumn('date_info', function ($variantValue) {
+                $created_by = \App\Models\Admin::find($variantValue->created_by)?->name ?? 'Unknown';
+                $updated_by = \App\Models\Admin::find($variantValue->updated_by)?->name ?? 'Unknown';
+
+                return '<div class="">
+                    <p class="mb-1"><span class="text-dark" style="font-weight: 600;">Created at:</span> '. $variantValue->created_at->format('M j, Y h:i A') .'</p>
+
+                    <p class="mb-1"><span class="text-dark" style="font-weight: 600;">Updated at:</span> '. $variantValue->updated_at->format('M j, Y h:i A') .'</p>
+
+                    <p class="mb-1"><span class="text-dark" style="font-weight: 600;">Created by:</span> '. $created_by.'</p>
+
+                    <p class="mb-1"><span class="text-dark" style="font-weight: 600;">Updated by:</span> '. $updated_by .'</p>
+                </div>';
+            })
             ->addColumn('status', function ($variantValue) {
                 if(auth("admin")->user()->can("status.attribute"))
                     if ($variantValue->status == 1) {
@@ -105,7 +119,7 @@ class VariantValueController extends Controller
                 ', ['variantValue' => $variantValue]);
                 return $actionHtml;
             })
-            ->rawColumns(['variant_name', 'color_value', 'variant_value', 'status', 'action'])
+            ->rawColumns(['variant_name', 'color_value', 'variant_value', 'status', 'date_info', 'action'])
             ->make(true);
     }
 
@@ -250,42 +264,6 @@ class VariantValueController extends Controller
 
         $variantValue->delete();
         return response()->json(['message' => 'Variant Value has been deleted.'], 200);
-    }
-
-
-    public function attributeView($id)
-    {
-        $attributeValue  = VariantValue::find($id);
-        // dd($attributeValue);
-
-        $statusHtml = '';
-        if ($attributeValue->status === 1) {
-            $statusHtml = '<span class="text-success">Active</span>';
-        } else {
-            $statusHtml = '<span class="text-danger">Inactive</span>';
-        }
-
-        $colorValue = '';
-        if (!empty($attributeValue->color_value)) {
-            $safeColorValue = htmlspecialchars($attributeValue->color_value, ENT_QUOTES, 'UTF-8');
-            $colorValue = '<div class="d-flex gap-2 align-items-center">
-                    <div class="circle_rounded" style="background:' . $safeColorValue . '"></div>
-                    <span class="text-dark">' . $safeColorValue . '</span>
-                </div>';
-        } else {
-            $colorValue = '<button class="btn btn-danger">N/A</button>';
-        }
-
-        $created_date = date('d F, Y H:i:s A', strtotime($attributeValue->created_at));
-        $updated_date = date('d F, Y H:i:s A', strtotime($attributeValue->updated_at));
-
-        return response()->json([
-            'success'           => $attributeValue,
-            'colorValue'       => $colorValue,
-            'statusHtml'        => $statusHtml,
-            'created_date'      => $created_date,
-            'updated_date'      => $updated_date,
-        ]);
     }
 
 }

@@ -52,6 +52,7 @@
                             <th>Attribute</th>
                             <th>Name</th>
                             <th>Color Value</th>
+                            <th>Date Info</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -169,59 +170,6 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
-
-
-        <!-- View Modal -->
-        <div id="viewModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-        style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary">
-                        <h5 class="modal-title" id="myModalLabel">View Attribute List</h5>
-
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="view_modal_content">
-                            <label>Attribute : </label>
-                            <span class="text-dark" >
-                                <button class="btn btn-dark" id="view_attribute"></button>
-                            </span>
-                        </div>
-
-                        <div class="view_modal_content">
-                            <label>Color Value : </label>
-                            <span class="text-dark" id="view_color_value"></span>
-                        </div>
-
-                        <div class="view_modal_content">
-                            <label>Value : </label>
-                            <span class="text-dark">
-                                 <button class="btn btn-secondary" id="view_value"></button>
-                            </span>
-                        </div>
-
-                        <div class="view_modal_content">
-                            <label>Created Date : </label>
-                            <div id="created_date"></div>
-                        </div>
-
-                        <div class="view_modal_content">
-                            <label>Updated Date : </label>
-                            <div id="updated_date"></div>
-                        </div>
-
-                        <div class="view_modal_content">
-                            <label>Status : </label>
-                            <div id="view_status"></div>
-                        </div>
-                    </div>
-
-
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div>
     </div>
 
 @endsection
@@ -305,6 +253,9 @@
                     },
                     {
                         data: 'color_value',
+                    },
+                    {
+                        data: 'date_info',
                     },
                     {
                         data: 'status',
@@ -529,35 +480,6 @@
                         swal.fire('Your Data is Safe');
                     }
                 })
-            })
-
-            // View Data
-            $(document).on("click", '#viewButton', function (e) {
-                let id = $(this).attr('data-id');
-                // alert(id);
-
-                $.ajax({
-                    type: 'GET',
-                    // headers: {
-                    //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    // },
-                    url: "{{ url('admin/attribute-value/view') }}/" + id,
-                    processData: false,  // Prevent jQuery from processing the data
-                    contentType: false,  // Prevent jQuery from setting contentType
-                    success: function (res) {
-                        let data = res.success;
-
-                        $('#view_attribute').html(data.attribute);
-                        $('#view_color_value').html(res.colorValue); 
-                        $('#view_value').html(data.value);
-                        $('#created_date').html(res.created_date);
-                        $('#updated_date').html(res.updated_date);
-                        $('#view_status').html(res.statusHtml);
-                    },
-                    error: function (error) {
-                        console.log('error');
-                    }
-                });
             })
         })
     </script>

@@ -378,10 +378,9 @@
                                     <div class="add_more_btn">
                                         <select class="form-control variants" id="add_more_variant">
                                             <option value="" disabled selected>Select Options</option>
-                                            <option value="db" data-id="1">Db</option>
-                                            <option value="size" data-id="2">Size</option>
-                                            <option value="color" data-id="3">Color</option>
-                                            <option value="data" data-id="4">Data</option>
+                                            @foreach ($variant_values as $item)
+                                                <option value="{{ $item->variant_value }}" data-id="{{ $item->id }}" data-type="{{ $item->variant_name }}">{{ $item->variant_name }} ({{ $item->variant_value }})</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -394,6 +393,7 @@
                                                     <tr class="text-center bg-primary variant_header">
                                                         <th><i class="fas fa-trash-alt text-white"></i></th>
                                                         <th class="text-white text-start">Variant Name <span class="text-danger">*</span></th>
+                                                        <th class="text-white text-start">Variant Value <span class="text-danger">*</span></th>
                                                         <th class="text-white text-start">Variant Code <i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="fas fa-info-circle tp" data-bs-original-title="Also known as SKU. Variant code(SKU) must be unique." aria-label="Also known as SKU. Variant code(SKU) must be unique."></i></th>
                                                         <th class="text-white text-start" id="variant_qty">Qty <span class="text-danger">*</span></th>
                                                         <th class="text-white text-start" id="variant_qty">Alert Qty <span class="text-danger">*</span></th>
@@ -1144,6 +1144,7 @@
 
                 var selectedValue = e.params.data.id; // Get the selected value (ID)
                 var selectId = $('#add_more_variant').find('option[value="' + selectedValue + '"]').data('id');
+                var selectName = $('#add_more_variant').find('option[value="' + selectedValue + '"]').data('type');
 
                 // Disable the selected option in the dropdown
                 var option = $('#add_more_variant').find('option[value="' + selectedValue + '"]');
@@ -1162,8 +1163,12 @@
                         </td>
 
                         <td>
+                            <input type="text" class="form-control variant_name" value="${selectName}" name="variant_name[]" id="variant_name" readonly>
+                        </td>
+
+                        <td>
                             <input type="hidden" class="form-control" value="${selectId}" name="variant_id[]" id="variant_id">
-                            <input type="text" class="form-control variant_name" value="${selectedValue}" name="variant_name[]" id="variant_name" readonly>
+                            <input type="text" class="form-control variant_value" value="${selectedValue}" name="variant_value[]" id="variant_value" readonly>
                         </td>
 
                         <td>

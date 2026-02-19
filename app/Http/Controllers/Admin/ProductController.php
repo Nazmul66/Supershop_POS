@@ -18,6 +18,7 @@ use App\Models\ProductUpdate;
 use App\Models\Unit;
 use App\Models\TaxRate;
 use App\Models\Warranty;
+use App\Models\VariantValue;
 use App\Models\ProductVariant;
 use Brian2694\Toastr\Facades\Toastr;
 use Exception;
@@ -76,7 +77,8 @@ class ProductController extends Controller
         $units                = Unit::get_data();
         $warranties           = Warranty::get_data();
         $tax_rates            = TaxRate::get_data();
-        return view('admin.pages.product.create', compact('categories', 'subCategories', 'childCategories', 'brands', 'tax_rates', 'warranties', 'units'));
+        $variant_values       = VariantValue::where('status', 1)->get();
+        return view('admin.pages.product.create', compact('categories', 'subCategories', 'childCategories', 'brands', 'tax_rates', 'warranties', 'units', 'variant_values'));
     }
 
     public function getData(Request $request)
@@ -400,12 +402,13 @@ class ProductController extends Controller
 
             // Product Variants add
             if( $product->has_variant === 'yes' && $hasVariants ){
-                foreach ($request->variant_name as $index => $variantName) {
-                    if (!empty($variantName)) {
+                foreach ($request->variant_value as $index => $variant_value) {
+                    if (!empty($variant_value)) {
                         ProductVariant::create([
                             'product_id'        => $product->id,
                             'variant_id'        => $request->variant_id[$index],
-                            'variant_name'      => $variantName,
+                            'variant_name'      => $request->variant_name[$index],
+                            'variant_value'     => $variant_value,
                             'variant_code'      => $request->variant_codes[$index],
                             'qty'               => $request->variant_qty[$index],
                             'alert_qty'         => $request->variant_alert_qty[$index],
@@ -463,9 +466,10 @@ class ProductController extends Controller
         $units                = Unit::get_data();
         $warranties           = Warranty::get_data();
         $tax_rates            = TaxRate::get_data();
+        $variant_values       = VariantValue::where('status', 1)->get();
         $variants             = ProductVariant::where('product_id', $product->id)->get();
 
-        return view('admin.pages.product.edit', compact('categories', 'subCategories', 'childCategories', 'brands', 'tax_rates', 'warranties', 'units', 'product', 'variants'));
+        return view('admin.pages.product.edit', compact('categories', 'subCategories', 'childCategories', 'brands', 'tax_rates', 'warranties', 'units', 'product', 'variants', 'variant_values'));
     }
 
     /**
@@ -544,8 +548,8 @@ class ProductController extends Controller
 
             if ($product->has_variant === 'yes' && $hasVariants) {
                 $variantIds = [];
-                foreach ($request->variant_name as $index => $variantName) {
-                    if (!empty($variantName)) {
+                foreach ($request->variant_value as $index => $variant_value) {
+                    if (!empty($variant_value)) {
                         $variant = ProductVariant::updateOrCreate(
                             // Condition (find by ID if exists)
                             ['id' => $request->variant_row_id[$index] ?? null],
@@ -553,7 +557,8 @@ class ProductController extends Controller
                             [
                                 'product_id'        => $product->id,
                                 'variant_id'        => $request->variant_id[$index],
-                                'variant_name'      => $variantName,
+                                'variant_name'      => $request->variant_name[$index],
+                                'variant_value'     => $variant_value,
                                 'variant_code'      => $request->variant_codes[$index],
                                 'qty'               => $request->variant_qty[$index],
                                 'alert_qty'         => $request->variant_alert_qty[$index],

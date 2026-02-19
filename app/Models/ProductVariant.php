@@ -13,6 +13,7 @@ class ProductVariant extends Model
         'product_id',
         'variant_id',
         'variant_name',
+        'variant_value',
         'variant_code',
         'qty',
         'alert_qty',

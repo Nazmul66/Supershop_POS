@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class ProductUpdate extends Model
 {
     public $timestamps = false;
+
+    protected $casts = [
+        'updated_at' => 'datetime',
+    ];
     
     protected $fillable = [
         'product_id',

@@ -289,9 +289,6 @@ class ProductController extends Controller
         $page->status = $status;
         $page->save();
 
-
-
-        $agent = new Agent();
         // Get changed fields
         $changes = $page->getChanges(); // only changed fields
 
@@ -308,19 +305,8 @@ class ProductController extends Controller
             $message = 'Product information has been updated. Modified fields:' . implode(', ', $formattedFields) . '.';
 
             // dd($changes);
-            $productUpdate = new ProductUpdate();
-
-            $productUpdate->product_id   = $page->id;
-            $productUpdate->admin_id     = Auth::guard('admin')->id();
-            $productUpdate->ip_address   = $request->ip();
-            $productUpdate->device       = $agent->browser();
-            $productUpdate->user_agent   = $request->userAgent();
-            $productUpdate->country      = Location::get($request->ip())->countryName ?? null;
-            $productUpdate->changes      = $message;
-            $productUpdate->updated_at   = now();
-
-            // dd($productUpdate);
-            $productUpdate->save();
+            // Product Log Update
+            $this->logProductUpdate($page->id, $message, $request);
         }
 
         return response()->json(['message' => 'success', 'status' => $status, 'id' => $id]);
@@ -604,19 +590,8 @@ class ProductController extends Controller
                 $message = 'Product information has been updated. Modified fields:' . implode(', ', $formattedFields) . '.';
 
                 // dd($changes);
-                $productUpdate = new ProductUpdate();
-
-                $productUpdate->product_id   = $product->id;
-                $productUpdate->admin_id     = Auth::guard('admin')->id();
-                $productUpdate->ip_address   = $request->ip();
-                $productUpdate->device       = $agent->browser();
-                $productUpdate->user_agent   = $request->userAgent();
-                $productUpdate->country      = Location::get($request->ip())->countryName ?? null;
-                $productUpdate->changes      = $message;
-                $productUpdate->updated_at   = now();
-
-                // dd($productUpdate);
-                $productUpdate->save();
+                // Product Log Update
+                $this->logProductUpdate($product->id, $message, $request);
             }
 
         }
@@ -656,6 +631,8 @@ class ProductController extends Controller
             }
         }
 
+        ProductUpdate::where('product_id', $product->id)->delete();
+
         $product->delete();
         return response()->json(['message' => 'Product has been deleted.'], 200);
     }
@@ -692,6 +669,7 @@ class ProductController extends Controller
 
                 // 1️⃣ Delete all variants
                 ProductVariant::whereIn('product_id', $ids)->delete();
+                ProductUpdate::whereIn('product_id', $ids)->delete();
             
                 // 2️⃣ Fetch products to delete their images
                 $products = Product::whereIn('id', $ids)->get();
@@ -751,10 +729,30 @@ class ProductController extends Controller
                 ->where('products.id', $id)
                 ->first();
 
-        $variants = ProductVariant::where('product_id', $id)->get();
+        $variants       = ProductVariant::where('product_id', $id)->get();
         $productUpdates = ProductUpdate::where('product_id', $id)->get();
 
         return view('admin.pages.product.view', compact('product', 'variants', 'productUpdates'));
+    }
+
+
+    private function logProductUpdate($productId, $message, $request)
+    {
+        $agent = new Agent();
+
+        $productUpdate = new ProductUpdate();
+
+        $productUpdate->product_id   = $productId;
+        $productUpdate->admin_id     = Auth::guard('admin')->id();
+        $productUpdate->ip_address   = $request->ip();
+        $productUpdate->device       = $agent->browser();
+        $productUpdate->user_agent   = $request->userAgent();
+        $productUpdate->country      = Location::get($request->ip())->countryName ?? null;
+        $productUpdate->changes      = $message;
+        $productUpdate->updated_at   = now();
+
+        // dd($productUpdate);
+        $productUpdate->save();
     }
 
 }

@@ -638,7 +638,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>{{ date('M d, Y - h:i:s A', strtotime($row->updated_at)) }}</td>
+                                                <td>{{ $row->updated_at->format('M j, Y h:i A') }}</td>
                                                 <td> <p class="user_agent mb-0">{{ $row->changes }}</p></td>
                                                 <td>
                                                     <div class="">

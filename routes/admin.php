@@ -147,6 +147,14 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/brands/pdf', [BrandsController::class, 'allBrandsPdf'])->name('brand.pdf');
 
 
+    //______ Brand _____//
+    Route::resource('/customer', CustomerController::class)->names('customer');
+    Route::get('/customer-data', [CustomerController::class, 'getData'])->name('customer-data');
+    Route::post('/change-customer-status', [CustomerController::class, 'changeCustomerStatus'])->name('customer.status');
+    Route::get('/customer/view/{id}', [CustomerController::class, 'customerView'])->name('customer.view');
+    Route::get('/customer/pdf', [CustomerController::class, 'allCustomerPdf'])->name('customer.pdf');
+
+
     //______ Product _____//
     Route::resource('/product', ProductController::class)->names('product');
     Route::get('/product-data', [ProductController::class, 'getData'])->name('product-data');
@@ -214,6 +222,12 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::post('/change-warehouse-status', [WarehouseController::class, 'changeWarehouseStatus'])->name('warehouse.status');
     Route::get('/warehouse/view/{id}', [WarehouseController::class, 'warehouseView'])->name('warehouse.view');
     Route::get('/warehouse/pdf', [WarehouseController::class, 'allWarehousePdf'])->name('warehouse.pdf');
+
+
+    //______ Order _____//
+    Route::resource('/orders', OrderController::class)->names('orders');
+    Route::get('/orders-data', [OrderController::class, 'getData'])->name('orders-data');
+    Route::post('/change-orders-status', [OrderController::class, 'changeOrdersStatus'])->name('orders.status');
 
 
     //______ HRM System _____//

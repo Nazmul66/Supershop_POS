@@ -96,7 +96,6 @@
                     </ul>
                 </li>
 
-
                 {{-- Inventory --}}
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Inventory</h6>
@@ -132,7 +131,7 @@
                     <h6 class="submenu-hdr">Order Management</h6>
                     <ul>
                         <li class="@yield('faq')">
-                            <a href="{{ route('admin.faq.index') }}" >
+                            <a href="{{ route('admin.orders.index') }}" >
                             <i class="ti ti-shopping-bag-check fs-16 me-2"></i><span>Manage Order</span></a>
                         </li>
                     </ul>
@@ -159,7 +158,7 @@
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Peoples</h6>
                     <ul>
-                        <li><a href="customers.html"><i class="ti ti-users-group fs-16 me-2"></i><span>Customers</span></a></li>
+                        <li class="@yield('customer')"><a href="{{ route('admin.customer.index') }}"><i class="ti ti-users-group fs-16 me-2"></i><span>Customers</span></a></li>
                         <li><a href="billers.html"><i class="ti ti-user-up fs-16 me-2"></i><span>Billers</span></a></li>
                         <li><a href="suppliers.html"><i class="ti ti-user-dollar fs-16 me-2"></i><span>Suppliers</span></a></li>
                         <li><a href="store-list.html"><i class="ti ti-home-bolt fs-16 me-2"></i><span>Stores</span></a></li>

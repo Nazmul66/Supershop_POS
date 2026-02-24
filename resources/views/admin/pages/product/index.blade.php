@@ -592,6 +592,7 @@
                                 <tr>
                                     <th>#Sl No.</th>
                                     <th>Variant Name</th>
+                                    <th>Variant Weight</th>
                                     <th>Variant Code</th>
                                     <th>Qty</th>
                                     <th>Alert Qty</th>
@@ -1021,6 +1022,7 @@
                                 html += `<tr>
                                     <td>${index + 1}</td>
                                     <td>${v.variant_name}</td>
+                                    <td>${v.variant_value} ${product.short_name ? product.short_name.charAt(0).toUpperCase() + product.short_name.slice(1): ''}</td>
                                     <td>${v.variant_code}</td>
                                     <td>${v.qty} ${product.short_name ? product.short_name.charAt(0).toUpperCase() + product.short_name.slice(1): ''}</td>
                                     <td>${v.alert_qty} ${product.short_name ? product.short_name.charAt(0).toUpperCase() + product.short_name.slice(1): ''}</td>

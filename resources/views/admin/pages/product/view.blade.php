@@ -510,6 +510,7 @@
                                             <tr>
                                                 <th>#Sl No.</th>
                                                 <th>Variant Name</th>
+                                                <th>Variant Weight</th>
                                                 <th>Variant Code</th>
                                                 <th>Qty</th>
                                                 <th>Alert Qty</th>
@@ -528,6 +529,7 @@
                                                 <tr>
                                                     <td>{{ $index + 1}}</td>
                                                     <td>{{ $row->variant_name}}</td>
+                                                    <td>{{ $row->variant_value }} {{ $product->short_name }}</td>
                                                     <td>{{ $row->variant_code}}</td>
                                                     <td>{{ $row->qty .' '. Str::title($row->short_name) }}</td>
                                                     <td>{{ $row->alert_qty .' '. Str::title($row->short_name) }}</td>

@@ -147,7 +147,7 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/brands/pdf', [BrandsController::class, 'allBrandsPdf'])->name('brand.pdf');
 
 
-    //______ Brand _____//
+    //______ Customer _____//
     Route::resource('/customer', CustomerController::class)->names('customer');
     Route::get('/customer-data', [CustomerController::class, 'getData'])->name('customer-data');
     Route::post('/change-customer-status', [CustomerController::class, 'changeCustomerStatus'])->name('customer.status');

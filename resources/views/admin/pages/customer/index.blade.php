@@ -7,6 +7,7 @@
 
 @push('add-css')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css">
+    <link href="{{ asset('public/admin/assets/css/select2.min.css') }}" rel="stylesheet" />
 @endpush
 
 {{-- Active sidebar --}}
@@ -19,8 +20,8 @@
     <div class="page-header">
         <div class="add-item d-flex">
             <div class="page-title">
-                <h4 class="fw-bold">Brand</h4>
-                <h6>Manage your brands</h6>
+                <h4 class="fw-bold">Customer</h4>
+                <h6>Manage your customers</h6>
             </div>
         </div>
         <ul class="table-top-head">
@@ -45,7 +46,7 @@
         </ul>
         <div class="page-btn">
             @if(auth("admin")->user()->can("create.brand"))
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Brand</button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Customer</button>
              @endif
         </div>
     </div>
@@ -58,10 +59,13 @@
                 <table class="table table-bordered mb-0" id="datatables">
                     <thead class="bg-primary text-white">
                         <tr>
-                            <th>#SL.</th>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Status</th>
+                            <th>#Sl No.</th>
+                            <th>Customer Id</th>
+                            <th>Customer Details</th>
+                            <th>Customer Email</th>
+                            <th>Customer Address</th>
+                            <th>Addtional Note</th>
+                            <th>Internal Note</th>
                             <th>Created By</th>
                             <th>Actions</th>
                         </tr>
@@ -79,7 +83,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Create Brand</h5>
+                        <h5 class="modal-title" id="myModalLabel">Create Customer</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
@@ -87,21 +91,129 @@
                         <form id="createForm" enctype="multipart/form-data">
                             @csrf
 
-                            <div class="mb-3">
-                                <label for="brand_name" class="form-label">Brand Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="brand_name" name="brand_name" placeholder="Brand name">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="cus_type" class="form-label">Customer Type</label>
+                                        <select class="form-select" id="cus_type" name="cus_type">
+                                            <option value="ecom_type_cus" selected>Ecommerce Type Customer</option>
+                                        </select>
+        
+                                        <span id="cus_type_validate" class="text-danger validation-error mt-1"></span>
+                                    </div>
+                                </div>
 
-                                <span id="name_validate" class="text-danger validation-error mt-1"></span>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="cus_name" class="form-label">Customer Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="cus_name" name="cus_name" placeholder="Customer name">
+        
+                                        <span id="cus_name_validate" class="text-danger validation-error mt-1"></span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="image" class="form-label">Brand Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
-                                <input type="file" class="form-control" name="image" id="image"  accept=".png, .jpeg, .jpg, .webp" onchange="previewImage(event)">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="cus_email" class="form-label">Customer Email (Optional)</label>
+                                        <input type="email" class="form-control" id="cus_email" name="cus_email" placeholder="Customer name">
+        
+                                        <span id="cus_email_validate" class="text-danger validation-error mt-1"></span>
+                                    </div>
+                                </div>
 
-                                <span id="image_validate" class="text-danger validation-error mt-1"></span>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="cus_phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="cus_phone" name="cus_phone" placeholder="Customer name">
+        
+                                        <span id="cus_phone_validate" class="text-danger validation-error mt-1"></span>
+                                    </div>
+                                </div>
+                            </div>
 
-                                <div id="image_preview" class="mt-3">
-                                    <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="cus_tag" class="form-label">Customer Tag (Optional)</label>
+                                        <select class="form-select" id="cus_tag" name="cus_tag">
+                                            <option value="regular" selected>Regular</option>
+                                            <option value="vip">VIP</option>
+                                            <option value="fraud">Fraud</option>
+                                            <option value="corporate">Corporate</option>
+                                            <option value="employee">Employee</option>
+                                            <option value="probashi">Probashi</option>
+                                        </select>
+        
+                                        <span id="cus_tag_validate" class="text-danger validation-error mt-1"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="cus_source">Customer Source <span class="text-danger">*</span></label>
+                    
+                                        <select name="cus_source" id="cus_source" class="form-control">
+                                            <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
+                                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
+                                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
+                                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
+                                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label for="cus_address" class="form-label">Customer Address <span class="text-danger">*</span></label>
+                                    <textarea name="cus_address" class="form-control" id="cus_address" cols="30" rows="2"></textarea>
+    
+                                    <span id="cus_address_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label for="additional_note" class="form-label">Additional Note (Optional)</label>
+                                    <textarea name="additional_note" class="form-control" id="additional_note" cols="30" rows="2"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label for="internal_note" class="form-label">Internal Note (Optional)</label>
+                                    <textarea name="internal_note" class="form-control" id="internal_note" cols="30" rows="2"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="">
+                                    <label for="" class="form-label">Save As</label>
+                
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="save_as" id="home" value="home" checked>
+                                            <label class="form-check-label" for="home">
+                                                Home
+                                            </label>
+                                        </div>
+                
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="save_as" id="work" value="work">
+                                            <label class="form-check-label" for="work">
+                                                Work
+                                            </label>
+                                        </div>
+                
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="save_as" id="other" value="other">
+                                            <label class="form-check-label" for="other">
+                                                Other
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -112,7 +224,7 @@
                                     <option value="0">Deactive</option>
                                 </select>
 
-                                <span id="featured_validate" class="text-danger validation-error mt-1"></span>
+                                <span id="status_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="d-flex justify-content-end align-items-center">
@@ -123,7 +235,6 @@
                             </div>
                         </form>
                     </div>
-
 
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -228,31 +339,32 @@
 
 @push('add-js')
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
+    <script src="{{ asset('public/admin/assets/js/select2.min.js') }}"></script>
 
-    <script>
-        function previewImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = e => document.getElementById('image_preview').innerHTML = `
-                <img src="${e.target.result}" width="100" height="100">`;
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function imageShow(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = e => document.getElementById('imageShow').innerHTML = `
-                <img src="${e.target.result}" width="100" height="100">`;
-                reader.readAsDataURL(file);
-            }
-        }
-    </script>
 
     <script>
         $(document).ready(function () {
+            $('#cus_source').select2({
+                templateResult: formatState,       
+                templateSelection: formatState, 
+            });
+
+            function formatState (state) {
+                if (!state.id) {
+                    return state.text; // Return text for disabled option
+                }
+
+                var imageUrl = $(state.element).data('image-url'); // Access image URL from data attribute
+
+                if (!imageUrl) {
+                    return state.text; // Return text if no image URL is available
+                }
+
+                var $state = $(
+                    '<span><img src="' + imageUrl + '" style="width: 30px; height: 30px; border-radius: 6px; margin-right: 8px;" /> ' + state.text + '</span>'
+                );
+                return $state;
+            };
 
             // Show Data through Datatable
             let datatables = $('#datatables').DataTable({
@@ -262,7 +374,7 @@
                 processing: true,
                 serverSide: true,
 
-                ajax: "{{ route('admin.brand-data') }}",
+                ajax: "{{ route('admin.customer-data') }}",
                 // pageLength: 30,
 
                 columns: [
@@ -273,12 +385,37 @@
                         searchable: false 
                     },
                     {
-                        data: 'brandImage',
+                        data: 'cus_id',
                         orderable: false,
                         searchable: false,
                     },
                     {
-                        data: 'brand_name',
+                        data: 'customer_details',
+                    },
+                    {
+                        data: 'cus_email',
+                        orderable: false,
+                        searchable: false,
+                    },
+                    {
+                        data: 'cus_address',
+                        orderable: false,
+                        searchable: false,
+                    },
+                    {
+                        data: 'cus_address',
+                        orderable: false,
+                        searchable: false,
+                    },
+                    {
+                        data: 'additional_note',
+                        orderable: false,
+                        searchable: false,
+                    },
+                    {
+                        data: 'internal_note',
+                        orderable: false,
+                        searchable: false,
                     },
                     {
                         data: 'status',
@@ -348,17 +485,13 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ route('admin.brand.store') }}",
+                    url: "{{ route('admin.customer.store') }}",
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         console.log(res);
                         if (res.status === true) {
-                            $('#image_preview').html(`
-                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
-                            `);
-                            
                             $('#createModal').modal('hide');
                             $('#createForm')[0].reset();
                             $('.validation-error').html('');

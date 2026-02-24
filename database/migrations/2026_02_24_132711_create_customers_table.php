@@ -13,6 +13,18 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->string('cus_id');
+            $table->string('cus_type');
+            $table->string('cus_name');
+            $table->string('cus_phone');
+            $table->string('cus_email')->nullable();
+            $table->string('cus_tag');
+            $table->string('cus_source');
+            $table->string('cus_address');
+            $table->string('additional_note')->nullable();
+            $table->string('internal_note')->nullable();
+            $table->string('save_as')->comment("home,work,other");
+            $table->integer('status')->default(1)->comment("1=Active, 0=Deactive");
             $table->timestamps();
         });
     }

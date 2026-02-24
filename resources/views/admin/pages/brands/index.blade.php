@@ -355,6 +355,10 @@
                     success: function (res) {
                         console.log(res);
                         if (res.status === true) {
+                            $('#image_preview').html(`
+                                <img src="{{ asset('public/admin/assets/images/no_Image_available.jpg') }}" width="100" height="100">
+                            `);
+                            
                             $('#createModal').modal('hide');
                             $('#createForm')[0].reset();
                             $('.validation-error').html('');

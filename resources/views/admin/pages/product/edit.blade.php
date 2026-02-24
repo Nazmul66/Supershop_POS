@@ -88,7 +88,7 @@
         <div class="add-item d-flex">
             <div class="page-title">
                 <h4 class="fw-bold">Product</h4>
-                <h6>Create your Products</h6>
+                <h6>Update your Products</h6>
             </div>
         </div>
         

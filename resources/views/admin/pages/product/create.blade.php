@@ -545,7 +545,7 @@
                                 <div class="input-group mb-1">
                                     <label class="col-4" for="profit_margin"><b>Profit Margin(%)</b> <span class="text-danger">*</span></label>
                                     <div class="col-8">
-                                        <input type="number" name="profit_margin" class="form-control profit_margin_validate" id="profit_margin" placeholder="0.00" min="1" value="{{ old('profit_margin') }}">
+                                        <input type="number" name="profit_margin" class="form-control profit_margin_validate" id="profit_margin" placeholder="0.00" min="1" step="0.01" value="{{ old('profit_margin') }}">
 
                                         <span id="profit_margin_validate" class="invalid-feedback mt-1"></span>
                                     </div>

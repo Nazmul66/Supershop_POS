@@ -8,6 +8,21 @@
 @push('add-css')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css">
     <link href="{{ asset('public/admin/assets/css/select2.min.css') }}" rel="stylesheet" />
+
+    <style>
+        .plus_icon{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        @media (min-width: 1240px) and (max-width: 1560px) {
+            .table-responsive {
+                overflow-x: inherit;
+                overflow-y: auto;
+            }
+        }
+    </style>
 @endpush
 
 {{-- Active sidebar --}}
@@ -59,13 +74,12 @@
                 <table class="table table-bordered mb-0" id="datatables">
                     <thead class="bg-primary text-white">
                         <tr>
-                            <th>#Sl No.</th>
                             <th>Customer Id</th>
                             <th>Customer Details</th>
-                            <th>Customer Email</th>
                             <th>Customer Address</th>
                             <th>Addtional Note</th>
                             <th>Internal Note</th>
+                            <th>Status</th>
                             <th>Created By</th>
                             <th>Actions</th>
                         </tr>
@@ -155,11 +169,11 @@
                                         <label class="form-label" for="cus_source">Customer Source <span class="text-danger">*</span></label>
                     
                                         <select name="cus_source" id="cus_source" class="form-control">
-                                            <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
-                                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
-                                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
-                                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
-                                            <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
+                                            <option value="website" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
+                                            <option value="phone_call" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
+                                            <option value="whatsapp" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
+                                            <option value="facebook" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
+                                            <option value="instagram" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
                                         </select>
                                     </div>
                                 </div>
@@ -168,7 +182,7 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label for="cus_address" class="form-label">Customer Address <span class="text-danger">*</span></label>
-                                    <textarea name="cus_address" class="form-control" id="cus_address" cols="30" rows="2"></textarea>
+                                    <textarea name="cus_address" class="form-control" id="cus_address" cols="30" placeholder="Write here....." rows="2"></textarea>
     
                                     <span id="cus_address_validate" class="text-danger validation-error mt-1"></span>
                                 </div>
@@ -177,14 +191,14 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label for="additional_note" class="form-label">Additional Note (Optional)</label>
-                                    <textarea name="additional_note" class="form-control" id="additional_note" cols="30" rows="2"></textarea>
+                                    <textarea name="additional_note" class="form-control" id="additional_note" cols="30" placeholder="Write here....." rows="2"></textarea>
                                 </div>
                             </div>
 
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label for="internal_note" class="form-label">Internal Note (Optional)</label>
-                                    <textarea name="internal_note" class="form-control" id="internal_note" cols="30" rows="2"></textarea>
+                                    <textarea name="internal_note" class="form-control" id="internal_note" cols="30" placeholder="Write here....." rows="2"></textarea>
                                 </div>
                             </div>
 
@@ -247,7 +261,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Update Brand</h5>
+                        <h5 class="modal-title" id="myModalLabel">Update Customer</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
@@ -256,35 +270,149 @@
                             @csrf
                             @method("PUT")
 
-                            <input type="text" name="id" id="id" hidden>
+                            <input type="text" name="id" id="ups_id" hidden>
 
-                            <div class="mb-3">
-                                <label for="up_brand_name" class="form-label">Brand Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="up_brand_name" name="brand_name" placeholder="Brand Name">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="up_cus_type" class="form-label">Customer Type</label>
+                                        <select class="form-select" id="up_cus_type" name="cus_type">
+                                            <option value="ecom_type_cus" selected>Ecommerce Type Customer</option>
+                                        </select>
+        
+                                        <span id="up_cus_type_validate" class="text-danger validation-error mt-1"></span>
+                                    </div>
+                                </div>
 
-                                <span id="up_name_validate" class="text-danger validation-error mt-1"></span>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="up_cus_name" class="form-label">Customer Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="up_cus_name" name="cus_name" placeholder="Customer name">
+        
+                                        <span id="up_cus_name_validate" class="text-danger validation-error mt-1"></span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="image" class="form-label">Brand Image <sup class="text-danger" style="font-size: 12px;">* resolution(100 x 100)</sup></label>
-                                <input type="file" class="form-control" name="image" id="image" accept=".png, .jpeg, .jpg, .webp" onchange="imageShow(event)">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="up_cus_email" class="form-label">Customer Email (Optional)</label>
+                                        <input type="email" class="form-control" id="up_cus_email" name="cus_email" placeholder="Customer name">
+        
+                                        <span id="up_cus_email_validate" class="text-danger validation-error mt-1"></span>
+                                    </div>
+                                </div>
 
-                                <div id="imageShow" class="mt-3"></div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="up_cus_phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="up_cus_phone" name="cus_phone" placeholder="Customer name">
+        
+                                        <span id="up_cus_phone_validate" class="text-danger validation-error mt-1"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="up_cus_tag" class="form-label">Customer Tag (Optional)</label>
+                                        <select class="form-select" id="up_cus_tag" name="cus_tag">
+                                            <option value="regular" selected>Regular</option>
+                                            <option value="vip">VIP</option>
+                                            <option value="fraud">Fraud</option>
+                                            <option value="corporate">Corporate</option>
+                                            <option value="employee">Employee</option>
+                                            <option value="probashi">Probashi</option>
+                                        </select>
+        
+                                        <span id="up_cus_tag_validate" class="text-danger validation-error mt-1"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="up_cus_source">Customer Source <span class="text-danger">*</span></label>
+                    
+                                        <select name="cus_source" id="up_cus_source" class="form-control">
+                                            <option value="website" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
+                                            <option value="phone_call" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
+                                            <option value="whatsapp" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
+                                            <option value="facebook" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
+                                            <option value="instagram" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label for="up_cus_address" class="form-label">Customer Address <span class="text-danger">*</span></label>
+                                    <textarea name="cus_address" class="form-control" id="up_cus_address" cols="30" placeholder="Write here....." rows="2"></textarea>
+    
+                                    <span id="up_cus_address_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label for="up_additional_note" class="form-label">Additional Note (Optional)</label>
+                                    <textarea name="additional_note" class="form-control" id="up_additional_note" cols="30" placeholder="Write here....." rows="2"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label for="up_internal_note" class="form-label">Internal Note (Optional)</label>
+                                    <textarea name="internal_note" class="form-control" id="up_internal_note" cols="30" placeholder="Write here....." rows="2"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="">
+                                    <label for="" class="form-label">Save As</label>
+                
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="save_as" id="home" value="home" checked>
+                                            <label class="form-check-label" for="home">
+                                                Home
+                                            </label>
+                                        </div>
+                
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="save_as" id="work" value="work">
+                                            <label class="form-check-label" for="work">
+                                                Work
+                                            </label>
+                                        </div>
+                
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="save_as" id="other" value="other">
+                                            <label class="form-check-label" for="other">
+                                                Other
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Status <span class="text-danger">*</span></label>
-                                <select class="form-select" id="up_status" name="status">
+                                <select class="form-select" name="status">
                                     <option value="1" selected>Active</option>
                                     <option value="0">Deactive</option>
                                 </select>
+
+                                <span id="status_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="d-flex justify-content-end align-items-center">
                                 <button type="button" class="btn btn-secondary waves-effect me-3"
                                     data-bs-dismiss="modal">Close</button>
 
-                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light"> Update </button>
+                                <button type="submit" id="btn-update" class="btn btn-primary waves-effect waves-light"> Update </button>
                             </div>
                         </form>
                     </div>
@@ -349,6 +477,11 @@
                 templateSelection: formatState, 
             });
 
+            $('#up_cus_source').select2({
+                templateResult: formatState,       
+                templateSelection: formatState, 
+            });
+
             function formatState (state) {
                 if (!state.id) {
                     return state.text; // Return text for disabled option
@@ -378,12 +511,6 @@
                 // pageLength: 30,
 
                 columns: [
-                    { 
-                        data: 'DT_RowIndex', 
-                        name: 'DT_RowIndex', 
-                        orderable: false, 
-                        searchable: false 
-                    },
                     {
                         data: 'cus_id',
                         orderable: false,
@@ -391,16 +518,6 @@
                     },
                     {
                         data: 'customer_details',
-                    },
-                    {
-                        data: 'cus_email',
-                        orderable: false,
-                        searchable: false,
-                    },
-                    {
-                        data: 'cus_address',
-                        orderable: false,
-                        searchable: false,
                     },
                     {
                         data: 'cus_address',
@@ -443,7 +560,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('admin.brand.status') }}",
+                    url: "{{ route('admin.customer.status') }}",
                     data: {
                         // '_token': token,
                         id: id,
@@ -489,12 +606,25 @@
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
+                    beforeSend: function () {
+                        $('#btn-store').prop('disabled', true);
+                        $('#btn-store').html(`
+                            <i class="fas fa-spinner fa-spin me-2"></i> Loading...
+                        `);
+                    },
                     success: function (res) {
                         console.log(res);
                         if (res.status === true) {
                             $('#createModal').modal('hide');
                             $('#createForm')[0].reset();
                             $('.validation-error').html('');
+
+                            // Optional: auto-select the newly added option
+                            $('#cus_source').val('website').trigger('change');
+
+                            $('#btn-store').prop('disabled', false);
+                            $('#btn-store').html(`Save changes`);
+
                             datatables.ajax.reload();
 
                             swal.fire({
@@ -506,10 +636,17 @@
                     },
                     error: function (err) {
                         let error = err.responseJSON.errors;
+                        console.log(error);
 
-                        $('#name_validate').empty().html(error.brand_name);
-                        $('#image_validate').empty().html(error.image);
-                        $('#featured_validate').empty().html(error.is_featured);
+                        $('#btn-store').prop('disabled', false);
+                        $('#btn-store').html(`Save changes`);
+
+                         // clear all previous validation messages
+                         $('[id$="_validate"]').html('');
+
+                        $.each(error, function (key, value) {
+                            $('#' + key + '_validate').html(value[0]);
+                        });
 
                         swal.fire({
                             title: "Failed",
@@ -531,21 +668,24 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/brands') }}/" + id + "/edit",
+                    url: "{{ url('admin/customer') }}/" + id + "/edit",
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
+                        console.log(data);
 
-                        $('#id').val(data.id);
-                        $('#up_brand_name').val(data.brand_name);
-                        $('#imageShow').html('');
-                        $('#imageShow').append(`
-                            <a href="{{ asset("`+ data.image +`") }}" target="__blank">
-                                 <img src={{ asset("`+ data.image +`") }} alt="" style="width: 75px;">
-                            </a>
-                        `);
-                        $('#up_status').val(data.status);
+                        $('#ups_id').val(data.id);
+                        $.each(data, function (key, value) {
+                            let element = $('#up_' + key);
+
+                            element.val(value);
+
+                            // Trigger change if select
+                            if (element.is('select')) {
+                                element.trigger('change');
+                            }
+                        });
                     },
                     error: function (error) {
                         console.log('error');
@@ -567,17 +707,25 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ url('admin/brands') }}/" + id,
+                    url: "{{ url('admin/customer') }}/" + id,
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
+                    beforeSend: function () {
+                        $('#btn-update').prop('disabled', true);
+                        $('#btn-update').html(`
+                            <i class="fas fa-spinner fa-spin me-2"></i> Loading...
+                        `);
+                    },
                     success: function (res) {
-
                         swal.fire({
                             title: "Success",
-                            text: "Brand Updated Successfully",
+                            text: "Customer Updated Successfully",
                             icon: "success"
                         })
+
+                        $('#btn-update').prop('disabled', false);
+                        $('#btn-update').html(`Update`);
 
                         $('#editModal').modal('hide');
                         $('#EditForm')[0].reset();
@@ -587,7 +735,15 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#up_name_validate').empty().html(error.brand_name);
+                        $('#btn-update').prop('disabled', false);
+                        $('#btn-update').html(`Update`);
+
+                         // clear all previous validation messages
+                         $('[id^="up_"][id$="_validate"]').html('');
+
+                        $.each(error, function (key, value) {
+                            $('#up_' + key + '_validate').html(value[0]);
+                        });
 
                         swal.fire({
                             title: "Failed",

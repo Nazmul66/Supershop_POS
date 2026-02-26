@@ -7,10 +7,26 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
+use App\Traits\ImageUploadTraits;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class CustomerController extends Controller
 {
+    use ImageUploadTraits;
+    
+    public $user;
+    public function __construct()
+    {
+        $this->user = Auth::guard('admin')->user();
+        if (!$this->user) {
+            abort(403, 'Unauthorized access');
+        }
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -26,20 +42,61 @@ class CustomerController extends Controller
 
         return DataTables::of($customers)
             ->addIndexColumn()
+            ->addColumn('cus_id', function ($customer) {
+                if (!empty($customer->cus_id)) {
+                    return '<strong><span class="">'. $customer->cus_id .'</span></strong>';
+                }
+            })
+            ->addColumn('additional_note', function ($customer) {
+                if (!empty($customer->additional_note)) {
+                    return '<span class="">'. $customer->additional_note .'</span>';
+                }
+                else{
+                    return '<div class="plus_icon"><i class="ti ti-plus"></i></div>';
+                }
+            })
+            ->addColumn('internal_note', function ($customer) {
+                if (!empty($customer->internal_note)) {
+                    return '<span class="">'. $customer->internal_note .'</span>';
+                }
+                else{
+                    return '<div class="plus_icon"><i class="ti ti-plus"></i></div>';
+                }
+            })
             ->addColumn('customer_details', function ($customer) {
-                $icon = asset('public/admin/assets/images/whatsapp.png');
+                $icon = '';
+                if( $customer->cus_source === 'website' ){
+                    $icon = asset('public/admin/assets/images/world-wide-web.png');
+                }
+                else if( $customer->cus_source === 'phone_call' ){
+                    $icon = asset('public/admin/assets/images/viber.png');
+                }
+                else if( $customer->cus_source === 'whatsapp' ){
+                    $icon = asset('public/admin/assets/images/whatsapp.png');
+                }
+                else if( $customer->cus_source === 'facebook' ){
+                    $icon = asset('public/admin/assets/images/facebook.png');
+                }
+                else{
+                    $icon = asset('public/admin/assets/images/instagram.png');
+                }
+
                 return '<div class="copy-row">
-                    <h6 style="color: #1e857a;" class="mb-1"><strong>Minhajhul Islam</strong></h6>
+                    <h6 style="color: #1e857a;" class="mb-1"><strong>'. $customer->cus_name .'</strong></h6>
                     <div class="d-flex align-items-center gap-1 mb-1">
-                        <span class="badge badge-sm bg-primary">New</span>
+                        <span class="badge badge-sm bg-primary">'. $customer->cus_tag .'</span>
                     </div>
 
                     <div class="d-flex align-items-center gap-2 mb-1">
-                        <strong><span class="copyNumber">+8801833220886</span></strong>
+                        <strong><span class="">+88'. $customer->cus_phone .'</span></strong>
 
-                        <a href="https://wa.me/01833220886" target="_blank" style="width: 18px;">
+                        <a href="https://wa.me/'. $customer->cus_phone .'" target="_blank" style="width: 18px;">
                             <img src="' . $icon . '" alt="" width="18">
                         </a>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <strong><span class="">'. $customer->cus_email .'</span></strong>
                     </div>
                 </div>';  
             })
@@ -100,16 +157,30 @@ class CustomerController extends Controller
                 ', ['customer' => $customer]);
                 return $actionHtml;
             })
-            ->rawColumns(['created_by', 'customer_details', 'status', 'action'])
+            ->rawColumns(['cus_id', 'internal_note', 'additional_note', 'created_by', 'customer_details', 'status', 'action'])
             ->make(true);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function changeCustomerStatus(Request $request)
     {
-        //
+        if (!$this->user || !$this->user->can('status.city')) {
+            throw UnauthorizedException::forPermissions(['status.city']);
+        }
+
+        $id = $request->id;
+        $Current_status = $request->status;
+
+        if ($Current_status == 1) {
+            $status = 0;
+        } else {
+            $status = 1;
+        }
+
+        $page = Customer::findOrFail($id);
+        $page->status = $status;
+        $page->save();
+
+        return response()->json(['message' => 'success', 'status' => $status, 'id' => $id]);
     }
 
     /**
@@ -117,23 +188,64 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        if (!$this->user || !$this->user->can('create.city')) {
+            throw UnauthorizedException::forPermissions(['create.city']);
+        }
+        
+        $request->validate([
+            'cus_name'      => 'required|string|max:150|unique:customers,cus_name',
+            'cus_phone'     => 'required|string|digits_between:10,11',
+            'cus_source'    => 'required|string',
+            'cus_address'   => 'required|string|max:512',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        DB::beginTransaction();
+        try {
+            $lastCustomer = Customer::orderBy('cus_id', 'desc')->value('cus_id');
+            $nextNumber = $lastCustomer ? ((int) str_replace('C-', '', $lastCustomer)) + 1
+            : 123001;
+
+            $customer  = new Customer();
+            $customer->cus_id                 = 'C-' . $nextNumber;
+            $customer->cus_type               = $request->cus_type;
+            $customer->cus_name               = $request->cus_name;
+            $customer->cus_phone              = $request->cus_phone;
+            $customer->cus_email              = $request->cus_email;
+            $customer->cus_tag                = $request->cus_tag;
+            $customer->cus_source             = $request->cus_source;
+            $customer->cus_address            = $request->cus_address;
+            $customer->additional_note        = $request->additional_note;
+            $customer->internal_note          = $request->internal_note;
+            $customer->save_as                = $request->save_as;
+            $customer->status                 = $request->status;
+            $customer->created_by             = Auth::guard('admin')->id();
+            $customer->created_at             = now();
+            $customer->updated_at             = now();
+
+            // dd($customer);
+            $customer->save();
+        }
+        catch(\Exception $ex){
+            DB::rollBack();
+            throw $ex;
+            // dd($ex->getMessage());
+        }
+
+        DB::commit();
+        return response()->json(['message'=> "Successfully Customer Created!", 'status' => true]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Customer $customer)
     {
-        //
+        if (!$this->user || !$this->user->can('update.city')) {
+            throw UnauthorizedException::forPermissions(['update.city']);
+        }
+
+        // dd($city);
+        return response()->json(['success' => $customer]);
     }
 
     /**
@@ -141,14 +253,60 @@ class CustomerController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if (!$this->user || !$this->user->can('update.city')) {
+            throw UnauthorizedException::forPermissions(['update.city']);
+        }
+
+        $request->validate([
+            'cus_name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('customers', 'cus_name')->ignore($id, 'id'),
+            ],
+            'cus_phone'     => 'required|string|digits_between:10,11',
+            'cus_source'    => 'required|string',
+            'cus_address'   => 'required|string|max:512',
+        ]);
+
+        $customer  = Customer::find($id);
+
+        DB::beginTransaction();
+        try {
+            $customer->cus_type               = $request->cus_type;
+            $customer->cus_name               = $request->cus_name;
+            $customer->cus_phone              = $request->cus_phone;
+            $customer->cus_email              = $request->cus_email;
+            $customer->cus_tag                = $request->cus_tag;
+            $customer->cus_source             = $request->cus_source;
+            $customer->cus_address            = $request->cus_address;
+            $customer->additional_note        = $request->additional_note;
+            $customer->internal_note          = $request->internal_note;
+            $customer->save_as                = $request->save_as;
+            $customer->status                 = $request->status;
+            $customer->updated_by             = Auth::guard('admin')->id();
+            $customer->updated_at             = now();
+            $customer->save();
+        }
+        catch(\Exception $ex){
+            DB::rollBack();
+            throw $ex;
+            // dd($ex->getMessage());
+        }
+
+        DB::commit();
+        return response()->json(['message'=> "success"],200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Customer $customer)
     {
-        //
+        if (!$this->user || !$this->user->can('delete.city')) {
+            throw UnauthorizedException::forPermissions(['delete.city']);
+        }
+        $customer->delete();
+        return response()->json(['message' => 'Customer has been deleted.'], 200);
     }
 }

@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 use App\Traits\ImageUploadTraits;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class CustomerController extends Controller
@@ -194,7 +194,7 @@ class CustomerController extends Controller
         
         $request->validate([
             'cus_name'      => 'required|string|max:150|unique:customers,cus_name',
-            'cus_phone'     => 'required|string|digits_between:10,11',
+            'cus_phone'     => 'required|string|unique:customers,cus_phone|digits_between:10,11',
             'cus_source'    => 'required|string',
             'cus_address'   => 'required|string|max:512',
         ]);
@@ -258,15 +258,10 @@ class CustomerController extends Controller
         }
 
         $request->validate([
-            'cus_name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('customers', 'cus_name')->ignore($id, 'id'),
-            ],
-            'cus_phone'     => 'required|string|digits_between:10,11',
-            'cus_source'    => 'required|string',
-            'cus_address'   => 'required|string|max:512',
+            'cus_name'     => ['required', 'string', 'max:255','unique:customers,cus_name,' .$id],
+            'cus_phone'    => ['required', 'string', 'digits_between:10,11', 'unique:customers,cus_phone,' .$id],
+            'cus_source'   => 'required|string',
+            'cus_address'  => 'required|string|max:512',
         ]);
 
         $customer  = Customer::find($id);
@@ -308,5 +303,63 @@ class CustomerController extends Controller
         }
         $customer->delete();
         return response()->json(['message' => 'Customer has been deleted.'], 200);
+    }
+
+    public function customerView($id)
+    {
+       $customer  =  Customer::findOrFail($id);
+        // dd($customer);
+
+        $statusHtml = '';
+        if ($customer->status == 1) {
+            $statusHtml = '<span class="text-success">Active</span>';
+        } else {
+            $statusHtml = '<span class="text-danger">Inactive</span>';
+        }
+
+        $createdName   = \App\Models\Admin::find($customer->created_by)?->name ?? 'Unknown';
+        $createdImage  = \App\Models\Admin::find($customer->created_by)?->image ?? 'Unknown';
+        $updatedName   = \App\Models\Admin::find($customer->created_by)?->name ?? 'Unknown';
+        $updatedImage  = \App\Models\Admin::find($customer->created_by)?->image ?? 'Unknown';
+        $createdBy     = '<div class="d-flex align-items-center">
+                            <img  class="rounded-circle me-2" width="40"  height="40" src="'.asset($createdImage) .'" />
+                            <div>
+                                <p class="mb-0">'. $createdName .'</p> 
+                            </div>
+                        </div>';
+        $updatedBy   = '<div class="d-flex align-items-center">
+                            <img  class="rounded-circle me-2" width="40"  height="40" src="'.asset($updatedImage) .'" />
+                            <div>
+                                <p class="mb-0">'. $updatedName .'</p> 
+                            </div>
+                        </div>';
+
+        $created_date = date('d F, Y', strtotime($customer->created_at));
+        $updated_date = date('d F, Y', strtotime($customer->updated_at));
+
+        return response()->json([
+            'success'           => $customer,
+            'statusHtml'        => $statusHtml,
+            'created_date'      => $created_date,
+            'updated_date'      => $updated_date,
+            'createdBy'         => $createdBy,
+            'updatedBy'         => $updatedBy,
+        ]);
+    }
+
+    
+    public function allCustomerPdf()
+    {
+        if (!$this->user || !$this->user->can('pdf.category')) {
+            throw UnauthorizedException::forPermissions(['pdf.category']);
+        }
+        
+        $customers = Customer::get();
+
+        $pdf = Pdf::loadView('admin.pages.customer.pdf', compact('customers'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('customer.pdf');
+        // return view('admin.pages.customer.pdf', compact('customers'));
     }
 }

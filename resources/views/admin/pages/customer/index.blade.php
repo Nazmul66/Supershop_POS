@@ -270,7 +270,7 @@
                             @csrf
                             @method("PUT")
 
-                            <input type="text" name="id" id="ups_id" hidden>
+                            <input type="text" name="id" id="up_id" hidden>
 
                             <div class="row">
                                 <div class="col-lg-6">
@@ -427,20 +427,75 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">View Brand List</h5>
+                        <h5 class="modal-title" id="myModalLabel">View Customer List</h5>
 
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
                     <div class="modal-body">
                         <div class="view_modal_content">
-                            <label>Name : </label>
-                            <span class="text-dark" id="view_brand_name"></span>
+                            <label>Customer ID : </label>
+                            <span class="text-dark" id="view_cus_id"></span>
                         </div>
 
                         <div class="view_modal_content">
-                            <label>Image : </label>
-                            <div id="viewImageShow"></div>
+                            <label>Customer Type : </label>
+                            <span class="text-dark" id="view_cus_type"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Customer Name : </label>
+                            <span class="text-dark" id="view_cus_name"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Customer Phone : </label>
+                            <span class="text-dark" id="view_cus_phone"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Customer Email : </label>
+                            <span class="text-dark" id="view_cus_email"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Customer Tag : </label>
+                            <span class="text-dark" id="view_cus_tag"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Customer Source : </label>
+                            <span class="text-dark" id="view_cus_source"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Customer Address : </label>
+                            <span class="text-dark" id="view_cus_address"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Additional Note : </label>
+                            <span class="text-dark" id="view_additional_note"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Internal Note : </label>
+                            <span class="text-dark" id="view_internal_note"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Save As : </label>
+                            <span class="text-dark" id="view_save_as"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Created By : </label>
+                            <span id="created_by"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Updated By : </label>
+                            <span id="updated_by"></span>
                         </div>
 
                         <div class="view_modal_content">
@@ -455,7 +510,7 @@
 
                         <div class="view_modal_content">
                             <label>Status : </label>
-                            <div id="view_status"></div>
+                            <div id="statusHtml"></div>
                         </div>
                     </div>
                 </div><!-- /.modal-content -->
@@ -675,7 +730,6 @@
                         let data = res.success;
                         console.log(data);
 
-                        $('#ups_id').val(data.id);
                         $.each(data, function (key, value) {
                             let element = $('#up_' + key);
 
@@ -699,7 +753,7 @@
             $("#EditForm").submit(function (e) {
                 e.preventDefault();
 
-                let id = $('#id').val();
+                let id = $('#up_id').val();
                 let formData = new FormData(this);
 
                 $.ajax({
@@ -774,7 +828,7 @@
                         $.ajax({
                             type: 'DELETE',
 
-                            url: "{{ url('admin/brands') }}/" + id,
+                            url: "{{ url('admin/customer') }}/" + id,
                             data: {
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -811,23 +865,22 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/brands/view') }}/" + id,
+                    url: "{{ url('admin/customer/view') }}/" + id,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
+                        console.log(data)
 
-                        $('#view_brand_name').html(data.brand_name);
-                        $('#viewImageShow').html('');
-                        $('#viewImageShow').append(`
-                          <a href="{{ asset("`+ data.image +`") }}" target="__blank">
-                            <img src={{ asset("`+ data.image +`") }} alt="" style="width: 75px;">    
-                          </a>
-                       `);
-
+                        $('#statusHtml').html(res.statusHtml);
+                        $('#created_by').html(res.createdBy);
+                        $('#updated_by').html(res.updatedBy);
                         $('#created_date').html(res.created_date);
                         $('#updated_date').html(res.updated_date);
-                        $('#view_status').html(res.statusHtml);
+
+                        $.each(data, function (key, value) {
+                            $('#view_' + key).html(value);
+                        });
                     },
                     error: function (error) {
                         console.log('error');

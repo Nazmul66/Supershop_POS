@@ -114,7 +114,7 @@ class CustomerController extends Controller
                 </div>';
             })
             ->addColumn('status', function ($customer) {
-                if(auth("admin")->user()->can("status.category"))
+                if(auth("admin")->user()->can("status.customer"))
                     if ($customer->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$customer->id.'" data-status="'.$customer->status.'"> <i
@@ -141,13 +141,13 @@ class CustomerController extends Controller
                                 <i class="fas fa-eye"></i> View
                             </a>
 
-                            @if(auth("admin")->user()->can("update.category"))
+                            @if(auth("admin")->user()->can("update.customer"))
                                 <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$customer->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
-                            @if(auth("admin")->user()->can("delete.category"))
+                            @if(auth("admin")->user()->can("delete.customer"))
                                 <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$customer->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
@@ -163,8 +163,8 @@ class CustomerController extends Controller
 
     public function changeCustomerStatus(Request $request)
     {
-        if (!$this->user || !$this->user->can('status.city')) {
-            throw UnauthorizedException::forPermissions(['status.city']);
+        if (!$this->user || !$this->user->can('status.customer')) {
+            throw UnauthorizedException::forPermissions(['status.customer']);
         }
 
         $id = $request->id;
@@ -188,8 +188,8 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$this->user || !$this->user->can('create.city')) {
-            throw UnauthorizedException::forPermissions(['create.city']);
+        if (!$this->user || !$this->user->can('create.customer')) {
+            throw UnauthorizedException::forPermissions(['create.customer']);
         }
         
         $request->validate([
@@ -240,8 +240,8 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        if (!$this->user || !$this->user->can('update.city')) {
-            throw UnauthorizedException::forPermissions(['update.city']);
+        if (!$this->user || !$this->user->can('update.customer')) {
+            throw UnauthorizedException::forPermissions(['update.customer']);
         }
 
         // dd($city);
@@ -253,8 +253,8 @@ class CustomerController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (!$this->user || !$this->user->can('update.city')) {
-            throw UnauthorizedException::forPermissions(['update.city']);
+        if (!$this->user || !$this->user->can('update.customer')) {
+            throw UnauthorizedException::forPermissions(['update.customer']);
         }
 
         $request->validate([
@@ -298,8 +298,8 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        if (!$this->user || !$this->user->can('delete.city')) {
-            throw UnauthorizedException::forPermissions(['delete.city']);
+        if (!$this->user || !$this->user->can('delete.customer')) {
+            throw UnauthorizedException::forPermissions(['delete.customer']);
         }
         $customer->delete();
         return response()->json(['message' => 'Customer has been deleted.'], 200);
@@ -357,7 +357,7 @@ class CustomerController extends Controller
         $customers = Customer::get();
 
         $pdf = Pdf::loadView('admin.pages.customer.pdf', compact('customers'))
-            ->setPaper('a4', 'portrait');
+            ->setPaper('a4', 'landscape');
 
         return $pdf->download('customer.pdf');
         // return view('admin.pages.customer.pdf', compact('customers'));

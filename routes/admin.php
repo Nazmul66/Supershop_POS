@@ -148,7 +148,7 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
 
 
     //______ Customer _____//
-    Route::resource('/customer', CustomerController::class)->names('customer');
+    Route::resource('/customer', CustomerController::class)->names('customer')->except('show');
     Route::get('/customer-data', [CustomerController::class, 'getData'])->name('customer-data');
     Route::post('/change-customer-status', [CustomerController::class, 'changeCustomerStatus'])->name('customer.status');
     Route::get('/customer/view/{id}', [CustomerController::class, 'customerView'])->name('customer.view');

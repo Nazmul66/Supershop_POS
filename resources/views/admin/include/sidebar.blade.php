@@ -116,7 +116,9 @@
 
                         <li class="@yield('childCategory')"><a href="{{ route('admin.childCategory.index') }}"><i class="ti ti-brand-airtable fs-16 me-2"></i><span>Child Category</span></a></li>
 
-                        <li class="@yield('product')"><a href="{{ route('admin.product.index') }}"><i class="ti ti-box fs-16 me-2"></i><span>Product</span></a></li>
+                        @if(auth("admin")->user()->can("index.product"))
+                            <li class="@yield('product')"><a href="{{ route('admin.product.index') }}"><i class="ti ti-box fs-16 me-2"></i><span>Product</span></a></li>
+                        @endif
 
                         <li class="@yield('brand')"><a href="{{ route('admin.brand.index') }}"><i class="ti ti-triangles fs-16 me-2"></i><span>Brand</span></a></li>
 
@@ -127,15 +129,17 @@
                 </li>
 
                 {{-- Order Management --}}
-                <li class="submenu-open">
-                    <h6 class="submenu-hdr">Order Management</h6>
-                    <ul>
-                        <li class="@yield('faq')">
-                            <a href="{{ route('admin.orders.index') }}" >
-                            <i class="ti ti-shopping-bag-check fs-16 me-2"></i><span>Manage Order</span></a>
-                        </li>
-                    </ul>
-                </li>
+                @if(auth("admin")->user()->can("index.customer"))
+                    <li class="submenu-open">
+                        <h6 class="submenu-hdr">Order Management</h6>
+                        <ul>
+                            <li class="@yield('faq')">
+                                <a href="{{ route('admin.orders.index') }}" >
+                                <i class="ti ti-shopping-bag-check fs-16 me-2"></i><span>Manage Order</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
 
                 {{-- Content (CMS) --}}
                 <li class="submenu-open">

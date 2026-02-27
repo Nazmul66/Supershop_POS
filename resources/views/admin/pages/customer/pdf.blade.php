@@ -96,12 +96,12 @@
 <body>
     
     <header>
-        <h2>Cities List</h2>
+        <h2>Customers List</h2>
         <p>Generated on: {{ date('d-m-Y H:i:A') }}</p>
     </header>
 
     <footer>
-        <p style="text-align: center;">© {{ date('Y') }} ShadhinDeal</p>
+        <p style="text-align: center;">© {{ date('Y') }} Dreampos</p>
     </footer>
 
     <main>
@@ -113,17 +113,75 @@
                     <th>Customer Address</th>
                     <th>Addtional Note</th>
                     <th>Internal Note</th>
+                    <th>Created Date</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($customers as $index => $row)
+                @foreach ($customers as $row)
                     <tr>
-                        <td>{{ $index+1 }}</td>
-                        <td>{{ $row->country_name }}</td>
-                        <td>{{ $row->state_name }}</td>
-                        <td>{{ $row->city_name }}</td>
+                        <td>
+                            <strong><span class="">{{ $row->cus_id }}</span></strong>
+                        </td>
+
+                        <td>
+                            @php
+                                $icon = '';
+                                if( $row->cus_source === 'website' ){
+                                    $icon = asset('public/admin/assets/images/world-wide-web.png');
+                                }
+                                else if( $row->cus_source === 'phone_call' ){
+                                    $icon = asset('public/admin/assets/images/viber.png');
+                                }
+                                else if( $row->cus_source === 'whatsapp' ){
+                                    $icon = asset('public/admin/assets/images/whatsapp.png');
+                                }
+                                else if( $row->cus_source === 'facebook' ){
+                                    $icon = asset('public/admin/assets/images/facebook.png');
+                                }
+                                else{
+                                    $icon = asset('public/admin/assets/images/instagram.png');
+                                }
+                            @endphp
+                            <div class="copy-row">
+                                <h4 style="color: #1e857a; margin: 0 0 8px 0;"><strong>{{ $row->cus_name }}</strong></h4>
+
+                                <span class="badge bg-success fw-medium fs-10" style="margin: 0 3px 0 0;">{{ $row->cus_tag  }}</span>
+            
+                                <div style="margin-top: 8px;">
+                                    <strong><span class="">+88{{ $row->cus_phone }}</span></strong>
+            
+                                    <a href="https://wa.me/{{ $row->cus_phone }}" target="_blank" style="width: 18px;">
+                                        <img src="{{ $icon }}" alt="" width="18">
+                                    </a>
+                                </div>
+            
+                                <div style="margin-top: 4px;">
+                                    <strong><span class="">{{ $row->cus_email }}</span></strong>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>{{ $row->cus_address }}</td>
+
+                        <td>
+                            @if (!empty($row->additional_note)) 
+                                <span class="">{{ $row->additional_note }}</span>
+                            @else
+                                <div class="plus_icon"><i class="ti ti-plus"></i></div>
+                            @endif
+                        </td>
+
+                        <td>
+                            @if (!empty($row->internal_note))
+                                <span class="">{{ $row->internal_note }}</span>
+                            @else
+                                <div class="plus_icon"><i class="ti ti-plus"></i></div>
+                            @endif
+                        </td>
+
                         <td>{{ $row->created_at }}</td>
+
                         <td>
                             @if ( $row->status == 1 )
                                 <span class="badge bg-success fw-medium fs-10">Active</span>
@@ -133,11 +191,9 @@
                         </td>
                     </tr>
                 @endforeach
-
             </tbody>
         </table>
     </main>
-
 
 </body>
 </html>

@@ -217,7 +217,7 @@ class CustomerController extends Controller
             $customer->additional_note        = $request->additional_note;
             $customer->internal_note          = $request->internal_note;
             $customer->save_as                = $request->save_as;
-            $customer->status                 = $request->status;
+            $customer->status                 = $request->status ?? 1;
             $customer->created_by             = Auth::guard('admin')->id();
             $customer->created_at             = now();
             $customer->updated_at             = now();
@@ -278,7 +278,7 @@ class CustomerController extends Controller
             $customer->additional_note        = $request->additional_note;
             $customer->internal_note          = $request->internal_note;
             $customer->save_as                = $request->save_as;
-            $customer->status                 = $request->status;
+            $customer->status                 = $request->status ?? 1;
             $customer->updated_by             = Auth::guard('admin')->id();
             $customer->updated_at             = now();
             $customer->save();

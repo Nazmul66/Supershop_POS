@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -62,4 +64,20 @@ class OrderController extends Controller
     {
         //
     }
+
+    public function customerSearch(Request $request)
+    {
+        // dd($request->all());
+        $customers = Customer::
+                    where('cus_phone', 'LIKE', "%{$request->phone}%")
+                    ->where('status', 1)
+                    ->limit(3)
+                    ->get();
+        
+        return response()->json([
+            'status' => true,
+            'data' => $customers
+        ]);
+    }
+
 }

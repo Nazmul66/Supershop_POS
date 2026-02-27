@@ -170,10 +170,12 @@
                 {{-- Customer Search Option --}}
                 <div class="search_box mb-3">
                     <div class="">
-                        <h5 class="mb-1">Customer Search</h5>
+                       <label for="customer_search">
+                            <h5 class="mb-1">Customer Search</h5>
+                       </label>
                         <div class="customer_form_box">
                             <span>+880</span>
-                            <input type="text" id="cus_name" name="cus_name" class="customer_search" maxlength="11" minlength="11"/>
+                            <input type="text" id="customer_search" name="customer_search" class="customer_search" maxlength="11" minlength="11"/>
                         </div>
                     </div>
 
@@ -183,28 +185,12 @@
                         </div>
                         <p class="text-center mb-2">Sorry! Customer not found.</p>
                         <div class="text-center">
-                            <button type="button" data-bs-toggle="offcanvas"  data-bs-target="#create_customer" aria-controls="offcanvasRight" class="btn btn-secondary">Add Customer</button>
+                            <button type="button" data-bs-toggle="offcanvas"  data-bs-target="#create_customer_canvas" aria-controls="offcanvasRight" class="btn btn-secondary">Add Customer</button>
                         </div>
                     </div>
 
-                    
-                    <div class="cus_history_box">
-                        <div class="border-bottom pb-1 mb-3">
-                            <a href="" class="d-block">
-                                <h4 class="mb-1">Kabir Hassan</h4>
-                                <span class="badge badge-sm bg-primary">New</span>
-                                <p class="mt-1">01765201685</p>
-                            </a>
-                        </div>
-
-                        <div class="border-bottom pb-1 mb-3">
-                            <a href="" class="d-block">
-                                <h4 class="mb-1">Kabir Hassan</h4>
-                                <span class="badge badge-sm bg-primary">Regular</span>
-                                <p class="mt-1">01765201685</p>
-                            </a>
-                        </div>
-                    </div>
+                    {{-- All Customer fetch data --}}
+                    <div class="cus_history_box"></div>
                 </div>
 
                 <div class="scroll-box">
@@ -718,7 +704,7 @@
     </div>
 
 
-    <!-- Customer Details Update Modal -->
+    <!-- Update Customer Details Update Modal -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="update_customer" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h3 id="offcanvasRightLabel">Update Customer</h3>
@@ -863,10 +849,10 @@
                     </div>
     
                     <div class="mb-3">
-                        <label class="form-label" for="create_cus_source">Customer Source</label>
+                        <label class="form-label" for="update_cus_source">Customer Source</label>
     
-                        <select name="cus_source" id="create_cus_source" class="form-control">
-                            <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
+                        <select name="cus_source" id="update_cus_source" class="form-control">
+                            <option value="website" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
@@ -1026,7 +1012,7 @@
 
 
     {{-- Create Customer --}}
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="create_customer" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="create_customer_canvas" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h3 id="offcanvasRightLabel">Create Customer</h3>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -1034,23 +1020,25 @@
 
         <div class="offcanvas-body">
             <div class="row">
-                <form id="createForm" enctype="multipart/form-data">
+                <form id="createCustomerForm" enctype="multipart/form-data">
                     @csrf
     
                     <div class="mb-3">
                         <div class="bg-input-field">
                             <label for="cus_type" class="form_labels">Customer Type</label>
                             <select name="cus_type" id="cus_type" class="form-select select_form mt-2">
-                                <option value="" selected>Ecommerce Type Customer</option>
+                                <option value="ecom_type_cus" selected>Ecommerce Type Customer</option>
                             </select>
                         </div>
                     </div>
     
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <div class="bg-input-field">
                             <label for="cus_name" class="form_labels">Customer Name <span class="text-danger"> *</span></label>
                             <input type="text" id="cus_name" name="cus_name" class="form-control form_inputs" placeholder="" />
                         </div>
+
+                        <span id="cus_name_validate" class="text-danger validation-error mt-1"></span>
                     </div>
     
                     <div class="mb-3 mt-3">
@@ -1058,6 +1046,8 @@
                             <label for="cus_phone" class="form_labels">Phone Number <span class="text-danger"> *</span></label>
                             <input type="text" id="cus_phone" name="cus_phone" class="form-control form_inputs" placeholder="" />
                         </div>
+
+                        <span id="cus_phone_validate" class="text-danger validation-error mt-1"></span>
                     </div>
     
                     <div class="mb-3 mt-3">
@@ -1069,12 +1059,14 @@
     
                     <div class="mb-3">
                         <div class="bg-input-field">
-                            <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
+                            <label for="cus_address" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
 
                             <div class="input-addon-right position-relative">
                                 <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
                             </div>
                         </div>
+
+                        <span id="cus_address_validate" class="text-danger validation-error mt-1"></span>
                     </div>
     
                     <div class="mb-3">
@@ -1097,26 +1089,26 @@
                         </div>
                     </div>
     
-                    <div class="">
+                    <div class="mb-3">
                         <label for="" class="form-label">Save As</label>
     
                         <div class="d-flex align-items-center gap-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                                <input class="form-check-input" type="radio" name="save_as" id="home" value="home" checked>
                                 <label class="form-check-label" for="home">
                                     Home
                                 </label>
                             </div>
     
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                                <input class="form-check-input" type="radio" name="save_as" id="work" value="work">
                                 <label class="form-check-label" for="work">
                                     Work
                                 </label>
                             </div>
     
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
+                                <input class="form-check-input" type="radio" name="save_as" id="other" value="other">
                                 <label class="form-check-label" for="other">
                                     Other
                                 </label>
@@ -1124,7 +1116,7 @@
                         </div>
                     </div>
     
-                    <div class="mt-3 mb-3">
+                    <div class="mb-3">
                         <label class="form-label" for="cus_tag">Customer Tag (Optional)</label>
     
                         <select name="cus_tag" id="cus_tag" class="form-control">
@@ -1142,12 +1134,14 @@
                         <label class="form-label" for="create_cus_source">Customer Source</label>
     
                         <select name="cus_source" id="create_cus_source" class="form-control">
-                            <option value="new" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
+                            <option value="website" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/facebook.png') }}">Facebook</option>
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/instagram.png') }}">Instagram</option>
                         </select>
+
+                        <span id="cus_source_validate" class="text-danger validation-error mt-1"></span>
                     </div>
     
                     <div class="d-flex justify-content-end align-items-center">
@@ -1511,20 +1505,93 @@
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
 
-    <script>
-        window.onbeforeunload = function () {
-            window.scrollTo(0, 0);
-        };
+<script>
+    window.onbeforeunload = function () {
+        window.scrollTo(0, 0);
+    };
 
-        lightbox.option({
-            'maxWidth': 500,
-            'maxHeight': 500
-            'fitImagesInViewport': true,
-            'imageFadeDuration': 700,
-            'fadeDuration': 700,
-            'resizeDuration': 700,
+    lightbox.option({
+        'maxWidth': 500,
+        'maxHeight': 500,
+        'fitImagesInViewport': true,
+        'imageFadeDuration': 700,
+        'fadeDuration': 700,
+        'resizeDuration': 700,
+    })
+</script>
+
+<script>
+     $(document).ready(function () {
+        // Create Customer
+        $('#createCustomerForm').submit(function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('admin.customer.store') }}",
+                data: formData,
+                processData: false,  // Prevent jQuery from processing the data
+                contentType: false,  // Prevent jQuery from setting contentType
+                beforeSend: function () {
+                    $('#btn_saves').prop('disabled', true);
+                    $('#btn_saves').html(`
+                        <i class="fas fa-spinner fa-spin me-2"></i> Loading...
+                    `);
+                },
+                success: function (res) {
+                    console.log(res);
+                    if (res.status === true) {
+                        // Close Offcanvas properly
+                        var offcanvasElement = document.getElementById('create_customer_canvas');
+                        var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+                        offcanvasInstance.hide();
+
+                        // Reset form
+                        $('#createCustomerForm')[0].reset();
+                        $('.validation-error').html('');
+
+                        // Optional: auto-select the newly added option
+                        $('#create_cus_source').val('website').trigger('change');
+
+                        $('#btn_saves').prop('disabled', false);
+                        $('#btn_saves').html(`Save changes`);
+                        
+                        swal.fire({
+                            title: "Success",
+                            text: `${res.message}`,
+                            icon: "success"
+                        })
+                    }
+                },
+                error: function (err) {
+                    let error = err.responseJSON.errors;
+                    console.log(error);
+
+                    $('#btn_saves').prop('disabled', false);
+                    $('#btn_saves').html(`Save changes`);
+
+                    // clear all previous validation messages
+                    $('[id$="_validate"]').html('');
+
+                    $.each(error, function (key, value) {
+                        $('#' + key + '_validate').html(value[0]);
+                    });
+
+                    swal.fire({
+                        title: "Failed",
+                        text: "Something Went Wrong !",
+                        icon: "error"
+                    })
+                }
+            });
         })
-    </script>
+    })
+</script>
 
 <script>
     // Custom Tooltips
@@ -1572,45 +1639,64 @@
 
 
     document.addEventListener('DOMContentLoaded', function () {
-        const searchInput = document.getElementById('cus_name');
-        const createBox = document.querySelector('.cus_create_box');
-        const historyBox = document.querySelector('.cus_history_box');
-    
-        searchInput.addEventListener('input', function () {
-            if (this.value.trim() === '01833220886') {
-                historyBox.classList.add('show');
-                createBox.classList.remove('show');
-            } 
-            else if(this.value.trim() === ''){
-                historyBox.classList.remove('show');
-                createBox.classList.remove('show');
+        $('.customer_search').on('input focus', function () {
+            let phone = $(this).val().trim();
+            let createBox = $('.cus_create_box');
+            let historyBox = $('.cus_history_box');
+
+            // Hide everything if empty
+            if (phone === '') {
+                createBox.removeClass('show');
+                historyBox.removeClass('show');
+                return;
             }
-            else {
-                historyBox.classList.remove('show');
-                createBox.classList.add('show');
-            }
+
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('admin.orders.customer.search') }}",
+                data: { phone: phone },
+                beforeSend: function () {
+                    historyBox.removeClass('show');
+                    createBox.removeClass('show');
+                },
+                success: function (res) {
+                    if (res.status === true && res.data.length > 0) {
+                        historyBox.html('');
+                        $.each(res.data, function (index, customer) {
+                            historyBox.append(`
+                                <div class="border-bottom pb-1 mb-3">
+                                    <a href="#" class="d-block">
+                                        <h4 class="mb-1">${customer.cus_name}</h4>
+                                        <span class="badge badge-sm bg-primary">${customer.cus_tag ?? ''}</span>
+                                        <p class="mt-1">${customer.cus_phone}</p>
+                                    </a>
+                                </div>
+                            `);
+                        });
+
+                        historyBox.addClass('show');
+                        createBox.removeClass('show');
+                    } else {
+                        historyBox.removeClass('show');
+                        createBox.addClass('show');
+                    }
+                },
+                error: function () {
+                    historyBox.removeClass('show');
+                    createBox.removeClass('show');
+                }
+            });
+
         });
 
-        searchInput.addEventListener('focus', function () {
-            if (this.value.trim() === '01833220886') {
-                historyBox.classList.add('show');
-                createBox.classList.remove('show');
-            } 
-            else if(this.value.trim() === ''){
-                historyBox.classList.remove('show');
-                createBox.classList.remove('show');
-            }
-            else {
-                historyBox.classList.remove('show');
-                createBox.classList.add('show');
-            }
-        });
-    
-        // Optional: hide box when clicking outside
-        document.addEventListener('click', function (e) {
-            if (!e.target.closest('.search_box')) {
-                createBox.classList.remove('show');
-                historyBox.classList.remove('show');
+        // ✅ CLICK OUTSIDE TO HIDE
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.search_box').length) {
+                $('.cus_history_box').removeClass('show');
+                $('.cus_create_box').removeClass('show');
             }
         });
     });
@@ -1792,6 +1878,11 @@
 
     //____ Create Customer Source Select2 ____//
     $('#create_cus_source').select2({
+        templateResult: formatState,       
+        templateSelection: formatState, 
+    });
+
+    $('#update_cus_source').select2({
         templateResult: formatState,       
         templateSelection: formatState, 
     });

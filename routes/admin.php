@@ -228,6 +228,7 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::resource('/orders', OrderController::class)->names('orders');
     Route::get('/orders-data', [OrderController::class, 'getData'])->name('orders-data');
     Route::post('/change-orders-status', [OrderController::class, 'changeOrdersStatus'])->name('orders.status');
+    Route::post('/customer-search', [OrderController::class, 'customerSearch'])->name('orders.customer.search');
 
 
     //______ HRM System _____//

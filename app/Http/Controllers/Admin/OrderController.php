@@ -69,14 +69,33 @@ class OrderController extends Controller
     {
         // dd($request->all());
         $customers = Customer::
-                    where('cus_phone', 'LIKE', "%{$request->phone}%")
-                    ->where('status', 1)
-                    ->limit(3)
-                    ->get();
+        where('cus_phone', 'LIKE', "%{$request->phone}%")
+        ->where('status', 1)
+        ->limit(3)
+        ->get();
         
         return response()->json([
             'status' => true,
             'data' => $customers
+        ]);
+    }
+    
+    public function customerSelect(Request $request)
+    {
+        // dd($request->all());
+        $customer = Customer::findOrFail($request->id);
+
+        // dd($customer);
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'id' => $customer->id,
+                'cus_id' => $customer->cus_id,
+                'name' => $customer->cus_name,
+                'phone' => $customer->cus_phone,
+                'address' => $customer->cus_address,
+                'tag' => $customer->cus_tag,
+            ]
         ]);
     }
 

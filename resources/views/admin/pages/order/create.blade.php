@@ -358,8 +358,8 @@
                     </div>
 
                     {{-- Customer Details --}}
-                    <div class="card customer_details">
-                        <button type="button" data-bs-toggle="offcanvas"  data-bs-target="#update_customer" aria-controls="offcanvasRight" class="btn_edit btn btn-outline-secondary">Edit</button>
+                    <div class="card customer_details cus_loader d-none">
+                        {{-- <button type="button" data-bs-toggle="offcanvas"  data-bs-target="#update_customer" aria-controls="offcanvasRight" class="btn_edit btn btn-outline-secondary">Edit</button>
 
                         <div class="card-body">
                             <div class="mb-3">
@@ -389,7 +389,7 @@
                                 <span class="mb-1 d-block" style="font-size: 12px;">Map Location</span>
                                 <h5> Ranks Business Centre, Plot-Ka-218/1-2, Pragati Sarani Main Road, Kuril, Dhaka-1229.</h5>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     {{-- Customer Order History --}}
@@ -718,40 +718,40 @@
     
                     <div class="mb-3">
                         <div class="bg-input-field">
-                            <label for="cus_type" class="form_labels">Customer Type</label>
-                            <select name="cus_type" id="cus_type" class="form-select select_form mt-2">
-                                <option value="ecommerce_type" selected>Ecommerce Type Customer</option>
+                            <label for="up_cus_type" class="form_labels">Customer Type</label>
+                            <select name="cus_type" id="up_cus_type" class="form-select select_form mt-2">
+                                <option value="ecom_type_cus" selected>Ecommerce Type Customer</option>
                             </select>
                         </div>
                     </div>
     
                     <div class="mb-4">
                         <div class="bg-input-field">
-                            <label for="cus_name" class="form_labels">Customer Name <span class="text-danger"> *</span></label>
-                            <input type="text" id="cus_name" name="cus_name" class="form-control form_inputs" placeholder="" />
+                            <label for="up_cus_name" class="form_labels">Customer Name <span class="text-danger"> *</span></label>
+                            <input type="text" id="up_cus_name" name="cus_name" class="form-control form_inputs" placeholder="" />
                         </div>
                     </div>
     
                     <div class="mb-3 mt-3">
                         <div class="bg-input-field">
-                            <label for="cus_phone" class="form_labels">Phone Number <span class="text-danger"> *</span></label>
-                            <input type="text" id="cus_phone" name="cus_phone" class="form-control form_inputs" placeholder="" />
+                            <label for="up_cus_phone" class="form_labels">Phone Number <span class="text-danger"> *</span></label>
+                            <input type="text" id="up_cus_phone" name="cus_phone" class="form-control form_inputs" placeholder="" />
                         </div>
                     </div>
     
                     <div class="mb-3 mt-3">
                         <div class="bg-input-field">
-                            <label for="cus_email" class="form_labels">Customer Email (optional) </label>
-                            <input type="email" id="cus_email" name="cus_email" class="form-control form_inputs" placeholder="" />
+                            <label for="up_cus_email" class="form_labels">Customer Email (optional) </label>
+                            <input type="email" id="up_cus_email" name="cus_email" class="form-control form_inputs" placeholder="" />
                         </div>
                     </div>
     
                     <div class="mb-3">
                         <div class="bg-input-field">
-                            <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
+                            <label for="up_cus_address" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
 
                             <div class="customer_address input-addon-right position-relative">
-                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2" readonly></textarea>
+                                <textarea id="up_cus_address" name="cus_address" class="form-control form_inputs"  cols="30" rows="2" readonly></textarea>
 
                                 <i class="ti ti-chevron-down address_chevron" style="cursor: pointer;"></i>
 
@@ -789,20 +789,20 @@
     
                     <div class="mb-3">
                         <div class="bg-input-field">
-                            <label for="additional_note" class="form_labels">Additional Note (optional)</label>
+                            <label for="up_additional_note" class="form_labels">Additional Note (optional)</label>
 
                             <div class="input-addon-right position-relative">
-                                <textarea name="additional_note" class="form-control form_inputs" id="additional_note" cols="30" rows="2"></textarea>
+                                <textarea name="additional_note" class="form-control form_inputs" id="up_additional_note" cols="30" rows="2"></textarea>
                             </div>
                         </div>
                     </div>
     
                     <div class="mb-3">
                         <div class="bg-input-field">
-                            <label for="internal_note" class="form_labels">Internal Note (optional)</label>
+                            <label for="up_internal_note" class="form_labels">Internal Note (optional)</label>
 
                             <div class="input-addon-right position-relative">
-                                <textarea name="internal_note" class="form-control form_inputs" id="internal_note" cols="30" rows="2"></textarea>
+                                <textarea name="internal_note" class="form-control form_inputs" id="up_internal_note" cols="30" rows="2"></textarea>
                             </div>
                         </div>
                     </div>
@@ -835,9 +835,9 @@
                     </div>
     
                     <div class="mt-3 mb-3">
-                        <label class="form-label" for="cus_tag">Customer Tag (Optional)</label>
+                        <label class="form-label" for="up_cus_tag">Customer Tag (Optional)</label>
     
-                        <select name="cus_tag" id="cus_tag" class="form-control">
+                        <select name="cus_tag" id="up_cus_tag" class="form-control">
                             <option value="new" selected>New</option>
                             <option value="regular">Regular</option>
                             <option value="vip">VIP</option>
@@ -849,9 +849,9 @@
                     </div>
     
                     <div class="mb-3">
-                        <label class="form-label" for="update_cus_source">Customer Source</label>
+                        <label class="form-label" for="up_cus_source">Customer Source</label>
     
-                        <select name="cus_source" id="update_cus_source" class="form-control">
+                        <select name="cus_source" id="up_cus_source" class="form-control">
                             <option value="website" data-image-url="{{ asset('public/admin/assets/images/world-wide-web.png') }}">Website</option>
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/viber.png') }}">Phone Call</option>
                             <option value="regular" data-image-url="{{ asset('public/admin/assets/images/whatsapp.png') }}">Whatsapp</option>
@@ -1147,7 +1147,7 @@
                     <div class="d-flex justify-content-end align-items-center">
                         <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
     
-                        <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Create</button>
+                        <button type="submit" id="createCustomerBtn" class="btn btn-success waves-effect waves-light"> Create</button>
                     </div>
                 </form>
             </div>
@@ -1538,18 +1538,21 @@
                 processData: false,  // Prevent jQuery from processing the data
                 contentType: false,  // Prevent jQuery from setting contentType
                 beforeSend: function () {
-                    $('#btn_saves').prop('disabled', true);
-                    $('#btn_saves').html(`
+                    $('#createCustomerBtn').prop('disabled', true);
+                    $('#createCustomerBtn').html(`
                         <i class="fas fa-spinner fa-spin me-2"></i> Loading...
+                    `);
+
+                    $('.cus_loader').html(`
+                        <div class="loader_measurement">
+                            <div class="spinning_loader"</div>    
+                        </div>
                     `);
                 },
                 success: function (res) {
-                    console.log(res);
+                    // console.log(res);
                     if (res.status === true) {
-                        // Close Offcanvas properly
-                        var offcanvasElement = document.getElementById('create_customer_canvas');
-                        var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
-                        offcanvasInstance.hide();
+                        let customer = res.data;
 
                         // Reset form
                         $('#createCustomerForm')[0].reset();
@@ -1558,8 +1561,16 @@
                         // Optional: auto-select the newly added option
                         $('#create_cus_source').val('website').trigger('change');
 
-                        $('#btn_saves').prop('disabled', false);
-                        $('#btn_saves').html(`Save changes`);
+                        $('#createCustomerBtn').prop('disabled', false);
+                        $('#createCustomerBtn').html(`Create`);
+
+                         // Update dynamic data
+                        customerDetails(customer)
+
+                        // Close Offcanvas properly
+                        var offcanvasElement = document.getElementById('create_customer_canvas');
+                        var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+                        offcanvasInstance.hide();
                         
                         swal.fire({
                             title: "Success",
@@ -1572,8 +1583,8 @@
                     let error = err.responseJSON.errors;
                     console.log(error);
 
-                    $('#btn_saves').prop('disabled', false);
-                    $('#btn_saves').html(`Save changes`);
+                    $('#createCustomerBtn').prop('disabled', false);
+                    $('#createCustomerBtn').html(`Create`);
 
                     // clear all previous validation messages
                     $('[id$="_validate"]').html('');
@@ -1590,6 +1601,129 @@
                 }
             });
         })
+
+        // Customer select 
+        $(document).on('click', '.cus_select', function () {
+            let id = $(this).attr('data-id');
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('admin.orders.customer.select') }}",
+                data: { id: id,},
+                beforeSend: function () {
+                    $('.cus_loader').html(`
+                        <div class="loader_measurement">
+                            <div class="spinning_loader"</div>    
+                        </div>
+                    `);
+                },
+                success: function (res) {
+                    // console.log(res);
+                    if (res.status === true) {
+                        let customer = res.data;
+                        // console.log(customer);
+                        $('.cus_history_box').removeClass('show');
+
+                        // Update dynamic data
+                        customerDetails(customer)
+                        
+                        swal.fire({
+                            title: "Success",
+                            text: `${res.message}`,
+                            icon: "success"
+                        })
+                    }
+                },
+                error: function (err) {
+                    let error = err.responseJSON.errors;
+                    // console.log(error);
+
+                    swal.fire({
+                        title: "Failed",
+                        text: "Something Went Wrong !",
+                        icon: "error"
+                    })
+                }
+            });
+        });
+
+        // Edit Customer  
+        $(document).on('click', '.edit_customer', function () {
+           let id = $(this).data('id');
+
+            $.ajax({
+                type: "GET",
+                url: "{{ url('admin/customer') }}/" + id + "/edit",
+                processData: false,  // Prevent jQuery from processing the data
+                contentType: false,  // Prevent jQuery from setting contentType
+                success: function (res) {
+                    let data = res.success;
+                    console.log(data);
+
+                    // Fill form fields
+                    $.each(data, function (key, value) {
+                        let element = $('#up_' + key);
+
+                        element.val(value);
+
+                        // Trigger change if select
+                        if (element.is('select')) {
+                            element.trigger('change');
+                        }
+                    });
+
+                    // Optional: radio button select
+                    $('input[name="saveAs"][value="'+data.saveAs+'"]').prop('checked', true);
+                }
+            });
+        });
+
+        function customerDetails (customer)
+        {
+            // Update dynamic data
+            $('.customer_details').removeClass('d-none');
+            $('#customer_search').val(customer.phone);
+
+            $('.customer_details').html(`
+                <button type="button" 
+                    data-bs-toggle="offcanvas"  
+                    data-bs-target="#update_customer" 
+                    data-id="${customer.id}"
+                    class="edit_customer btn btn-outline-secondary">
+                    Edit
+                </button>
+
+                <div class="card-body">
+                    <div class="mb-3">
+                        <span class="mb-1 d-block" style="font-size: 12px;">Customer ID</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <h5>${customer.cus_id}</h5>
+                            <span class="badge badge-sm bg-primary">${customer.tag}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="mb-1 d-block" style="font-size: 12px;">Customer Name</span>
+                        <h5>${customer.name}</h5>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="mb-1 d-block" style="font-size: 12px;">Phone Number</span>
+                        <h5>${customer.phone}</h5>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="mb-1 d-block" style="font-size: 12px;">Customer Address</span>
+                        <h5>${customer.address ?? '-'}</h5>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="mb-1 d-block" style="font-size: 12px;">Map Location</span>
+                        <h5>${customer.address ?? '-'}</h5>
+                    </div>
+                </div>
+            `);
+        }
     })
 </script>
 
@@ -1668,7 +1802,7 @@
                         $.each(res.data, function (index, customer) {
                             historyBox.append(`
                                 <div class="border-bottom pb-1 mb-3">
-                                    <a href="#" class="d-block">
+                                    <a href="javascript:void(0)" data-id="${customer.id}" class="cus_select d-block">
                                         <h4 class="mb-1">${customer.cus_name}</h4>
                                         <span class="badge badge-sm bg-primary">${customer.cus_tag ?? ''}</span>
                                         <p class="mt-1">${customer.cus_phone}</p>
@@ -1689,7 +1823,6 @@
                     createBox.removeClass('show');
                 }
             });
-
         });
 
         // ✅ CLICK OUTSIDE TO HIDE
@@ -1882,7 +2015,7 @@
         templateSelection: formatState, 
     });
 
-    $('#update_cus_source').select2({
+    $('#up_cus_source').select2({
         templateResult: formatState,       
         templateSelection: formatState, 
     });

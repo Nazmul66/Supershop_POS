@@ -232,7 +232,18 @@ class CustomerController extends Controller
         }
 
         DB::commit();
-        return response()->json(['message'=> "Successfully Customer Created!", 'status' => true]);
+        return response()->json([
+            'message'=> "Successfully Customer Created!", 
+            'status' => true,
+            'data' => [
+                'id' => $customer->id,
+                'cus_id' => $customer->cus_id,
+                'name' => $customer->cus_name,
+                'phone' => $customer->cus_phone,
+                'address' => $customer->cus_address,
+                'tag' => $customer->cus_tag,
+            ]
+        ]);
     }
 
     /**
@@ -244,7 +255,7 @@ class CustomerController extends Controller
             throw UnauthorizedException::forPermissions(['update.customer']);
         }
 
-        // dd($city);
+        // dd($customer);
         return response()->json(['success' => $customer]);
     }
 

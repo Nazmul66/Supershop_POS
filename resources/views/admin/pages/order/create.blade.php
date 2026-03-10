@@ -60,7 +60,7 @@
         .customer_details{
             position: relative;
         }
-        .customer_details .btn_edit{
+        .customer_details .edit_customer{
             position: absolute;
             top: 15px;
             right: 15px;
@@ -705,7 +705,7 @@
 
 
     <!-- Update Customer Details Update Modal -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="update_customer" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="update_customer_canvas" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h3 id="offcanvasRightLabel">Update Customer</h3>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -713,9 +713,12 @@
 
         <div class="offcanvas-body">
             <div class="row">
-                <form id="createForm" enctype="multipart/form-data">
+                <form id="updateCustomerForm" enctype="multipart/form-data">
                     @csrf
+                    @method("PUT")
     
+                    <input type="text" name="id" id="up_id" hidden>
+
                     <div class="mb-3">
                         <div class="bg-input-field">
                             <label for="up_cus_type" class="form_labels">Customer Type</label>
@@ -751,7 +754,7 @@
                             <label for="up_cus_address" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
 
                             <div class="customer_address input-addon-right position-relative">
-                                <textarea id="up_cus_address" name="cus_address" class="form-control form_inputs"  cols="30" rows="2" readonly></textarea>
+                                <textarea id="up_cus_address" name="cus_address" class="form-control form_inputs"  cols="30" rows="2"></textarea>
 
                                 <i class="ti ti-chevron-down address_chevron" style="cursor: pointer;"></i>
 
@@ -812,21 +815,21 @@
     
                         <div class="d-flex align-items-center gap-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                                <input class="form-check-input" type="radio" name="save_as" id="home" value="home">
                                 <label class="form-check-label" for="home">
                                     Home
                                 </label>
                             </div>
     
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                                <input class="form-check-input" type="radio" name="save_as" id="work" value="work">
                                 <label class="form-check-label" for="work">
                                     Work
                                 </label>
                             </div>
     
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
+                                <input class="form-check-input" type="radio" name="save_as" id="other" value="other">
                                 <label class="form-check-label" for="other">
                                     Other
                                 </label>
@@ -863,155 +866,14 @@
                     <div class="d-flex justify-content-end align-items-center">
                         <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
     
-                        <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Update</button>
+                        <button type="submit" id="updateCustomerBtn" class="btn btn-success waves-effect waves-light"> Update</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-
-    <!-- Customer Address Create Modal -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="create_customer_address" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header">
-            <h3 id="offcanvasRightLabel">Create Customer Address</h3>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-
-        <div class="offcanvas-body">
-            <div class="row">
-                <form id="createForm" enctype="multipart/form-data">
-                    @csrf
-    
-                    <div class="mb-3">
-                        <div class="bg-input-field">
-                            <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
-
-                            <div class="customer_address input-addon-right position-relative">
-                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="bg-input-field">
-                            <label for="map_location" class="form_labels">Map Location <span class="text-danger"> *</span></label>
-
-                            <div class="input-addon-right">
-                                <textarea name="map_location" class="form-control form_inputs" id="map_location" cols="30" rows="2"></textarea>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="mb-4">
-                        <label for="" class="form-label">Save As</label>
-    
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
-                                <label class="form-check-label" for="home">
-                                    Home
-                                </label>
-                            </div>
-    
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
-                                <label class="form-check-label" for="work">
-                                    Work
-                                </label>
-                            </div>
-    
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
-                                <label class="form-check-label" for="other">
-                                    Other
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="d-flex justify-content-end align-items-center">
-                        <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
-    
-                        <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Create</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    
-
-    <!-- Customer Address Update Modal -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="update_customer_address" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header">
-            <h3 id="offcanvasRightLabel">Update Customer Address</h3>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-
-        <div class="offcanvas-body">
-            <div class="row">
-                <form id="createForm" enctype="multipart/form-data">
-                    @csrf
-    
-                    <div class="mb-3">
-                        <div class="bg-input-field">
-                            <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
-
-                            <div class="customer_address input-addon-right position-relative">
-                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="bg-input-field">
-                            <label for="map_location" class="form_labels">Map Location <span class="text-danger"> *</span></label>
-
-                            <div class="input-addon-right">
-                                <textarea name="map_location" class="form-control form_inputs" id="map_location" cols="30" rows="2"></textarea>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="mb-4">
-                        <label for="" class="form-label">Save As</label>
-    
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
-                                <label class="form-check-label" for="home">
-                                    Home
-                                </label>
-                            </div>
-    
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
-                                <label class="form-check-label" for="work">
-                                    Work
-                                </label>
-                            </div>
-    
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
-                                <label class="form-check-label" for="other">
-                                    Other
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="d-flex justify-content-end align-items-center">
-                        <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
-    
-                        <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Update</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-    {{-- Create Customer --}}
+    {{-- Create Customer Details Update Modal --}}
     <div class="offcanvas offcanvas-end" tabindex="-1" id="create_customer_canvas" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h3 id="offcanvasRightLabel">Create Customer</h3>
@@ -1148,6 +1010,145 @@
                         <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
     
                         <button type="submit" id="createCustomerBtn" class="btn btn-success waves-effect waves-light"> Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Address Create Modal -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="create_customer_address" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h3 id="offcanvasRightLabel">Create Customer Address</h3>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body">
+            <div class="row">
+                <form id="createForm" enctype="multipart/form-data">
+                    @csrf
+    
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
+
+                            <div class="customer_address input-addon-right position-relative">
+                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="map_location" class="form_labels">Map Location <span class="text-danger"> *</span></label>
+
+                            <div class="input-addon-right">
+                                <textarea name="map_location" class="form-control form_inputs" id="map_location" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="mb-4">
+                        <label for="" class="form-label">Save As</label>
+    
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                                <label class="form-check-label" for="home">
+                                    Home
+                                </label>
+                            </div>
+    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                                <label class="form-check-label" for="work">
+                                    Work
+                                </label>
+                            </div>
+    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
+                                <label class="form-check-label" for="other">
+                                    Other
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
+    
+                        <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Customer Address Update Modal -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="update_customer_address" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h3 id="offcanvasRightLabel">Update Customer Address</h3>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body">
+            <div class="row">
+                <form id="createForm" enctype="multipart/form-data">
+                    @csrf
+    
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
+
+                            <div class="customer_address input-addon-right position-relative">
+                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="bg-input-field">
+                            <label for="map_location" class="form_labels">Map Location <span class="text-danger"> *</span></label>
+
+                            <div class="input-addon-right">
+                                <textarea name="map_location" class="form-control form_inputs" id="map_location" cols="30" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="mb-4">
+                        <label for="" class="form-label">Save As</label>
+    
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                                <label class="form-check-label" for="home">
+                                    Home
+                                </label>
+                            </div>
+    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                                <label class="form-check-label" for="work">
+                                    Work
+                                </label>
+                            </div>
+    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
+                                <label class="form-check-label" for="other">
+                                    Other
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
+    
+                        <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Update</button>
                     </div>
                 </form>
             </div>
@@ -1629,7 +1630,7 @@
                         
                         swal.fire({
                             title: "Success",
-                            text: `${res.message}`,
+                            text: "Customer Selected",
                             icon: "success"
                         })
                     }
@@ -1673,10 +1674,88 @@
                     });
 
                     // Optional: radio button select
-                    $('input[name="saveAs"][value="'+data.saveAs+'"]').prop('checked', true);
+                    $('input[name="save_as"][value="'+data.save_as+'"]').prop('checked', true);
                 }
             });
         });
+
+        // Update Customer
+        $('#updateCustomerForm').submit(function (e) {
+            e.preventDefault();
+
+            let id = $('#up_id').val();
+            let formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ url('admin/customer') }}/" + id,
+                data: formData,
+                processData: false,  // Prevent jQuery from processing the data
+                contentType: false,  // Prevent jQuery from setting contentType
+                beforeSend: function () {
+                    $('#updateCustomerBtn').prop('disabled', true);
+                    $('#updateCustomerBtn').html(`
+                        <i class="fas fa-spinner fa-spin me-2"></i> Loading...
+                    `);
+
+                    $('.cus_loader').html(`
+                        <div class="loader_measurement">
+                            <div class="spinning_loader"</div>    
+                        </div>
+                    `);
+                },
+                success: function (res) {
+                    // console.log(res);
+                    if (res.status === true) {
+                        let customer = res.data;
+
+                        // Reset form
+                        $('#updateCustomerForm')[0].reset();
+                        $('.validation-error').html('');
+
+                        $('#updateCustomerBtn').prop('disabled', false);
+                        $('#updateCustomerBtn').html(`Update`);
+
+                         // Update dynamic data
+                        customerDetails(customer)
+
+                        // Close Offcanvas properly
+                        var offcanvasElement = document.getElementById('update_customer_canvas');
+                        var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+                        offcanvasInstance.hide();
+                        
+                        swal.fire({
+                            title: "Success",
+                            text: "Customer Updated",
+                            icon: "success"
+                        })
+                    }
+                },
+                error: function (err) {
+                    let error = err.responseJSON.errors;
+                    console.log(error);
+
+                    $('#updateCustomerBtn').prop('disabled', false);
+                    $('#updateCustomerBtn').html(`Create`);
+
+                    // clear all previous validation messages
+                    $('[id$="_validate"]').html('');
+
+                    $.each(error, function (key, value) {
+                        $('#up_' + key + '_validate').html(value[0]);
+                    });
+
+                    swal.fire({
+                        title: "Failed",
+                        text: "Something Went Wrong !",
+                        icon: "error"
+                    })
+                }
+            });
+        })
 
         function customerDetails (customer)
         {
@@ -1687,7 +1766,7 @@
             $('.customer_details').html(`
                 <button type="button" 
                     data-bs-toggle="offcanvas"  
-                    data-bs-target="#update_customer" 
+                    data-bs-target="#update_customer_canvas" 
                     data-id="${customer.id}"
                     class="edit_customer btn btn-outline-secondary">
                     Edit

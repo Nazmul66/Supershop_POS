@@ -289,9 +289,11 @@ class CustomerController extends Controller
             $customer->additional_note        = $request->additional_note;
             $customer->internal_note          = $request->internal_note;
             $customer->save_as                = $request->save_as;
-            $customer->status                 = $request->status ?? 1;
+            $customer->status                 = $request->status;
             $customer->updated_by             = Auth::guard('admin')->id();
             $customer->updated_at             = now();
+
+            // dd($customer);
             $customer->save();
         }
         catch(\Exception $ex){
@@ -301,7 +303,19 @@ class CustomerController extends Controller
         }
 
         DB::commit();
-        return response()->json(['message'=> "success"],200);
+        return response()->json([
+            'message'=> "success",
+            'status' => true,
+            'data' => [
+                'id' => $customer->id,
+                'cus_id' => $customer->cus_id,
+                'name' => $customer->cus_name,
+                'phone' => $customer->cus_phone,
+                'address' => $customer->cus_address,
+                'tag' => $customer->cus_tag,
+            ]
+        ]
+        ,200);
     }
 
     /**

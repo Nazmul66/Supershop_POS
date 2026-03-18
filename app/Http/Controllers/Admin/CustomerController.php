@@ -273,6 +273,7 @@ class CustomerController extends Controller
             'cus_phone'    => ['required', 'string', 'digits_between:10,11', 'unique:customers,cus_phone,' .$id],
             'cus_source'   => 'required|string',
             'cus_address'  => 'required|string|max:512',
+            'status'       => 'nullable',
         ]);
 
         $customer  = Customer::find($id);
@@ -289,7 +290,8 @@ class CustomerController extends Controller
             $customer->additional_note        = $request->additional_note;
             $customer->internal_note          = $request->internal_note;
             $customer->save_as                = $request->save_as;
-            $customer->status                 = $request->status;
+            $customer->status                 = $request->has('status') ? $request->status 
+                                                : $customer->status;
             $customer->updated_by             = Auth::guard('admin')->id();
             $customer->updated_at             = now();
 

@@ -35,6 +35,7 @@ use App\Http\Controllers\Admin\ProductCollectionController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\CustomerAddressController;
 use App\Http\Controllers\Admin\DBbackupController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DesignationController;
@@ -153,6 +154,12 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::post('/change-customer-status', [CustomerController::class, 'changeCustomerStatus'])->name('customer.status');
     Route::get('/customer/view/{id}', [CustomerController::class, 'customerView'])->name('customer.view');
     Route::get('/customer/pdf', [CustomerController::class, 'allCustomerPdf'])->name('customer.pdf');
+
+
+    //______ Customer Address _____//
+    Route::resource('/customer-address', CustomerAddressController::class)->names('customer-address')->except('show');
+    Route::get('/customer-address-show/{id}', [CustomerAddressController::class, 'allCusAddressShow'])->name('customer.address.show');
+    Route::get('/select-customer-address/{id}', [CustomerAddressController::class, 'selectCusAddress'])->name('select.customer.address');
 
 
     //______ Product _____//

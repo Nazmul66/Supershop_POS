@@ -756,17 +756,19 @@
                             <div class="customer_address input-addon-right position-relative">
                                 <textarea id="up_cus_address" name="cus_address" class="form-control form_inputs"  cols="30" rows="2"></textarea>
 
-                                <i class="ti ti-chevron-down address_chevron" style="cursor: pointer;"></i>
+                                <a href="javascript:void(0);" data-id="" class="address_chevron">
+                                    <i class="ti ti-chevron-down" style="cursor: pointer;"></i>
+                                </a>
 
                                 <div class="cus_address_list">
                                     <ul>
-                                        <li>
+                                        {{-- <li>
                                             <a href="#" class="d-flex align-items-center justify-content-between mb-2 gap-3">
                                                 <p class="mb-0 fw-bold" style="width: 95%; white-space: nowrap; overflow:hidden;">কে-৩৯/৫, ১২২৯ কুড়িল - এনএসইউ রোড</p>
 
                                                 <div class="d-flex align-items-center">
-                                                    <i class="ti ti-edit" style="font-size: 20px; cursor: pointer;" data-bs-toggle="offcanvas"  data-bs-target="#update_customer_address" aria-controls="offcanvasRight"></i>
-                                                    <i class="ti ti-trash ms-1" style="font-size: 20px; cursor: pointer;"></i>
+                                                    <i class="ti ti-edit" data-id="" style="font-size: 20px; cursor: pointer;" data-bs-toggle="offcanvas"  data-bs-target="#update_customer_address" aria-controls="offcanvasRight"></i>
+                                                    <i class="ti ti-trash ms-1" data-id="" style="font-size: 20px; cursor: pointer;"></i>
                                                 </div>
                                             </a>
                                         </li>
@@ -775,15 +777,15 @@
                                            <a href="#" class="d-flex align-items-center justify-content-between gap-3">
                                                 <p class="mb-0 fw-bold" style="width: 95%; white-space: nowrap; overflow:hidden;">k-39/5, 1229 Kuril - NSU Rd k-39/5, 1229 Kuril - NSU Rd k-39/5, 1229 Kuril - NSU Rd</p>
                                                 <div class="d-flex align-items-center">
-                                                    <i class="ti ti-edit" style="font-size: 20px; cursor: pointer;" data-bs-toggle="offcanvas"  data-bs-target="#update_customer_address" aria-controls="offcanvasRight"></i>
-                                                    <i class="ti ti-trash ms-1" style="font-size: 20px; cursor: pointer;"></i>
+                                                    <i class="ti ti-edit" style="font-size: 20px; cursor: pointer;" data-id="" data-bs-toggle="offcanvas"  data-bs-target="#update_customer_address" aria-controls="offcanvasRight"></i>
+                                                    <i data-id="" class="ti ti-trash ms-1" style="font-size: 20px; cursor: pointer;"></i>
                                                 </div>
                                            </a>
-                                        </li>
+                                        </li> --}}
                                     </ul>
 
                                     <div class="text-center mt-3">
-                                        <button type="button"  data-bs-toggle="offcanvas"  data-bs-target="#create_customer_address" aria-controls="offcanvasRight" class="btn btn-secondary"><i class="ti ti-user-plus"></i> Add New Address</button>
+                                        <button type="button"  data-bs-toggle="offcanvas"  data-bs-target="#createCusAddress" aria-controls="offcanvasRight" class="btn btn-secondary"><i class="ti ti-user-plus"></i> Add New Address</button>
                                     </div>
                                 </div>
                             </div>
@@ -1017,7 +1019,7 @@
     </div>
 
     <!-- Customer Address Create Modal -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="create_customer_address" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="createCusAddress" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h3 id="offcanvasRightLabel">Create Customer Address</h3>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -1025,15 +1027,17 @@
 
         <div class="offcanvas-body">
             <div class="row">
-                <form id="createForm" enctype="multipart/form-data">
+                <form id="createCusAddressForm" enctype="multipart/form-data">
                     @csrf
     
+                    <input type="text" name="customer_id" id="customer_id" hidden>
+
                     <div class="mb-3">
                         <div class="bg-input-field">
-                            <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
+                            <label for="address" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
 
                             <div class="customer_address input-addon-right position-relative">
-                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
+                                <textarea name="address" class="form-control form_inputs" id="address" cols="30" rows="2"></textarea>
                             </div>
                         </div>
                     </div>
@@ -1053,21 +1057,21 @@
     
                         <div class="d-flex align-items-center gap-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                                <input class="form-check-input" type="radio" name="save_as" id="home" value="home" checked>
                                 <label class="form-check-label" for="home">
                                     Home
                                 </label>
                             </div>
     
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                                <input class="form-check-input" type="radio" name="save_as" id="work" value="work">
                                 <label class="form-check-label" for="work">
                                     Work
                                 </label>
                             </div>
     
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
+                                <input class="form-check-input" type="radio" name="save_as" id="other" value="other">
                                 <label class="form-check-label" for="other">
                                     Other
                                 </label>
@@ -1078,7 +1082,7 @@
                     <div class="d-flex justify-content-end align-items-center">
                         <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
     
-                        <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Create</button>
+                        <button type="submit" id="createCusAddressBtn" class="btn btn-success waves-effect waves-light"> Create</button>
                     </div>
                 </form>
             </div>
@@ -1087,7 +1091,7 @@
     
 
     <!-- Customer Address Update Modal -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="update_customer_address" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="updateCusAddress" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h3 id="offcanvasRightLabel">Update Customer Address</h3>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -1095,8 +1099,11 @@
 
         <div class="offcanvas-body">
             <div class="row">
-                <form id="createForm" enctype="multipart/form-data">
+                <form id="updateCusAddressForm" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
+
+                    <input type="text" name="customer_id" id="up_customer_id" hidden>
     
                     <div class="mb-3">
                         <div class="bg-input-field">
@@ -1148,7 +1155,7 @@
                     <div class="d-flex justify-content-end align-items-center">
                         <button type="button" id="btn_close" class="btn btn-secondary waves-effect me-3" data-bs-dismiss="offcanvas">Close </button>
     
-                        <button type="submit" id="btn_saves" class="btn btn-success waves-effect waves-light"> Update</button>
+                        <button type="submit" id="updateCusAddressBtn" class="btn btn-success waves-effect waves-light"> Update</button>
                     </div>
                 </form>
             </div>
@@ -1562,6 +1569,9 @@
                         // Optional: auto-select the newly added option
                         $('#create_cus_source').val('website').trigger('change');
 
+                        $('#customer_id').val(customer.id);
+                        $('#up_customer_id').val(customer.id);
+
                         $('#createCustomerBtn').prop('disabled', false);
                         $('#createCustomerBtn').html(`Create`);
 
@@ -1625,6 +1635,9 @@
                         // console.log(customer);
                         $('.cus_history_box').removeClass('show');
 
+                        $('#customer_id').val(customer.id);
+                        $('#up_customer_id').val(customer.id);
+                        
                         // Update dynamic data
                         customerDetails(customer)
                         
@@ -1659,7 +1672,11 @@
                 contentType: false,  // Prevent jQuery from setting contentType
                 success: function (res) {
                     let data = res.success;
-                    console.log(data);
+                    // console.log(data);
+
+                    $('#customer_id').val(data.id);
+                    $('#up_customer_id').val(data.id);
+                    $('.address_chevron').attr('data-id', data.id);
 
                     // Fill form fields
                     $.each(data, function (key, value) {
@@ -1719,6 +1736,9 @@
                         $('#updateCustomerBtn').prop('disabled', false);
                         $('#updateCustomerBtn').html(`Update`);
 
+                        $('#customer_id').val(customer.id);
+                        $('#up_customer_id').val(customer.id);
+
                          // Update dynamic data
                         customerDetails(customer)
 
@@ -1747,6 +1767,246 @@
                     $.each(error, function (key, value) {
                         $('#up_' + key + '_validate').html(value[0]);
                     });
+
+                    swal.fire({
+                        title: "Failed",
+                        text: "Something Went Wrong !",
+                        icon: "error"
+                    })
+                }
+            });
+        })
+
+        // Create Customer Address
+        $('#createCusAddressForm').submit(function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('admin.customer-address.store') }}",
+                data: formData,
+                processData: false,  // Prevent jQuery from processing the data
+                contentType: false,  // Prevent jQuery from setting contentType
+                beforeSend: function () {
+                    $('#createCusAddressBtn').prop('disabled', true);
+                    $('#createCusAddressBtn').html(`
+                        <i class="fas fa-spinner fa-spin me-2"></i> Loading...
+                    `);
+                },
+                success: function (res) {
+                    // console.log(res);
+                    if (res.status === true) {
+                        let customer = res.data;
+
+                        // Reset form
+                        $('#createCusAddressForm')[0].reset();
+                        $('.validation-error').html('');
+
+                        $('#createCusAddressBtn').prop('disabled', false);
+                        $('#createCusAddressBtn').html(`Create`);
+
+                         // Update dynamic data
+                        customerDetails(customer)
+
+                        // Close Offcanvas properly
+                        var offcanvasElement = document.getElementById('createCusAddress');
+                        var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+                        offcanvasInstance.hide();
+                        
+                        swal.fire({
+                            title: "Success",
+                            text: `${res.message}`,
+                            icon: "success"
+                        })
+                    }
+                },
+                error: function (err) {
+                    let error = err.responseJSON.errors;
+                    console.log(error);
+
+                    $('#createCustomerBtn').prop('disabled', false);
+                    $('#createCustomerBtn').html(`Create`);
+
+                    // clear all previous validation messages
+                    $('[id$="_validate"]').html('');
+
+                    $.each(error, function (key, value) {
+                        $('#' + key + '_validate').html(value[0]);
+                    });
+
+                    swal.fire({
+                        title: "Failed",
+                        text: "Something Went Wrong !",
+                        icon: "error"
+                    })
+                }
+            });
+        })
+
+        // Update Customer Address
+        $('#updateCusAddressForm').submit(function (e) {
+            e.preventDefault();
+
+            let id = $(this).data('id');
+            let formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ url('admin/customer-address') }}/" + id,
+                data: formData,
+                processData: false,  // Prevent jQuery from processing the data
+                contentType: false,  // Prevent jQuery from setting contentType
+                beforeSend: function () {
+                    $('#updateCusAddressBtn').prop('disabled', true);
+                    $('#updateCusAddressBtn').html(`
+                        <i class="fas fa-spinner fa-spin me-2"></i> Loading...
+                    `);
+                },
+                success: function (res) {
+                    // console.log(res);
+                    if (res.status === true) {
+                        let customer = res.data;
+
+                        // Reset form
+                        $('#createCusAddressForm')[0].reset();
+                        $('.validation-error').html('');
+
+                        $('#updateCusAddressBtn').prop('disabled', false);
+                        $('#updateCusAddressBtn').html(`Update`);
+
+                         // Update dynamic data
+                        customerDetails(customer)
+
+                        // Close Offcanvas properly
+                        var offcanvasElement = document.getElementById('updateCusAddress');
+                        var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+                        offcanvasInstance.hide();
+                        
+                        swal.fire({
+                            title: "Success",
+                            text: `${res.message}`,
+                            icon: "success"
+                        })
+                    }
+                },
+                error: function (err) {
+                    let error = err.responseJSON.errors;
+                    console.log(error);
+
+                    $('#createCustomerBtn').prop('disabled', false);
+                    $('#createCustomerBtn').html(`Create`);
+
+                    // clear all previous validation messages
+                    $('[id$="_validate"]').html('');
+
+                    $.each(error, function (key, value) {
+                        $('#' + key + '_validate').html(value[0]);
+                    });
+
+                    swal.fire({
+                        title: "Failed",
+                        text: "Something Went Wrong !",
+                        icon: "error"
+                    })
+                }
+            });
+        })
+
+        // Customer Address showcase
+        $('.address_chevron').click(function(e){
+            e.preventDefault();
+
+            let id = $(this).data('id');
+            // console.log(id);
+            
+            $.ajax({
+                type: "GET",
+                url: "{{ url('admin/customer-address-show') }}/" + id,
+                data: { id: id },
+                success: function (res) {
+                    // console.log(res);
+                    if (res.status === true) {
+                        let customer = res.data;
+                        console.log(customer);
+
+                        let html = '';
+                        $.each(customer, function(index, item){
+                            html += `
+                                <li>
+                                    <a href="javascript:void(0);" class="d-flex align-items-center justify-content-between mb-2 gap-3">
+                                        <div data-id="${item.id}" class="select_cus_address" >
+                                            <p class="mb-0 fw-bold" style="width:100%; white-space:nowrap; overflow:hidden;">
+                                            ${item.address}
+                                            </p>    
+                                        </div>
+
+                                        <div class="d-flex align-items-center">
+                                            <i class="ti ti-edit"
+                                            data-id="${item.id}"
+                                            style="font-size:20px; cursor:pointer;"
+                                            data-bs-toggle="offcanvas"
+                                            data-bs-target="#updateCusAddress"></i>
+
+                                            <i class="ti ti-trash ms-1"
+                                            data-id="${item.id}"
+                                            style="font-size:20px; cursor:pointer;"></i>
+                                        </div>
+                                    </a>
+                                </li>
+                            `;
+                        });
+
+                        $('.cus_address_list ul').html(html);
+                    }
+                },
+                error: function (err) {
+                    let error = err.responseJSON.errors;
+
+                    swal.fire({
+                        title: "Failed",
+                        text: "Something Went Wrong !",
+                        icon: "error"
+                    })
+                }
+            });
+        })
+
+        // Select Customer Address Update
+        $(document).on('click', '.select_cus_address', function(e){
+            e.preventDefault();
+
+            let id = $(this).data('id');
+            console.log(id);
+
+            $.ajax({
+                type: "GET",
+                url: "{{ url('admin/select-customer-address') }}/" + id,
+                data: { id: id },
+                success: function (res) {
+                    // console.log(res);
+                    if (res.status === true) {
+                        let customer = res.data;
+                        // console.log(customer);
+
+                        $('#up_cus_address').val(customer.address);
+                        $('.cus_address_list').removeClass('active');
+
+                        swal.fire({
+                            title: "Success",
+                            text: `Customer Address Updated`,
+                            icon: "success"
+                        })
+                    }
+                },
+                error: function (err) {
+                    let error = err.responseJSON.errors;
 
                     swal.fire({
                         title: "Failed",

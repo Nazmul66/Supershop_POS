@@ -126,9 +126,13 @@ class CustomerAddressController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(CustomerAddress $customerAddress)
     {
-        //
+        // dd($customerAddress);
+        return response()->json([
+            'status' => true,
+            'success' => $customerAddress
+        ]);
     }
 
     /**
@@ -136,7 +140,54 @@ class CustomerAddressController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'map_location'   => 'required|string|max:512',
+            'address'        => 'required|string|max:512',
+        ]);
+
+        $customerAddress  = CustomerAddress::findOrFail($id);
+        // dd($customerAddress);
+
+        DB::beginTransaction();
+        try {
+            $customerAddress->address             = $request->address;
+            $customerAddress->map_location        = $request->map_location;
+            $customerAddress->save_as             = $request->save_as;
+            $customerAddress->status              = $request->has('status') ? $request->status 
+                                                    : $customerAddress->status;
+            $customerAddress->updated_at          = now();
+
+            // dd($customerAddress);
+            $customerAddress->save();
+
+            // Customer Address Update
+            $customer = Customer::findOrFail($customerAddress->customer_id);
+            $customer->cus_address  = $customerAddress->address;
+            $customer->save_as      = $customerAddress->save_as;
+            $customer->save();
+        }
+        catch(\Exception $ex){
+            DB::rollBack();
+            throw $ex;
+            // dd($ex->getMessage());
+        }
+
+        DB::commit();
+        $customer = Customer::find($customerAddress->customer_id);
+
+        return response()->json([
+            'message'=> "success",
+            'status' => true,
+            'data' => [
+                'id' => $customer->id,
+                'cus_id' => $customer->cus_id,
+                'name' => $customer->cus_name,
+                'phone' => $customer->cus_phone,
+                'address' => $customer->cus_address,
+                'tag' => $customer->cus_tag,
+            ]
+        ]
+        ,200);
     }
 
     /**

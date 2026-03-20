@@ -705,7 +705,7 @@
 
 
     <!-- Update Customer Details Update Modal -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="update_customer_canvas" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="static" tabindex="-1" id="update_customer_canvas" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h3 id="offcanvasRightLabel">Update Customer</h3>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -876,7 +876,7 @@
     </div>
 
     {{-- Create Customer Details Update Modal --}}
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="create_customer_canvas" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="static" tabindex="-1" id="create_customer_canvas" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h3 id="offcanvasRightLabel">Create Customer</h3>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -1019,7 +1019,7 @@
     </div>
 
     <!-- Customer Address Create Modal -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="createCusAddress" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="static" tabindex="-1" id="createCusAddress" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h3 id="offcanvasRightLabel">Create Customer Address</h3>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -1091,7 +1091,7 @@
     
 
     <!-- Customer Address Update Modal -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="updateCusAddress" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="static" tabindex="-1" id="updateCusAddress" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h3 id="offcanvasRightLabel">Update Customer Address</h3>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -1103,24 +1103,24 @@
                     @csrf
                     @method('PUT')
 
-                    <input type="text" name="customer_id" id="up_customer_id" hidden>
+                    <input type="text" name="cus_address_id" id="up_cus_address_id" hidden>
     
                     <div class="mb-3">
                         <div class="bg-input-field">
-                            <label for="cus_email" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
+                            <label for="upp_cus_addresses" class="form_labels">Customer Address <span class="text-danger"> *</span></label>
 
                             <div class="customer_address input-addon-right position-relative">
-                                <textarea name="cus_address" class="form-control form_inputs" id="cus_address" cols="30" rows="2"></textarea>
+                                <textarea name="address" class="form-control form_inputs" id="upp_cus_addresses" cols="30" rows="2"></textarea>
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <div class="bg-input-field">
-                            <label for="map_location" class="form_labels">Map Location <span class="text-danger"> *</span></label>
+                            <label for="up_map_location" class="form_labels">Map Location <span class="text-danger"> *</span></label>
 
                             <div class="input-addon-right">
-                                <textarea name="map_location" class="form-control form_inputs" id="map_location" cols="30" rows="2"></textarea>
+                                <textarea name="map_location" class="form-control form_inputs" id="up_map_location" cols="30" rows="2"></textarea>
                             </div>
                         </div>
                     </div>
@@ -1130,21 +1130,21 @@
     
                         <div class="d-flex align-items-center gap-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="home" value="home" checked>
+                                <input class="form-check-input" type="radio" name="save_as" id="home" value="home" checked>
                                 <label class="form-check-label" for="home">
                                     Home
                                 </label>
                             </div>
     
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="work" value="work">
+                                <input class="form-check-input" type="radio" name="save_as" id="work" value="work">
                                 <label class="form-check-label" for="work">
                                     Work
                                 </label>
                             </div>
     
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="saveAs" id="other" value="other">
+                                <input class="form-check-input" type="radio" name="save_as" id="other" value="other">
                                 <label class="form-check-label" for="other">
                                     Other
                                 </label>
@@ -1513,6 +1513,8 @@
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
 
+   
+
 <script>
     window.onbeforeunload = function () {
         window.scrollTo(0, 0);
@@ -1851,8 +1853,10 @@
         $('#updateCusAddressForm').submit(function (e) {
             e.preventDefault();
 
-            let id = $(this).data('id');
+            let id = $('#up_cus_address_id').val();
             let formData = new FormData(this);
+
+            console.log(id);
 
             $.ajax({
                 type: "POST",
@@ -1875,11 +1879,13 @@
                         let customer = res.data;
 
                         // Reset form
-                        $('#createCusAddressForm')[0].reset();
+                        $('#updateCusAddressForm')[0].reset();
                         $('.validation-error').html('');
 
                         $('#updateCusAddressBtn').prop('disabled', false);
                         $('#updateCusAddressBtn').html(`Update`);
+
+                        $('#up_cus_address').val(customer.address);
 
                          // Update dynamic data
                         customerDetails(customer)
@@ -1900,8 +1906,8 @@
                     let error = err.responseJSON.errors;
                     console.log(error);
 
-                    $('#createCustomerBtn').prop('disabled', false);
-                    $('#createCustomerBtn').html(`Create`);
+                    $('#updateCusAddressBtn').prop('disabled', false);
+                    $('#updateCusAddressBtn').html(`Create`);
 
                     // clear all previous validation messages
                     $('[id$="_validate"]').html('');
@@ -1934,7 +1940,7 @@
                     // console.log(res);
                     if (res.status === true) {
                         let customer = res.data;
-                        console.log(customer);
+                        // console.log(customer);
 
                         let html = '';
                         $.each(customer, function(index, item){
@@ -2023,27 +2029,24 @@
             e.preventDefault();
 
             let id = $(this).data('id');
-            console.log(id);
+            // console.log(id);
 
             $.ajax({
                 type: "GET",
-                url: "{{ url('admin/select-customer-address') }}/" + id,
+                url: "{{ url('admin/customer-address') }}/" + id + "/edit",
                 data: { id: id },
                 success: function (res) {
-                    // console.log(res);
                     if (res.status === true) {
-                        let customer = res.data;
-                        // console.log(customer);
+                        let customer = res.success;
+                        console.log(customer);
 
-                        $('#up_cus_address').val(customer.address);
-                        $('.appear_address').html(customer.address);
-                        $('.cus_address_list').removeClass('active');
+                        $('#up_cus_address_id').val(customer.id);
+                        $('#up_customer_id').val(customer.customer_id);
+                        $('#upp_cus_addresses').val(customer.address);
+                        $('#up_map_location').val(customer.map_location);
 
-                        swal.fire({
-                            title: "Success",
-                            text: `Customer Address Updated`,
-                            icon: "success"
-                        })
+                        // Optional: radio button select
+                        $('input[name="save_as"][value="'+customer.save_as+'"]').prop('checked', true);
                     }
                 },
                 error: function (err) {
@@ -2105,6 +2108,24 @@
             `);
         }
     })
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#updateCusAddress').on('hidden.bs.offcanvas', function () {
+            var upCusCanvas = document.getElementById('update_customer_canvas');
+            var bsOffcanvas = new bootstrap.Offcanvas(upCusCanvas);
+
+            bsOffcanvas.show();
+        });
+
+        $('#createCusAddress').on('hidden.bs.offcanvas', function () {
+            var secondCanvas = document.getElementById('update_customer_canvas');
+            var bsOffcanvas = new bootstrap.Offcanvas(secondCanvas);
+
+            bsOffcanvas.show();
+        });
+    });
 </script>
 
 <script>

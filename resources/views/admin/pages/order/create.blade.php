@@ -1948,7 +1948,7 @@
                                         </div>
 
                                         <div class="d-flex align-items-center">
-                                            <i class="ti ti-edit"
+                                            <i class="ti ti-edit address_update"
                                             data-id="${item.id}"
                                             style="font-size:20px; cursor:pointer;"
                                             data-bs-toggle="offcanvas"
@@ -1996,6 +1996,47 @@
                         // console.log(customer);
 
                         $('#up_cus_address').val(customer.address);
+                        $('.appear_address').html(customer.address);
+                        $('.cus_address_list').removeClass('active');
+
+                        swal.fire({
+                            title: "Success",
+                            text: `Customer Address Updated`,
+                            icon: "success"
+                        })
+                    }
+                },
+                error: function (err) {
+                    let error = err.responseJSON.errors;
+
+                    swal.fire({
+                        title: "Failed",
+                        text: "Something Went Wrong !",
+                        icon: "error"
+                    })
+                }
+            });
+        })
+
+        // Customer Address Edit
+        $(document).on('click', '.address_update', function(e){
+            e.preventDefault();
+
+            let id = $(this).data('id');
+            console.log(id);
+
+            $.ajax({
+                type: "GET",
+                url: "{{ url('admin/select-customer-address') }}/" + id,
+                data: { id: id },
+                success: function (res) {
+                    // console.log(res);
+                    if (res.status === true) {
+                        let customer = res.data;
+                        // console.log(customer);
+
+                        $('#up_cus_address').val(customer.address);
+                        $('.appear_address').html(customer.address);
                         $('.cus_address_list').removeClass('active');
 
                         swal.fire({
@@ -2053,12 +2094,12 @@
 
                     <div class="mb-3">
                         <span class="mb-1 d-block" style="font-size: 12px;">Customer Address</span>
-                        <h5>${customer.address ?? '-'}</h5>
+                        <h5 class="appear_address">${customer.address ?? '-'}</h5>
                     </div>
 
                     <div class="mb-3">
                         <span class="mb-1 d-block" style="font-size: 12px;">Map Location</span>
-                        <h5>${customer.address ?? '-'}</h5>
+                        <h5 class="appear_address">${customer.address ?? '-'}</h5>
                     </div>
                 </div>
             `);

@@ -71,7 +71,7 @@
     <div class="card">
         <div class="card-body">
             <div class="">
-                <table class="table table-bordered mb-0" id="datatables">
+                <table class="table table-bordered mb-0 datatables">
                     <thead class="bg-primary text-white">
                         <tr>
                             <th>Customer Id</th>
@@ -522,6 +522,8 @@
 
 @push('add-js')
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.6/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.6/js/buttons.dataTables.js"></script>
     <script src="{{ asset('public/admin/assets/js/select2.min.js') }}"></script>
 
 
@@ -555,16 +557,16 @@
             };
 
             // Show Data through Datatable
-            let datatables = $('#datatables').DataTable({
-                order: [
+            let datatables = $('.datatables').DataTable({
+                "order": [
                     [0, 'desc']
                 ],
-                processing: true,
-                serverSide: true,
-
+                "processing": true,
+                "serverSide": true,
                 ajax: "{{ route('admin.customer-data') }}",
-                // pageLength: 30,
-
+                pageLength: 10,
+                scrollCollapse: true,
+                scrollY: 400,
                 columns: [
                     {
                         data: 'cus_id',
@@ -602,7 +604,98 @@
                         orderable: false,
                         searchable: false
                     },
-                ]
+                ],
+                layout: {
+                    topStart: {
+                        buttons: [
+                            {
+                                text: `<i class="ti ti-refresh"></i>`,
+                                className: 'btn btn-outline-secondary refresh_btn',
+                            },
+                            {
+                                text: '<i class="ti ti-adjustments"></i> Filter Column',
+                                className: 'btn btn-secondary filter-column-btn',
+                                action: function () {
+                                    // Bootstrap dropdown will handle it
+                                }
+                            },
+                        ],
+                        pageLength: {
+                            menu: [10, 25, 50, 100, 250, -1]
+                        },
+                    },
+                    topEnd: {
+                        search: {
+                            placeholder: "Search.......",
+                            text: ''
+                        },
+                        paging: true,
+                    }
+                },
+                language: {
+                    lengthMenu: "Show_MENU_",
+                },
+                initComplete: function () {
+                    let table = this.api(); // Safe reference to DataTable
+
+                    // Inject dropdown HTML AFTER table initialization
+                    $('.filter-column-btn').replaceWith(`
+                        <div class="dropdown">
+                            <button class="btn btn-secondary border dropdown-toggle filter-column-btn"
+                                    data-bs-toggle="dropdown">
+                                <i class="ti ti-adjustments"></i> Filter Column
+                            </button>
+                            <div class="dropdown-menu filter-column-menu p-2"></div>
+                        </div>
+                    `);
+
+                    let columnMenu = $('.filter-column-menu');
+
+                    // Build checkboxes for all columns
+                    table.columns().every(function (index) {
+                        let column = this;
+                        let title = $(column.header()).text().trim();
+                        if (!title) return;
+
+                        columnMenu.append(`
+                            <div class="form-check mb-1">
+                                <input class="form-check-input toggle-column"
+                                    type="checkbox"
+                                    data-column="${index}"
+                                    checked>
+                                <label class="form-check-label">${title}</label>
+                            </div>
+                        `);
+                    });
+
+                    // Bind toggle event
+                    $(document).on('change', '.toggle-column', function () {
+                        let columnIndex = $(this).data('column');
+                        let visible = $(this).is(':checked');
+                        table.column(columnIndex).visible(visible);
+                    });
+                }
+            });
+
+            datatables.on('processing.dt', function (e, settings, processing) {
+                if (processing) {
+                    if (!$('.dt-processing').length) {
+                        $('.datatables').parent().append(`
+                            <div class="dt-processing text-center py-3">
+                                <div class="spinner-border text-primary"></div>
+                            </div>
+                        `);
+                    }
+                    $('.dt-processing').show();
+                } else {
+                    $('.dt-processing').hide();
+                }
+            });
+
+            // refresh the datatables data
+            $(document).on('click', '.refresh_btn', function (e) {
+                e.preventDefault();
+                datatables.ajax.reload(null, false); // 🔥 correct
             });
 
 

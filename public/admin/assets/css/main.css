@@ -269,6 +269,9 @@ table.dataTable th.dt-type-numeric{
 .modal-title{
     /* color: #FFF !important; */
 }
+div.dt-container .dt-search input {
+    padding: 7px !important;
+}
 
 
 @media ( min-width: 320px ) and ( max-width: 576px ){

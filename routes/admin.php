@@ -94,8 +94,11 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/invoice', function(){
         return view('admin.pages.gb.invoice_print');
     });
-    Route::get('/invoice_payment_type_change', function(){
+    Route::get('/invoice-payment-type-change', function(){
         return view('admin.pages.invoice.invoice_payment_type_change');
+    });
+    Route::get('/product-search', function(){
+        return view('admin.pages.product.product_search');
     });
     // Optional view show
 

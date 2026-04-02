@@ -78,6 +78,7 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/dashboard', [AdminController::class, "dashboard"])->name('dashboard');
     
 
+    // Optional view show
     Route::get('/orderDetails', function(){
         return view('admin.pages.gb.orderDetails');
     });
@@ -93,6 +94,10 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/invoice', function(){
         return view('admin.pages.gb.invoice_print');
     });
+    Route::get('/invoice_payment_type_change', function(){
+        return view('admin.pages.invoice.invoice_payment_type_change');
+    });
+    // Optional view show
 
 
     //______ Variant Name _____//

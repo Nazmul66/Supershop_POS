@@ -677,21 +677,6 @@
                 }
             });
 
-            datatables.on('processing.dt', function (e, settings, processing) {
-                if (processing) {
-                    if (!$('.dt-processing').length) {
-                        $('.datatables').parent().append(`
-                            <div class="dt-processing text-center py-3">
-                                <div class="spinner-border text-primary"></div>
-                            </div>
-                        `);
-                    }
-                    $('.dt-processing').show();
-                } else {
-                    $('.dt-processing').hide();
-                }
-            });
-
             // refresh the datatables data
             $(document).on('click', '.refresh_btn', function (e) {
                 e.preventDefault();

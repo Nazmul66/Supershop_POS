@@ -20,7 +20,7 @@
         }
         .invoice_form {
             color: #0a0a0a;
-            font-size: 1.7rem;
+            font-size: 2rem;
             font-weight: 700;
             width: 100%;
             height: 50px;
@@ -49,7 +49,7 @@
         .table_customs tbody tr td{
             color: #000;
             font-weight: 700;
-            font-size: 11px;
+            font-size: 12px;
             cursor: pointer;
         }
         .table_customs thead tr{
@@ -104,7 +104,7 @@
             </div>
 
             <div class="col-lg-4">
-                <input type="text" class="invoice_form" id="" style="background: #FFE0C0;" disabled>
+                <input type="text" class="invoice_form" id="invoice_amount" style="background: #FFE0C0; padding: 0; text-align: right;" value="" readonly>
             </div>
         </div>
 
@@ -211,6 +211,11 @@
                </div>
            </div>
         </div>
+
+        <div class="d-flex align-items-center justify-content-end gap-3 mt-3 mb-5">
+            <button type="button" class="btn btn-lg btn-danger">Close</button>
+            <button type="button" class="btn btn-lg btn-secondary">Change</button>
+        </div>
     </div>
  </div>
 
@@ -220,6 +225,14 @@
 
     <script>
         $(document).ready(function () {
+
+            function getInvoiceAmount() {
+                return parseFloat($('#invoice_amount').val()) || 0;
+            }
+
+            function setInvoiceAmount(value) {
+                $('#invoice_amount').val(value.toFixed(2));
+            }
 
             // 👉 Focus flow (Enter key navigation)
             $('#payment_type').on('change', function () {
@@ -248,7 +261,8 @@
                     let paymentType = $('#payment_type').val();
                     let cardNumber = $('#card_number').val();
                     let machineNumber = $('#machine_number').val();
-                    let amount = $('#amount').val();
+                    let amount = parseFloat($('#amount').val());
+                    let currentTotal = getInvoiceAmount();
 
                     // ✅ Validation
                     if (!paymentType) {
@@ -257,17 +271,33 @@
                         return;
                     }
 
-                    if (!amount) {
+                    if (!amount || amount <= 0) {
                         alert('Amount is required');
                         return;
                     }
 
+                    // ❌ Prevent exceed
+                    if (amount > currentTotal) {
+                        // alert('Amount exceeds invoice total!');
+                        swal.fire({
+                            title: "Sorry!!! exceeding invoice amount...!!",
+                            icon: "error",
+                            confirmButtonText: "Okay"
+                        })
+                        $('#amount').focus();
+                        return;
+                    }
+
+                    // ✅ Subtract from total
+                    let newTotal = currentTotal - amount;
+                    setInvoiceAmount(newTotal);
+
                     // ✅ Append row
                     let row = `
-                        <tr>
+                        <tr data-amount="${amount}">
                             <td>${paymentType}</td>
                             <td>${cardNumber ?? ''}</td>
-                            <td>${amount}</td>
+                            <td>${amount.toFixed(2)}</td>
                         </tr>
                     `;
 
@@ -283,13 +313,9 @@
                 }
             });
 
-        });
-    </script>
-
-
-    <script>
-       $(document).on('dblclick', '#recent_table_data tbody tr', function () {
+        $(document).on('dblclick', '#recent_table_data tbody tr', function () {
             let row = $(this);
+            let rowAmount = parseFloat(row.data('amount')) || 0;
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -297,12 +323,18 @@
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#092C4C',
-                cancelButtonColor: '#db0000 ',
+                cancelButtonColor: '#db0000',
                 confirmButtonText: 'Yes, remove it!',
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    row.remove(); // 🔥 delete row
+                    // ✅ Add back amount
+                    let currentTotal = getInvoiceAmount();
+                    let newTotal = currentTotal + rowAmount;
+                    setInvoiceAmount(newTotal);
+
+                    // ✅ Remove row
+                    row.remove();
 
                     // Swal.fire({
                     //     icon: 'success',
@@ -314,6 +346,7 @@
                 }
             });
         });
+    });
     </script>
 @endpush
 

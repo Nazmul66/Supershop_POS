@@ -52,6 +52,10 @@
         .fs-md{
             font-size: 11px !important;
         }
+        .table tbody tr td:nth-child(4) {
+            background-color: #C0FFC0;
+            color: red;
+        }
     </style>
 @endpush
 
@@ -64,7 +68,7 @@
     <div class="page-header">
         <div class="add-item d-flex">
             <div class="page-title">
-                <h4 class="fw-bold">Product Search</h4>
+                <h4 class="fw-bold">Stock Search</h4>
                 <h6 class="fw-bold text-danger fs-md">( Press ESC to close )</h6>
             </div>
         </div>
@@ -135,7 +139,11 @@
                             <td>A000025</td>
                             <td>8942240150072</td>
                             <td>African Organic Willd HOney 500gm</td>
-                            <td>2500.00</td>
+                            <td>
+                                <div class="price_show">
+                                    2500.00
+                                </div>
+                            </td>
                             <td>5</td>
                             <td>Pcs</td>
                             <td>0.00</td>

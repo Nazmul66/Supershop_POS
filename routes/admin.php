@@ -100,6 +100,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/product-search', function(){
         return view('admin.pages.product.product_search');
     });
+    Route::get('/invoice-search', function(){
+        return view('admin.pages.invoice.invoice_search');
+    });
     // Optional view show
 
 

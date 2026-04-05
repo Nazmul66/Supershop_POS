@@ -154,7 +154,7 @@
                                             <td>1.000</td>
                                             <td>285.00</td>
                                             <td><button type="button" class="btn btn-sm btn-secondary">Reprint</button></td>
-                                            <td><button type="button" class="btn btn-sm btn-secondary">Preview</button></td>
+                                            <td><a href="{{ route('admin.invoice-preview') }}" class="btn btn-sm btn-secondary">Preview</a></td>
                                         </tr>
                                         <tr>
                                             <td><i class="ti ti-arrow-big-right"></i></td>
@@ -163,7 +163,7 @@
                                             <td>5.000</td>
                                             <td>732.00</td>
                                             <td><button type="button" class="btn btn-sm btn-secondary">Reprint</button></td>
-                                            <td><button type="button" class="btn btn-sm btn-secondary">Preview</button></td>
+                                            <td><a href="{{ route('admin.invoice-preview') }}" class="btn btn-sm btn-secondary">Preview</a></td>
                                         </tr>
                                     </tbody>
                                 </table>

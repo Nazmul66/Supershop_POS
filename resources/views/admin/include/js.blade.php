@@ -1,5 +1,5 @@
 {{-- Install Desktop APP --}}
-<div class="modal fade" id="appInstallModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="appInstallModalLabel" style="display: none;" aria-hidden="true">
+{{-- <div class="modal fade" id="appInstallModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="appInstallModalLabel" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header" style="background: linear-gradient(#444444, #0a0b0c);">
@@ -14,7 +14,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 
 

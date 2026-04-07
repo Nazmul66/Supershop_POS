@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>POS Receipt</title>
+<title>Invoice POS Receipt</title>
 
 <style>
     body {
@@ -317,13 +317,13 @@
 </div>
 
 <script>
-// window.onafterprint = function () {
-//     if (window.opener) {
-//         window.close();
-//     } else {
-//         window.history.back();
-//     }
-// };
+window.onafterprint = function () {
+    if (window.opener) {
+        window.close();
+    } else {
+        window.history.back();
+    }
+};
 </script>
 
 </body>

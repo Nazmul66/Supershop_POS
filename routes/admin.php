@@ -106,6 +106,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/invoice-preview', function(){
         return view('admin.pages.invoice.invoice_preview');
     })->name('invoice-preview');
+    Route::get('/discount-search', function(){
+        return view('admin.pages.discount.discount_search');
+    });
     // Optional view show
 
 

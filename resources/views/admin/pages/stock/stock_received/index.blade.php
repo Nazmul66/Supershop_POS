@@ -128,6 +128,8 @@
 
 @section('body-content')
 
+    <h2 class="text-center fw-bold mb-2">Stock Received</h2>
+
  <div class="row">
     <div class="col-lg-3">
         <div class="card">
@@ -277,7 +279,7 @@
 
     {{-- Show Search Product Data --}}
     <div class="col-lg-9">
-        <div class="mt-3">
+        <div class="">
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered mb-0 datatables">
@@ -446,13 +448,13 @@
     </div>
  </div>
 
- <div class="footer_line mt-5">
+ <div class="footer_line mt-3">
     <div class="row align-items-end justify-content-between">
         <div class="col-lg-6 offset-lg-2">
             <div class="d-flex align-items-end gap-3">
                 <div class="">
                     <a href="{{ route('admin.stock-receive-preview') }}" class="btn btn-sm btn-secondary">Preview</a>
-                    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#createModal">Save</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#saveModal">Save</button>
                     <button type="button" class="btn btn-sm btn-secondary" id="closePage">Close</button>
                 </div>
         
@@ -471,37 +473,37 @@
 
 
  
-        <!-- Create Modal -->
-        <div id="createModal" class="modal effect-scale fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-            style="display: none;" aria-hidden="true">
-           <div class="modal-dialog modal-sm modal-dialog-centered">
-               <div class="modal-content">
-                   <div class="modal-header">
-                       <h5 class="modal-title" id="myModalLabel">Stock Receive</h5>
-                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                   </div>
+    <!-- Save Modal -->
+    <div id="saveModal" class="modal effect-scale fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Stock Receive</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                </div>
 
-                   <div class="modal-body">
-                      <div class="d-flex align-items-center">
-                        <img src="{{ asset('public/admin/assets/images/question_mark.png') }}" alt="" width="50">
-                        <p>Are you sure to save the challan</p>
-                      </div>
-                   </div>
+                <div class="modal-body">
+                    <div class="d-flex align-items-center">
+                    <img src="{{ asset('public/admin/assets/images/question_mark.png') }}" alt="" width="50">
+                    <p>Are you sure to save the challan</p>
+                    </div>
+                </div>
 
-                   <div class="modal-footer">
-                        <form id="createForm" enctype="multipart/form-data">
-                           @csrf
-                            <div class="d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn btn-secondary waves-effect me-3"
-                                    data-bs-dismiss="modal">Yes </button>
+                <div class="modal-footer">
+                    <form id="createForm" enctype="multipart/form-data">
+                        @csrf
+                        <div class="d-flex justify-content-end align-items-center">
+                            <button type="button" class="btn btn-secondary waves-effect me-3"
+                                data-bs-dismiss="modal">Yes </button>
 
-                                <button type="button" id="btn-store" class="btn btn-secondary waves-effect waves-light" data-bs-dismiss="modal">No</button>
-                            </div>
-                        </form>
-                  </div>
-               </div><!-- /.modal-content -->
-           </div><!-- /.modal-dialog -->
-       </div>
+                            <button type="button" id="btn-store" class="btn btn-secondary waves-effect waves-light" data-bs-dismiss="modal">No</button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 
 @endsection
 

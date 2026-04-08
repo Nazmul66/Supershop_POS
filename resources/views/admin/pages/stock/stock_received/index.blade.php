@@ -109,8 +109,15 @@
         div.dt-container .dt-paging .dt-paging-button {
             font-size: 12px;
         }
-        .footer_line{
-
+        .copyright-footer {
+            display: none !important;
+        }
+        .modal-header{
+            background: #F0F0F0;
+        }
+        .modal-footer{
+            padding: 0.4rem .8rem !important;
+            background: #F0F0F0;
         }
     </style>
 @endpush
@@ -439,14 +446,14 @@
     </div>
  </div>
 
- <div class="footer_line">
+ <div class="footer_line mt-5">
     <div class="row align-items-end justify-content-between">
         <div class="col-lg-6 offset-lg-2">
             <div class="d-flex align-items-end gap-3">
                 <div class="">
-                    <button type="button" class="btn btn-sm btn-secondary">Preview</button>
-                    <button type="button" class="btn btn-sm btn-secondary">Save</button>
-                    <button type="button" class="btn btn-sm btn-secondary">Close</button>
+                    <a href="{{ route('admin.stock-receive-preview') }}" class="btn btn-sm btn-secondary">Preview</a>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#createModal">Save</button>
+                    <button type="button" class="btn btn-sm btn-secondary" id="closePage">Close</button>
                 </div>
         
                 <div class="">
@@ -461,6 +468,40 @@
         </div>
     </div>
  </div>
+
+
+ 
+        <!-- Create Modal -->
+        <div id="createModal" class="modal effect-scale fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+            style="display: none;" aria-hidden="true">
+           <div class="modal-dialog modal-sm modal-dialog-centered">
+               <div class="modal-content">
+                   <div class="modal-header">
+                       <h5 class="modal-title" id="myModalLabel">Stock Receive</h5>
+                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                   </div>
+
+                   <div class="modal-body">
+                      <div class="d-flex align-items-center">
+                        <img src="{{ asset('public/admin/assets/images/question_mark.png') }}" alt="" width="50">
+                        <p>Are you sure to save the challan</p>
+                      </div>
+                   </div>
+
+                   <div class="modal-footer">
+                        <form id="createForm" enctype="multipart/form-data">
+                           @csrf
+                            <div class="d-flex justify-content-end align-items-center">
+                                <button type="button" class="btn btn-secondary waves-effect me-3"
+                                    data-bs-dismiss="modal">Yes </button>
+
+                                <button type="button" id="btn-store" class="btn btn-secondary waves-effect waves-light" data-bs-dismiss="modal">No</button>
+                            </div>
+                        </form>
+                  </div>
+               </div><!-- /.modal-content -->
+           </div><!-- /.modal-dialog -->
+       </div>
 
 @endsection
 
@@ -487,6 +528,11 @@
                 language: {
                     lengthMenu: "_MENU_Page_Entries"   // 🔥 remove "Entries per page" text
                 }
+            });
+
+
+            $(document).on('click', '#closePage', function () {
+                window.location.href = "{{ route('admin.dashboard') }}";
             });
         });
     </script>

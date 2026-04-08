@@ -480,7 +480,3 @@
         });
     </script>
 @endpush
-{{-- 
-if (e.key === 'Escape') {
-    window.history.back(); // 🔥 go to previous page
-} --}}

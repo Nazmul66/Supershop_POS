@@ -19,7 +19,6 @@
             margin-bottom: 1rem;
             width: 100%;
             height: 250px;
-            background: #fff;
             padding: 25px;
             border: 1px solid #000;
         }
@@ -32,7 +31,7 @@
             font-size: 1rem;
             font-weight: 700;
             width: 100%;
-            height: 30px;
+            height: 25px;
             border: 1px solid #dfdfdf;
             padding: 0px 10px;
             border-bottom: 1px solid #1E78C8;
@@ -151,127 +150,7 @@
     <script>
         $(document).ready(function () {
 
-            function getInvoiceAmount() {
-                return parseFloat($('#invoice_amount').val()) || 0;
-            }
-
-            function setInvoiceAmount(value) {
-                $('#invoice_amount').val(value.toFixed(2));
-            }
-
-            // 👉 Focus flow (Enter key navigation)
-            $('#payment_type').on('change', function () {
-                $('#card_number').focus();
-            });
-
-            $('#card_number').on('keypress', function (e) {
-                if (e.which === 13) {
-                    e.preventDefault();
-                    $('#machine_number').focus();
-                }
-            });
-
-            $('#machine_number').on('keypress', function (e) {
-                if (e.which === 13) {
-                    e.preventDefault();
-                    $('#amount').focus();
-                }
-            });
-
-            // 👉 Final step: Add to table
-            $('#amount').on('keypress', function (e) {
-                if (e.which === 13) {
-                    e.preventDefault();
-
-                    let paymentType = $('#payment_type').val();
-                    let cardNumber = $('#card_number').val();
-                    let machineNumber = $('#machine_number').val();
-                    let amount = parseFloat($('#amount').val());
-                    let currentTotal = getInvoiceAmount();
-
-                    // ✅ Validation
-                    if (!paymentType) {
-                        alert('Select Payment Type');
-                        $('#payment_type').focus();
-                        return;
-                    }
-
-                    if (!amount || amount <= 0) {
-                        alert('Amount is required');
-                        return;
-                    }
-
-                    // ❌ Prevent exceed
-                    if (amount > currentTotal) {
-                        // alert('Amount exceeds invoice total!');
-                        swal.fire({
-                            title: "Sorry!!! exceeding invoice amount...!!",
-                            icon: "error",
-                            confirmButtonText: "Okay"
-                        })
-                        $('#amount').focus();
-                        return;
-                    }
-
-                    // ✅ Subtract from total
-                    let newTotal = currentTotal - amount;
-                    setInvoiceAmount(newTotal);
-
-                    // ✅ Append row
-                    let row = `
-                        <tr data-amount="${amount}">
-                            <td>${paymentType}</td>
-                            <td>${cardNumber ?? ''}</td>
-                            <td>${amount.toFixed(2)}</td>
-                        </tr>
-                    `;
-
-                    $('#recent_table_data tbody').append(row);
-
-                    // ✅ Reset fields
-                    $('#card_number').val('');
-                    $('#machine_number').val('');
-                    $('#amount').val('');
-
-                    // 👉 Focus আবার শুরুতে
-                    $('#payment_type').prop('selectedIndex', 0).focus();
-                }
-            });
-
-        $(document).on('dblclick', '#recent_table_data tbody tr', function () {
-            let row = $(this);
-            let rowAmount = parseFloat(row.data('amount')) || 0;
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You want to remove this row!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#092C4C',
-                cancelButtonColor: '#db0000',
-                confirmButtonText: 'Yes, remove it!',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // ✅ Add back amount
-                    let currentTotal = getInvoiceAmount();
-                    let newTotal = currentTotal + rowAmount;
-                    setInvoiceAmount(newTotal);
-
-                    // ✅ Remove row
-                    row.remove();
-
-                    // Swal.fire({
-                    //     icon: 'success',
-                    //     title: 'Deleted!',
-                    //     text: 'Row has been removed.',
-                    //     timer: 1500,
-                    //     showConfirmButton: false
-                    // });
-                }
-            });
         });
-    });
     </script>
 @endpush
 

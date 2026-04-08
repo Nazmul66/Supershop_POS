@@ -109,6 +109,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/discount-search', function(){
         return view('admin.pages.discount.discount_search');
     });
+    Route::get('/stock-receive', function(){
+        return view('admin.pages.stock.stock_received');
+    });
     // Optional view show
 
 

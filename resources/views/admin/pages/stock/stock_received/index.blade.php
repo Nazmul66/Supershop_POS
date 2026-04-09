@@ -109,6 +109,9 @@
         div.dt-container .dt-paging .dt-paging-button {
             font-size: 12px;
         }
+        .product_info{
+
+        }
         .copyright-footer {
             display: none !important;
         }
@@ -137,11 +140,11 @@
                 <div class="mb-1">
                      <div class="row align-items-center justify-content-between">
                         <div class="col-lg-4">
-                            <label for="cus_id" class="d-block text-end">Date</label>
+                            <label for="date_time" class="d-block text-end">Date</label>
                         </div>
 
                         <div class="col-lg-8">
-                            <input type="text" name="cus_id" class="search_field" id="cus_id" >
+                            <input type="text" name="date_time" class="search_field" id="date_time" readonly>
                         </div>
                      </div>
                 </div>
@@ -161,7 +164,7 @@
                      </div>
                 </div>
 
-                <div class="mb-5">
+                <div class="mb-3">
                     <div class="row align-items-center justify-content-between">
                        <div class="col-lg-4">
                            <label for="received_from" class="d-block text-end">Received From</label>
@@ -173,102 +176,106 @@
                     </div>
                </div>
 
-               <div class="mb-1">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-lg-4">
-                            <label for="barcode" class="d-block text-end">Barcode</label>
-                        </div>
+                <div class="product_info">
+                    <span class="fw-bold d-block mb-2" style="border-bottom: 2px solid #726c6c;">Product Information</span>
 
-                        <div class="col-lg-8">
-                            <input type="text" name="barcode" class="search_field" id="barcode">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-1">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-lg-4">
-                            <label for="name" class="d-block text-end">Name</label>
-                        </div>
-
-                        <div class="col-lg-8">
-                            <input type="text" name="name" class="search_field" id="name" disabled>
+                    <div class="mb-1">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-lg-4">
+                                <label for="barcode" class="d-block text-end">Barcode</label>
+                            </div>
+    
+                            <div class="col-lg-8">
+                                <input type="text" name="barcode" class="search_field" id="barcode">
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="mb-1">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-lg-4">
-                            <label for="category" class="d-block text-end">Category</label>
-                        </div>
-
-                        <div class="col-lg-8">
-                            <input type="text" name="category" class="search_field" id="category" disabled>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-1">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-lg-4">
-                            <label for="sub_category" class="d-block text-end">Sub Category</label>
-                        </div>
-
-                        <div class="col-lg-8">
-                            <input type="text" name="sub_category" class="search_field" id="sub_category" disabled>
+    
+                    <div class="mb-1">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-lg-4">
+                                <label for="name" class="d-block text-end">Name</label>
+                            </div>
+    
+                            <div class="col-lg-8">
+                                <input type="text" name="name" class="search_field" id="name" disabled>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="mb-1">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-lg-4">
-                            <label for="sale_price" class="d-block text-end">Sale price</label>
-                        </div>
-
-                        <div class="col-lg-8">
-                            <input type="text" name="sale_price" class="search_field" id="sale_price" disabled>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-1">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-lg-4">
-                            <label for="challan_qty" class="d-block text-end">Challan Qty</label>
-                        </div>
-
-                        <div class="col-lg-8">
-                            <input type="text" name="challan_qty" class="search_field" id="challan_qty" disabled>
+    
+                    <div class="mb-1">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-lg-4">
+                                <label for="category" class="d-block text-end">Category</label>
+                            </div>
+    
+                            <div class="col-lg-8">
+                                <input type="text" name="category" class="search_field" id="category" disabled>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="mb-1">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-lg-4">
-                            <label for="receiving_qty" class="d-block text-end">Receiving Qty</label>
-                        </div>
-
-                        <div class="col-lg-8">
-                            <input type="text" name="receiving_qty" class="search_field" id="receiving_qty" style="width: 50%;">
+    
+                    <div class="mb-1">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-lg-4">
+                                <label for="sub_category" class="d-block text-end">Sub Category</label>
+                            </div>
+    
+                            <div class="col-lg-8">
+                                <input type="text" name="sub_category" class="search_field" id="sub_category" disabled>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="mb-1">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-lg-4">
-                            <label for="receiving_qty" class="d-block text-end">Auto Scan</label>
+    
+                    <div class="mb-1">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-lg-4">
+                                <label for="sale_price" class="d-block text-end">Sale price</label>
+                            </div>
+    
+                            <div class="col-lg-8">
+                                <input type="text" name="sale_price" class="search_field" id="sale_price" disabled>
+                            </div>
                         </div>
-
-                        <div class="col-lg-8">
-                            <div class="d-flex align-items-center gap-2">
-                                <input class="form-check-input m-0" type="checkbox" value="" id="autoScan">
-                                <label class="" for="autoScan">
-                                    No
-                                </label>
+                    </div>
+    
+                    <div class="mb-1">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-lg-4">
+                                <label for="challan_qty" class="d-block text-end">Challan Qty</label>
+                            </div>
+    
+                            <div class="col-lg-8">
+                                <input type="text" name="challan_qty" class="search_field" id="challan_qty" disabled>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="mb-1">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-lg-4">
+                                <label for="receiving_qty" class="d-block text-end">Receiving Qty</label>
+                            </div>
+    
+                            <div class="col-lg-8">
+                                <input type="text" name="receiving_qty" class="search_field" id="receiving_qty" style="width: 50%;">
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="mb-1">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-lg-4">
+                                <label for="receiving_qty" class="d-block text-end">Auto Scan</label>
+                            </div>
+    
+                            <div class="col-lg-8">
+                                <div class="d-flex align-items-center gap-2">
+                                    <input class="form-check-input m-0" type="checkbox" value="" id="autoScan">
+                                    <label class="" for="autoScan">
+                                        No
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -511,6 +518,21 @@
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.2.6/js/dataTables.buttons.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.2.6/js/buttons.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            let today = new Date();
+    
+            let day = String(today.getDate()).padStart(2, '0');
+            let monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            let month = monthNames[today.getMonth()];
+            let year = today.getFullYear();
+    
+            let formattedDate = day + '-' + month + '-' + year;
+    
+            $('#date_time').val(formattedDate);
+        });
+    </script>
 
     <script>
         $(document).ready(function () {

@@ -74,6 +74,9 @@
         .table tbody tr {
             border-color: #8d8d8d;
         }
+        .table tbody tr {
+           cursor: pointer;
+        }
         .table thead tr th{
             font-size: 11px;
             font-weight: 700;
@@ -95,6 +98,10 @@
             background-color: #FFFFE0;
             color: #000;
             font-weight: 900;
+        }
+        .table tbody tr:hover td {
+            background-color: #0078D7 !important;
+            color: #fff;
         }
         .dt-container .dt-length{
             display: flex !important;
@@ -134,6 +141,19 @@
             padding: 0.4rem .8rem !important;
             background: #F0F0F0;
         }
+        .card{
+            margin-bottom: 1rem
+        }
+        .card .card-body {
+            padding: 0.5rem 1rem;
+            height: 310px;
+        }
+        .fs-sm{
+            font-size: 12px;
+        }
+        .fs-xs{
+            font-size: 11px;
+        }
     </style>
 @endpush
 
@@ -168,7 +188,7 @@
                             </div>
         
                             <div class="col-lg-8">
-                                <input type="text" name="barcode" class="search_field" id="barcode" style="background: #FFFFC0;">
+                                <input type="text" name="barcode" class="search_field" id="barcode" style="background: #FFFFC0;" value="8942240180086">
                             </div>
                         </div>
                     </div>
@@ -180,7 +200,7 @@
                             </div>
         
                             <div class="col-lg-8">
-                                <input type="text" name="current_stock" class="search_field" id="current_stock" style="background: #C0FFFF;" readonly>
+                                <input type="text" name="current_stock" class="search_field" id="current_stock" style="background: #C0FFFF;" readonly value="10">
                             </div>
                         </div>
                     </div>
@@ -206,7 +226,7 @@
                             </div>
         
                             <div class="col-lg-8">
-                                <input type="text" name="description" class="search_field" id="description" style="background: #C0FFFF;" readonly>
+                                <input type="text" name="description" class="search_field" id="description" style="background: #C0FFFF;" readonly value="Fig Tangy, Sweet & Spicy pickle 215gm">
                             </div>
                         </div>
                     </div>
@@ -219,7 +239,8 @@
         
                             <div class="col-lg-8">
                                 <div class="d-flex align-items-center gap-2">
-                                    <input type="text" name="scan_quantity" class="search_field" id="scan_quantity" style="background: #C0FFFF;" readonly>
+                                    <input type="number" name="scan_quantity" class="search_field" id="scan_quantity" style="background: #FFFFC0;" >
+                                    <input type="hidden" name="mrp_amount" class="" value="280" id="mrp_amount" readonly>
 
                                     <div class="d-flex align-items-center gap-2">
                                         <input class="form-check-input m-0" type="checkbox" value="" id="autoScan">
@@ -246,11 +267,164 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- Show Product Data --}}
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered mb-0 datatables" id="stock_table">
+                                    <thead>
+                                        <tr>
+                                            <th>Barcode</th>
+                                            <th>Description</th>
+                                            <th>Current Stock</th>
+                                            <th>Actual Stock</th>
+                                            <th>Adjust Stock</th>
+                                            <th>MRP</th>
+                                            <th>Note</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{-- <tr>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>15.000</td>
+                                            <td>5.000</td>
+                                            <td>-10.000</td>
+                                            <td>2500.00</td>
+                                            <td></td>
+                                        </tr>
+            
+                                        <tr>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>20.000</td>
+                                            <td>5.000</td>
+                                            <td>-15.000</td>
+                                            <td>2500.00</td>
+                                            <td></td>
+                                        </tr>
+            
+                                        <tr>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>11.000</td>
+                                            <td>1.000</td>
+                                            <td>-10.000</td>
+                                            <td>2500.00</td>
+                                            <td></td>
+                                        </tr>
+            
+                                        <tr>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>21.000</td>
+                                            <td>10.000</td>
+                                            <td>-11.000</td>
+                                            <td>2500.00</td>
+                                            <td></td>
+                                        </tr>
+            
+                                        <tr>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>16.000</td>
+                                            <td>10.000</td>
+                                            <td>-6.000</td>
+                                            <td>2500.00</td>
+                                            <td></td>
+                                        </tr>
+            
+                                        <tr>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>9.000</td>
+                                            <td>2.000</td>
+                                            <td>-7.000</td>
+                                            <td>2500.00</td>
+                                            <td></td>
+                                        </tr>
+            
+                                        <tr>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>10.000</td>
+                                            <td>9.000</td>
+                                            <td>-1.000</td>
+                                            <td>2500.00</td>
+                                            <td></td>
+                                        </tr>
+            
+                                        <tr>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>12.000</td>
+                                            <td>8.000</td>
+                                            <td>-4.000</td>
+                                            <td>2500.00</td>
+                                            <td></td>
+                                        </tr>
+            
+                                        <tr>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>10.000</td>
+                                            <td>8.000</td>
+                                            <td>-2.000</td>
+                                            <td>2500.00</td>
+                                            <td></td>
+                                        </tr>
+            
+                                        <tr>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>17.000</td>
+                                            <td>8.000</td>
+                                            <td>-9.000</td>
+                                            <td>2500.00</td>
+                                            <td></td>
+                                        </tr>
+            
+                                        <tr>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>10.000</td>
+                                            <td>5.000</td>
+                                            <td>-5.000</td>
+                                            <td>2500.00</td>
+                                            <td></td>
+                                        </tr> --}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col-lg-9">
+                        <p class="mb-1 text-danger fs-xs fw-bold">Number of line: <span id="line_number">0</span></p>
+
+                        <div class="d-flex align-items-center gap-5">
+                            <p class="mb-0 text-danger fw-bold">Current Stock: <span id="total_current_stock">00.000</span></p>
+                            <p class="mb-0 text-danger fw-bold" id="actual_stock">Actual Stock: <span>00.000</span></p>
+                            <p class="mb-0 text-danger fw-bold" id="adjust_qty">Adjust Qty: <span>-00.000</span></p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 text-end">
+                        <span class="text-danger fs-sm fw-bold">Double Click To Delete</span>
+
+                        <div class="">
+                            <button type="button" class="btn btn-sm btn-secondary"  data-bs-toggle="modal" data-bs-target="#saveModal">Save</button>
+                            <button type="button" class="btn btn-sm btn-secondary" id="closePage">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-
 
  
     <!-- Save Modal -->
@@ -309,15 +483,141 @@
 
     <script>
         $(document).ready(function () {
+
+            $('#barcode').on('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+
+                    let barcode = $(this).val();
+
+                    if (!barcode) {
+                        alert('Barcode must required');
+                        return;
+                    }
+
+                    // 👉 Auto set quantity
+                    $('#scan_quantity').val(1);
+
+                    // 👉 Focus qty
+                    $('#scan_quantity').focus().select();
+                }
+            });
+
+            // 👉 Focus flow (Enter key navigation)
+            $('#scan_quantity').on('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+
+                    let qty = $(this).val();
+
+                    if (!qty || qty < 1) {
+                        alert('Qty must be at least 1');
+                        $(this).val(1).focus().select();
+                        return;
+                    }
+
+                    $('#note').focus();
+                }
+            });
+
+            // 👉 Final step: Add to table
+            $('#note').on('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+
+                    let barcode = $('#barcode').val();
+                    let current_stock = parseFloat($('#current_stock').val()) || 0;
+                    let scan_quantity = parseFloat($('#scan_quantity').val()) || 0;
+                    let mrp_amount    = parseFloat($('#mrp_amount').val()) || 0;
+                    let note = $('#note').val();
+
+                    // ✅ Validation
+                    if (!barcode) {
+                        alert('Barcode must required');
+                        $('#barcode').focus();
+                        return;
+                    }
+
+                    if (!scan_quantity || scan_quantity < 1) {
+                        alert('Qty must be at least 1');
+                        $('#scan_quantity').val(1).focus();
+                        return;
+                    }
+
+                    if (!note) {
+                        alert('Note must required');
+                        $('#note').focus();
+                        return;
+                    }
+
+                    // ❗ Fix your logic here
+                    if (scan_quantity > current_stock) {
+                        alert('Exceeding stock qty');
+                        $('#scan_quantity').val(1).focus();
+                        return;
+                    }
+
+                    // 👉 Add to table function
+                    let tbody = $('tbody');
+                    let row = `
+                    <tr>
+                        <td>${barcode}</td>
+                        <td>${$('#description').val() ?? ''}</td>
+                        <td class="current_stock">${current_stock.toFixed(3)}</td>
+                        <td class="actual_stock">${scan_quantity.toFixed(3)}</td>
+                        <td class="adjust_stock">${(current_stock - scan_quantity).toFixed(3)}</td>
+                        <td>${mrp_amount.toFixed(3)}</td>
+                        <td>${note}</td>
+                    </tr>
+                    `;
+
+                    tbody.append(row);
+
+                    calculateTotals()
+
+                    // 👉 Reset fields
+                    // $('#barcode').val('').focus();
+                    // $('#description').val('');
+                    // $('#current_stock').val('');
+                    // $('#scan_quantity').val('');
+                    // $('#mrp_amount').val('');
+                    // $('#note').val('');
+                }
+            });
+
+
+            function calculateTotals() {
+                let totalLine = 0;
+                let totalCurrent = 0;
+                let totalAdjust = 0;
+
+                $('#stock_table tbody tr').each(function () {
+                    totalLine++;
+
+                    let current = parseFloat($(this).find('.current_stock').text()) || 0;
+                    let adjust = parseFloat($(this).find('.adjust_stock').text()) || 0;
+
+                    totalCurrent += current;
+                    totalAdjust += adjust;
+                });
+
+                let totalActual = totalCurrent - totalAdjust;
+
+                // 👉 Update UI
+                $('#line_number').text(totalLine);
+                $('#total_current_stock').text(totalCurrent.toFixed(3)); // ⚠️ use DIFFERENT ID
+                $('#actual_stock span').text(totalActual.toFixed(3));
+                $('#adjust_qty span').text("-" + totalAdjust.toFixed(3));
+            }
+
             // Show Data through Datatable
-            let datatables = $('.datatables').DataTable({
+            let datatables = $('.datatable').DataTable({
                 pageLength: 10,
                 scrollCollapse: true,
-                scrollY: 300,
+                scrollY: 250,
                 layout: {
-                    topStart: ['info','pageLength'],   // ✅ clean dropdown only
-                    topEnd: ['paging'],         // ✅ pagination on top right
-
+                    topStart: null,   // ✅ clean dropdown only
+                    topEnd: null,         // ✅ pagination on top right
                     bottomStart: null,          // ❌ remove "Showing entries"
                     bottomEnd: null             // ❌ remove bottom pagination
                 },
@@ -328,10 +628,42 @@
             });
 
 
+            $(document).on('dblclick', '.table tbody tr', function () {
+                let row = $(this);
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to remove this row!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#092C4C',
+                    cancelButtonColor: '#db0000',
+                    confirmButtonText: 'Yes, remove it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        // ✅ Remove row
+                        row.remove();
+                        calculateTotals();
+
+                        // Swal.fire({
+                        //     icon: 'success',
+                        //     title: 'Deleted!',
+                        //     text: 'Row has been removed.',
+                        //     timer: 1500,
+                        //     showConfirmButton: false
+                        // });
+                    }
+                });
+            });
+
             $(document).on('click', '#closePage', function () {
                 window.location.href = "{{ route('admin.dashboard') }}";
             });
+            
         });
     </script>
+
 @endpush
 

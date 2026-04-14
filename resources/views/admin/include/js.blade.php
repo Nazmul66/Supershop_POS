@@ -31,8 +31,8 @@
 <script src="{{ asset('public/admin/assets/js/jquery.slimscroll.min.js') }}"></script>
 
 <!-- Laravel PWA Package -->
-<script src="{{ asset('public/sw.js') }}"></script>
-<script src="{{ asset('public/pwa-install.js') }}"></script>
+{{-- <script src="{{ asset('public/sw.js') }}"></script>
+<script src="{{ asset('public/pwa-install.js') }}"></script> --}}
 
 
 <!-- Chart JS -->

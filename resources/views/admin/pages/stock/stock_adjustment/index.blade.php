@@ -128,9 +128,6 @@
         div.dt-container .dt-paging .dt-paging-button {
             font-size: 12px;
         }
-        .product_info{
-
-        }
         .copyright-footer {
             display: none !important;
         }
@@ -145,8 +142,9 @@
             margin-bottom: 1rem
         }
         .card .card-body {
-            padding: 0.5rem 1rem;
+            padding: 0.5rem;
             height: 310px;
+            overflow-y: auto;
         }
         .fs-sm{
             font-size: 12px;
@@ -557,24 +555,73 @@
                         return;
                     }
 
-                    // 👉 Add to table function
-                    let tbody = $('tbody');
-                    let row = `
-                    <tr>
-                        <td>${barcode}</td>
-                        <td>${$('#description').val() ?? ''}</td>
-                        <td class="current_stock">${current_stock.toFixed(3)}</td>
-                        <td class="actual_stock">${scan_quantity.toFixed(3)}</td>
-                        <td class="adjust_stock">${(current_stock - scan_quantity).toFixed(3)}</td>
-                        <td>${mrp_amount.toFixed(3)}</td>
-                        <td>${note}</td>
-                    </tr>
-                    `;
+                    let existingRow = null;
 
-                    tbody.append(row);
+                    $('#stock_table tbody tr').each(function () {
+                        let rowBarcode = $(this).find('td:eq(0)').text();
+
+                        if (rowBarcode === barcode) {
+                            existingRow = $(this);
+                            return false; // break loop
+                        }
+                    });
+
+                    if (existingRow) {
+                        let oldActual = parseFloat(existingRow.find('.actual_stock').text()) || 0;
+                        let newActual = oldActual + scan_quantity;
+                        // console.log(
+                        //     `current_stock ==>${current_stock}` ,
+                        //     `oldActual ==>${oldActual}`, 
+                        //     `newActual ==>${newActual}`
+                        //     );
+
+                        // validation
+                        if (newActual > current_stock) {
+                            alert('Exceeding stock! Resetting previous data...');
+
+                            // ✅ RESET LOGIC
+                            let resetActual = scan_quantity;
+
+                            // যদি একবারেই exceed করে (scan_quantity > current_stock)
+                            if (resetActual > current_stock) {
+                                alert('Qty itself exceeds stock!');
+                                return;
+                            }
+
+                            let resetAdjust = current_stock - resetActual;
+
+                            // 👉 overwrite previous values
+                            existingRow.find('.actual_stock').text(resetActual.toFixed(3));
+                            existingRow.find('.adjust_stock').text(resetAdjust.toFixed(3));
+                            existingRow.find('.stock_note').text(note);
+                        }
+                        else{
+                            let newAdjust = current_stock - newActual; 
+                            // 👉 Update row
+                            existingRow.find('.adjust_stock').text(newAdjust.toFixed(3));
+                            existingRow.find('.actual_stock').text(newActual.toFixed(3));
+                            existingRow.find('.stock_note').text(note);
+                        }
+                    }
+                    else{
+                        let actual = current_stock - scan_quantity;
+                        // 👉 Add to table function
+                        let row = `
+                            <tr>
+                                <td>${barcode}</td>
+                                <td>${$('#description').val() ?? ''}</td>
+                                <td class="current_stock">${current_stock.toFixed(3)}</td>
+                                <td class="actual_stock">${scan_quantity.toFixed(3)}</td>
+                                <td class="adjust_stock">${actual.toFixed(3)}</td>
+                                <td>${mrp_amount.toFixed(3)}</td>
+                                <td class="stock_note">${note}</td>
+                            </tr>
+                        `;
+
+                        $('tbody').prepend(row);
+                    }
 
                     calculateTotals()
-
                     // 👉 Reset fields
                     // $('#barcode').val('').focus();
                     // $('#description').val('');

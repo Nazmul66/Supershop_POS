@@ -14,6 +14,12 @@
             cursor: pointer;
             display: block;
         }
+        .header{
+            display: none;
+        }
+        .page-wrapper {
+            padding: 0px 0px 0px 30px;
+        }
         .search_field{
             color: #000;
             font-size: 12px;
@@ -24,7 +30,7 @@
             padding: 0px 9px;
             border-bottom: 2px solid #9b9797;
             border-radius: 2px;
-            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.12);
+            box-shadow: 0px 3px 20px rgba(0, 0, 0, 0.1);
         }
         .search_field:focus{
             border-bottom: 2px solid #86b7fe;
@@ -461,7 +467,7 @@
             <div class="d-flex align-items-end gap-3">
                 <div class="">
                     <a href="{{ route('admin.stock-receive-preview') }}" class="btn btn-sm btn-secondary">Preview</a>
-                    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#saveModal">Save</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#saveChallanModal">Save</button>
                     <button type="button" class="btn btn-sm btn-secondary" id="closePage">Close</button>
                 </div>
         
@@ -480,6 +486,38 @@
 
 
  
+    <!-- Save Challan Modal -->
+    <div id="saveChallanModal" class="modal effect-scale fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Stock Receive</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="d-flex align-items-center justify-content-center gap-2">
+                    <img src="{{ asset('public/admin/assets/images/question_mark.png') }}" alt="" width="50" style="-webkit-user-drag: none;">
+                    <p class="fw-bold">Are you sure to save the challan</p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <form id="createForm" enctype="multipart/form-data">
+                        @csrf
+                        <div class="d-flex justify-content-end align-items-center">
+                            <button type="button" class="btn btn-secondary waves-effect me-3"
+                            data-bs-toggle="modal" data-bs-target="#saveModal">Yes </button>
+
+                            <button type="button" id="btn-store" class="btn btn-secondary waves-effect waves-light" data-bs-dismiss="modal">No</button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
     <!-- Save Modal -->
     <div id="saveModal" class="modal effect-scale fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
         style="display: none;" aria-hidden="true">
@@ -491,9 +529,9 @@
                 </div>
 
                 <div class="modal-body">
-                    <div class="d-flex align-items-center">
-                    <img src="{{ asset('public/admin/assets/images/question_mark.png') }}" alt="" width="50">
-                    <p>Are you sure to save the challan</p>
+                    <div class="d-flex align-items-center justify-content-center gap-2">
+                    <img src="{{ asset('public/admin/assets/images/info_mark.png') }}" alt="" width="50" style="-webkit-user-drag: none;">
+                    <p class="fw-bold">Saved Successfully!!!!</p>
                     </div>
                 </div>
 
@@ -502,9 +540,7 @@
                         @csrf
                         <div class="d-flex justify-content-end align-items-center">
                             <button type="button" class="btn btn-secondary waves-effect me-3"
-                                data-bs-dismiss="modal">Yes </button>
-
-                            <button type="button" id="btn-store" class="btn btn-secondary waves-effect waves-light" data-bs-dismiss="modal">No</button>
+                                data-bs-dismiss="modal">OK </button>
                         </div>
                     </form>
                 </div>

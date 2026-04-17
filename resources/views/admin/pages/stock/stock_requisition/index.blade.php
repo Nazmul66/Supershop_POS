@@ -132,6 +132,26 @@
             padding: 4px 8px 0;
             border-radius: 4px;
         }
+        @media (min-width: 1240px) and (max-width: 1560px) {
+            .table_responsive {
+                overflow-x: auto;
+                overflow-y: auto;
+                height: 300px;
+            }
+        }
+        .warehouse_table thead th {
+            position: sticky;
+            top: 0;
+            background: #fff;      /* must set background */
+            z-index: 2;
+        }
+        .card-bordered{
+            border: 1px solid #a39e9e;
+            padding: 5px;
+        }
+        #storeListModal .modal-body{
+            padding: 10px;
+        }
     </style>
 @endpush
 
@@ -172,7 +192,7 @@
                                     <div class="d-flex align-items-center gap-1">
                                         <input type="text" name="cus_id" class="search_field" id="received_from" readonly>
 
-                                        <a href="javascript:void(0);" class="select_warehouse"><i class="ti ti-dots"></i></a>
+                                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#storeListModal" class="select_warehouse"><i class="ti ti-dots"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -624,7 +644,7 @@
         </div><!-- /.modal-dialog -->
     </div>
 
-    <!-- Product Seearch Modal -->
+    <!-- Product Search Modal -->
     <div id="productSearchModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
         style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -979,6 +999,182 @@
                             </div>
                         </div>
 
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+    <!-- Store List Modal -->
+    <div id="storeListModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Store List</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="card-bordered">
+                        <div class="card-body">
+                            <div class="table_responsive">
+                                <table class="table table-bordered warehouse_table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Barcode or SKU</th>
+                                            <th>User Barcode</th>
+                                            <th>Name</th>
+                                            <th>MRP</th>
+                                            <th>Balance</th>
+                                            <th>UOM</th>
+                                            <th>VAT(%)</th>
+                                            <th>Category</th>
+                                            <th>Sub Category</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>A000025</td>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>2500.00</td>
+                                            <td>5</td>
+                                            <td>Pcs</td>
+                                            <td>0.00</td>
+                                            <td>Honey</td>
+                                            <td>Organic Honey</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A000025</td>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>2500.00</td>
+                                            <td>5</td>
+                                            <td>Pcs</td>
+                                            <td>0.00</td>
+                                            <td>Honey</td>
+                                            <td>Organic Honey</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A000025</td>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>2500.00</td>
+                                            <td>5</td>
+                                            <td>Pcs</td>
+                                            <td>0.00</td>
+                                            <td>Honey</td>
+                                            <td>Organic Honey</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A000025</td>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>2500.00</td>
+                                            <td>5</td>
+                                            <td>Pcs</td>
+                                            <td>0.00</td>
+                                            <td>Honey</td>
+                                            <td>Organic Honey</td>
+                                        </tr>
+                                        {{-- <tr>
+                                            <td>A000025</td>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>2500.00</td>
+                                            <td>5</td>
+                                            <td>Pcs</td>
+                                            <td>0.00</td>
+                                            <td>Honey</td>
+                                            <td>Organic Honey</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A000025</td>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>2500.00</td>
+                                            <td>5</td>
+                                            <td>Pcs</td>
+                                            <td>0.00</td>
+                                            <td>Honey</td>
+                                            <td>Organic Honey</td>
+                                        </tr>
+
+
+
+                                        <tr>
+                                            <td>A000025</td>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>2500.00</td>
+                                            <td>5</td>
+                                            <td>Pcs</td>
+                                            <td>0.00</td>
+                                            <td>Honey</td>
+                                            <td>Organic Honey</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A000025</td>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>2500.00</td>
+                                            <td>5</td>
+                                            <td>Pcs</td>
+                                            <td>0.00</td>
+                                            <td>Honey</td>
+                                            <td>Organic Honey</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A000025</td>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>2500.00</td>
+                                            <td>5</td>
+                                            <td>Pcs</td>
+                                            <td>0.00</td>
+                                            <td>Honey</td>
+                                            <td>Organic Honey</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A000025</td>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>2500.00</td>
+                                            <td>5</td>
+                                            <td>Pcs</td>
+                                            <td>0.00</td>
+                                            <td>Honey</td>
+                                            <td>Organic Honey</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A000025</td>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>2500.00</td>
+                                            <td>5</td>
+                                            <td>Pcs</td>
+                                            <td>0.00</td>
+                                            <td>Honey</td>
+                                            <td>Organic Honey</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A000025</td>
+                                            <td>8942240150072</td>
+                                            <td>African Organic Willd HOney 500gm</td>
+                                            <td>2500.00</td>
+                                            <td>5</td>
+                                            <td>Pcs</td>
+                                            <td>0.00</td>
+                                            <td>Honey</td>
+                                            <td>Organic Honey</td>
+                                        </tr> --}}
+
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div><!-- /.modal-content -->

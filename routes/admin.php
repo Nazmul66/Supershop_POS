@@ -121,6 +121,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/stock-requisition', function(){
         return view('admin.pages.stock.stock_requisition.index');
     });
+    Route::get('/stock-requisition-preview', function(){
+        return view('admin.pages.stock.stock_requisition.preview');
+    });
     // Optional view show
 
 

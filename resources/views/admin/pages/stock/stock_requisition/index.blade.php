@@ -145,7 +145,20 @@
             background: #fff;      /* must set background */
             z-index: 2;
         }
+        .warehouse_table tbody tr.active {
+            background-color: #0078D7 !important;
+            color: #fff;
+            cursor: pointer;
+        }
+        .warehouse_table tbody tr.active td{
+            font-size: 10px !important;
+            color: #4D555E;
+            font-weight: 700 !important;
+            background-color: #0078D7 !important;
+            color: #fff;
+        }
         .card-bordered{
+            background: #ABABAB;
             border: 1px solid #a39e9e;
             padding: 5px;
         }
@@ -190,7 +203,8 @@
             
                                 <div class="col-lg-8">
                                     <div class="d-flex align-items-center gap-1">
-                                        <input type="text" name="cus_id" class="search_field" id="received_from" readonly>
+                                        <input type="text" name="received_from" class="search_field" id="received_from" disabled>
+                                        <input type="hidden" name="warehouse_id" class="search_field" id="warehouse_id">
 
                                         <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#storeListModal" class="select_warehouse"><i class="ti ti-dots"></i></a>
                                     </div>
@@ -1022,155 +1036,103 @@
                                 <table class="table table-bordered warehouse_table mb-0">
                                     <thead>
                                         <tr>
-                                            <th>Barcode or SKU</th>
-                                            <th>User Barcode</th>
-                                            <th>Name</th>
-                                            <th>MRP</th>
-                                            <th>Balance</th>
-                                            <th>UOM</th>
-                                            <th>VAT(%)</th>
-                                            <th>Category</th>
-                                            <th>Sub Category</th>
+                                            <th></th>
+                                            <th>Code</th>
+                                            <th>Store Name</th>
+                                            <th>Area</th>
+                                            <th>Address</th>
+                                            <th>City</th>
+                                            <th>Postal Code</th>
+                                            <th>Phone Number</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>A000025</td>
-                                            <td>8942240150072</td>
-                                            <td>African Organic Willd HOney 500gm</td>
-                                            <td>2500.00</td>
-                                            <td>5</td>
-                                            <td>Pcs</td>
-                                            <td>0.00</td>
-                                            <td>Honey</td>
-                                            <td>Organic Honey</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A000025</td>
-                                            <td>8942240150072</td>
-                                            <td>African Organic Willd HOney 500gm</td>
-                                            <td>2500.00</td>
-                                            <td>5</td>
-                                            <td>Pcs</td>
-                                            <td>0.00</td>
-                                            <td>Honey</td>
-                                            <td>Organic Honey</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A000025</td>
-                                            <td>8942240150072</td>
-                                            <td>African Organic Willd HOney 500gm</td>
-                                            <td>2500.00</td>
-                                            <td>5</td>
-                                            <td>Pcs</td>
-                                            <td>0.00</td>
-                                            <td>Honey</td>
-                                            <td>Organic Honey</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A000025</td>
-                                            <td>8942240150072</td>
-                                            <td>African Organic Willd HOney 500gm</td>
-                                            <td>2500.00</td>
-                                            <td>5</td>
-                                            <td>Pcs</td>
-                                            <td>0.00</td>
-                                            <td>Honey</td>
-                                            <td>Organic Honey</td>
-                                        </tr>
-                                        {{-- <tr>
-                                            <td>A000025</td>
-                                            <td>8942240150072</td>
-                                            <td>African Organic Willd HOney 500gm</td>
-                                            <td>2500.00</td>
-                                            <td>5</td>
-                                            <td>Pcs</td>
-                                            <td>0.00</td>
-                                            <td>Honey</td>
-                                            <td>Organic Honey</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A000025</td>
-                                            <td>8942240150072</td>
-                                            <td>African Organic Willd HOney 500gm</td>
-                                            <td>2500.00</td>
-                                            <td>5</td>
-                                            <td>Pcs</td>
-                                            <td>0.00</td>
-                                            <td>Honey</td>
-                                            <td>Organic Honey</td>
+                                            <td data-id="1"><i class="ti ti-arrow-big-right"></i></td>
+                                            <td>100010001</td>
+                                            <td>Dhaka</td>
+                                            <td>Banasree</td>
+                                            <td>House 5, Road 3, Block B</td>
+                                            <td>dhaka</td>
+                                            <td>1212</td>
+                                            <td>01710-254136</td>
                                         </tr>
 
+                                        <tr>
+                                            <td data-id="2"><i class="ti ti-arrow-big-right"></i></td>
+                                            <td>100010002</td>
+                                            <td>Chittagong</td>
+                                            <td>Talertek</td>
+                                            <td>House 5, Road 3, Block B</td>
+                                            <td>Chittagong</td>
+                                            <td>1212</td>
+                                            <td>01710-254136</td>
+                                        </tr>
 
+                                        <tr>
+                                            <td data-id="3"><i class="ti ti-arrow-big-right"></i></td>
+                                            <td>100010003</td>
+                                            <td>Chandpur</td>
+                                            <td>Suchipara</td>
+                                            <td>House 5, Road 3, Block B</td>
+                                            <td>Chandpur</td>
+                                            <td>1212</td>
+                                            <td>01710-254136</td>
+                                        </tr>
 
                                         <tr>
-                                            <td>A000025</td>
-                                            <td>8942240150072</td>
-                                            <td>African Organic Willd HOney 500gm</td>
-                                            <td>2500.00</td>
-                                            <td>5</td>
-                                            <td>Pcs</td>
-                                            <td>0.00</td>
-                                            <td>Honey</td>
-                                            <td>Organic Honey</td>
+                                            <td data-id="4"><i class="ti ti-arrow-big-right"></i></td>
+                                            <td>100010001</td>
+                                            <td>Dhaka</td>
+                                            <td>Baneshor</td>
+                                            <td>House 5, Road 3, Block B</td>
+                                            <td>Chuadanga</td>
+                                            <td>1212</td>
+                                            <td>01710-254136</td>
                                         </tr>
-                                        <tr>
-                                            <td>A000025</td>
-                                            <td>8942240150072</td>
-                                            <td>African Organic Willd HOney 500gm</td>
-                                            <td>2500.00</td>
-                                            <td>5</td>
-                                            <td>Pcs</td>
-                                            <td>0.00</td>
-                                            <td>Honey</td>
-                                            <td>Organic Honey</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A000025</td>
-                                            <td>8942240150072</td>
-                                            <td>African Organic Willd HOney 500gm</td>
-                                            <td>2500.00</td>
-                                            <td>5</td>
-                                            <td>Pcs</td>
-                                            <td>0.00</td>
-                                            <td>Honey</td>
-                                            <td>Organic Honey</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A000025</td>
-                                            <td>8942240150072</td>
-                                            <td>African Organic Willd HOney 500gm</td>
-                                            <td>2500.00</td>
-                                            <td>5</td>
-                                            <td>Pcs</td>
-                                            <td>0.00</td>
-                                            <td>Honey</td>
-                                            <td>Organic Honey</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A000025</td>
-                                            <td>8942240150072</td>
-                                            <td>African Organic Willd HOney 500gm</td>
-                                            <td>2500.00</td>
-                                            <td>5</td>
-                                            <td>Pcs</td>
-                                            <td>0.00</td>
-                                            <td>Honey</td>
-                                            <td>Organic Honey</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A000025</td>
-                                            <td>8942240150072</td>
-                                            <td>African Organic Willd HOney 500gm</td>
-                                            <td>2500.00</td>
-                                            <td>5</td>
-                                            <td>Pcs</td>
-                                            <td>0.00</td>
-                                            <td>Honey</td>
-                                            <td>Organic Honey</td>
-                                        </tr> --}}
-
                                         
+                                        {{--  <tr>
+                                            <td><i class="ti ti-arrow-big-right"></i></td>
+                                            <td>100010001</td>
+                                            <td>Dhaka</td>
+                                            <td>Banasree</td>
+                                            <td>House 5, Road 3, Block B</td>
+                                            <td>dhaka</td>
+                                            <td>1212</td>
+                                            <td>01710-254136</td>
+                                        </tr>
+                                       
+                                        <tr>
+                                            <td><i class="ti ti-arrow-big-right"></i></td>
+                                            <td>100010001</td>
+                                            <td>Dhaka</td>
+                                            <td>Banasree</td>
+                                            <td>House 5, Road 3, Block B</td>
+                                            <td>dhaka</td>
+                                            <td>1212</td>
+                                            <td>01710-254136</td>
+                                        </tr>
+                                         <tr>
+                                            <td><i class="ti ti-arrow-big-right"></i></td>
+                                            <td>100010001</td>
+                                            <td>Dhaka</td>
+                                            <td>Banasree</td>
+                                            <td>House 5, Road 3, Block B</td>
+                                            <td>dhaka</td>
+                                            <td>1212</td>
+                                            <td>01710-254136</td>
+                                        </tr>
+                                         <tr>
+                                            <td><i class="ti ti-arrow-big-right"></i></td>
+                                            <td>100010001</td>
+                                            <td>Dhaka</td>
+                                            <td>Banasree</td>
+                                            <td>House 5, Road 3, Block B</td>
+                                            <td>dhaka</td>
+                                            <td>1212</td>
+                                            <td>01710-254136</td>
+                                        </tr> --}}
+                                    
                                     </tbody>
                                 </table>
                             </div>
@@ -1266,14 +1228,14 @@
         let formattedDate = day + '-' + month + '-' + year;
 
 
-    $('#date_time').val(formattedDate);
+        $('#date_time').val(formattedDate);
 
         $(document).on('dblclick', '.datatables tbody tr', function () {
             let row = $(this);
 
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You want to remove this row!",
+                // title: 'Are you sure?',
+                text: "Are you sure to discard the requision product???",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#092C4C',
@@ -1286,6 +1248,74 @@
                     row.remove();
                 }
             });
+        });
+    </script>
+
+
+    <script>
+        // Warehouse Select Modal
+        let currentIndex = 0;
+
+        function highlightRow(index) {
+            let rows = $('.warehouse_table tbody tr');
+
+            rows.removeClass('active');
+
+            if (rows.length > 0) {
+                $(rows[index]).addClass('active');
+
+                // scroll into view (optional but useful)
+                $('.table_responsive').scrollTop(
+                    $(rows[index]).position().top + $('.table_responsive').scrollTop()
+                );
+            }
+        }
+
+        // 👉 Modal Open Event
+        $('#storeListModal').on('shown.bs.modal', function () {
+            currentIndex = 0;
+            highlightRow(currentIndex);
+        });
+
+        // 👉 Keyboard Control
+        $(document).on('keydown', function (e) {
+            let rows = $('.warehouse_table tbody tr');
+
+            if ($('#storeListModal').hasClass('show')) {
+
+                if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    if (currentIndex < rows.length - 1) {
+                        currentIndex++;
+                        highlightRow(currentIndex);
+                    }
+                }
+
+                if (e.key === "ArrowUp") {
+                    e.preventDefault();
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        highlightRow(currentIndex);
+                    }
+                }
+
+                if (e.key === "Enter") {
+                    e.preventDefault();
+
+                    let selectedRow = $(rows[currentIndex]);
+
+                    let id   = selectedRow.find('td:eq(0)').data('id');
+                    let code = selectedRow.find('td:eq(1)').text(); // Code column
+                    let name = selectedRow.find('td:eq(2)').text(); // Store name
+
+                    // 👉 Set value to input
+                    $('#warehouse_id').val(id);
+                    $('#received_from').val( name + ' - ' + code);
+
+                    // 👉 Optional: close modal
+                    $('#storeListModal').modal('hide');
+                }
+            }
         });
     </script>
 
@@ -1339,39 +1369,39 @@
         });
     </script>
 
-<script>
-    $(document).ready(function () {
-        $(document).on('keydown', function (e) {
-            switch (e.key) {
-                case 'F1':
-                    e.preventDefault(); // ❗ stop browser help
-                    $('#searchByName').focus();
-                    break;
+    <script>
+        $(document).ready(function () {
+            $(document).on('keydown', function (e) {
+                switch (e.key) {
+                    case 'F1':
+                        e.preventDefault(); // ❗ stop browser help
+                        $('#searchByName').focus();
+                        break;
 
-                case 'F2':
-                    e.preventDefault();
-                    let checkbox = $('#showZero');
+                    case 'F2':
+                        e.preventDefault();
+                        let checkbox = $('#showZero');
 
-                    checkbox.prop('checked', !checkbox.prop('checked')); // 🔄 toggle
-                    checkbox.focus();
-                    break;
+                        checkbox.prop('checked', !checkbox.prop('checked')); // 🔄 toggle
+                        checkbox.focus();
+                        break;
 
-                case 'F3':
-                    e.preventDefault();
-                    $('#searchBybarcode').focus();
-                    break;
-                case 'Escape':
-                    let modalEl = document.getElementById('productSearchModal');
-                    let modal = bootstrap.Modal.getInstance(modalEl);
+                    case 'F3':
+                        e.preventDefault();
+                        $('#searchBybarcode').focus();
+                        break;
+                    case 'Escape':
+                        let modalEl = document.getElementById('productSearchModal');
+                        let modal = bootstrap.Modal.getInstance(modalEl);
 
-                    if (modal) {
-                        modal.hide();
-                    }
-                    $('#barcode').focus();
-                    break;
-            }
+                        if (modal) {
+                            modal.hide();
+                        }
+                        $('#barcode').focus();
+                        break;
+                }
+            });
         });
-    });
-</script>
+    </script>
 @endpush
 

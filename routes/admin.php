@@ -124,6 +124,15 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/stock-requisition-preview', function(){
         return view('admin.pages.stock.stock_requisition.preview');
     });
+    Route::get('/stock-transfer', function(){
+        return view('admin.pages.stock.stock_transfer.index');
+    });
+    Route::get('/stock-transfer-preview', function(){
+        return view('admin.pages.stock.stock_transfer.preview');
+    });
+    Route::get('/stock-transfer-challan', function(){
+        return view('admin.pages.stock.stock_transfer.challan');
+    });
     // Optional view show
 
 

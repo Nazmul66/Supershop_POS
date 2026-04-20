@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @push('add-title')
-    Stock Requisition
+    Stock Transfer
 @endpush
 
 
@@ -179,13 +179,13 @@
 
 @section('body-content')
 
-    <h2 class="text-center fw-bold mb-2">Requisition</h2>
+    <h2 class="text-center fw-bold mb-2">Stock Transfer</h2>
 
     <div class="row">
         <div class="col-lg-3">
             <div class="card">
                 <div class="card-body">
-                    <div class="mb-3">
+                    <div class="mb-1">
                         <div class="row align-items-center justify-content-between">
                             <div class="col-lg-4">
                                 <label for="date_time" class="d-block text-end">Date</label>
@@ -197,25 +197,37 @@
                         </div>
                     </div>
 
-                    <div class="product_info">
-                        <span class="fw-bold d-block mb-2" style="border-bottom: 2px solid #726c6c;">Product Information</span>
+                    <div class="mb-1">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-lg-4">
+                                <label for="challan" class="d-block text-end">Challan#</label>
+                            </div>
 
-                        <div class="mb-2">
-                            <div class="row align-items-center justify-content-between">
-                                <div class="col-lg-4">
-                                    <label for="received_from" class="d-block text-end">Requisition To</label>
-                                </div>
-            
-                                <div class="col-lg-8">
-                                    <div class="d-flex align-items-center gap-1">
-                                        <input type="text" name="received_from" class="search_field" id="received_from" disabled>
-                                        <input type="hidden" name="warehouse_id" class="search_field" id="warehouse_id">
+                            <div class="col-lg-8">
+                                <input type="text" name="challan" class="search_field" id="challan" readonly value="DC005010000001" style="font-weight: 700;">
+                            </div>
+                        </div>
+                    </div>
 
-                                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#storeListModal" class="select_warehouse"><i class="ti ti-dots"></i></a>
-                                    </div>
+                    <div class="mb-3">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-lg-4">
+                                <label for="transfer_to" class="d-block text-end">Transfer To</label>
+                            </div>
+        
+                            <div class="col-lg-8">
+                                <div class="d-flex align-items-center gap-1">
+                                    <input type="text" name="transfer_to" class="search_field" id="transfer_to" disabled style="font-weight: 700;">
+                                    <input type="hidden" name="warehouse_id" class="search_field" id="warehouse_id">
+
+                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#storeListModal" class="select_warehouse"><i class="ti ti-dots"></i></a>
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="product_info">
+                        <span class="fw-bold d-block mb-2" style="border-bottom: 2px solid #726c6c;">Product Information</span>
 
                         <div class="mb-0">
                             <div class="row align-items-center justify-content-between">
@@ -265,7 +277,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-0">
                             <div class="row align-items-center justify-content-between">
                                 <div class="col-lg-4">
                                     <label for="brand" class="d-block text-end">Brand</label>
@@ -280,40 +292,16 @@
                         <div class="mb-0">
                             <div class="row align-items-center justify-content-between">
                                 <div class="col-lg-4">
-                                    <label for="vat" class="d-block text-end">VAT (%)</label>
+                                    <label for="vendor" class="d-block text-end">Vendor</label>
                                 </div>
         
                                 <div class="col-lg-8">
-                                    <input type="text" name="vat" class="search_field" id="vat" disabled>
-                                </div>
-                            </div>
-                        </div>
-        
-                        <div class="mb-0">
-                            <div class="row align-items-center justify-content-between">
-                                <div class="col-lg-4">
-                                    <label for="sale_qty" class="d-block text-end">Sale Quantity</label>
-                                </div>
-        
-                                <div class="col-lg-8">
-                                    <input type="text" name="sale_qty" class="search_field" id="sale_qty" disabled>
-                                </div>
-                            </div>
-                        </div>
-        
-                        <div class="mb-0">
-                            <div class="row align-items-center justify-content-between">
-                                <div class="col-lg-4">
-                                    <label for="current_stock" class="d-block text-end">Current Stock</label>
-                                </div>
-        
-                                <div class="col-lg-8">
-                                    <input type="text" name="current_stock" class="search_field" id="current_stock" disabled>
+                                    <input type="text" name="vendor" class="search_field" id="vendor" disabled>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mb-0">
+                        <div class="mb-3">
                             <div class="row align-items-center justify-content-between">
                                 <div class="col-lg-4">
                                     <label for="Sale_price" class="d-block text-end">Sale Price </label>
@@ -324,15 +312,44 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="mb-2">
+        
+                        <div class="mb-0">
                             <div class="row align-items-center justify-content-between">
                                 <div class="col-lg-4">
-                                    <label for="requisition_qty" class="d-block text-end">Requisition Qty </label>
+                                    <label for="in_stock" class="d-block text-end">In Stock</label>
                                 </div>
         
                                 <div class="col-lg-8">
-                                    <input type="number" name="requisition_qty" class="search_field" id="requisition_qty">
+                                    <input type="text" name="in_stock" class="search_field" id="in_stock" disabled>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="mb-1">
+                            <div class="row align-items-center justify-content-between">
+                                <div class="col-lg-4">
+                                    <label for="transfer_stock" class="d-block text-end">Transfer Stock</label>
+                                </div>
+        
+                                <div class="col-lg-8">
+                                    <input type="text" name="transfer_stock" class="search_field" id="transfer_stock">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-1">
+                            <div class="row align-items-center justify-content-between">
+                                <div class="col-lg-4">
+                                    <label for="receiving_qty" class="d-block text-end">Auto Scan</label>
+                                </div>
+        
+                                <div class="col-lg-8">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <input class="form-check-input m-0" type="checkbox" value="" id="autoScan">
+                                        <label class="" for="autoScan">
+                                            No
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -521,7 +538,7 @@
                         <div class="">
                             <a href="{{ route('admin.stock-receive-preview') }}" class="btn btn-sm btn-secondary">Preview</a>
                             <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#saveChallanModal">Save</button>
-                            <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#clearModal">Clear</button>
                             <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#closeModal">Close</button>
                         </div>
                     </div>
@@ -539,20 +556,20 @@
         </div>
     </div>
 
-    <!-- Delete Modal -->
-    <div id="deleteModal" class="modal effect-scale fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
+    <!-- Clear Modal -->
+    <div id="clearModal" class="modal effect-scale fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
         style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Requisition</h5>
+                    <h5 class="modal-title" id="myModalLabel">Transfer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                 </div>
 
                 <div class="modal-body">
                     <div class="d-flex align-items-center justify-content-center gap-2">
                     <img src="{{ asset('public/admin/assets/images/question_mark.png') }}" alt="" width="50" style="-webkit-user-drag: none;">
-                    <p class="fw-bold">Are you sure to discard this requisition</p>
+                    <p class="fw-bold">Are you sure to discard this Transfer</p>
                     </div>
                 </div>
 
@@ -576,7 +593,7 @@
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Requisition</h5>
+                    <h5 class="modal-title" id="myModalLabel">Transfer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                 </div>
 
@@ -608,7 +625,7 @@
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Requisition</h5>
+                    <h5 class="modal-title" id="myModalLabel">Transfer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                 </div>
 
@@ -638,14 +655,14 @@
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Requisition</h5>
+                    <h5 class="modal-title" id="myModalLabel">Transfer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                 </div>
 
                 <div class="modal-body">
                     <div class="d-flex align-items-center justify-content-center gap-2">
                     <img src="{{ asset('public/admin/assets/images/question_mark.png') }}" alt="" width="50" style="-webkit-user-drag: none;">
-                    <p class="fw-bold">You have some unsaved requisition(s)......Are you sure to exit.</p>
+                    <p class="fw-bold">You have some unsaved transfer(s)......Are you sure to exit.</p>
                     </div>
                 </div>
 
@@ -1062,13 +1079,13 @@
                     } 
                     // 👉 CASE 2: Has value → set qty + focus
                     else {
-                        $('#requisition_qty').val(1);
-                        $('#requisition_qty').focus();
+                        $('#transfer_stock').val(1);
+                        $('#transfer_stock').focus();
                     }
                 }
             });
 
-            $('#requisition_qty').on('keydown', function (e) {
+            $('#transfer_stock').on('keydown', function (e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
 
@@ -1090,7 +1107,7 @@
                     e.preventDefault();
 
                     let barcode = $('#barcode').val();
-                    let requisition_qty = parseFloat($('#requisition_qty').val()) || 0;
+                    let transfer_stock = parseFloat($('#transfer_stock').val()) || 0;
                     let reason = $(this).val();
 
                      // ✅ Validation
@@ -1100,9 +1117,9 @@
                         return;
                     }
 
-                    if (!requisition_qty || requisition_qty < 1) {
+                    if (!transfer_stock || transfer_stock < 1) {
                         alert('Qty must be at least 1');
-                        $('#requisition_qty').val(1).focus();
+                        $('#transfer_stock').val(1).focus();
                         return;
                     }
 
@@ -1208,7 +1225,7 @@
 
                     // 👉 Set value to input
                     $('#warehouse_id').val(id);
-                    $('#received_from').val( name + ' - ' + code);
+                    $('#transfer_to').val( name + ' - ' + code);
 
                     // 👉 Optional: close modal
                     $('#storeListModal').modal('hide');

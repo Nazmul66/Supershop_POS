@@ -163,7 +163,7 @@
 
                         <div class="col-lg-8">
                             <select class="search_field" name="admin_user" id="admin_user" style="cursor: pointer;">
-                                <option value="all" selected>-- Select --</option>
+                                <option value="all" selected>--> Select <--</option>
                                 <option value="dc10005000011">DC10005000011</option>
                             </select>
                         </div>

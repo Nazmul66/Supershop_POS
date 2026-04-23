@@ -133,6 +133,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/stock-transfer-challan', function(){
         return view('admin.pages.stock.stock_transfer.challan');
     });
+    Route::get('/stock-transfer-by-category', function(){
+        return view('admin.pages.stock.stock_transfer_by_category.index');
+    });
     // Optional view show
 
 

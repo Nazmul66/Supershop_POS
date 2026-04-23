@@ -136,6 +136,16 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/stock-transfer-by-category', function(){
         return view('admin.pages.stock.stock_transfer_by_category.index');
     });
+
+    // All Report Blade File
+    Route::group(["as" => 'report.',"prefix" => '/report'], function () {
+        Route::get('/product-receive', function(){
+            return view('admin.pages.report.product_receive.index');
+        });
+        Route::get('/product-receive-view', function(){
+            return view('admin.pages.report.product_receive.view');
+        });
+    });
     // Optional view show
 
 

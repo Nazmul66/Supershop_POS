@@ -121,7 +121,7 @@
             </div>
 
             <div class="row mb-3">
-                <div class="col-lg-6">
+                <div class="col-6">
                     <h6 class="fw-bold">Dhaka</h6>
                     <p class="light_content mb-0">House 5, Road 3, Black B, Rampura Banasree - 1226</p>
                     <p class="light_content mb-1">+880 1332 254136</p>
@@ -129,7 +129,7 @@
                     <p class="light_content mb-0">ADDRESS: Shewrapara, Metro Station</p>
                 </div>
 
-                <div class="col-lg-6">
+                <div class="col-6">
                     <p class="heavy_content">CHALLAN# DC10005000011</p>
                     <p class="heavy_content">CHALLAN DATE# 15-Feb-2026</p>
                     <p class="heavy_content">RECEIVE DATE# 15-Feb-2026</p>

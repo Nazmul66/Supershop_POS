@@ -145,6 +145,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
         Route::get('/product-receive-view', function(){
             return view('admin.pages.report.product_receive.view');
         });
+        Route::get('/reprint', function(){
+            return view('admin.pages.report.reprint.index');
+        });
     });
     // Optional view show
 

@@ -100,15 +100,36 @@
 
     <div class="row">
         <div class="col-lg-4 offset-lg-4">
-            <div class="mb-4">
-                <div class="d-flex align-items-center gap-3">
-                    <label for="product" class="d-block text-end">Date</label>
-                    <input type="text" id="date" name="date" class="search_field" placeholder="Select date range" />
+            <div class="mb-1">
+                <div class="row align-items-center ">
+                    <div class="col-lg-2">
+                        <label for="date_range" class="d-block text-end">Date</label>
+                    </div>
+                   
+                    <div class="col-lg-10">
+                        <input type="text" id="date_range" name="date_range" class="search_field" placeholder="Select date range" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-1 all_user">
+                <div class="row align-items-center ">
+                    <div class="col-lg-2">
+                        <label for="user_id" class="d-block text-end">User</label>
+                    </div>
+                   
+                    <div class="col-lg-10">
+                        <select class="search_field" name="user_id" id="user_id" style="cursor: pointer;">
+                            <option value="all" selected>All</option>
+                            <option value="nazmul_10693">Nazmul-10693</option>
+                            <option value="anisur_10693">Anisur-10693</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-8 offset-lg-2">
+        <div class="col-lg-8 offset-lg-2 mt-4">
             <div class="mb-5 report_type">
                 <span class="">Report Type</span>
 
@@ -242,7 +263,7 @@
                 var end = moment();
             
                 function cb(start, end) {
-                    $(selector).find('span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    $(selector).find('span').html(start.format('MMMM D, YYYY') + ' To: ' + end.format('MMMM D, YYYY'));
                 }
             
                 $(selector).daterangepicker({
@@ -265,7 +286,7 @@
                 }, cb);
 
                 $(selector).on('apply.daterangepicker', function(ev, picker) {
-                    $(this).val(picker.startDate.format('D-MMM-YYYY') + ' To ' + picker.endDate.format('D-MMM-YYYY'));
+                    $(this).val(picker.startDate.format('D-MMM-YYYY') + ' To: ' + picker.endDate.format('D-MMM-YYYY'));
                 });
 
                 $(selector).on('cancel.daterangepicker', function(ev, picker) {
@@ -282,6 +303,29 @@
             $(document).on('click', '#closePage', function () {
                 window.location.href = "{{ route('admin.dashboard') }}";
             });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            function toggleUserField() {
+                let selected = $('input[name="invoice_wise"]:checked').val();
+
+                if (selected === 'user' || selected === 'user_summary' || selected === 'user_paytype') {
+                    $('.all_user').removeClass('d-none');
+                } else {
+                    $('.all_user').addClass('d-none');
+                }
+            }
+
+            // Run on page load (important because default is "summary")
+            toggleUserField();
+
+            // Run on change
+            $('input[name="invoice_wise"]').on('change', function () {
+                toggleUserField();
+            });
+
         });
     </script>
 

@@ -149,7 +149,10 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
             return view('admin.pages.report.reprint.index');
         });
         Route::get('/invoice-wise', function(){
-            return view('admin.pages.report.invoice_wise_sale.index');
+            return view('admin.pages.report.sale.invoice_wise.index');
+        });
+        Route::get('/invoice-wise-summary', function(){
+            return view('admin.pages.report.sale.invoice_wise.summary');
         });
     });
     // Optional view show

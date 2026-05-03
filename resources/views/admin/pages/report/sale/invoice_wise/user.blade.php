@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @push('add-title')
-    Summary - Invoice Wise Sale
+    User - Invoice Wise Sale
 @endpush
 
 
@@ -130,8 +130,8 @@
         }
         .datatables th:nth-child(12),
         .datatables td:nth-child(12) {
-            width: 100px !important;
-            max-width: 100px;
+            width: 70px !important;
+            max-width: 70px;
             white-space: normal;        
         }
         .fs-md{
@@ -314,7 +314,7 @@
    <div class="report_view_structure">
         <h2 class="text-center fw-bold mb-1">Ghorer Bazar</h2>
         <h4 class="text-center fw-bold mb-1">Metro Shewrapara</h4>
-        <h4 class="text-center fw-bold mb-1">INVOICE WISE SALE REPORT (SUMMARY)</h4>
+        <h4 class="text-center fw-bold mb-1">INVOICE WISE SALE REPORT (USER)</h4>
         <p class="text-center fw-bold mb-0">From: <strong class="fw-bold text-dark">18-Feb-2026 08:00:00 AM</strong> To: <strong class="fw-bold text-dark">21-Feb-2026 11:59:59 PM</strong></p>
 
         <div class="row">

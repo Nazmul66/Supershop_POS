@@ -154,6 +154,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
         Route::get('/invoice-wise-summary', function(){
             return view('admin.pages.report.sale.invoice_wise.summary');
         });
+        Route::get('/invoice-wise-user-summary', function(){
+            return view('admin.pages.report.sale.invoice_wise.user_summary');
+        });
     });
     // Optional view show
 

@@ -66,55 +66,47 @@
             border-color: #86b7fe;
             outline: 0;
         }
-        .table thead{
+        .datatables thead{
             border-top: 2px solid #000;
             border-bottom: 2px solid #000;
         }
-        .table td {
+        .datatables td {
             vertical-align: top;
             padding: 3px 10px !important;
         }
-        .table thead tr th{
+        .datatables thead tr th{
             font-size: 11px;
             font-weight: 900;
             color: #212B36;
             background: transparent;
             padding: 6px 10px !important;
         }
-        .table tbody tr td{
+        .datatables tbody tr:hover td {
+            background: #2f91a1;
+            color: #FFF;
+            cursor: pointer;
+        }
+        .datatables tbody tr td{
             font-size: 11px;
             font-weight: 600;
             color: #212B36;
             border: 1px solid transparent; 
         }
-        .table tbody tr.invoice_date td{
-            color: #0926b3;
-            font-weight: 800;
-            border-top: 2px solid #000;
-            border-bottom: 2px solid #000 !important;
-            text-align: start;
+        .datatables tbody tr td.highlight{
+            color: #373796;
+            font-weight: 700;
         }
-        .table tbody tr.subTotal_day_invoice td{
-            color: #484CA5;
+        .datatables tbody tr:hover td.highlight{
+            color: #FFF;
+        }
+        .datatables tbody tr.grandTotal td{
             font-weight: 700;
             border-top: 2px solid #000;
             border-bottom: 2px solid #000 !important;
             text-align: start;
         }
-        .table tbody tr.grandTotal td{
+        .datatables tbody tr.grandTotal td.highlight{
             color: #840704;
-            font-weight: 700;
-            border-top: 2px solid #000;
-            border-bottom: 2px solid #000 !important;
-            text-align: start;
-        }
-        .table tbody tr.invoice_date:hover td{
-            color: #FFF;
-        }
-        .table tbody tr:not(.payment-summary-row):hover td {
-            background: #2f91a1;
-            color: #FFF;
-            cursor: pointer;
         }
         table.datatables {
             table-layout: fixed;
@@ -127,12 +119,6 @@
             white-space: normal;        
             word-break: break-word;    
             overflow-wrap: anywhere;    
-        }
-        .datatables th:nth-child(12),
-        .datatables td:nth-child(12) {
-            width: 100px !important;
-            max-width: 100px;
-            white-space: normal;        
         }
         .fs-md{
             font-size: 10px !important;
@@ -226,66 +212,8 @@
             -webkit-appearance: none;
             margin: 0;
         }
-        .payment-summary-row td {
-            padding: 20px 0 !important;
-            border: none !important;
-        }
-
-        .payment-box {
-            width: 850px;
-            margin: auto; /* right align like your image */
-            border: 2px solid #000;
-            padding: 10px 15px;
-            background: #fff;
-        }
-        .payment_history{
-            width: 55%;
-            max-width: 100%;
-            margin-left: auto;
-        }
-
-        .payment-inner-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        /* .payment-inner-table tr{
-            background: transparent !important;
-            border-bottom: 2px solid #000 !important;
-        } */
-
-        .payment-inner-table tr .payment_th {
-            font-size: 12px;
-            font-weight: 900 !important;
-            background: transparent !important;
-            border-bottom: 2px solid #000 !important;
-            text-align: left;
-            white-space: nowrap !important;
-            padding: 3px !important;
-        }
-
-        .payment-inner-table tr .payment_td{
-            font-size: 11px;
-            font-weight: 600;
-            white-space: nowrap !important;
-            padding: 4px !important;
-        }
-        .payment-inner-table tr:hover .payment_td{
-            background: #2f91a1;
-            color: #FFF;
-            cursor: pointer;
-        }
-        .payment-inner-table tr.total-row .payment_td{
-            border-top: 2px solid #000 !important;
-        }
-
         .text-end {
             text-align: right;
-        }
-
-        .total-row td {
-            border-top: 2px solid #000;
-            padding-top: 6px;
-            font-weight: bold;
         }
         .report_view_structure .foote_body{
             position: absolute;
@@ -302,6 +230,30 @@
             font-weight: 800;
             color: #000;
         }
+        .card_wise_breakdown{
+            margin: auto;
+        }
+        .card_wise_breakdown .card_wise tbody{
+            font-size: 11px;
+        }
+        .card_wise_breakdown .card_wise thead tr th{
+            font-size: 13px;
+            background: transparent;
+            border: 1px solid #000;
+            font-weight: 800;
+        }
+        .card_wise_breakdown .card_wise tbody tr td{
+            font-size: 11px;
+            border: 1px solid #000;
+            color: #000;
+            font-weight: 600;
+        }
+        .card_wise_breakdown .card_wise tbody tr.total_card_wise td{
+            font-size: 11px;
+            font-weight: 800;
+            color: #000;
+            border: 1px solid #000;
+        }
     </style>
 @endpush
 
@@ -314,7 +266,7 @@
    <div class="report_view_structure">
         <h2 class="text-center fw-bold mb-1">Ghorer Bazar</h2>
         <h4 class="text-center fw-bold mb-1">Metro Shewrapara</h4>
-        <h4 class="text-center fw-bold mb-1">INVOICE WISE SALE REPORT (SUMMARY)</h4>
+        <h4 class="text-center fw-bold mb-1">CASHIER WISE SUMMARY REPORT</h4>
         <p class="text-center fw-bold mb-0">From: <strong class="fw-bold text-dark">18-Feb-2026 08:00:00 AM</strong> To: <strong class="fw-bold text-dark">21-Feb-2026 11:59:59 PM</strong></p>
 
         <div class="row">
@@ -325,247 +277,114 @@
                         <table class="table mb-0 datatables">
                             <thead>
                                 <tr>
-                                    <th>INVOICE NO</th>
+                                    <th>USER NAME</th>
                                     <th>VALUE</th>
                                     <th>DISC AMT</th>
                                     <th>SP DISC</th>
                                     <th>SD AMT</th>
                                     <th>VAT AMT</th>
+                                    <th>EXG AMT</th>
                                     <th>RTN AMT</th>
-                                    <th>ADJ AMT</th>
-                                    <th>NET AMT</th>
                                     <th>CASH AMT</th>
                                     <th>CARD AMT</th>
-                                    <th>CARD NAME</th>
+                                    <th>NET AMT</th>
+                                    <th>ADJ AMT</th>
                                     <th>RDM_VAL</th>
+                                    <th>RTN DISC</th>
+                                    <th>RTN SP DISC</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="invoice_date">
-                                    <td>16-Feb-2026</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                
                                 <tr>
-                                    <td>0126021600001</td>
-                                    <td>1300.00</td>
-                                    <td>130.00</td>
+                                    <td class="highlight">Anisur-10701</td>
+                                    <td>42,750.00</td>
+                                    <td class="highlight">3,747.75</td>
                                     <td>0.00</td>
                                     <td>0.00</td>
-                                    <td>81.63</td>
+                                    <td class="highlight">2,691.74</td>
+                                    <td class="highlight">0.00</td>
+                                    <td class="highlight">0.00</td>
+                                    <td class="highlight">26,313.00</td>
+                                    <td class="highlight">12,690.00</td>
+                                    <td class="highlight">39,003.00</td>
+                                    <td class="highlight">0.75</td>
                                     <td>0.00</td>
                                     <td>0.00</td>
-                                    <td>1170.00</td>
-                                    <td>0.00</td>
-                                    <td>1170.00</td>
-                                    <td>City Bank</td>
                                     <td>0.00</td>
                                 </tr>
 
                                 <tr>
-                                    <td>0126021600002</td>
-                                    <td>155.00</td>
-                                    <td>7.75</td>
+                                    <td class="highlight">Nazmul-10693</td>
+                                    <td>25,660.00</td>
+                                    <td class="highlight">1,969.25</td>
                                     <td>0.00</td>
                                     <td>0.00</td>
-                                    <td>7.01</td>
-                                    <td>0.00</td>
-                                    <td>-0.25</td>
-                                    <td>147.00</td>
-                                    <td>147.00</td>
-                                    <td>0.00</td>
-                                    <td></td>
-                                    <td>0.00</td>
-                                </tr>
-
-                                <tr>
-                                    <td>0126021600003</td>
-                                    <td>1300.00</td>
-                                    <td>130.00</td>
+                                    <td class="highlight">1,630.71</td>
+                                    <td class="highlight">0.00</td>
+                                    <td class="highlight">0.00</td>
+                                    <td class="highlight">10,306.00</td>
+                                    <td class="highlight">13,395.00</td>
+                                    <td class="highlight">23,701.00</td>
+                                    <td class="highlight">0.25</td>
                                     <td>0.00</td>
                                     <td>0.00</td>
-                                    <td>81.63</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>1170.00</td>
-                                    <td>0.00</td>
-                                    <td>1170.00</td>
-                                    <td>City Bank</td>
-                                    <td>0.00</td>
-                                </tr>
-
-                                <tr>
-                                    <td>0126021600004</td>
-                                    <td>4200.00</td>
-                                    <td>420.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>263.72</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>3780.00</td>
-                                    <td>0.00</td>
-                                    <td>3780.00</td>
-                                    <td>City Bank</td>
-                                    <td>0.00</td>
-                                </tr>
-
-                                <tr>
-                                    <td>0126021600005</td>
-                                    <td>5325.00</td>
-                                    <td>470.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>338.72</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>4855.00</td>
-                                    <td>855.00</td>
-                                    <td>4000.00</td>
-                                    <td>Bkash (Merchant)</td>
-                                    <td>0.00</td>
-                                </tr>
-
-                                <tr>
-                                    <td>0126021600004</td>
-                                    <td>4200.00</td>
-                                    <td>420.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>263.72</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>3780.00</td>
-                                    <td>0.00</td>
-                                    <td>3780.00</td>
-                                    <td>City Bank</td>
-                                    <td>0.00</td>
-                                </tr>
-
-                                <tr>
-                                    <td>0126021600005</td>
-                                    <td>5325.00</td>
-                                    <td>470.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>338.72</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>4855.00</td>
-                                    <td>855.00</td>
-                                    <td>4000.00</td>
-                                    <td>Bkash (Merchant)</td>
-                                    <td>0.00</td>
-                                </tr>
-
-
-                                <tr>
-                                    <td>0126021600004</td>
-                                    <td>4200.00</td>
-                                    <td>420.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>263.72</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>3780.00</td>
-                                    <td>0.00</td>
-                                    <td>3780.00</td>
-                                    <td>City Bank</td>
-                                    <td>0.00</td>
-                                </tr>
-
-                                <tr>
-                                    <td>0126021600005</td>
-                                    <td>5325.00</td>
-                                    <td>470.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>338.72</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>4855.00</td>
-                                    <td>855.00</td>
-                                    <td>4000.00</td>
-                                    <td>Bkash (Merchant)</td>
-                                    <td>0.00</td>
-                                </tr>
-
-                                <tr class="subTotal_day_invoice">
-                                    <td></td>
-                                    <td>5325.00</td>
-                                    <td>470.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>338.72</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>4855.00</td>
-                                    <td>855.00</td>
-                                    <td>4000.00</td>
-                                    <td></td>
                                     <td>0.00</td>
                                 </tr>
 
                                 <tr class="grandTotal">
-                                    <td>GRAND TOTAL</td>
-                                    <td>5325.00</td>
-                                    <td>470.00</td>
+                                    <td>TOTAL</td>
+                                    <td>68,410.00</td>
+                                    <td class="highlight">5707.00</td>
                                     <td>0.00</td>
                                     <td>0.00</td>
-                                    <td>338.72</td>
+                                    <td class="highlight" >4322.45</td>
+                                    <td>0.00</td>
+                                    <td class="highlight">0.00</td>
+                                    <td class="highlight">36,619.00</td>
+                                    <td class="highlight">26,085.00</td>
+                                    <td class="highlight">62,704.00</td>
+                                    <td class="highlight">1.00</td>
                                     <td>0.00</td>
                                     <td>0.00</td>
-                                    <td>4855.00</td>
-                                    <td>855.00</td>
-                                    <td>4000.00</td>
-                                    <td></td>
                                     <td>0.00</td>
-                                </tr>
-
-                                <tr class="payment-summary-row">
-                                    <td colspan="13">
-                                        <div class="payment-box">
-                                            <div class="payment_history">
-                                                <table class="payment-inner-table">
-                                                    <tr>
-                                                        <th class="payment_th">PAYMENT TYPE</th>
-                                                        <th class="text-end payment_th">AMOUNT</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="payment_td">CASH</td>
-                                                        <td class="text-end payment_td">36,619.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="payment_td">Bkash (Merchant)</td>
-                                                        <td class="text-end payment_td">12,240.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="payment_td">City Bank</td>
-                                                        <td class="text-end payment_td">13,845.00</td>
-                                                    </tr>
-                                                    <tr class="total-row">
-                                                        <td class="payment_td"></td>
-                                                        <td class="text-end payment_td fw-bolder">62,704.00</td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </td>
                                 </tr>
                             </tbody>
                         </table>
+
+                        <h4 class="text-center fw-bold mt-5 mb-1">CARD WISE BREAKDOWN</h4>
+
+                        <div class="card_wise_breakdown" style="width: 40%;">
+                            <table class="table card_wise mb-0">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th class="text-end">Bkash (Merchant)</th>
+                                        <th class="text-end">City Bank</th>
+                                        <th class="text-end">TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-start">Anisur-10701</td>
+                                        <td class="text-end">5,170.00</td>
+                                        <td class="text-end">7,520.00</td>
+                                        <td class="text-end">12,693.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-start">Nazmul-10701</td>
+                                        <td class="text-end">7,070.00</td>
+                                        <td class="text-end">6,325.00</td>
+                                        <td class="text-end">13,395.00</td>
+                                    </tr>
+                                    <tr class="total_card_wise">
+                                        <td class="text-start">TOTAL</td>
+                                        <td class="text-end">12,240.00</td>
+                                        <td class="text-end">13,845.00</td>
+                                        <td class="text-end">26,085.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <div class="foote_body">
@@ -600,7 +419,7 @@
             let table = $('.datatables').DataTable({
                 pageLength: 20,
                 scrollCollapse: true,
-                scrollY: 420,
+                scrollY: 300,
                 ordering: false,
                 lengthChange: false,
                 searching: false,

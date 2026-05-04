@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @push('add-title')
-    User Summary - Invoice Wise Sale
+    User PayType - Invoice Wise Sale
 @endpush
 
 
@@ -87,38 +87,46 @@
             cursor: pointer;
         }
         .datatables tbody tr td{
-            font-size: 11px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 700;
             color: #212B36;
             border: 1px solid transparent; 
         }
         .datatables tbody tr td.highlight{
-            color: #373796;
-            font-weight: 700;
+            font-size: 12px;
+            color: #000;
+            font-weight: 800;
         }
         .datatables tbody tr:hover td.highlight{
             color: #FFF;
         }
         .datatables tbody tr.grandTotal td{
-            font-weight: 700;
+            font-size: 12px;
+            color: #840704;
+            font-weight: 900;
             border-top: 2px solid #000;
             border-bottom: 2px solid #000 !important;
             text-align: start;
         }
-        .datatables tbody tr.grandTotal td.highlight{
-            color: #840704;
+        .datatables tbody tr.subTotal td{
+            font-size: 12px;
+            color: #303392;
+            font-weight: 900;
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000 !important;
         }
-        .datatables tbody tr.grandTotal:hover td.highlight{
+        .datatables tbody tr.subTotal:hover td,
+        .datatables tbody tr.grandTotal:hover td{
             color: #FFF;
         }
         table.datatables {
             table-layout: fixed;
             width: 100%;
         }
-        .datatables th:nth-child(1),
-        .datatables td:nth-child(1) {
-            width: 140px !important;
-            max-width: 140px;
+        .datatables th:nth-child(2),
+        .datatables td:nth-child(2) {
+            width: 280px !important;
+            max-width: 280px;
             white-space: normal;        
             word-break: break-word;    
             overflow-wrap: anywhere;    
@@ -166,13 +174,6 @@
             padding: 4px 8px 0;
             border-radius: 4px;
         }
-        @media (min-width: 1240px) and (max-width: 1560px) {
-            .table_responsive {
-                overflow-x: auto;
-                overflow-y: auto;
-                height: 300px;
-            }
-        }
         .report_view_structure{
             position: relative;
             background: #fff;
@@ -180,6 +181,7 @@
             padding: 10px 24px 20px;
             border: 1px solid #000;
             border-radius: 2px;
+            margin: 0 210px;
         }
         .custom-pagination{
             position: absolute;
@@ -269,7 +271,7 @@
    <div class="report_view_structure">
         <h2 class="text-center fw-bold mb-1">Ghorer Bazar</h2>
         <h4 class="text-center fw-bold mb-1">Metro Shewrapara</h4>
-        <h4 class="text-center fw-bold mb-1">CASHIER WISE SUMMARY REPORT</h4>
+        <h4 class="text-center fw-bold mb-1">CASHIER WISE PAY TYPE REPORT</h4>
         <p class="text-center fw-bold mb-0">From: <strong class="fw-bold text-dark">18-Feb-2026 08:00:00 AM</strong> To: <strong class="fw-bold text-dark">21-Feb-2026 11:59:59 PM</strong></p>
 
         <div class="row">
@@ -280,126 +282,115 @@
                         <table class="table mb-0 datatables">
                             <thead>
                                 <tr>
-                                    <th>USER NAME</th>
-                                    <th>VALUE</th>
-                                    <th>DISC AMT</th>
-                                    <th>SP DISC</th>
-                                    <th>SD AMT</th>
-                                    <th>VAT AMT</th>
-                                    <th>EXG AMT</th>
-                                    <th>RTN AMT</th>
-                                    <th>CASH AMT</th>
-                                    <th>CARD AMT</th>
-                                    <th>NET AMT</th>
-                                    <th>ADJ AMT</th>
-                                    <th>RDM_VAL</th>
-                                    <th>RTN DISC</th>
-                                    <th>RTN SP DISC</th>
+                                    <th>CASHIER</th>
+                                    <th>
+                                        <div style="width: 100%; text-align: center;">
+                                            DESCRIPTION
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div style="width: 100%; text-align: end;">
+                                            CASH
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div style="width: 100%; text-align: end;">
+                                            CARD
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div style="width: 100%; text-align: end;">
+                                            TOTAL
+                                        </div>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="highlight">Anisur-10701</td>
-                                    <td>42,750.00</td>
-                                    <td class="highlight">3,747.75</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td class="highlight">2,691.74</td>
-                                    <td class="highlight">0.00</td>
-                                    <td class="highlight">0.00</td>
-                                    <td class="highlight">26,313.00</td>
-                                    <td class="highlight">12,690.00</td>
-                                    <td class="highlight">39,003.00</td>
-                                    <td class="highlight">0.75</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
+                                    <td class="highlight">Anisur-10766</td>
+                                    <td style="text-align: end !important;">CASH</td>
+                                    <td style="text-align: end !important;">26,313.00</td>
+                                    <td style="text-align: end !important;">0.00</td>
+                                    <td style="text-align: end !important;">26,313.00</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="highlight"></td>
+                                    <td style="text-align: end !important;">Bkash (Merchant)</td>
+                                    <td style="text-align: end !important;">0.00</td>
+                                    <td style="text-align: end !important;">5,170.00</td>
+                                    <td style="text-align: end !important;">5,170.00</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="highlight"></td>
+                                    <td style="text-align: end !important;">City Bank</td>
+                                    <td style="text-align: end !important;">0.00</td>
+                                    <td style="text-align: end !important;">7,520.00</td>
+                                    <td style="text-align: end !important;">7,520.00</td>
+                                </tr>
+
+                                <tr class="subTotal">
+                                    <td></td>
+                                    <td style="text-align: end !important;">Sub-Total (Anisur-10766)</td>
+                                    <td style="text-align: end !important;">0.00</td>
+                                    <td style="text-align: end !important;">7,520.00</td>
+                                    <td style="text-align: end !important;">7,520.00</td>
                                 </tr>
 
                                 <tr>
                                     <td class="highlight">Nazmul-10693</td>
-                                    <td>25,660.00</td>
-                                    <td class="highlight">1,969.25</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td class="highlight">1,630.71</td>
-                                    <td class="highlight">0.00</td>
-                                    <td class="highlight">0.00</td>
-                                    <td class="highlight">10,306.00</td>
-                                    <td class="highlight">13,395.00</td>
-                                    <td class="highlight">23,701.00</td>
-                                    <td class="highlight">0.25</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
+                                    <td style="text-align: end !important;">CASH</td>
+                                    <td style="text-align: end !important;">10,306.00</td>
+                                    <td style="text-align: end !important;">0.00</td>
+                                    <td style="text-align: end !important;">10,306.00</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="highlight"></td>
+                                    <td style="text-align: end !important;">Bkash (Merchant)</td>
+                                    <td style="text-align: end !important;">0.00</td>
+                                    <td style="text-align: end !important;">7,070.00</td>
+                                    <td style="text-align: end !important;">7,070.00</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="highlight"></td>
+                                    <td style="text-align: end !important;">City Bank</td>
+                                    <td style="text-align: end !important;">0.00</td>
+                                    <td style="text-align: end !important;">6,325.00</td>
+                                    <td style="text-align: end !important;">6,325.00</td>
+                                </tr>
+
+                                <tr class="subTotal">
+                                    <td></td>
+                                    <td style="text-align: end !important;">Sub-Total (Anisur-10766)</td>
+                                    <td style="text-align: end !important;">0.00</td>
+                                    <td style="text-align: end !important;">7,520.00</td>
+                                    <td style="text-align: end !important;">7,520.00</td>
                                 </tr>
 
                                 <tr class="grandTotal">
-                                    <td>TOTAL</td>
-                                    <td>68,410.00</td>
-                                    <td class="highlight">5707.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td class="highlight" >4322.45</td>
-                                    <td>0.00</td>
-                                    <td class="highlight">0.00</td>
-                                    <td class="highlight">36,619.00</td>
-                                    <td class="highlight">26,085.00</td>
-                                    <td class="highlight">62,704.00</td>
-                                    <td class="highlight">1.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
+                                    <td></td>
+                                    <td style="text-align: end !important;">Grand Total</td>
+                                    <td style="text-align: end !important;">36,619.00</td>
+                                    <td style="text-align: end !important;">26,085.00</td>
+                                    <td style="text-align: end !important;">64,704.00</td>
                                 </tr>
                             </tbody>
                         </table>
-
-                        <h4 class="text-center fw-bold mt-5 mb-1">CARD WISE BREAKDOWN</h4>
-
-                        <div class="card_wise_breakdown" style="width: 40%;">
-                            <table class="table card_wise mb-0">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th class="text-end">Bkash (Merchant)</th>
-                                        <th class="text-end">City Bank</th>
-                                        <th class="text-end">TOTAL</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-start">Anisur-10701</td>
-                                        <td class="text-end">5,170.00</td>
-                                        <td class="text-end">7,520.00</td>
-                                        <td class="text-end">12,693.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-start">Nazmul-10701</td>
-                                        <td class="text-end">7,070.00</td>
-                                        <td class="text-end">6,325.00</td>
-                                        <td class="text-end">13,395.00</td>
-                                    </tr>
-                                    <tr class="total_card_wise">
-                                        <td class="text-start">TOTAL</td>
-                                        <td class="text-end">12,240.00</td>
-                                        <td class="text-end">13,845.00</td>
-                                        <td class="text-end">26,085.00</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
 
-                    <div class="foote_body">
+                    {{-- <div class="foote_body">
                         <span>System By: Mediasoft Data System Ltd</span>
                         <span id="pageInfo">Page 1 of 1</span>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
    </div>
 
-   <div class="custom-pagination">
+   {{-- <div class="custom-pagination">
         <button id="first"><i class="ri-skip-left-fill"></i></button>
         <button id="prev"><i class="ri-arrow-drop-left-fill"></i></button>
 
@@ -409,7 +400,7 @@
 
         <button id="next"><i class="ri-arrow-drop-right-fill"></i></button>
         <button id="last"><i class="ri-skip-right-fill"></i></button>
-    </div>
+    </div> --}}
     
 @endsection
 

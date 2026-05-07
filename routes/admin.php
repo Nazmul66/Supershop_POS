@@ -47,6 +47,7 @@ use App\Http\Controllers\Admin\HolidaysController;
 use App\Http\Controllers\Admin\LandingPageController;
 use App\Http\Controllers\Admin\Hrms\ExpenseController;
 use App\Http\Controllers\Admin\OtherSettingController;
+use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\NotesController;
 use App\Http\Controllers\Admin\PayrollController;
@@ -199,6 +200,13 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/childCategories/view/{id}', [ChildCategoryController::class, 'childSubCategoryView'])->name('childCategory.view');
     Route::get('/childCategories/pdf', [ChildCategoryController::class, 'allChildCategoryPdf'])->name('childCategory.pdf');
     Route::post('/get/subCategory-data', [ChildCategoryController::class, 'get_subCategory_data'])->name('childCategory.subCategory.data');
+
+    //______ Branch _____//
+    Route::resource('/branch', BranchController::class)->names('branch')->except('show');
+    Route::get('/branch-data', [BranchController::class, 'getData'])->name('branch-data');
+    Route::post('/branch/status', [BranchController::class, 'changeBranchStatus'])->name('branch.status');
+    Route::get('/branch/view/{id}', [BranchController::class, 'branchView'])->name('branch.view');
+    Route::get('/branch/pdf', [BranchController::class, 'allBranchPdf'])->name('branch.pdf');
 
 
     //______ Warranties _____//

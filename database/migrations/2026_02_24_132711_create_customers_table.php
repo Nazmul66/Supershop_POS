@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('internal_note')->nullable();
             $table->string('save_as')->comment("home,work,other");
             $table->integer('status')->default(1)->comment("1=Active, 0=Deactive");
+            $table->string('created_by')->null();
             $table->timestamps();
         });
     }

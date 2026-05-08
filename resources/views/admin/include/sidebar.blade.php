@@ -127,6 +127,8 @@
                         <li class="@yield('warranty')"><a href="{{ route('admin.warranties.index') }}"><i class="ti ti-certificate fs-16 me-2"></i><span>Warranties</span></a></li>
 
                         <li class="@yield('branch')"><a href="{{ route('admin.branch.index') }}"><i class="ti ti-git-branch fs-16 me-2"></i><span>Branch</span></a></li>
+                        
+                        <li class="@yield('device')"><a href="{{ route('admin.device.index') }}"><i class="ti ti-device-desktop fs-16 me-2"></i><span>Device</span></a></li>
                     </ul>
                 </li>
 

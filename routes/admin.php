@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\PermissionController;
@@ -48,6 +49,7 @@ use App\Http\Controllers\Admin\LandingPageController;
 use App\Http\Controllers\Admin\Hrms\ExpenseController;
 use App\Http\Controllers\Admin\OtherSettingController;
 use App\Http\Controllers\Admin\BranchController;
+use App\Http\Controllers\Admin\DeviceController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\NotesController;
 use App\Http\Controllers\Admin\PayrollController;
@@ -77,6 +79,14 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     
     Route::get('/cc', [AdminController::class, "cacheClear"])->name('cacheClear');
     Route::get('/dashboard', [AdminController::class, "dashboard"])->name('dashboard');
+
+        // Route::get('/test-babaji', function(){
+        //     // $deviceCode = trim(file_get_contents('C:/pos-device/device.txt'));
+        //     $filePath = 'C:/pos-device/code.txt';
+        //     $content = "POS Device Code: POS-MIRPUR-01\nIP: " . request()->ip();
+        //     File::put($filePath, $content);
+        //     dd('successfully Set');
+        // });
     
 
     // Optional view show
@@ -207,6 +217,14 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::post('/branch/status', [BranchController::class, 'changeBranchStatus'])->name('branch.status');
     Route::get('/branch/view/{id}', [BranchController::class, 'branchView'])->name('branch.view');
     Route::get('/branch/pdf', [BranchController::class, 'allBranchPdf'])->name('branch.pdf');
+
+
+    //______ Device _____//
+    Route::resource('/device', DeviceController::class)->names('device')->except('show');
+    Route::get('/device-data', [DeviceController::class, 'getData'])->name('device-data');
+    Route::post('/device/status', [DeviceController::class, 'changeDeviceStatus'])->name('device.status');
+    Route::get('/device/view/{id}', [DeviceController::class, 'deviceView'])->name('device.view');
+    Route::get('/device/pdf', [DeviceController::class, 'allDevicePdf'])->name('device.pdf');
 
 
     //______ Warranties _____//

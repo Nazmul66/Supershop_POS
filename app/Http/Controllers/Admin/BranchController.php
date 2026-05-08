@@ -82,13 +82,13 @@ class BranchController extends Controller
                                 <i class="fas fa-eye"></i> View
                             </a>
 
-                            @if(auth("admin")->user()->can("update.category"))
+                            @if(auth("admin")->user()->can("update.branch"))
                                 <a class="dropdown-item text-success" id="editButton" href="javascript:void(0)" data-id="'.$branch->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                             @endif
 
-                            @if(auth("admin")->user()->can("delete.category"))
+                            @if(auth("admin")->user()->can("delete.branch"))
                                 <a class="dropdown-item text-danger" href="javascript:void(0)" data-id="'.$branch->id.'" id="deleteBtn">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>

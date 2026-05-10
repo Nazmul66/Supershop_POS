@@ -54,7 +54,7 @@
     <div class="card">
         <div class="card-body">
             <div class="">
-                <table class="table table-bordered mb-0" id="branchTable">
+                <table class="table table-bordered mb-0" id="deviceTable">
                     <thead class="bg-primary text-white">
                         <tr>
                             <th>#SL.</th>
@@ -62,7 +62,6 @@
                             <th>Device Code</th>
                             <th>Device Name</th>
                             <th>Ip Address</th>
-                            <th>Last Activate At</th>
                             <th>Is Online</th>
                             <th>Status</th>
                             <th>Created By</th>
@@ -114,6 +113,13 @@
                                 <input class="form-control" id="device_code" type="text" name="device_code" placeholder="Device Code">
 
                                 <span id="device_code_validate" class="text-danger validation-error mt-1"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="ip_address" class="form-label">Ip Address <span class="text-danger">*</span></label>
+                                <input class="form-control" id="ip_address" type="text" name="ip_address" placeholder="Ip Address">
+
+                                <span id="ip_address_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="mb-3">
@@ -188,6 +194,13 @@
                             </div>
 
                             <div class="mb-3">
+                                <label for="up_ip_address" class="form-label">Ip Address <span class="text-danger">*</span></label>
+                                <input class="form-control" id="up_ip_address" type="text" name="up_ip_address" placeholder="Ip Address">
+
+                                <span id="up_ip_address_validate" class="text-danger validation-error mt-1"></span>
+                            </div>
+
+                            <div class="mb-3">
                                 <label class="form-label">Status <span class="text-danger">*</span></label>
                                 <select class="form-select" id="up_status" name="status">
                                     <option value="1">Active</option>
@@ -213,66 +226,66 @@
 
         <!-- View Modal -->
         <div id="viewModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true" style="display: none;" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">View Device List</h5>
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">View Device List</h5>
 
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="view_modal_content">
+                            <label>Branch Name : </label>
+                            <span class="text-dark" id="view_branch_name"></span>
                         </div>
 
-                        <div class="modal-body">
-                            <div class="view_modal_content">
-                                <label>Branch Name : </label>
-                                <span class="text-dark" id="view_branch_name"></span>
-                            </div>
-
-                            <div class="view_modal_content">
-                                <label>Device Name : </label>
-                                <span class="text-dark" id="view_device_name"></span>
-                            </div>
-
-                            <div class="view_modal_content">
-                                <label>Device Code : </label>
-                                <span class="text-dark" id="view_device_code"></span>
-                            </div>
-
-                            <div class="view_modal_content">
-                                <label>Ip Address : </label>
-                                <span class="text-dark" id="view_ip_address"></span>
-                            </div>
-
-                            <div class="view_modal_content">
-                                <label>Last Active At: </label>
-                                <span class="text-dark" id="view_last_active"></span>
-                            </div>
-
-                            <div class="view_modal_content">
-                                <label>Is Online: </label>
-                                <span class="text-dark" id="view_is_online"></span>
-                            </div>
-
-                            <div class="view_modal_content">
-                                <label>Created Date : </label>
-                                <div id="created_date"></div>
-                            </div>
-
-                            <div class="view_modal_content">
-                                <label>Updated Date : </label>
-                                <div id="updated_date"></div>
-                            </div>
-
-                            <div class="view_modal_content">
-                                <label>Status : </label>
-                                <div id="view_status"></div>
-                            </div>
+                        <div class="view_modal_content">
+                            <label>Device Name : </label>
+                            <span class="text-dark" id="view_device_name"></span>
                         </div>
 
+                        <div class="view_modal_content">
+                            <label>Device Code : </label>
+                            <span class="text-dark" id="view_device_code"></span>
+                        </div>
 
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div>
+                        <div class="view_modal_content">
+                            <label>Ip Address : </label>
+                            <span class="text-dark" id="view_ip_address"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Last Active At: </label>
+                            <span class="text-dark" id="view_last_active"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Is Online: </label>
+                            <span class="text-dark" id="view_is_online"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Created Date : </label>
+                            <div id="created_date"></div>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Updated Date : </label>
+                            <div id="updated_date"></div>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Status : </label>
+                            <div id="view_status"></div>
+                        </div>
+                    </div>
+
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
         </div>
+    </div>
 
 @endsection
 
@@ -284,16 +297,12 @@
         $(document).ready(function () {
 
             // Show Data through Datatable
-            let datatables = $('#branchTable').DataTable({
-                order: [
-                    [0, 'desc']
-                ],
+            let datatables = $('#deviceTable').DataTable({
+                order: [[0, 'desc']],
                 processing: true,
                 serverSide: true,
-
-                ajax: "{{ route('admin.branch-data') }}",
+                ajax: "{{ route('admin.device-data') }}",
                 // pageLength: 30,
-
                 columns: [
                     { 
                         data: 'DT_RowIndex', 
@@ -302,10 +311,21 @@
                         searchable: false 
                     },
                     {
-                        data: 'name',
+                        data: 'branch_name',
                     },
                     {
-                        data: 'slug',
+                        data: 'device_code',
+                    },
+                    {
+                        data: 'device_name',
+                    },
+                    {
+                        data: 'ip_address',
+                        orderable: false,
+                    },
+                    {
+                        data: 'is_online',
+                        orderable: false,
                     },
                     {
                         data: 'status',
@@ -332,7 +352,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('admin.branch.status') }}",
+                    url: "{{ route('admin.device.status') }}",
                     data: {
                         // '_token': token,
                         id: id,
@@ -373,7 +393,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ route('admin.branch.store') }}",
+                    url: "{{ route('admin.device.store') }}",
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
@@ -395,7 +415,10 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#name_validate').empty().html(error.name);
+                        $('#branch_name_validate').empty().html(error.branch_id);
+                        $('#device_name_validate').empty().html(error.device_name);
+                        $('#device_code_validate').empty().html(error.device_code);
+                        $('#ip_address_validate').empty().html(error.ip_address);
                         $('#status_validate').empty().html(error.status);
 
                         swal.fire({
@@ -407,7 +430,6 @@
                 });
             })
 
-
             // Edit Data
             $(document).on("click", '#editButton', function (e) {
                 let id = $(this).attr('data-id');
@@ -418,7 +440,7 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/branch') }}/" + id + "/edit",
+                    url: "{{ url('admin/device') }}/" + id + "/edit",
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
@@ -426,7 +448,10 @@
                         // console.log(data.id);
 
                         $('#up_id').val(data.id);
-                        $('#up_name').val(data.name);
+                        $('#up_branch_name').val(data.branch_id);
+                        $('#up_device_code').val(data.device_code);
+                        $('#up_device_name').val(data.device_name);
+                        $('#up_ip_address').val(data.ip_address);
                         $('#up_status').val(data.status);
                     },
                     error: function (error) {
@@ -435,7 +460,6 @@
 
                 });
             })
-
 
             // Update Data
             $("#EditForm").submit(function (e) {
@@ -449,7 +473,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ url('admin/branch') }}/" + id,
+                    url: "{{ url('admin/device') }}/" + id,
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
@@ -457,7 +481,7 @@
 
                         swal.fire({
                             title: "Success",
-                            text: "Branch Updated Successfully",
+                            text: "Device Updated Successfully",
                             icon: "success"
                         })
 
@@ -469,7 +493,10 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#up_name_validate').empty().html(error.name);
+                        $('#up_branch_name_validate').empty().html(error.branch_id);
+                        $('#up_device_name_validate').empty().html(error.device_name);
+                        $('#up_device_code_validate').empty().html(error.device_code);
+                        $('#up_ip_address_validate').empty().html(error.ip_address);
 
                         swal.fire({
                             title: "Failed",
@@ -480,7 +507,6 @@
                 });
 
             });
-
 
             // Delete Data
             $(document).on("click", "#deleteBtn", function () {
@@ -499,7 +525,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: 'DELETE',
-                            url: "{{ url('admin/branch') }}/" + id,
+                            url: "{{ url('admin/device') }}/" + id,
                             data: {
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -525,7 +551,6 @@
                 })
             })
 
-
             // View Data
             $(document).on("click", '#viewButton', function (e) {
                 let id = $(this).attr('data-id');
@@ -536,13 +561,18 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/branch/view') }}/" + id,
+                    url: "{{ url('admin/device/view') }}/" + id,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
 
-                        $('#view_branch_name').html(data.name);
+                        $('#view_branch_name').html(data.branch_name);
+                        $('#view_device_name').html(data.device_name);
+                        $('#view_device_code').html(data.device_code);
+                        $('#view_ip_address').html(data.ip_address);
+                        $('#view_last_active').html(data.last_active_at);
+                        $('#view_is_online').html(res.is_online);
                         $('#created_date').html(res.created_date);
                         $('#updated_date').html(res.updated_date);
                         $('#view_status').html(res.statusHtml);

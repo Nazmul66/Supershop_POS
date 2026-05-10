@@ -28,8 +28,13 @@ class UpdateDeviceRequest extends FormRequest
                 'required',
                 Rule::unique('devices', 'device_code')->ignore($id),
             ],
-            'device_name' => ['nullable', 'max:255'],
+            'device_name' => [
+                'nullable', 
+                 Rule::unique('devices', 'device_name')->ignore($id),
+                'max:255'],
             'ip_address' => ['nullable','ip'],
+            'last_active_at' => ['nullable'],
+            'is_online' => ['nullable'],
             'status' => ['required','boolean'],
         ];
     }
@@ -40,9 +45,11 @@ class UpdateDeviceRequest extends FormRequest
         return [
             'branch_id.required' => 'Please select a branch.',
             'branch_id.exists' => 'Selected branch does not exist.',
-            'device_code.required' => 'Please enter a device code.',
+            'device_code.required' => 'The device code field is required.',
+            'device_name.required' => 'The device name field is required.',
+            'device_name.unique' => 'The device name has already been registered.',
             'device_code.unique' => 'This device code has already been registered.',
-            'device_name.max' => 'Device name may not be greater than 255 characters.',
+            'device_name.max' => 'The device name may not be greater than 255 characters.',
             'ip_address.ip' => 'Please enter a valid IP address.',
             'status.required' => 'Please select device status.',
             'status.boolean' => 'Invalid device status selected.',

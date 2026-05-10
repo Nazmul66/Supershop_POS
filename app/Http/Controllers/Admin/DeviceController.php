@@ -39,7 +39,9 @@ class DeviceController extends Controller
     public function getData()
     {
         // get all data
-        $devices = Device::all();
+        $devices = Device::join('branches', 'branches.id', 'devices.branch_id')
+            ->select('branches.name as branch_name', 'devices.*')
+            ->get();
 
         return DataTables::of($devices)
             ->addIndexColumn()
@@ -49,12 +51,22 @@ class DeviceController extends Controller
                 $maskMail = Str::mask($adminEmail, '*', -18, 8);
                 $adminImage = \App\Models\Admin::find($device->created_by)?->image ?? 'Unknown';
                 return '<div class="d-flex align-items-center">
-                      <img  class="rounded-circle me-2" width="40"  height="40" src="'.asset($adminImage) .'" />
-                      <div>
+                        <img  class="rounded-circle me-2" width="40"  height="40" src="'.asset($adminImage) .'" />
+                        <div>
                         <p class="mb-0">'. $adminName .'</p> 
                         <p class="mb-0">'. $maskMail .'</p>
-                      </div>
+                        </div>
                 </div>';
+            })
+            ->addColumn('branch_name', function ($device) {
+                return '<p class="status">'.$device->branch_name.'</p>';
+            })
+            ->addColumn('is_online', function ($device) {
+                if ($device->is_online === 'online') {
+                    return '<button type="button" class="btn btn-info btn-sm">Online</button>';
+                } elseif ($device->is_online === 'offline') {
+                    return '<button type="button" class="btn btn-danger btn-sm">Offline</button>';
+                }
             })
             ->addColumn('status', function ($device) {
                 if(auth("admin")->user()->can("status.device"))
@@ -100,7 +112,7 @@ class DeviceController extends Controller
                 ', ['device' => $device]);
                 return $actionHtml;
             })
-            ->rawColumns(['created_by', 'status', 'action'])
+            ->rawColumns(['created_by', 'branch_name', 'is_online', 'status', 'action'])
             ->make(true);
     }
 
@@ -140,11 +152,11 @@ class DeviceController extends Controller
             $device = new Device();
             $device->branch_id              = $request->branch_id;
             $device->device_code            = Str::upper(Str::slug($request->device_code));
-            $device->device_name            = $request->device_name;
+            $device->device_name            = Str::title($request->device_name);
             $device->ip_address             = $request->ip_address;
             $device->last_active_at         = $request->last_active_at;
-            $device->is_online              = $request->is_online ?? 1;
-            $device->status                 = $request->status;
+            $device->is_online              = $request->is_online ?? "Online";
+            $device->status                 = $request->status ?? 1;
             $device->created_by             = Auth::guard('admin')->id();
             $device->created_at             = now();
             $device->updated_at             = now();
@@ -195,11 +207,11 @@ class DeviceController extends Controller
             // Handle image with ImageUploadTraits function
             $device->branch_id              = $request->branch_id;
             $device->device_code            = Str::upper(Str::slug($request->device_code));
-            $device->device_name            = $request->device_name;
+            $device->device_name            = Str::title($request->device_name);
             $device->ip_address             = $request->ip_address;
             $device->last_active_at         = $request->last_active_at;
-            $device->is_online              = $request->is_online;
-            $device->status                 = $request->status;
+            $device->is_online              = $request->is_online ?? "Online";
+            $device->status                 = $request->status ?? 1;
             $device->updated_by             = Auth::guard('admin')->id();
             $device->updated_at             = now();
             $device->save();
@@ -229,14 +241,24 @@ class DeviceController extends Controller
 
     public function deviceView($id)
     {
-        $device  = Device::find($id);
+        $device = Device::join('branches', 'branches.id', 'devices.branch_id')
+                ->select('branches.name as branch_name', 'devices.*')
+                ->where('devices.id', $id)
+                ->first();
         // dd($device);
 
         $statusHtml = '';
         if ($device->status === 1) {
-            $statusHtml = '<span class="text-success">Active</span>';
+            $statusHtml = '<button type="button" class="btn btn-info btn-sm">Active</button>';
         } else {
-            $statusHtml = '<span class="text-danger">Inactive</span>';
+            $statusHtml = '<button type="button" class="btn btn-danger btn-sm">Deactive</button>';
+        }
+
+        $is_online = '';
+        if ($device->is_online === 'online') {
+            $is_online = '<button type="button" class="btn btn-info btn-sm">Online</button>';
+        } elseif ($device->is_online === 'offline') {
+            $is_online = '<button type="button" class="btn btn-danger btn-sm">Offline</button>';
         }
 
         $created_date = date('d F, Y H:i:s A', strtotime($device->created_at));
@@ -245,6 +267,7 @@ class DeviceController extends Controller
         return response()->json([
             'success'           => $device,
             'statusHtml'        => $statusHtml,
+            'is_online'         => $is_online,
             'created_date'      => $created_date,
             'updated_date'      => $updated_date,
         ]);

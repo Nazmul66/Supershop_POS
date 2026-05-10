@@ -25,8 +25,10 @@ class CreateDeviceRequest extends FormRequest
         return [
             'branch_id' => ['required',],
             'device_code' => ['required','unique:devices,device_code'],
-            'device_name' => ['nullable', 'max:255'],
+            'device_name' => ['required', 'unique:devices,device_name', 'max:255'],
             'ip_address' => ['nullable','ip'],
+            'last_active_at' => ['nullable'],
+            'is_online' => ['nullable'],
             'status' => ['required','boolean'],
         ];
     }
@@ -37,6 +39,8 @@ class CreateDeviceRequest extends FormRequest
         return [
             'branch_id.required' => 'Please select a branch.',
             'device_code.required' => 'The device code field is required.',
+            'device_name.required' => 'The device name field is required.',
+            'device_name.unique' => 'The device name has already been registered.',
             'device_code.unique' => 'This device code has already been registered.',
             'device_name.max' => 'The device name may not be greater than 255 characters.',
             'ip_address.ip' => 'Please enter a valid IP address.',

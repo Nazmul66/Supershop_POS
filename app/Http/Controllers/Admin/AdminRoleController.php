@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin;
+use App\Models\Branch;
+use App\Models\Device;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -45,9 +47,13 @@ class AdminRoleController extends Controller
             throw UnauthorizedException::forPermissions(['create.admin-role']);
         }
 
-        $roles = Role::where('guard_name', 'admin')->pluck('name', 'name')->all();
+        $roles  = Role::where('guard_name', 'admin')->pluck('name', 'name')->all();
+        $device = Device::where('status', 1)->select('id', 'branch_id', 'device_name')->get();
+        $branch = Branch::where('status', 1)->select('id','name')->get();
         return view('admin.pages.role_and_permission.admin.create',[
-            'roles' => $roles
+            'roles'  => $roles,
+            'device' => $device,
+            'branch' => $branch,
         ]);
     }
 
@@ -63,10 +69,12 @@ class AdminRoleController extends Controller
         // dd($request->all());
         $request->validate(
             [
-                'name'     => ['required', 'string', 'unique:admins,name', 'max:255'],
-                'email'    => ['required', 'unique:admins,email', 'email', 'max:255'],
-                'phone'    => ['required', 'regex:/^[0-9]{11,15}$/'],
-                'password' => [
+                'branch_name'  => ['required', 'integer'],
+                'device_name'  => ['required', 'integer'],
+                'name'         => ['required', 'string', 'unique:admins,name', 'max:255'],
+                'email'        => ['required', 'unique:admins,email', 'email', 'max:255'],
+                'phone'        => ['required', 'regex:/^[0-9]{11,15}$/'],
+                'password'     => [
                     $request->isMethod('post') ? 'required' : 'nullable',
                     'string', 
                     'min:8', 
@@ -82,6 +90,8 @@ class AdminRoleController extends Controller
                 ],
             ],
             [
+                'branch_name.required' => 'The Branch name field is required.',
+                'device_name.unique'   => 'This Device name is already in use.',
                 'name.required'     => 'The name field is required.',
                 'name.unique'       => 'This name is already in use.',
                 'email.required'    => 'The email field is required.',
@@ -98,6 +108,8 @@ class AdminRoleController extends Controller
         DB::beginTransaction();
         try {
            $admin =  Admin::create([
+                'current_branch_id'     => $request->branch_name,
+                'current_device_id'     => $request->device_name,
                 'name'     => $request->name,
                 'email'    => $request->email,
                 'phone'    => $request->phone,
@@ -109,7 +121,7 @@ class AdminRoleController extends Controller
         catch(\Exception $ex){
             DB::rollBack();
             // throw $ex;
-            // dd($ex->getMessage());
+            dd($ex->getMessage());
             Toastr::error('New Admin create error', 'Error', ["positionClass" => "toast-top-right"]);
             return back();
         }
@@ -131,11 +143,15 @@ class AdminRoleController extends Controller
         $admin     = Admin::findOrFail($id);
         $roles     = Role::where('guard_name', 'admin')->pluck('name', 'name')->all();
         $userRoles = $admin->roles->pluck('name', 'name')->all();
+        $device = Device::where('status', 1)->select('id', 'branch_id', 'device_name')->get();
+        $branch = Branch::where('status', 1)->select('id','name')->get();
         
         return view('admin.pages.role_and_permission.admin.edit',[
             'admin'     => $admin,
             'roles'     => $roles,
             'userRoles' => $userRoles,
+            'device'    => $device,
+            'branch'    => $branch,
         ]);
     }
 

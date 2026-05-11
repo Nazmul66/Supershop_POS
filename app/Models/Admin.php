@@ -16,9 +16,7 @@ class Admin extends Authenticatable // must added Authenticatable and remove Mod
     protected $guard_name = 'admin';  // Important for Spatie permission
 
     protected $fillable = [
-        'name', 'type', 'phone', 'email', 'password','image','status',
-        'username', 'address', 'postal_code','email_verified_at',
-        'country_id', 'state_id', 'city_id'
+        'current_branch_id', 'current_device_id', 'name', 'type', 'phone', 'email', 'password','image','status', 'username', 'address', 'postal_code','email_verified_at', 'country_id', 'state_id', 'city_id'
     ];
 
     protected $hidden = [

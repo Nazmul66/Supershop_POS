@@ -6,6 +6,11 @@
 
 @push('add-css')
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css"> --}}
+    <style>
+        .form-select{
+            border: 1px solid #aaa !important; 
+        }
+    </style>
 @endpush
 
 @section('admin-role', 'active')
@@ -44,7 +49,21 @@
                 @method('PUT')
 
                 <div class="row">
-                    <div class="col-lg-8 ">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="branch_name" class="form-label">Branch Name</label>
+                            <select class="form-select" name="branch_name" id="branch_name">
+                                <option value="" selected disabled>-- Select --</option>
+                                @foreach ($branch as $row)
+                                    <option value="{{ $row->id }}" {{ $row->id == $admin->current_branch_id ? 'selected' : '' }}>{{ $row->name }}</option>
+                                @endforeach
+                            </select>
+
+                             @error('branch_name')
+                                <span class="text-danger mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
                             <input class="form-control" type="text" value="{{ old('name', $admin->name) }}" name="name" id="name" placeholder="Write Your Name.....">
@@ -55,28 +74,10 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input class="form-control" type="email" value="{{ $admin->email }}" name="email" id="email" readonly placeholder="Write Your Email.....">
-
-                            @error('email')
-                                <span class="text-danger mt-1">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
                             <label for="phones" class="form-label">Phone</label>
                             <input class="form-control" type="text" name="phone" id="phones" placeholder="Phone..." value="{{ old('phone', $admin->phone) }}" pattern="[0-9]{11,15}" oninput="validatePhone(this)"> 
 
                             @error('phone')
-                                <span class="text-danger mt-1">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input class="form-control" type="password" name="password" id="password" placeholder="****************">
-
-                            @error('password')
                                 <span class="text-danger mt-1">{{ $message }}</span>
                             @enderror
                         </div>
@@ -97,10 +98,46 @@
                             @enderror
                         </div>
 
-                        <button type="submit" class="btn btn-success">Update</button>
                     </div>
-                </div>
 
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="device_name" class="form-label">Device Name</label>
+                            <select class="form-select" name="device_name" id="device_name">
+                                <option value="" selected disabled>-- Select --</option>
+                                @foreach ($device as $row)
+                                    <option value="{{ $row->id }}" {{ $row->id == $admin->current_device_id ? 'selected' : '' }}>{{ $row->device_name }}</option>
+                                @endforeach
+                            </select>
+
+                             @error('device_name')
+                                <span class="text-danger mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input class="form-control" type="email" value="{{ $admin->email }}" name="email" id="email" readonly placeholder="Write Your Email.....">
+
+                            @error('email')
+                                <span class="text-danger mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input class="form-control" type="password" name="password" id="password" placeholder="****************">
+
+                            @error('password')
+                                <span class="text-danger mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+                   </div> 
+
+                   <div class="">
+                        <button type="submit" class="btn btn-secondary">Update</button>
+                   </div>
+                </div>
             </form>
         </div>
     </div>

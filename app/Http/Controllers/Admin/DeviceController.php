@@ -244,7 +244,7 @@ class DeviceController extends Controller
         $device = Device::join('branches', 'branches.id', 'devices.branch_id')
                 ->select('branches.name as branch_name', 'devices.*')
                 ->where('devices.id', $id)
-                ->first();
+                ->firstOrFail();
         // dd($device);
 
         $statusHtml = '';

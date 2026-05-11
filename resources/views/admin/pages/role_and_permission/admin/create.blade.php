@@ -11,9 +11,11 @@
         .is-valid {
             border-color: #198754;
         }
-
         .is-invalid {
             border-color: #dc3545;
+        }
+        .form-select{
+            border: 1px solid #aaa !important; 
         }
     </style>
 @endpush
@@ -26,7 +28,7 @@
     <div class="row">
         <div class="col-12 mb-4">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Create Admin</h4>
+                <h4 class="mb-sm-0 font-size-18">Create New Admin</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
@@ -43,7 +45,7 @@
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-                <h4>Create Admin</h4>
+                <h4>Create Form</h4>
                 <a href="{{ route('admin.admin-role.index') }}" class="btn btn-primary">Back</a>
             </div>
         </div>
@@ -53,7 +55,21 @@
                 @csrf
 
                 <div class="row">
-                    <div class="col-lg-8 ">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="branch_name" class="form-label">Branch Name</label>
+                            <select class="form-select" name="branch_name" id="branch_name">
+                                <option value="" selected disabled>-- Select --</option>
+                                @foreach ($branch as $row)
+                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                @endforeach
+                            </select>
+
+                             @error('branch_name')
+                                <span class="text-danger mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
                             <input class="form-control" type="text" name="name" id="name" placeholder="Name..." value="{{ old('name') }}"> 
@@ -64,29 +80,11 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input class="form-control" type="email" name="email" id="email" placeholder="Email..." value="{{ old('email') }}">
-
-                            @error('email')
-                                <span class="text-danger mt-1">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
                             <label for="phones" class="form-label">Phone</label>
                             <input class="form-control" type="number" name="phone" id="phones" placeholder="Phone..." pattern="[0-9]{11,15}" value="{{ old('phone') }}" oninput="validatePhone(this)"> 
 
                              @error('phone')
                                 <span id="phone-error" class="text-danger mt-1">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input class="form-control" type="password" name="password" id="password" placeholder="Password...">
-                            
-                            @error('password')
-                                <span class="text-danger mt-1">{{ $message }}</span>
                             @enderror
                         </div>
 
@@ -102,11 +100,47 @@
                                 <span class="text-danger mt-1">{{ $message }}</span>
                             @enderror
                         </div>
+                    </div>
 
-                        <button type="submit" class="btn btn-success">Save</button>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label for="device_name" class="form-label">Device Name</label>
+                            <select class="form-select" name="device_name" id="device_name">
+                                <option value="" selected disabled>-- Select --</option>
+                                @foreach ($device as $row)
+                                    <option value="{{ $row->id }}">{{ $row->device_name }}</option>
+                                @endforeach
+                            </select>
+
+                             @error('device_name')
+                                <span class="text-danger mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input class="form-control" type="email" name="email" id="email" placeholder="Email..." value="{{ old('email') }}">
+
+                            @error('email')
+                                <span class="text-danger mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input class="form-control" type="password" name="password" id="password" placeholder="Password...">
+                            
+                            @error('password')
+                                <span class="text-danger mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
                 </div>
 
+                <div class="">
+                    <button type="submit" class="btn btn-secondary">Save Changes</button>
+                </div>
             </form>
         </div>
     </div>

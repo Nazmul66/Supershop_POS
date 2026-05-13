@@ -50,6 +50,7 @@ use App\Http\Controllers\Admin\Hrms\ExpenseController;
 use App\Http\Controllers\Admin\OtherSettingController;
 use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\DeviceController;
+use App\Http\Controllers\Admin\TerminalController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\NotesController;
 use App\Http\Controllers\Admin\PayrollController;
@@ -225,6 +226,13 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::post('/device/status', [DeviceController::class, 'changeDeviceStatus'])->name('device.status');
     Route::get('/device/view/{id}', [DeviceController::class, 'deviceView'])->name('device.view');
     Route::get('/device/pdf', [DeviceController::class, 'allDevicePdf'])->name('device.pdf');
+
+    //______ Terminal _____//
+    Route::resource('/terminal', TerminalController::class)->names('terminal')->except('show');
+    Route::get('/terminal-data', [TerminalController::class, 'getData'])->name('terminal-data');
+    Route::post('/terminal/status', [TerminalController::class, 'changeTerminalStatus'])->name('terminal.status');
+    Route::get('/terminal/view/{id}', [TerminalController::class, 'terminalView'])->name('terminal.view');
+    Route::get('/terminal/pdf', [TerminalController::class, 'allTerminalPdf'])->name('terminal.pdf');
 
 
     //______ Warranties _____//

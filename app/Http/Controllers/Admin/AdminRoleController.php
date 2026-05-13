@@ -166,6 +166,8 @@ class AdminRoleController extends Controller
 
         $request->validate(
             [
+                'branch_name'  => ['required', 'integer'],
+                'device_name'  => ['required', 'integer'],
                 'name'     => ['required', 'string', 'max:255', 'unique:admins,name,' . $id],
                 'email'    => ['required', 'email', 'max:255', 'unique:admins,email,' . $id],
                 'phone'    => ['required', 'regex:/^[0-9]{11,15}$/'],
@@ -185,6 +187,8 @@ class AdminRoleController extends Controller
                 ],
             ],
             [
+                'branch_name.required' => 'The Branch name field is required.',
+                'device_name.unique'   => 'This Device name is already in use.',
                 'name.required'     => 'The name field is required.',
                 'name.unique'       => 'This name is already in use.',
                 'email.required'    => 'The email field is required.',
@@ -204,6 +208,8 @@ class AdminRoleController extends Controller
 
             // Update admin details
             $admin->update([
+                'current_branch_id'     => $request->branch_name,
+                'current_device_id'     => $request->device_name,
                 'name'     => $request->name,
                 'email'    => $request->email,
                 'phone'    => $request->phone,

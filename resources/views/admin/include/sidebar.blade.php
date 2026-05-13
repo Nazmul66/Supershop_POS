@@ -129,6 +129,8 @@
                         <li class="@yield('branch')"><a href="{{ route('admin.branch.index') }}"><i class="ti ti-git-branch fs-16 me-2"></i><span>Branch</span></a></li>
                         
                         <li class="@yield('device')"><a href="{{ route('admin.device.index') }}"><i class="ti ti-device-desktop fs-16 me-2"></i><span>Device</span></a></li>
+
+                        <li class="@yield('terminal')"><a href="{{ route('admin.terminal.index') }}"><i class="ti ti-terminal-2 fs-16 me-2"></i><span>Terminal</span></a></li>
                     </ul>
                 </li>
 

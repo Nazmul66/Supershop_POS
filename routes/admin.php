@@ -233,7 +233,7 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::post('/terminal/status', [TerminalController::class, 'changeTerminalStatus'])->name('terminal.status');
     Route::get('/terminal/view/{id}', [TerminalController::class, 'terminalView'])->name('terminal.view');
     Route::get('/terminal/pdf', [TerminalController::class, 'allTerminalPdf'])->name('terminal.pdf');
-
+    Route::get('/get-branch-devices', [TerminalController::class, 'getBranchDevices'])->name('get.branch.devices');
 
     //______ Warranties _____//
     Route::resource('/warranties', WarrantiesController::class)->names('warranties')->except('show');

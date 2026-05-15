@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf;
-// use App\Http\Requests\Admin\CreateDeviceRequest;
-// use App\Http\Requests\Admin\UpdateDeviceRequest;
+use App\Http\Requests\Admin\CreateTerminalRequest;
+use App\Http\Requests\Admin\UpdateTerminalRequest;
 use App\Models\Branch;
 use App\Models\Terminal;
+use App\Models\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -32,15 +33,16 @@ class TerminalController extends Controller
     public function index()
     {
         $branches = Branch::where('status', 1)->get();
-        return view('admin.pages.terminal.index', compact('branches'));
+        $devices = Device::where('status', 1)->get();
+        return view('admin.pages.terminal.index', compact('branches', 'devices'));
     }
 
     public function getData()
     {
         // get all data
-        $terminals = Terminal::join('branches', 'branches.id', 'terminals.branch_id')
-            ->select('branches.name as branch_name', 'terminals.*')
-            ->get();
+        $terminals = Terminal::leftJoin('branches', 'branches.id', 'terminals.branch_id')
+            ->leftJoin('devices', 'devices.id', 'terminals.device_id')
+            ->select('branches.name as branch_name', 'devices.device_name as device_names', 'terminals.*')->get();
 
         return DataTables::of($terminals)
             ->addIndexColumn()
@@ -59,6 +61,9 @@ class TerminalController extends Controller
             })
             ->addColumn('branch_name', function ($terminal) {
                 return '<p class="status">'.$terminal->branch_name.'</p>';
+            })
+            ->addColumn('device_name', function ($terminal) {
+                return '<p class="status">'.$terminal->device_names.'</p>';
             })
             ->addColumn('status', function ($terminal) {
                 if(auth("admin")->user()->can("status.terminal"))
@@ -104,8 +109,17 @@ class TerminalController extends Controller
                 ', ['terminal' => $terminal]);
                 return $actionHtml;
             })
-            ->rawColumns(['created_by', 'branch_name', 'status', 'action'])
+            ->rawColumns(['created_by', 'branch_name', 'device_name', 'status', 'action'])
             ->make(true);
+    }
+
+    public function getBranchDevices(Request $request)
+    {
+        // dd($request->branch_id);
+        $devices = Device::where('branch_id', $request->branch_id)->get();
+        return response()->json([
+            'devices' => $devices
+        ]);
     }
 
     public function changeTerminalStatus(Request $request)
@@ -133,7 +147,7 @@ class TerminalController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateTerminalRequest $request)
     {
         if (!$this->user || !$this->user->can('create.terminal')) {
             throw UnauthorizedException::forPermissions(['create.terminal']);
@@ -143,11 +157,10 @@ class TerminalController extends Controller
         try {
             $terminal = new Terminal();
             $terminal->branch_id              = $request->branch_id;
-            $terminal->device_code            = Str::upper(Str::slug($request->device_code));
-            $terminal->device_name            = Str::title($request->device_name);
+            $terminal->device_id              = $request->device_id;
+            $terminal->terminal_name          = $request->terminal_name;
+            $terminal->terminal_code          = Str::upper(Str::slug($request->terminal_name));
             $terminal->ip_address             = $request->ip_address;
-            $terminal->last_active_at         = $request->last_active_at;
-            $terminal->is_online              = $request->is_online ?? "Online";
             $terminal->status                 = $request->status ?? 1;
             $terminal->created_by             = Auth::guard('admin')->id();
             $terminal->created_at             = now();
@@ -187,7 +200,7 @@ class TerminalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTerminalRequest $request, $id)
     {
         if (!$this->user || !$this->user->can('update.terminal')) {
             throw UnauthorizedException::forPermissions(['update.terminal']);
@@ -198,11 +211,10 @@ class TerminalController extends Controller
         try {
             // Handle image with ImageUploadTraits function
             $terminal->branch_id              = $request->branch_id;
-            $terminal->device_code            = Str::upper(Str::slug($request->device_code));
-            $terminal->device_name            = Str::title($request->device_name);
+            $terminal->device_id              = $request->device_id;
+            $terminal->terminal_name          = $request->terminal_name;
+            $terminal->terminal_code          = Str::upper(Str::slug($request->terminal_name));
             $terminal->ip_address             = $request->ip_address;
-            $terminal->last_active_at         = $request->last_active_at;
-            $terminal->is_online              = $request->is_online ?? "Online";
             $terminal->status                 = $request->status ?? 1;
             $terminal->updated_by             = Auth::guard('admin')->id();
             $terminal->updated_at             = now();
@@ -234,7 +246,8 @@ class TerminalController extends Controller
     public function terminalView($id)
     {
         $terminal = Terminal::join('branches', 'branches.id', 'terminals.branch_id')
-                ->select('branches.name as branch_name', 'terminals.*')
+                ->leftJoin('devices', 'devices.id', 'terminals.device_id')
+                ->select('branches.name as branch_name', 'devices.device_name as device_names', 'terminals.*')
                 ->where('terminals.id', $id)
                 ->firstOrFail();
         // dd($device);

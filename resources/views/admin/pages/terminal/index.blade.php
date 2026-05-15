@@ -59,9 +59,9 @@
                         <tr>
                             <th>#SL.</th>
                             <th>Branch Name</th>
+                            <th>Device Name</th>
                             <th>Terminal Name</th>
-                            <th>Terminal No</th>
-                            <th>Device Code</th>
+                            <th>Terminal Code</th>
                             <th>Ip Address</th>
                             <th>Status</th>
                             <th>Created By</th>
@@ -102,31 +102,22 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label" for="device_name">Device Name <span class="text-danger">*</span></label>
+                                <select class="form-select" name="device_id" id="device_name">
+                                    <option value="0" selected disabled>-- Selected --</option>
+                                    @foreach ($devices as $row)
+                                        <option value="{{ $row->id }}">{{ $row->device_name }}</option>
+                                    @endforeach
+                                </select>
+
+                                <span id="device_name_validate" class="text-danger mt-1"></span>
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="terminal_name" class="form-label">Terminal Name <span class="text-danger">*</span></label>
-                                <input class="form-control" id="terminal_name" type="text" name="terminal_name" placeholder="Device Name">
+                                <input class="form-control" id="terminal_name" type="text" name="terminal_name" placeholder="Terminal Name">
 
                                 <span id="terminal_name_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="terminal_no" class="form-label">Terminal No <span class="text-danger">*</span></label>
-                                <input class="form-control" id="terminal_no" type="text" name="terminal_no" placeholder="Terminal No">
-
-                                <span id="terminal_no_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="device_code" class="form-label">Device Code <span class="text-danger">*</span></label>
-                                <input class="form-control" id="device_code" type="text" name="device_code" placeholder="Device Code">
-
-                                <span id="device_code_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="ip_address" class="form-label">Ip Address <span class="text-danger">*</span></label>
-                                <input class="form-control" id="ip_address" type="text" name="ip_address" placeholder="Ip Address">
-
-                                <span id="ip_address_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="mb-3">
@@ -150,8 +141,6 @@
                             </div>
                         </form>
                     </div>
-
-
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
@@ -187,31 +176,23 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label" for="up_device_name">Device Name <span class="text-danger">*</span></label>
+                                <select class="form-select" name="device_id" id="up_device_name">
+                                    <option value="0" selected disabled>-- Selected --</option>
+                                    @foreach ($devices as $row)
+                                        <option value="{{ $row->id }}">{{ $row->device_name }}</option>
+                                    @endforeach
+                                </select>
+
+                                <span id="up_device_name_validate" class="text-danger mt-1"></span>
+                            </div>
+                            
+
+                            <div class="mb-3">
                                 <label for="up_terminal_name" class="form-label">Terminal Name <span class="text-danger">*</span></label>
-                                <input class="form-control" id="up_terminal_name" type="text" name="up_terminal_name" placeholder="Device Name">
+                                <input class="form-control" id="up_terminal_name" type="text" name="terminal_name" placeholder="Terminal Name">
 
                                 <span id="up_terminal_name_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="up_terminal_no" class="form-label">Terminal No <span class="text-danger">*</span></label>
-                                <input class="form-control" id="up_terminal_no" type="text" name="up_terminal_no" placeholder="Terminal No">
-
-                                <span id="up_terminal_no_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="up_device_code" class="form-label">Device Code <span class="text-danger">*</span></label>
-                                <input class="form-control" id="up_device_code" type="text" name="device_code" placeholder="Device Code">
-
-                                <span id="up_device_code_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="up_ip_address" class="form-label">Ip Address <span class="text-danger">*</span></label>
-                                <input class="form-control" id="up_ip_address" type="text" name="up_ip_address" placeholder="Ip Address">
-
-                                <span id="up_ip_address_validate" class="text-danger validation-error mt-1"></span>
                             </div>
 
                             <div class="mb-3">
@@ -224,7 +205,7 @@
 
                             <div class="d-flex justify-content-end align-items-center">
                                 <button type="button" class="btn btn-secondary waves-effect me-3"
-                                        data-bs-dismiss="modal">Close
+                                    data-bs-dismiss="modal">Close
                                 </button>
 
                                 <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
@@ -255,19 +236,20 @@
                         </div>
 
                         <div class="view_modal_content">
+                            <label>Device Name : </label>
+                            <span class="text-dark" id="view_device_name"></span>
+                        </div>
+
+                        <div class="view_modal_content">
                             <label>Terminal Name : </label>
                             <span class="text-dark" id="view_terminal_name"></span>
                         </div>
 
                         <div class="view_modal_content">
-                            <label>Terminal No : </label>
-                            <span class="text-dark" id="view_terminal_no"></span>
+                            <label>Terminal Code : </label>
+                            <span class="text-dark" id="view_terminal_code"></span>
                         </div>
 
-                        <div class="view_modal_content">
-                            <label>Device Code : </label>
-                            <span class="text-dark" id="view_device_code"></span>
-                        </div>
 
                         <div class="view_modal_content">
                             <label>Ip Address : </label>
@@ -301,10 +283,64 @@
 @push('add-js')
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            $('#branch_name').change(function () {  
+                let branch_id = $(this).val();
+        
+                $.ajax({    
+                    url: "{{ route('admin.get.branch.devices') }}",
+                    type: "GET",
+                    data: {
+                        branch_id: branch_id
+                    },  
+                    success: function (response) {   
+                        $('#device_name').html(`
+                            <option value="" selected disabled>
+                                -- Selected --
+                            </option>
+                        `);
+                        $.each(response.devices, function (index, row) {
+                            $('#device_name').append(`
+                                <option value="${row.id}">
+                                    ${row.device_name}
+                                </option>
+                            `);
+                        });
+                    }
+                });
+            });
+
+            $('#up_branch_name').change(function () {  
+                let branch_id = $(this).val();
+        
+                $.ajax({    
+                    url: "{{ route('admin.get.branch.devices') }}",
+                    type: "GET",
+                    data: {
+                        branch_id: branch_id
+                    },  
+                    success: function (response) {   
+                        $('#up_device_name').html(`
+                            <option value="" selected disabled>
+                                -- Selected --
+                            </option>
+                        `);
+                        $.each(response.devices, function (index, row) {
+                            $('#up_device_name').append(`
+                                <option value="${row.id}">
+                                    ${row.device_name}
+                                </option>
+                            `);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 
     <script>
         $(document).ready(function () {
-
             // Show Data through Datatable
             let datatables = $('#terminalTable').DataTable({
                 order: [[0, 'desc']],
@@ -323,13 +359,13 @@
                         data: 'branch_name',
                     },
                     {
+                        data: 'device_name',
+                    },
+                    {
                         data: 'terminal_name',
                     },
                     {
-                        data: 'terminal_no',
-                    },
-                    {
-                        data: 'device_code',
+                        data: 'terminal_code',
                     },
                     {
                         data: 'ip_address',
@@ -424,10 +460,8 @@
                         let error = err.responseJSON.errors;
 
                         $('#branch_name_validate').empty().html(error.branch_id);
+                        $('#device_name_validate').empty().html(error.device_id);
                         $('#terminal_name_validate').empty().html(error.terminal_name);
-                        $('#terminal_no_validate').empty().html(error.terminal_no);
-                        $('#device_code_validate').empty().html(error.device_code);
-                        $('#ip_address_validate').empty().html(error.ip_address);
                         $('#status_validate').empty().html(error.status);
 
                         swal.fire({
@@ -454,14 +488,12 @@
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
-                        // console.log(data.id);
+                        console.log(data);
 
                         $('#up_id').val(data.id);
                         $('#up_branch_name').val(data.branch_id);
+                        $('#up_device_name').val(data.device_id);
                         $('#up_terminal_name').val(data.terminal_name);
-                        $('#up_terminal_no').val(data.terminal_no);
-                        $('#up_device_code').val(data.device_code);
-                        $('#up_ip_address').val(data.ip_address);
                         $('#up_status').val(data.status);
                     },
                     error: function (error) {
@@ -503,10 +535,8 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
                         $('#up_branch_name_validate').empty().html(error.branch_id);
+                        $('#up_device_name_validate').empty().html(error.device_id);
                         $('#up_terminal_name_validate').empty().html(error.terminal_name);
-                        $('#up_terminal_no_validate').empty().html(error.terminal_no);
-                        $('#up_device_code_validate').empty().html(error.device_code);
-                        $('#up_ip_address_validate').empty().html(error.ip_address);
 
                         swal.fire({
                             title: "Failed",
@@ -578,9 +608,9 @@
                         let data = res.success;
 
                         $('#view_branch_name').html(data.branch_name);
+                        $('#view_device_name').html(data.device_names);
                         $('#view_terminal_name').html(data.terminal_name);
-                        $('#view_terminal_no').html(data.terminal_no);
-                        $('#view_device_code').html(data.device_code);
+                        $('#view_terminal_code').html(data.terminal_code);
                         $('#view_ip_address').html(data.ip_address);
                         $('#created_date').html(res.created_date);
                         $('#updated_date').html(res.updated_date);

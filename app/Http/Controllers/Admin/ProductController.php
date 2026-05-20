@@ -75,10 +75,8 @@ class ProductController extends Controller
         $childCategories      = ChildCategory::get_data();
         $brands               = Brand::get_data();
         $units                = Unit::get_data();
-        $warranties           = Warranty::get_data();
         $tax_rates            = TaxRate::get_data();
-        $variant_values       = VariantValue::where('status', 1)->get();
-        return view('admin.pages.product.create', compact('categories', 'subCategories', 'childCategories', 'brands', 'tax_rates', 'warranties', 'units', 'variant_values'));
+        return view('admin.pages.product.create', compact('categories', 'subCategories', 'childCategories', 'brands', 'tax_rates', 'units'));
     }
 
     public function getData(Request $request)
@@ -90,13 +88,7 @@ class ProductController extends Controller
                     ->leftJoin('subcategories', 'subcategories.id', 'products.subCategory_id')
                     ->leftJoin('child_categories', 'child_categories.id', 'products.childCategory_id')
                     ->leftJoin('brands', 'brands.id', 'products.brand_id')
-                    ->leftJoin('units', 'units.id', 'products.unit_id')
-                    ->leftJoin(
-                        DB::raw('(SELECT product_id, SUM(qty) as variant_total_qty 
-                                  FROM product_variants 
-                                  GROUP BY product_id) as pv'),
-                        'pv.product_id','=','products.id'
-                    );
+                    ->leftJoin('units', 'units.id', 'products.unit_id');
                    
                     // Category
                     if( !empty($request->category_id) ){
@@ -111,12 +103,6 @@ class ProductController extends Controller
                     // Brand
                     if( !empty($request->brand_id) ){
                         $query->where('products.brand_id', $request->brand_id);
-                    }
-
-                    if( $request->filled(['min_qty', 'max_qty']) ) {
-                        $query->whereBetween(
-                            DB::raw('COALESCE(pv.variant_total_qty, products.qty)'),
-                            [$request->min_qty, $request->max_qty]);
                     }
 
                     // Date Range created_at
@@ -137,16 +123,6 @@ class ProductController extends Controller
                         $query->whereIn('products.created_by', $request->admin_user);
                     }
 
-                    // Product Variant
-                    if (!empty($request->product_variant)) {
-                        $query->whereIn('products.has_variant', $request->product_variant);
-                    }
-
-                    // Display Ecommerce
-                    if (!empty($request->display_ecom)) {
-                        $query->whereIn('products.display_ecommerce', $request->display_ecom);
-                    }
-
                     // Status
                     if (!empty($request->status)) {
                         $query->whereIn('products.status', $request->status);
@@ -156,9 +132,7 @@ class ProductController extends Controller
                     'categories.category_name as cat_name', 
                     'subcategories.subcategory_name as subCat_name', 
                     'child_categories.name as childCat_name', 
-                    'brands.brand_name', 'units.short_name',
-                    DB::raw('pv.variant_total_qty as variant_qty'),
-                    DB::raw('COALESCE(pv.variant_total_qty, products.qty) as final_qty'))
+                    'brands.brand_name', 'units.short_name')
                     ->orderBy('products.id', "DESC")
                     ->get();
 
@@ -170,26 +144,12 @@ class ProductController extends Controller
                         <span class="checkmarks"></span>
                     </label>';
             })
-            ->addColumn('quantity', function ($product) {
-                return '<div class="">
-                       <h6><span class="text-dark">'. $product->final_qty .' '. Str::title($product->short_name) .' </span></h6>
-                </div>';
-            })
             ->addColumn('product_name', function ($product) {
-                $icon = '';
-
-                if (!is_null($product->variant_qty)) {
-                    $icon = '<i data-bs-toggle="tooltip" data-bs-custom-class="tooltip-dark" data-bs-placement="top" data-bs-original-title="Product Variants"
-                        class="ti ti-info-circle cursor-pointer"
-                        style="font-size: 18px;"></i>';
-                }
-
                 return '<div class="copy-row">
                     <h6 style="color: #1e857a;" class="mb-1"><strong>'. $product->name .'</strong></h6>
 
                     <div class="d-flex align-items-center gap-1 mb-1">
                         <span class="badge badge-sm bg-primary">New</span>
-                        <span class="variant_icon" data-id='. $product->id .'>'.$icon.'</span>
                     </div>
                 </div>';
             })
@@ -244,8 +204,6 @@ class ProductController extends Controller
             ->addColumn('action', function ($product) {
                 $actionHtml = Blade::render('<div class="copy-row">
                     <div class="all_icons mb-2">
-                        <i class="ti ti-settings cursor-pointer text-secondary" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="Multi Product Image"></i>
-
                         <a href="'. route('admin.product.show', $product->id) .'">
                             <i data-tooltip="tip1" class="ti ti-eye cursor-pointer tooltip-trigger"
                             data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="View"></i>
@@ -266,7 +224,7 @@ class ProductController extends Controller
                 </div>', ['product' => $product]);
                 return $actionHtml;
             })
-            ->rawColumns(['checkbox', 'product_name', 'quantity', 'date_info', 'product_details', 'product_img', 'status', 'action'])
+            ->rawColumns(['checkbox', 'product_name', 'date_info', 'product_details', 'product_img', 'status', 'action'])
             ->make(true);
     }
 
@@ -329,51 +287,23 @@ class ProductController extends Controller
             $product->name                      = $request->name;
             $product->slug                      = Str::slug($request->name);
             $product->sku                       = $request->sku;
-            $product->barcode                   = 730 . rand(100000000, 999999999);
+            $product->barcode                   = $request->barcode;
             $product->unit_id                   = $request->unit_id;
-            // $product->vender_id                 = 1;  
+            $product->vender_id                 = 1;  
             $product->category_id               = $request->category_id;
             $product->subCategory_id            = $request->subCategory_id;
             $product->childCategory_id          = $request->childCategory_id;
             $product->brand_id                  = $request->brand_id;
-            $product->warranties_id             = $request->warranties_id;
-            $product->qty                       = $request->qty;
-            $product->alert_qty                 = $request->alert_qty;
-            $product->stock_type                = $request->stock_type ?? "in_stock";
             $product->apply_tax_percentage      = $request->apply_tax_percentage;
             $product->apply_tax_type            = $request->apply_tax_type;
             $product->apply_tax_for             = $request->apply_tax_for;
-
-            $product->video_link                = $request->video_link;
             $product->tags                      = $request->tags;
-            $product->purchase_price            = $request->purchase_price;
-            $product->profit_margin             = $request->profit_margin;
-            $product->selling_price             = $request->selling_price;
-            $product->discount_type             = $request->discount_type;
-
-            if( $request->discount_type === "none" ){
-                $product->discount_value        = null;
-            }
-
-            $product->has_variant               = $request->has_variant;
-            $product->discount_value            = $request->discount_value;
-            $product->discount_date             = $request->discount_date;
-            $product->short_description         = $request->short_description;
-            $product->long_description          = $request->long_description;
-            $product->display_ecommerce         = $request->display_ecommerce;
-            $product->return_policy             = $request->return_policy;
-            $product->shipping_return           = $request->shipping_return;   
             $product->is_sale                   = $request->is_sale;
-            $product->is_top                    = $request->is_top ?? 0;
-            $product->is_best                   = $request->is_best ?? 0;
-            $product->is_featured               = $request->is_featured;
             $product->is_approved               = 0;  // Note 0=Not Approve, 1=Approve
             $product->status                    = 1;  
             $product->created_by                = Auth::guard('admin')->id();  
             $product->created_at                = now();   
             $product->updated_at                = now();   
-            $product->seo_title                 = $request->seo_title ?? '';
-            $product->seo_description           = $request->seo_description ?? '';
     
             // Handle image with ImageUploadTraits function
             $uploadImage                        = $this->imageUpload($request, 'thumb_image', 'product');
@@ -381,39 +311,6 @@ class ProductController extends Controller
     
             // dd($product);
             $product->save();
-
-            // Check if product has variants and request has variant data
-            $hasVariants = $request->has('variant_name') && $request->has('variant_id') 
-               && count(array_filter($request->variant_name)) > 0;
-
-            // Product Variants add
-            if( $product->has_variant === 'yes' && $hasVariants ){
-                foreach ($request->variant_value as $index => $variant_value) {
-                    if (!empty($variant_value)) {
-                        ProductVariant::create([
-                            'product_id'        => $product->id,
-                            'variant_id'        => $request->variant_id[$index],
-                            'variant_name'      => $request->variant_name[$index],
-                            'variant_value'     => $variant_value,
-                            'variant_code'      => $request->variant_codes[$index],
-                            'qty'               => $request->variant_qty[$index],
-                            'alert_qty'         => $request->variant_alert_qty[$index],
-                            'purchase_price'    => $request->variant_costs[$index],
-                            'profit_margin'     => $request->variant_profits[$index],
-                            'selling_price'     => $request->variant_prices[$index],
-                            'variant_dis_type'  => $request->variant_dis_type[$index],
-                            'variant_dis_value' => $request->variant_dis_value[$index],
-                            'variant_dis_date'  => $request->variant_dis_date[$index],
-                            'status'            => 1,
-                        ]);
-                    }
-                }
-            }
-            else {
-                // No valid variants were provided, update product's has_variant to 'no'
-                $product->has_variant = 'no';
-                $product->save();
-            }
         }
 
         catch(Exception $ex){
@@ -450,12 +347,9 @@ class ProductController extends Controller
         $childCategories      = ChildCategory::get_data();
         $brands               = Brand::get_data();
         $units                = Unit::get_data();
-        $warranties           = Warranty::get_data();
         $tax_rates            = TaxRate::get_data();
-        $variant_values       = VariantValue::where('status', 1)->get();
-        $variants             = ProductVariant::where('product_id', $product->id)->get();
 
-        return view('admin.pages.product.edit', compact('categories', 'subCategories', 'childCategories', 'brands', 'tax_rates', 'warranties', 'units', 'product', 'variants', 'variant_values'));
+        return view('admin.pages.product.edit', compact('categories', 'subCategories', 'childCategories', 'brands', 'tax_rates', 'units', 'product',));
     }
 
     /**
@@ -476,48 +370,21 @@ class ProductController extends Controller
             $product->name                      = $request->name;
             $product->slug                      = Str::slug($request->name);
             $product->sku                       = $request->sku;
-            $product->barcode                   = 730 . rand(100000000, 999999999);
+            $product->barcode                   = $request->barcode;
             $product->unit_id                   = $request->unit_id;
-            // $product->vender_id                 = 1;  
+            $product->vender_id                 = 1;  
             $product->category_id               = $request->category_id;
             $product->subCategory_id            = $request->subCategory_id;
             $product->childCategory_id          = $request->childCategory_id;
             $product->brand_id                  = $request->brand_id;
-            $product->warranties_id             = $request->warranties_id;
-            $product->qty                       = $request->qty;
-            $product->alert_qty                 = $request->alert_qty;
-            $product->stock_type                = $request->stock_type ?? "in_stock";
             $product->apply_tax_percentage      = $request->apply_tax_percentage;
             $product->apply_tax_type            = $request->apply_tax_type;
             $product->apply_tax_for             = $request->apply_tax_for;
-
-            $product->video_link                = $request->video_link;
             $product->tags                      = $request->tags;
-            $product->purchase_price            = $request->purchase_price;
-            $product->profit_margin             = $request->profit_margin;
-            $product->selling_price             = $request->selling_price;
-            $product->discount_type             = $request->discount_type;
-
-            if( $request->discount_type === "none" ){
-                $product->discount_value        = null;
-            }
-
-            $product->has_variant               = $request->has_variant;
-            $product->discount_value            = $request->discount_value;
-            $product->discount_date             = $request->discount_date;
-            $product->short_description         = $request->short_description;
-            $product->long_description          = $request->long_description;
-            $product->display_ecommerce         = $request->display_ecommerce;
-            $product->return_policy             = $request->return_policy;
-            $product->shipping_return           = $request->shipping_return;   
             $product->is_sale                   = $request->is_sale;
-            $product->is_top                    = $request->is_top ?? 0;
-            $product->is_best                   = $request->is_best ?? 0;
-            $product->is_featured               = $request->is_featured;
-            $product->is_approved               = 0;  // Note 0=Not Approve, 1=Approve
+            $product->is_approved               = $request->is_approved ?? 0;  // Note 0=Not Approve, 1=Approve
             $product->status                    = 1;  
-            $product->created_by                = Auth::guard('admin')->id();  
-            $product->created_at                = now();   
+            $product->updated_by                = Auth::guard('admin')->id();  
             $product->updated_at                = now();   
             $product->seo_title                 = $request->seo_title ?? '';
             $product->seo_description           = $request->seo_description ?? '';
@@ -528,51 +395,7 @@ class ProductController extends Controller
         
             // dd($product);
             $product->save();
-
-            $hasVariants = $request->has('variant_name') && $request->has('variant_id') &&
-               count(array_filter($request->variant_name)) > 0;
-
-            if ($product->has_variant === 'yes' && $hasVariants) {
-                $variantIds = [];
-                foreach ($request->variant_value as $index => $variant_value) {
-                    if (!empty($variant_value)) {
-                        $variant = ProductVariant::updateOrCreate(
-                            // Condition (find by ID if exists)
-                            ['id' => $request->variant_row_id[$index] ?? null],
-                            // Data to update or insert
-                            [
-                                'product_id'        => $product->id,
-                                'variant_id'        => $request->variant_id[$index],
-                                'variant_name'      => $request->variant_name[$index],
-                                'variant_value'     => $variant_value,
-                                'variant_code'      => $request->variant_codes[$index],
-                                'qty'               => $request->variant_qty[$index],
-                                'alert_qty'         => $request->variant_alert_qty[$index],
-                                'purchase_price'    => $request->variant_costs[$index],
-                                'profit_margin'     => $request->variant_profits[$index],
-                                'selling_price'     => $request->variant_prices[$index],
-                                'variant_dis_type'  => $request->variant_dis_type[$index],
-                                'variant_dis_value' => $request->variant_dis_value[$index],
-                                'variant_dis_date'  => $request->variant_dis_date[$index],
-                                'status'            => 1,
-                            ]
-                        );
-                        $variantIds[] = $variant->id;
-                    }
-                }
-
-                // 🔥 Delete removed variants
-                ProductVariant::where('product_id', $product->id)
-                    ->whereNotIn('id', $variantIds)
-                    ->delete();
-            }
-            else {
-                // No variants → remove all
-                ProductVariant::where('product_id', $product->id)->delete();
-                $product->has_variant = 'no';
-                $product->save();
-            }
-
+        
             $agent = new Agent();
             // Get changed fields
             $changes = $product->getChanges(); // only changed fields
@@ -622,8 +445,6 @@ class ProductController extends Controller
         if (!$this->user || !$this->user->can('delete.product')) {
             throw UnauthorizedException::forPermissions(['delete.product']);
         }
-        // 1️⃣ Delete all variants
-        ProductVariant::where('product_id', $product->id)->delete();
 
         if ($product->thumb_image) {
             if (file_exists($product->thumb_image)) {
@@ -638,25 +459,6 @@ class ProductController extends Controller
     }
 
 
-    public function product_variant_show(Request $request)
-    {
-        // dd($request->id);
-        $product = Product::leftJoin('categories', 'categories.id', 'products.category_id')
-                ->leftJoin('subcategories', 'subcategories.id', 'products.subCategory_id')
-                ->leftJoin('child_categories', 'child_categories.id', 'products.childCategory_id')
-                ->leftJoin('brands', 'brands.id', 'products.brand_id')
-                ->leftJoin('units', 'units.id', 'products.unit_id')
-                ->select('products.*', 'categories.category_name as cat_name', 'subcategories.subcategory_name as subCat_name', 'child_categories.name as childCat_name', 'brands.brand_name', 'units.short_name')
-                ->where('products.id', $request->id)
-                ->first();
-
-        $variants = ProductVariant::where('product_id', $request->id)->get();
-        return response()->json([
-            'success' => $variants,
-            'product' => $product,
-        ]);
-    }
-
     public function product_bulk_action(Request $request)
     {
         $ids = $request->ids;
@@ -668,7 +470,6 @@ class ProductController extends Controller
             DB::transaction(function () use ($ids) {
 
                 // 1️⃣ Delete all variants
-                ProductVariant::whereIn('product_id', $ids)->delete();
                 ProductUpdate::whereIn('product_id', $ids)->delete();
             
                 // 2️⃣ Fetch products to delete their images
@@ -711,28 +512,16 @@ class ProductController extends Controller
                 ->leftJoin('child_categories', 'child_categories.id', 'products.childCategory_id')
                 ->leftJoin('brands', 'brands.id', 'products.brand_id')
                 ->leftJoin('units', 'units.id', 'products.unit_id')
-                ->leftJoin('warranties', 'warranties.id', 'products.warranties_id')
-                ->leftJoin(
-                    DB::raw('(SELECT product_id, SUM(qty) as variant_total_qty 
-                            FROM product_variants 
-                            GROUP BY product_id) as pv'),
-                    'pv.product_id','=','products.id'
-                )
                 ->select('products.*', 
                     'categories.category_name as cat_name', 
                     'subcategories.subcategory_name as subCat_name', 
                     'child_categories.name as childCat_name', 
-                    'brands.brand_name', 'units.short_name',
-                    'warranties.duration', 'warranties.period',
-                    DB::raw('pv.variant_total_qty as variant_qty'),
-                    DB::raw('COALESCE(pv.variant_total_qty, products.qty) as final_qty'))
+                    'brands.brand_name', 'units.short_name')
                 ->where('products.id', $id)
                 ->first();
 
-        $variants       = ProductVariant::where('product_id', $id)->get();
         $productUpdates = ProductUpdate::where('product_id', $id)->get();
-
-        return view('admin.pages.product.view', compact('product', 'variants', 'productUpdates'));
+        return view('admin.pages.product.view', compact('product', 'productUpdates'));
     }
 
 

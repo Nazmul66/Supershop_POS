@@ -105,28 +105,6 @@
                       <button class="nav-link active" id="pills-main-tab" data-bs-toggle="pill" data-bs-target="#pills-main" type="button" role="tab" aria-controls="pills-main" aria-selected="true">Main Info</button>
                     </li>
 
-                    @if (!empty($product->variant_qty))
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pills-product-variants-tab" data-bs-toggle="pill" data-bs-target="#pills-product-variants" type="button" role="tab" aria-controls="pills-product-variants" aria-selected="false">Product Variants</button>
-                        </li>
-                    @endif
-
-                    <li class="nav-item" role="presentation">
-                      <button class="nav-link" id="pills-long-description-tab" data-bs-toggle="pill" data-bs-target="#pills-long-description" type="button" role="tab" aria-controls="pills-long-description" aria-selected="false">Long Description</button>
-                    </li>
-
-                    <li class="nav-item" role="presentation">
-                      <button class="nav-link" id="pills-return-policy-tab" data-bs-toggle="pill" data-bs-target="#pills-return-policy" type="button" role="tab" aria-controls="pills-return-policy" aria-selected="false">Return Policy</button>
-                    </li>
-
-                    <li class="nav-item" role="presentation">
-                      <button class="nav-link" id="pills-shipping-return-tab" data-bs-toggle="pill" data-bs-target="#pills-shipping-return" type="button" role="tab" aria-controls="pills-shipping-return" aria-selected="false">Shipping Return</button>
-                    </li>
-
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-video-link-tab" data-bs-toggle="pill" data-bs-target="#pills-video-link" type="button" role="tab" aria-controls="pills-video-link" aria-selected="false">Video Link</button>
-                    </li>
-
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="pills-log-tab" data-bs-toggle="pill" data-bs-target="#pills-log" type="button" role="tab" aria-controls="pills-log" aria-selected="false">Logs</button>
                     </li>
@@ -162,6 +140,19 @@
                                             <td class="fw-bold">Slug</td>
                                             <td>{{ $product->slug }}</td>
                                         </tr>
+
+                                        <tr>
+                                            <td class="fw-bold">Barcode</td>
+                                            <td>
+                                                <span>{!! DNS1D::getBarcodeHTML($product->barcode, 'EAN13', 2, 50, 'black', true) !!}</span>
+                                                <p>Code: {{ $product->barcode }}</p>
+                                            </td>
+                                        </tr>
+        
+                                        <tr>
+                                            <td class="fw-bold">SKU</td>
+                                            <td>{{ $product->sku }}</td>
+                                        </tr>
         
                                         <tr>
                                             <td class="fw-bold">Category Name</td>
@@ -192,13 +183,6 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="fw-bold">Warranty Name</td>
-                                            <td>
-                                                <span >{{ $product->duration .' '. $product->period}}</span>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
                                             <td class="fw-bold">Product Type</td>
                                             <td>
                                                 <span >New</span>
@@ -209,68 +193,6 @@
                                             <td class="fw-bold">Total Product Sold</td>
                                             <td>
                                                 <span class="badge bg-secondary">{{ $product->product_sold }}</span>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="fw-bold">Total Product View</td>
-                                            <td>
-                                                <span class="badge bg-secondary">{{ $product->product_view }}</span>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="fw-bold">Is Sale Product</td>
-                                            <td>
-                                                @if ( $product->is_top == 1)
-                                                    <span class="badge badge-md bg-primary">Yes</span>
-                                                @else
-                                                   <span class="badge badge-md bg-danger">No</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-        
-                                        <tr>
-                                            <td class="fw-bold">Is Top Product</td>
-                                            <td>
-                                                @if ( $product->is_top == 1)
-                                                    <span class="badge badge-md bg-primary">Yes</span>
-                                                @else
-                                                   <span class="badge badge-md bg-danger">No</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-        
-                                        <tr>
-                                            <td class="fw-bold">Is Best Product</td>
-                                            <td>
-                                                @if ( $product->is_best == 1)
-                                                    <span class="badge badge-md bg-primary">Yes</span>
-                                                @else
-                                                   <span class="badge badge-md bg-danger">No</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-        
-                                        <tr>
-                                            <td class="fw-bold">Is Featured Product</td>
-                                            <td>
-                                                @if ( $product->is_featured == 1)
-                                                   <span class="badge badge-md bg-primary">Yes</span>
-                                                @else
-                                                   <span class="badge badge-md bg-danger">No</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="fw-bold">Display Ecommerce</td>
-                                            <td>
-                                                @if ( $product->display_ecommerce == 1)
-                                                   <span class="badge badge-md bg-primary">Yes</span>
-                                                @else
-                                                   <span class="badge badge-md bg-danger">No</span>
-                                                @endif
                                             </td>
                                         </tr>
         
@@ -310,11 +232,6 @@
                                         </tr>
         
                                         <tr>
-                                            <td class="fw-bold">Short Description</td>
-                                            <td>{{ $product->short_description }}</td>
-                                        </tr>
-
-                                        <tr>
                                             <td class="fw-bold">Created Date</td>
                                             <td>{{ date('M d, Y - h:i:s A', strtotime($product->created_at)) }}</td>
                                         </tr>
@@ -334,28 +251,6 @@
                                                         <p class="mb-0">{{ $maskMail }}</p>
                                                     </div>
                                                 </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="fw-bold">Meta Title</td>
-                                            <td>
-                                                @if ( !empty($product->seo_title) )
-                                                    <span class="text-dark">{{ $product->seo_title }}</span>
-                                                @else
-                                                   <span class="text-danger">N/A</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-        
-                                        <tr>
-                                            <td class="fw-bold">Meta Description</td>
-                                            <td>
-                                                @if ( !empty($product->seo_description) )
-                                                    <span class="text-dark">{{ $product->seo_description }}</span>
-                                                @else
-                                                   <span class="text-danger">N/A</span>
-                                                @endif
                                             </td>
                                         </tr>
         
@@ -386,112 +281,7 @@
                             </div>
                         </div>
                     </div>    
-        
-                    <div class="card cards">
-                        <div class="card-body">
-                            <h4 class="mb-3">Product Management</h4>
-                            <div class="table-responsive">
-                                <table class="table table-bordered border-primary mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 40%">Element Name</th>
-                                            <th style="width: 60%">Element Value</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="fw-bold">Barcode</td>
-                                            <td>
-                                                <span>{!! DNS1D::getBarcodeHTML($product->barcode, 'EAN13', 2, 50, 'black', true) !!}</span>
-                                                <p>Code: {{ $product->barcode }}</p>
-                                            </td>
-                                        </tr>
-        
-                                        @if (empty($product->variant_qty))
-                                            <tr>
-                                                <td class="fw-bold">SKU</td>
-                                                <td>{{ $product->sku }}</td>
-                                            </tr>
-                                        @endif
-
-                                        @if (empty($product->variant_qty))
-                                            <tr>
-                                                <td class="fw-bold">Quantity</td>
-                                                <td>{{ $product->final_qty .' '. Str::title($product->short_name) }}</td>
-                                            </tr>
-                                        @endif
-
-                                        @if (empty($product->variant_qty))
-                                            <tr>
-                                                <td class="fw-bold">Alert Quantity</td>
-                                                <td>{{ $product->alert_qty .' '. Str::title($product->short_name) }}</td>
-                                            </tr>
-                                        @endif
-        
-                                        @if (empty($product->variant_qty))
-                                            <tr>
-                                                <td class="fw-bold">Purchase Price</td>
-                                                <td>{{ getSetting()->currency_name }} {{ $product->purchase_price }} </td>
-                                            </tr>
-                                        @endif
-
-                                        @if (empty($product->variant_qty))
-                                            <tr>
-                                                <td class="fw-bold">Profit Margin</td>
-                                                <td>{{ $product->profit_margin }}% </td>
-                                            </tr>
-                                        @endif
-        
-                                        @if (empty($product->variant_qty))
-                                            <tr>
-                                                <td class="fw-bold">Selling Price</td>
-                                                <td>{{ getSetting()->currency_name }} {{ $product->selling_price }} </td>
-                                            </tr>
-                                        @endif
-        
-                                        @if (empty($product->variant_qty))
-                                            <tr>
-                                                <td class="fw-bold">Discount Type</td>
-                                                <td>{{ ucwords($product->discount_type) }}</td>
-                                            </tr>
-                                        @endif
-        
-                                        @if (empty($product->variant_qty))
-                                            <tr>
-                                                <td class="fw-bold">Discount Value</td>
-                                                <td>
-                                                    @if ( $product->discount_type === "amount" )
-                                                    {{ getSetting()->currency_name }} {{ $product->discount_value }}
-                                                    @elseif ( $product->discount_type === "percent" )
-                                                        {{ $product->discount_value }}%
-                                                    @else
-                                                        <span class="text-danger">N/A</span>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endif
-
-                                        @if (empty($product->variant_qty))
-                                            <tr>
-                                                <td class="fw-bold">Discount Date</td>
-                                                <td>
-                                                    @php
-                                                        $dates = explode(' - ', $product->discount_date);
-                                                    @endphp
-                                                    @if ( !empty($product->discount_date) )
-                                                        <span><strong>Start:</strong> {{ date('M d, Y - h:i:s A', strtotime($dates[0])) }}</span> <br />
-                                                        <span><strong>End:</strong> {{ date('M d, Y - h:i:s A', strtotime($dates[1])) }}</span>
-                                                    @else
-                                                        <span class="text-danger">N/A</span>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+    
                 </div>
             </div>
         </div>

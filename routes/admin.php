@@ -219,7 +219,6 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/branch/view/{id}', [BranchController::class, 'branchView'])->name('branch.view');
     Route::get('/branch/pdf', [BranchController::class, 'allBranchPdf'])->name('branch.pdf');
 
-
     //______ Device _____//
     Route::resource('/device', DeviceController::class)->names('device')->except('show');
     Route::get('/device-data', [DeviceController::class, 'getData'])->name('device-data');

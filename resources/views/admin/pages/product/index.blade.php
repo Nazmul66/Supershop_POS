@@ -224,13 +224,13 @@
             </div>
         </div>
         <ul class="table-top-head">
-            @if(auth("admin")->user()->can("pdf.brand"))
+            @if(auth("admin")->user()->can("pdf.product"))
                 <li>
                     <a data-bs-toggle="tooltip" data-bs-placement="top" href="{{ route('admin.faq.pdf') }}" aria-label="Pdf" data-bs-original-title="Pdf"><img src="{{ asset('public/admin/assets/img/icons/pdf.svg') }}" alt="img"></a>
                 </li>
             @endif
 
-            @if(auth("admin")->user()->can("excel.brand"))
+            @if(auth("admin")->user()->can("excel.product"))
                 <li>
                     <a data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Excel" data-bs-original-title="Excel"><img src="{{ asset('public/admin/assets/img/icons/excel.svg') }}" alt="img"></a>
                 </li>
@@ -258,7 +258,7 @@
                 </ul>
             </div> 
 
-            @if(auth("admin")->user()->can("create.brand"))
+            @if(auth("admin")->user()->can("create.product"))
                 <a href="{{ route('admin.product.create') }}" class="btn btn-teal"><i class="ti ti-circle-plus me-1"></i>Add Product</a>
              @endif
         </div>
@@ -283,7 +283,6 @@
                                 <th>Image</th>
                                 <th>Product Name</th>
                                 <th>Product Details</th>
-                                <th>Quantity</th>
                                 <th>Date Info</th>
                                 <th>Status</th>
                             </tr>
@@ -452,22 +451,6 @@
                 </div>
 
                 <div class="mb-4">
-                    <h4 class="text-dark mb-2" style="font-weight: 700;">Quantity</h4>
-
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="bg-input-field ">
-                            <label for="" class="form_labels">Min</label>
-                            <input type="number" id="min_qty" min="1" name="min_qty" class="form-control form_inputs" value="{{ request('min_qty') }}" placeholder="" />
-                        </div>
-
-                        <div class="bg-input-field ">
-                            <label for="" class="form_labels">Max</label>
-                            <input type="number" id="max_qty" min="1" name="max_qty" class="form-control form_inputs" value="{{ request('max_qty') }}" placeholder="" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
                     <h4 class="text-dark mb-2" style="font-weight: 700;">Creation Date Range</h4>
 
                     <div class="bg-input-field">
@@ -505,46 +488,6 @@
                     </div>
                 </div>
 
-                <div class="mb-4">
-                    <h4 class="text-dark mb-2" style="font-weight: 700;">Product Has Variant</h4>
-
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="form-check">
-                            <input class="form-check-input" name="product_variant[]" type="checkbox" value="yes" id="product_variant_yes" {{ in_array('yes', request('product_variant', [])) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="product_variant_yes">
-                                Yes
-                            </label>
-                        </div>
-        
-                        <div class="form-check">
-                            <input class="form-check-input" name="product_variant[]" type="checkbox" value="no" id="product_variant_no" {{ in_array('no', request('product_variant', [])) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="product_variant_no">
-                                No
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <h4 class="text-dark mb-2" style="font-weight: 700;">Display Ecommerce</h4>
-
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="display_ecom[]" value="1" id="dcom-yes" {{ in_array('1', request('display_ecom', [])) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="dcom-yes">
-                                Yes
-                            </label>
-                        </div>
-        
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="display_ecom[]" value="0" id="dcom-no" {{ in_array('0', request('display_ecom', [])) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="dcom-no">
-                                No
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="mb-5">
                     <h4 class="text-dark mb-2" style="font-weight: 700;">Product Status</h4>
 
@@ -573,47 +516,6 @@
                 </div>
             </form>
         </div> <!-- end offcanvas-body-->
-    </div>
-
-    {{-- Product Variant Modal --}}
-    <div id="variant_history" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
-    style="display: none;" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content modal_loader">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Product Variants</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="table-responsive pb-3">
-                        <table class="table table-hover table-nowrap mb-0">
-                            <thead>
-                                <tr>
-                                    <th>#Sl No.</th>
-                                    <th>Variant Name</th>
-                                    <th>Variant Weight</th>
-                                    <th>Variant Code</th>
-                                    <th>Qty</th>
-                                    <th>Alert Qty</th>
-                                    <th>Cost Price</th>
-                                    <th>Profit Margin</th>
-                                    <th>Selling Price</th>
-                                    <th>Discount Type</th>
-                                    <th>Discount Value</th>
-                                    <th>Discount Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-    
-                            <tbody id="t_product_variants">
-                            
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
     </div>
 
 @endsection
@@ -777,20 +679,14 @@
                                 }).get();
                         }
 
-                        let displayValues         = getCheckedValues('display_ecom');
-                        let productVariantValues = getCheckedValues('product_variant');
                         let statusValues          = getCheckedValues('status');
             
                         e.product_name     = $('#product_name').val();
                         e.category_id      = $('#category_id').val();
                         e.subCategory_id   = $('#subCategory_id').val();
                         e.brand_id         = $('#brand_id').val();
-                        e.min_qty          = $('#min_qty').val();
-                        e.max_qty          = $('#max_qty').val();
                         e.creation_date    = $('#creation_date').val();
                         e.admin_user       = $('#admin_user').val(); // array (select2 multiple)
-                        e.product_variant  = productVariantValues;
-                        e.display_ecom     = displayValues;
                         e.status           = statusValues;
                     }
                 },
@@ -817,9 +713,6 @@
                     },
                     {
                         data: 'product_details',
-                    },
-                    {
-                        data: 'quantity',
                     },
                     {
                         data: 'date_info',
@@ -913,12 +806,6 @@
                 if ($('#brand_id').val())
                     params.append('brand_id', $('#brand_id').val());
 
-                if ($('#min_qty').val())
-                    params.append('min_qty', $('#min_qty').val());
-
-                if ($('#max_qty').val())
-                    params.append('max_qty', $('#max_qty').val());
-
                 if ($('#creation_date').val())
                     params.append('creation_date', $('#creation_date').val());
 
@@ -928,14 +815,6 @@
                     adminUsers.forEach(val => params.append('admin_user[]', val));
 
                 // Checkboxes
-                $('input[name="product_variant[]"]:checked').each(function () {
-                    params.append('product_variant[]', $(this).val());
-                });
-
-                $('input[name="display_ecom[]"]:checked').each(function () {
-                    params.append('display_ecom[]', $(this).val());
-                });
-
                 $('input[name="status[]"]:checked').each(function () {
                     params.append('status[]', $(this).val());
                 });
@@ -979,84 +858,6 @@
                 // Reload Datatables
                 datatables.ajax.reload();
             });
-
-            // Product Variant Show
-            $(document).on("click", '.variant_icon', function (e) {
-                let id = $(this).attr('data-id');
-                // alert(id);
-
-                // Show the modal first
-                $('#variant_history').modal('show');
-
-                // Save original modal content to restore later
-                let originalContent = $('.modal_loader').html();
-
-                $.ajax({
-                    type: 'GET',
-                    url: "{{ route('admin.product-variant') }}",
-                    data: { id: id }, // send product id
-                    beforeSend: function() {
-                        // show loader
-                        $('#variant_history .modal-dialog')
-                            .removeClass('modal-lg') // remove large
-                            .addClass('modal-sm'); 
-
-                        $('.modal_loader').html(`
-                            <div class="loader_measurement">
-                                <div class="spinning_loader"</div>    
-                            </div>
-                        `);
-                    },
-                    success: function (res) {
-                        let data = res.success;
-                        let product = res.product;
-
-                        $('#variant_history .modal-dialog')
-                            .removeClass('modal-sm') // remove small
-                            .addClass('modal-lg'); 
-
-                        let html = '';
-
-                        if (data.length > 0) {
-                            data.forEach((v, index) => {
-                                html += `<tr>
-                                    <td>${index + 1}</td>
-                                    <td>${v.variant_name}</td>
-                                    <td>${v.variant_value} ${product.short_name ? product.short_name.charAt(0).toUpperCase() + product.short_name.slice(1): ''}</td>
-                                    <td>${v.variant_code}</td>
-                                    <td>${v.qty} ${product.short_name ? product.short_name.charAt(0).toUpperCase() + product.short_name.slice(1): ''}</td>
-                                    <td>${v.alert_qty} ${product.short_name ? product.short_name.charAt(0).toUpperCase() + product.short_name.slice(1): ''}</td>
-                                    <td>{{ getSetting()->currency_name }} ${v.purchase_price}</td>
-                                    <td>${v.profit_margin}%</td>
-                                    <td>{{ getSetting()->currency_name }} ${v.selling_price}</td>
-                                    <td>${v.variant_dis_type}</td>
-                                    <td>
-                                        ${v.variant_dis_type === "amount" 
-                                            ? `{{ getSetting()->currency_name }} ${v.variant_dis_value}` 
-                                            : v.variant_dis_type === "percent" 
-                                                ? `${v.variant_dis_value}%` 
-                                                : 'N/A'}
-                                        </td>
-                                    <td>${v.variant_dis_date}</td>
-                                    <td>${v.status == 1 ? '<button class="btn btn-success btn-sm">Active</button>' : '<button class="btn btn-success btn-sm">Deactive</button>'}</td>
-                                </tr>`;
-                            });
-                        } else {
-                            html = '<tr><td colspan="9" class="text-center">No variants found</td></tr>';
-                        }
-
-                        // Restore original modal content
-                        $('.modal_loader').html(originalContent);
-
-                        // Inject table rows
-                        $('#t_product_variants').html(html);
-                    },
-                    error: function (error) {
-                        console.log('error');
-                    }
-                    /* HTML: <div class="loader"></div> */
-                });
-            })
 
             // status updates
             $(document).on('click', '#status', function () {

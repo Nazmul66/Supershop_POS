@@ -119,6 +119,8 @@
                         @if(auth("admin")->user()->can("index.product"))
                             <li class="@yield('product')"><a href="{{ route('admin.product.index') }}"><i class="ti ti-box fs-16 me-2"></i><span>Product</span></a></li>
                         @endif
+                        
+                        <li class="@yield('product_branch')"><a href="{{ route('admin.product.branch.index') }}"><i class="ti ti-box fs-16 me-2"></i><span>Product Branch</span></a></li>
 
                         <li class="@yield('brand')"><a href="{{ route('admin.brand.index') }}"><i class="ti ti-triangles fs-16 me-2"></i><span>Brand</span></a></li>
 

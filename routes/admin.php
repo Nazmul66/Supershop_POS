@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\ProductCollectionController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductBranchController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomerAddressController;
@@ -270,6 +271,12 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::get('/product-variant', [ProductController::class, 'product_variant_show'])->name('product-variant');
     Route::post('/product-bulk-action', [ProductController::class, 'product_bulk_action'])->name('product-bulk-action');
     Route::post('/change-product-status', [ProductController::class, 'changeProductStatus'])->name('product.status');
+
+
+    //______ Product Branch _____//
+    Route::resource('/product-branch', ProductBranchController::class)->names('product.branch');
+    Route::get('/product-branch-data', [ProductBranchController::class, 'getData'])->name('product-branch-data');
+    Route::post('/change-product-branch-status', [ProductBranchController::class, 'changeProductBranchStatus'])->name('product.branch.status');
 
 
     //______ Country _____//

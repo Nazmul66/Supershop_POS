@@ -18,6 +18,10 @@
         .table tbody tr td {
             font-size: 13px !important;
         }
+        .form-select {
+            border-color: #aaa;
+            height: 35px;
+        }
     </style>
 @endpush
 
@@ -219,10 +223,10 @@
         <!-- Edit Modal -->
         <div id="editModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" data-bs-scroll="true"
              style="display: none;" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Update Device</h5>
+                        <h5 class="modal-title" id="myModalLabel">Update Branch Wise Product</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
 
@@ -233,37 +237,90 @@
 
                             <input type="text" name="id" id="up_id" hidden>
 
-                            <div class="mb-3">
-                                <label class="form-label" for="up_branch_name">Branch Name <span class="text-danger">*</span></label>
-                                <select class="form-select" name="branch_id" id="up_branch_name">
-                                    <option value="0" selected disabled>-- Selected --</option>
-                                    @foreach ($branches as $row)
-                                        <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="row">
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label" for="up_product_id">Product Name <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="product_id" id="up_product_id">
+                                        <option value="0" selected disabled>-- Selected --</option>
+                                        @foreach ($products as $row)
+                                            <option value="{{ $row->id }}" data-image-url="{{ asset($row->thumb_image) }}">{{ $row->name }}</option>
+                                        @endforeach
+                                    </select>
+    
+                                    <span id="up_product_id_validate" class="text-danger mt-1"></span>
+                                </div>
+    
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label" for="up_branch_id">Branch Name <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="branch_id" id="up_branch_id">
+                                        <option value="0" selected disabled>-- Selected --</option>
+                                        @foreach ($branches as $row)
+                                            <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                        @endforeach
+                                    </select>
+    
+                                    <span id="up_branch_id_validate" class="text-danger mt-1"></span>
+                                </div>
 
-                                <span id="up_branch_name_validate" class="text-danger mt-1"></span>
-                            </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label for="up_qty" class="form-label">Quantity <span class="text-danger">*</span></label>
+                                    <input class="form-control" id="up_qty" type="text" name="qty" placeholder="Product Quantity">
+    
+                                    <span id="up_qty_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
 
-                            <div class="mb-3">
-                                <label for="up_device_name" class="form-label">Device Name <span class="text-danger">*</span></label>
-                                <input class="form-control" id="up_device_name" type="text" name="device_name" placeholder="Device Name">
+                                <div class="col-lg-6 mb-3">
+                                    <label for="up_alert_qty" class="form-label">Alert Quantity <span class="text-danger">*</span></label>
+                                    <input class="form-control" id="up_alert_qty" type="text" name="alert_qty" placeholder="Alert Quantity">
+    
+                                    <span id="up_alert_qty_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
 
-                                <span id="up_device_name_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label for="up_purchase_price" class="form-label">Purchase Price <span class="text-danger">*</span></label>
+                                    <input class="form-control" id="up_purchase_price" type="number" name="purchase_price" placeholder="Purchase Price">
+    
+                                    <span id="up_purchase_price_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
 
-                            <div class="mb-3">
-                                <label for="up_device_code" class="form-label">Device Code <span class="text-danger">*</span></label>
-                                <input class="form-control" id="up_device_code" type="text" name="device_code" placeholder="Device Code">
+                                <div class="col-lg-6 mb-3">
+                                    <label for="up_profit_margin" class="form-label">Profit Margin <span class="text-danger">*</span></label>
+                                    <input class="form-control" id="up_profit_margin" type="number" name="profit_margin" placeholder="Profit Margin">
+    
+                                    <span id="up_profit_margin_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
+    
+                                <div class="col-lg-6 mb-3">
+                                    <label for="up_selling_price" class="form-label">Selling Price <span class="text-danger">*</span></label>
+                                    <input class="form-control" id="up_selling_price" type="number" name="selling_price" placeholder="Purchase Price">
+    
+                                    <span id="up_selling_price_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
 
-                                <span id="up_device_code_validate" class="text-danger validation-error mt-1"></span>
-                            </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label" for="up_discount_type">Discount Type</label>
+                                    <select class="form-select" name="discount_type" id="up_discount_type">
+                                        <option value="none" selected>-- None --</option>
+                                        <option value="fixed">Fixed</option>
+                                        <option value="percent">Percentage (%)</option>
+                                    </select>
+    
+                                    <span id="up_discount_type_validate" class="text-danger mt-1"></span>
+                                </div>
 
-                            <div class="mb-3">
-                                <label for="up_ip_address" class="form-label">Ip Address <span class="text-danger">*</span></label>
-                                <input class="form-control" id="up_ip_address" type="text" name="up_ip_address" placeholder="Ip Address">
+                                <div class="col-lg-6 mb-3 up_discount_area d-none">
+                                    <label for="up_discount_value" class="form-label">Discount Value <span class="text-danger">*</span></label>
+                                    <input class="form-control" id="up_discount_value" type="number" name="discount_value" placeholder="Discount Value" min="1">
+    
+                                    <span id="up_discount_value_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
 
-                                <span id="up_ip_address_validate" class="text-danger validation-error mt-1"></span>
+                                <div class="col-lg-6 mb-3 up_discount_area d-none">
+                                    <label for="up_discount_date" class="form-label">Discount Date <span class="text-danger">*</span></label>
+                                    <input type="text" id="up_discount_date" name="discount_date" class="form-control" value="" placeholder="Select date range" />
+    
+                                    <span id="up_discount_date_validate" class="text-danger validation-error mt-1"></span>
+                                </div>
                             </div>
 
                             <div class="mb-3">
@@ -378,12 +435,34 @@
                 }
             });
 
+            $('#up_discount_type').change(function () {
+                let discountType = $(this).val();
+                if ( discountType === 'fixed' || discountType === 'percent') {
+                    $('.up_discount_area').removeClass('d-none');
+                }
+                else {
+                    $('.up_discount_area').addClass('d-none');
+                    $('#up_discount_value').val('');
+                    $('#up_discount_date').val('');
+                }
+            });
+
             $('#product_id').select2({
                 templateResult: formatState,       
                 templateSelection: formatState, 
             });
 
             $('#branch_id').select2({
+                templateResult: formatState,       
+                templateSelection: formatState, 
+            });
+            
+            $('#up_product_id').select2({
+                templateResult: formatState,       
+                templateSelection: formatState, 
+            });
+
+            $('#up_branch_id').select2({
                 templateResult: formatState,       
                 templateSelection: formatState, 
             });
@@ -447,6 +526,7 @@
             }
             // Initialize both inputs
             initDateRangePicker('#discount_date', "up");
+            initDateRangePicker('#up_discount_date', "up");
         });
     </script>
 
@@ -606,18 +686,24 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/device') }}/" + id + "/edit",
+                    url: "{{ url('admin/product-branch') }}/" + id + "/edit",
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
-                        // console.log(data.id);
+                        // console.log(data);
 
                         $('#up_id').val(data.id);
-                        $('#up_branch_name').val(data.branch_id);
-                        $('#up_device_code').val(data.device_code);
-                        $('#up_device_name').val(data.device_name);
-                        $('#up_ip_address').val(data.ip_address);
+                        $('#up_branch_id').val(data.branch_id).trigger('change');
+                        $('#up_product_id').val(data.product_id).trigger('change');
+                        $('#up_qty').val(data.qty);
+                        $('#up_alert_qty').val(data.alert_qty);
+                        $('#up_purchase_price').val(data.purchase_price);
+                        $('#up_profit_margin').val(data.profit_margin);
+                        $('#up_selling_price').val(data.selling_price);
+                        $('#up_discount_type').val(data.discount_type).trigger('change');
+                        $('#up_discount_date').val(data.discount_date);
+                        $('#up_discount_value').val(data.discount_value);
                         $('#up_status').val(data.status);
                     },
                     error: function (error) {
@@ -639,7 +725,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ url('admin/device') }}/" + id,
+                    url: "{{ url('admin/product-branch') }}/" + id,
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
@@ -647,7 +733,7 @@
 
                         swal.fire({
                             title: "Success",
-                            text: "Device Updated Successfully",
+                            text: "Branch Wise Product Updated Successfully",
                             icon: "success"
                         })
 
@@ -659,10 +745,18 @@
                     error: function (err) {
                         let error = err.responseJSON.errors;
 
-                        $('#up_branch_name_validate').empty().html(error.branch_id);
-                        $('#up_device_name_validate').empty().html(error.device_name);
-                        $('#up_device_code_validate').empty().html(error.device_code);
+                        $('#up_branch_id_validate').empty().html(error.branch_id);
+                        $('#up_product_id_validate').empty().html(error.product_id);
+                        $('#up_qty_validate').empty().html(error.qty);
+                        $('#up_alert_qty_validate').empty().html(error.alert_qty);
+                        $('#up_purchase_price_validate').empty().html(error.purchase_price);
+                        $('#up_profit_margin_validate').empty().html(error.profit_margin);
+                        $('#up_selling_price_validate').empty().html(error.selling_price);
                         $('#up_ip_address_validate').empty().html(error.ip_address);
+                        $('#up_discount_type_validate').empty().html(error.discount_type);
+                        $('#up_discount_date_validate').empty().html(error.discount_date);
+                        $('#up_discount_value_validate').empty().html(error.discount_value);
+                        $('#up_status_validate').empty().html(error.status);
 
                         swal.fire({
                             title: "Failed",
@@ -691,7 +785,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: 'DELETE',
-                            url: "{{ url('admin/device') }}/" + id,
+                            url: "{{ url('admin/product-branch') }}/" + id,
                             data: {
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -703,14 +797,12 @@
                                     text: `${res.message}`,
                                     icon: "success"
                                 });
-
                                 datatables.ajax.reload();
                             },
                             error: function (err) {
                                 console.log('error')
                             }
                         })
-
                     } else {
                         swal.fire('Your Image is Safe');
                     }

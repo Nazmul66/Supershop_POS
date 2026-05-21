@@ -120,7 +120,7 @@ class ProductBranchController extends Controller
                         </a>
 
                         @if(auth("admin")->user()->can("update.product"))
-                            <a href="javascript:void(0)" data-id="'.$productBranch->id.'" data-bs-toggle="modal" data-bs-target="#editModal">
+                            <a href="javascript:void(0)" data-id="'.$productBranch->id.'" data-bs-toggle="modal" id="editButton" data-bs-target="#editModal">
                                 <i style="font-size: 20px;" class="ti ti-edit cursor-pointer text-info"></i>
                             </a>
                         @endif
@@ -229,20 +229,23 @@ class ProductBranchController extends Controller
             throw UnauthorizedException::forPermissions(['update.device']);
         }
 
-        $device  = Device::find($id);
+        $productBranch  = ProductBranch::find($id);
         DB::beginTransaction();
         try {
-            // Handle image with ImageUploadTraits function
-            $device->branch_id              = $request->branch_id;
-            $device->device_code            = Str::upper(Str::slug($request->device_code));
-            $device->device_name            = Str::title($request->device_name);
-            $device->ip_address             = $request->ip_address;
-            $device->last_active_at         = $request->last_active_at;
-            $device->is_online              = $request->is_online ?? "Online";
-            $device->status                 = $request->status ?? 1;
-            $device->updated_by             = Auth::guard('admin')->id();
-            $device->updated_at             = now();
-            $device->save();
+            $productBranch->product_id             = $request->product_id ;
+            $productBranch->branch_id              = $request->branch_id;
+            $productBranch->qty                    = $request->qty;
+            $productBranch->alert_qty              = $request->alert_qty;
+            $productBranch->purchase_price         = $request->purchase_price;
+            $productBranch->selling_price          = $request->selling_price;
+            $productBranch->profit_margin          = $request->profit_margin;
+            $productBranch->discount_type          = $request->discount_type;
+            $productBranch->discount_value         = $request->discount_value ?? '';
+            $productBranch->discount_date          = $request->discount_date ?? '';
+            $productBranch->status                 = $request->status ?? 1;
+            $productBranch->updated_by             = Auth::guard('admin')->id();
+            $productBranch->updated_at             = now();
+            $productBranch->save();
         }
         catch(\Exception $ex){
             DB::rollBack();
@@ -257,14 +260,14 @@ class ProductBranchController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Device $device)
+    public function destroy(ProductBranch $productBranch)
     {
         if (!$this->user || !$this->user->can('delete.device')) {
             throw UnauthorizedException::forPermissions(['delete.device']);
         }
 
-        $device->delete();
-        return response()->json(['message' => 'Device has been deleted.'], 200);
+        $productBranch->delete();
+        return response()->json(['message' => 'Branch Wise Product has been deleted.'], 200);
     }
 
     public function deviceView($id)

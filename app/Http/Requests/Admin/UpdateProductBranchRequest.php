@@ -39,7 +39,7 @@ class UpdateProductBranchRequest extends FormRequest
             'qty'              => ['required','integer'],
             'alert_qty'        => ['required', 'integer'],
             'purchase_price'   => ['required','integer'],
-            'profit_margin'    => ['required','integer'],
+            'profit_margin'    => ['required','numeric'],
             'selling_price'    => ['required','integer'],
             'status'           => ['required','boolean'],
             'discount_type'    => ['nullable','in:none,fixed,percent'],

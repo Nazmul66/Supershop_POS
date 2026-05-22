@@ -272,33 +272,26 @@ class ProductBranchController extends Controller
 
     public function deviceView($id)
     {
-        $device = Device::join('branches', 'branches.id', 'devices.branch_id')
-                ->select('branches.name as branch_name', 'devices.*')
-                ->where('devices.id', $id)
-                ->firstOrFail();
+        $productBranch = ProductBranch::leftJoin('branches', 'branches.id', 'product_branches.branch_id')
+            ->leftJoin('products', 'products.id', 'product_branches.product_id')
+            ->select('branches.name as branch_name', 'products.*', 'product_branches.*')
+            ->where('product_branches.id', $id)
+            ->firstOrFail();
         // dd($device);
 
         $statusHtml = '';
-        if ($device->status === 1) {
+        if ($productBranch->status === 1) {
             $statusHtml = '<button type="button" class="btn btn-info btn-sm">Active</button>';
         } else {
             $statusHtml = '<button type="button" class="btn btn-danger btn-sm">Deactive</button>';
         }
 
-        $is_online = '';
-        if ($device->is_online === 'online') {
-            $is_online = '<button type="button" class="btn btn-info btn-sm">Online</button>';
-        } elseif ($device->is_online === 'offline') {
-            $is_online = '<button type="button" class="btn btn-danger btn-sm">Offline</button>';
-        }
-
-        $created_date = date('d F, Y H:i:s A', strtotime($device->created_at));
-        $updated_date = date('d F, Y H:i:s A', strtotime($device->updated_at));
+        $created_date = date('d F, Y H:i:s A', strtotime($productBranch->created_at));
+        $updated_date = date('d F, Y H:i:s A', strtotime($productBranch->updated_at));
 
         return response()->json([
-            'success'           => $device,
+            'success'           => $productBranch,
             'statusHtml'        => $statusHtml,
-            'is_online'         => $is_online,
             'created_date'      => $created_date,
             'updated_date'      => $updated_date,
         ]);

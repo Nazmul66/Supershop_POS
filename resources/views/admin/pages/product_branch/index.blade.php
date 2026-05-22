@@ -153,8 +153,8 @@
                                 </div>
 
                                 <div class="col-lg-6 mb-3">
-                                    <label for="profit_margin" class="form-label">Profit Margin <span class="text-danger">*</span></label>
-                                    <input class="form-control" id="profit_margin" type="number" name="profit_margin" placeholder="Profit Margin">
+                                    <label for="profit_margin" class="form-label">Profit Margin (%) <span class="text-danger">*</span></label>
+                                    <input class="form-control" id="profit_margin" type="number" name="profit_margin" placeholder="Profit Margin" step="0.01">
     
                                     <span id="profit_margin_validate" class="text-danger validation-error mt-1"></span>
                                 </div>
@@ -284,8 +284,8 @@
                                 </div>
 
                                 <div class="col-lg-6 mb-3">
-                                    <label for="up_profit_margin" class="form-label">Profit Margin <span class="text-danger">*</span></label>
-                                    <input class="form-control" id="up_profit_margin" type="number" name="profit_margin" placeholder="Profit Margin">
+                                    <label for="up_profit_margin" class="form-label">Profit Margin (%) <span class="text-danger">*</span></label>
+                                    <input class="form-control" id="up_profit_margin" type="number" name="profit_margin" placeholder="Profit Margin" step="0.01">
     
                                     <span id="up_profit_margin_validate" class="text-danger validation-error mt-1"></span>
                                 </div>
@@ -359,17 +359,17 @@
 
                     <div class="modal-body">
                         <div class="view_modal_content">
+                            <label>Product Name : </label>
+                            <span class="text-dark" id="view_product_name"></span>
+                        </div>
+
+                        <div class="view_modal_content">
                             <label>Branch Name : </label>
                             <span class="text-dark" id="view_branch_name"></span>
                         </div>
 
                         <div class="view_modal_content">
-                            <label>Device Name : </label>
-                            <span class="text-dark" id="view_device_name"></span>
-                        </div>
-
-                        <div class="view_modal_content">
-                            <label>Device Code : </label>
+                            <label>Quantity : </label>
                             <span class="text-dark" id="view_device_code"></span>
                         </div>
 
@@ -417,6 +417,60 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
+
+    <script>
+         $(document).ready(function () {
+            $('#purchase_price, #selling_price').on('input', function () {
+                let purchasePrice = parseFloat(
+                    $('#purchase_price').val()
+                ) || 0;
+
+                let sellingPrice = parseFloat(
+                    $('#selling_price').val()
+                ) || 0;
+
+                // Prevent divide by zero
+                if (purchasePrice > 0 && sellingPrice > 0) {
+                    let profitMargin =
+                        ((sellingPrice - purchasePrice)
+                        / purchasePrice) * 100;
+
+                    $('#profit_margin').val(
+                        profitMargin.toFixed(2)
+                    );
+                }
+                else {
+                    $('#profit_margin').val('');
+                }
+            });
+
+
+            $('#up_purchase_price, #up_selling_price').on('input', function () {
+                let purchasePrice = parseFloat(
+                    $('#up_purchase_price').val()
+                ) || 0;
+
+                let sellingPrice = parseFloat(
+                    $('#up_selling_price').val()
+                ) || 0;
+
+                // Prevent divide by zero
+                if (purchasePrice > 0 && sellingPrice > 0) {
+                    let profitMargin =
+                        ((sellingPrice - purchasePrice)
+                        / purchasePrice) * 100;
+
+                    $('#up_profit_margin').val(
+                        profitMargin.toFixed(2)
+                    );
+                }
+                else {
+                    $('#up_profit_margin').val('');
+                }
+            });
+        });
+
+    </script>
 
     <script>
          $(document).ready(function () {
@@ -819,7 +873,7 @@
                     // headers: {
                     //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     // },
-                    url: "{{ url('admin/device/view') }}/" + id,
+                    url: "{{ url('admin/product-branch/view') }}/" + id,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {

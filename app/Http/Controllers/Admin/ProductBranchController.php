@@ -35,7 +35,14 @@ class ProductBranchController extends Controller
     {
         $branches = Branch::where('status', 1)->get();
         $products = Product::where('status', 1)->get();
-        return view('admin.pages.product_branch.index', compact('branches', 'products'));
+        // Total branch count
+        $totalBranches = $branches->count();
+        // Existing assigned branches count
+        $assignedCounts = ProductBranch::select(
+            'product_id', DB::raw('COUNT(branch_id) as total'))
+            ->groupBy('product_id')
+            ->pluck('total', 'product_id');
+        return view('admin.pages.product_branch.index', compact('branches', 'products', 'assignedCounts', 'totalBranches'));
     }
 
     public function getData()
@@ -88,11 +95,13 @@ class ProductBranchController extends Controller
             })
             ->addColumn('discount_date', function ($device) {
                 $dates = explode(' - ', $device->discount_date);
-                return '<div class="d-flex flex-column align-items-center">
+                if( !empty($device->discount_date) ){
+                    return '<div class="d-flex flex-column align-items-center">
                         <p class="mb-1 fw-semibold"><span class="text-dark fw-bold">Start:</span> '. trim($dates[0] ?? null) .'</p>
                         <p class="mb-1 fw-semibold"><span class="text-dark fw-bold">End: </span> '. trim($dates[1] ?? null) .'</p>
                             </div>
                     </div>';
+                }
             })
             ->addColumn('status', function ($productBranch) {
                 if(auth("admin")->user()->can("status.device"))
@@ -114,7 +123,7 @@ class ProductBranchController extends Controller
             ->addColumn('action', function ($productBranch) {
                 $actionHtml = Blade::render('<div class="copy-row">
                     <div class="all_icons">
-                        <a href="javascript:void(0)" id="viewButton" data-bs-toggle="modal" data-bs-target="#viewModal">
+                        <a href="javascript:void(0)" id="viewButton" data-id="'.$productBranch->id.'" data-bs-toggle="modal" data-bs-target="#viewModal">
                             <i  class="ti ti-eye cursor-pointer text-success" style="font-size: 20px;"
                             ></i>
                         </a>
@@ -182,8 +191,8 @@ class ProductBranchController extends Controller
             $productBranch->selling_price          = $request->selling_price;
             $productBranch->profit_margin          = $request->profit_margin;
             $productBranch->discount_type          = $request->discount_type;
-            $productBranch->discount_value         = $request->discount_value ?? '';
-            $productBranch->discount_date          = $request->discount_date ?? '';
+            $productBranch->discount_value         = $request->discount_value ?? 0;
+            $productBranch->discount_date          = $request->discount_date ?? null;
             $productBranch->status                 = $request->status ?? 1;
             $productBranch->created_by             = Auth::guard('admin')->id();
             $productBranch->created_at             = now();
@@ -200,7 +209,7 @@ class ProductBranchController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Successfully Branch Product Created!',
-            'device' => [
+            'productBranch' => [
                 'id' => $productBranch->id,
                 'name' => $productBranch->name,
             ]
@@ -215,9 +224,15 @@ class ProductBranchController extends Controller
         if (!$this->user || !$this->user->can('update.device')) {
             throw UnauthorizedException::forPermissions(['update.device']);
         }
+        // all used branch ids of this product
+        $usedBranchIds = ProductBranch::where('product_id', $productBranch->product_id)
+        ->pluck('branch_id');
 
         // dd($productBranch);
-        return response()->json(['success' => $productBranch]);
+         return response()->json([
+            'success' => $productBranch,
+            'usedBranchIds' => $usedBranchIds,
+        ]);
     }
 
     /**
@@ -232,17 +247,17 @@ class ProductBranchController extends Controller
         $productBranch  = ProductBranch::find($id);
         DB::beginTransaction();
         try {
-            $productBranch->product_id             = $request->product_id ;
-            $productBranch->branch_id              = $request->branch_id;
+            // $productBranch->product_id             = $request->product_id;
+            // $productBranch->branch_id              = $request->branch_id;
             $productBranch->qty                    = $request->qty;
             $productBranch->alert_qty              = $request->alert_qty;
             $productBranch->purchase_price         = $request->purchase_price;
             $productBranch->selling_price          = $request->selling_price;
             $productBranch->profit_margin          = $request->profit_margin;
             $productBranch->discount_type          = $request->discount_type;
-            $productBranch->discount_value         = $request->discount_value ?? '';
-            $productBranch->discount_date          = $request->discount_date ?? '';
-            $productBranch->status                 = $request->status ?? 1;
+            $productBranch->discount_value         = $request->discount_value ?? 0;
+            $productBranch->discount_date          = $request->discount_date ?? null;
+            $productBranch->status                 = $request->status;
             $productBranch->updated_by             = Auth::guard('admin')->id();
             $productBranch->updated_at             = now();
             $productBranch->save();
@@ -270,15 +285,53 @@ class ProductBranchController extends Controller
         return response()->json(['message' => 'Branch Wise Product has been deleted.'], 200);
     }
 
-    public function deviceView($id)
+    public function getProductBranches($id)
+    {
+        $branches = ProductBranch::where('product_id',$id)->pluck('branch_id');
+        $all_branches = Branch::where('status', 1)->get();
+
+        return response()->json([
+            'branch_ids'    => $branches,
+            'all_branches'  => $all_branches
+        ]);
+    }
+
+    public function getProducts()
+    {
+        $products = Product::where('status', 1)->get()
+        ->map(function ($product) {
+            $product->image_url = asset($product->thumb_image);
+            return $product;
+        });
+
+        $totalBranches = Branch::where('status', 1)->count();
+
+        $assignedCounts = ProductBranch::select(
+                'product_id',
+                DB::raw('COUNT(branch_id) as total')
+            )
+            ->groupBy('product_id')
+            ->pluck('total', 'product_id');
+
+        return response()->json([
+            'products'        => $products,
+            'assignedCounts'  => $assignedCounts,
+            'totalBranches'   => $totalBranches,
+        ]);
+    }
+    
+
+    public function productBranchView($id)
     {
         $productBranch = ProductBranch::leftJoin('branches', 'branches.id', 'product_branches.branch_id')
             ->leftJoin('products', 'products.id', 'product_branches.product_id')
             ->select('branches.name as branch_name', 'products.*', 'product_branches.*')
             ->where('product_branches.id', $id)
             ->firstOrFail();
-        // dd($device);
+        // dd($productBranch);
 
+        $dates = explode(' - ', $productBranch->discount_date);
+        
         $statusHtml = '';
         if ($productBranch->status === 1) {
             $statusHtml = '<button type="button" class="btn btn-info btn-sm">Active</button>';
@@ -286,12 +339,16 @@ class ProductBranchController extends Controller
             $statusHtml = '<button type="button" class="btn btn-danger btn-sm">Deactive</button>';
         }
 
-        $created_date = date('d F, Y H:i:s A', strtotime($productBranch->created_at));
-        $updated_date = date('d F, Y H:i:s A', strtotime($productBranch->updated_at));
+        $dis_date_start = trim($dates[0] ?? null);
+        $dis_date_end   = trim($dates[1] ?? null);
+        $created_date   = date('d F, Y H:i:s A', strtotime($productBranch->created_at));
+        $updated_date   = date('d F, Y H:i:s A', strtotime($productBranch->updated_at));
 
         return response()->json([
             'success'           => $productBranch,
             'statusHtml'        => $statusHtml,
+            'dis_date_start'    => $dis_date_start,
+            'dis_date_end'      => $dis_date_end,
             'created_date'      => $created_date,
             'updated_date'      => $updated_date,
         ]);

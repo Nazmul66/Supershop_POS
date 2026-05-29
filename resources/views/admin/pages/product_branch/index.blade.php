@@ -22,6 +22,11 @@
             border-color: #aaa;
             height: 35px;
         }
+        .select2-container--default .select2-results__option--disabled {
+            background: #853d43 !important;
+            color: #e9e8e8 !important;
+            cursor: not-allowed;
+        }
     </style>
 @endpush
 
@@ -109,10 +114,15 @@
                             <div class="row">
                                 <div class="col-lg-6 mb-3">
                                     <label class="form-label" for="product_id">Product Name <span class="text-danger">*</span></label>
-                                    <select class="form-select" name="product_id" id="product_id">
-                                        <option value="0" selected disabled>-- Selected --</option>
+                                    <select class="form-select product_id" name="product_id" id="product_id">
+                                        <option value=" " selected data-image-url="{{ asset('public/admin/assets/images/select_option.png') }}">-- Selected --</option>
                                         @foreach ($products as $row)
-                                            <option value="{{ $row->id }}" data-image-url="{{ asset($row->thumb_image) }}">{{ $row->name }}</option>
+                                            @php
+                                                $assigned = $assignedCounts[$row->id] ?? 0;                                 
+                                                $disabled = $assigned >= $totalBranches;
+                                            @endphp
+
+                                            <option value="{{ $row->id }}" data-image-url="{{ asset($row->thumb_image) }}" {{ $disabled ? 'disabled' : '' }}>{{ $row->name }}</option>
                                         @endforeach
                                     </select>
     
@@ -121,8 +131,7 @@
     
                                 <div class="col-lg-6 mb-3">
                                     <label class="form-label" for="branch_id">Branch Name <span class="text-danger">*</span></label>
-                                    <select class="form-select" name="branch_id" id="branch_id">
-                                        <option value="0" selected disabled>-- Selected --</option>
+                                    <select class="form-select branch_id" name="branch_id" id="branch_id">
                                         @foreach ($branches as $row)
                                             <option value="{{ $row->id }}">{{ $row->name }}</option>
                                         @endforeach
@@ -192,7 +201,7 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="col-lg-6 mb-3">
                                 <label class="form-label">Status <span class="text-danger">*</span></label>
                                 <select class="form-select" name="status">
                                     <option value="1" selected>Active</option>
@@ -240,10 +249,15 @@
                             <div class="row">
                                 <div class="col-lg-6 mb-3">
                                     <label class="form-label" for="up_product_id">Product Name <span class="text-danger">*</span></label>
-                                    <select class="form-select" name="product_id" id="up_product_id">
-                                        <option value="0" selected disabled>-- Selected --</option>
+                                    <select class="form-select up_product_id" name="product_id" id="up_product_id">
+                                        <option value=" " selected data-image-url="{{ asset('public/admin/assets/images/select_option.png') }}">-- Selected --</option>
                                         @foreach ($products as $row)
-                                            <option value="{{ $row->id }}" data-image-url="{{ asset($row->thumb_image) }}">{{ $row->name }}</option>
+                                            @php
+                                                $assigned = $assignedCounts[$row->id] ?? 0;                                 
+                                                $disabled = $assigned >= $totalBranches;
+                                            @endphp
+
+                                            <option value="{{ $row->id }}" data-image-url="{{ asset($row->thumb_image) }}" {{ $disabled ? 'disabled' : '' }}>{{ $row->name }}</option>
                                         @endforeach
                                     </select>
     
@@ -253,7 +267,6 @@
                                 <div class="col-lg-6 mb-3">
                                     <label class="form-label" for="up_branch_id">Branch Name <span class="text-danger">*</span></label>
                                     <select class="form-select" name="branch_id" id="up_branch_id">
-                                        <option value="0" selected disabled>-- Selected --</option>
                                         @foreach ($branches as $row)
                                             <option value="{{ $row->id }}">{{ $row->name }}</option>
                                         @endforeach
@@ -323,7 +336,7 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="col-lg-6 mb-3">
                                 <label class="form-label">Status <span class="text-danger">*</span></label>
                                 <select class="form-select" id="up_status" name="status">
                                     <option value="1">Active</option>
@@ -352,7 +365,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">View Device List</h5>
+                        <h5 class="modal-title" id="myModalLabel">View Branch wise Product</h5>
 
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: transparent;"></button>
                     </div>
@@ -370,22 +383,32 @@
 
                         <div class="view_modal_content">
                             <label>Quantity : </label>
-                            <span class="text-dark" id="view_device_code"></span>
+                            <span class="text-dark" id="view_qty"></span>
                         </div>
 
                         <div class="view_modal_content">
-                            <label>Ip Address : </label>
-                            <span class="text-dark" id="view_ip_address"></span>
+                            <label>Alert Quantity : </label>
+                            <span class="text-dark" id="view_alert_qty"></span>
                         </div>
 
                         <div class="view_modal_content">
-                            <label>Last Active At: </label>
-                            <span class="text-dark" id="view_last_active"></span>
+                            <label>Discount Type: </label>
+                            <span class="text-dark" id="view_discount_type"></span>
                         </div>
 
                         <div class="view_modal_content">
-                            <label>Is Online: </label>
-                            <span class="text-dark" id="view_is_online"></span>
+                            <label>Discount Value: </label>
+                            <span class="text-dark" id="view_discount_value"></span>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Discount Date Start : </label>
+                            <div id="view_dis_date_start"></div>
+                        </div>
+
+                        <div class="view_modal_content">
+                            <label>Discount Date End : </label>
+                            <div id="view_dis_date_end"></div>
                         </div>
 
                         <div class="view_modal_content">
@@ -417,6 +440,92 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
+
+    <script>
+        $('.product_id').change(function () {
+            let productId = $(this).val();
+            // First enable all options
+            $('#branch_id option').prop('disabled', false);
+    
+            $.ajax({
+                url: "{{ route('admin.get.product.branches', ':id') }}".replace(':id', productId),
+                type: 'GET',
+    
+                success: function (res) {
+                    $('#branch_id').html(``);
+                    let firstAvailable = null;
+
+                    $.each(res.all_branches, function (index, row) {
+                        let isDisabled = res.branch_ids.includes(row.id)
+
+                        $('#branch_id').append(`
+                            <option value="${row.id}" ${isDisabled ? 'disabled' : ''}>
+                                ${row.name}
+                            </option>
+                        `);
+
+                        // store first enabled option
+                        if (!isDisabled && firstAvailable === null) {
+                            firstAvailable = row.id;
+                        }
+                    });
+
+                    // 👉 Select first available branch
+                    if (firstAvailable !== null) {
+                        $('#branch_id').val(firstAvailable).trigger('change');
+                    }
+
+                    // Disable existing branches
+                    $.each(res.branch_ids, function (index, branchId) {
+                        $('#branch_id option[value="' + branchId + '"]')
+                            .prop('disabled', true);
+                    });
+                }
+            });
+        });
+
+        // $('.up_product_id').change(function () {
+        //     let productId = $(this).val();
+        //     // First enable all options
+        //     $('#up_branch_id option').prop('disabled', false);
+    
+        //     $.ajax({
+        //         url: "{{ route('admin.get.product.branches', ':id') }}".replace(':id', productId),
+        //         type: 'GET',
+    
+        //         success: function (res) {
+        //             $('#up_branch_id').html(``);
+        //             let firstAvailable = null;
+
+        //             $.each(res.all_branches, function (index, row) {
+        //                 let isDisabled = res.branch_ids.includes(row.id)
+
+        //                 $('#up_branch_id').append(`
+        //                     <option value="${row.id}" ${isDisabled ? 'disabled' : ''}>
+        //                         ${row.name}
+        //                     </option>
+        //                 `);
+
+        //                 // store first enabled option
+        //                 if (!isDisabled && firstAvailable === null) {
+        //                     firstAvailable = row.id;
+        //                 }
+        //             });
+
+        //             // 👉 Select first available branch
+        //             if (firstAvailable !== null) {
+        //                 $('#up_branch_id').val(firstAvailable).trigger('change');
+        //             }
+
+        //             // Disable existing branches
+        //             $.each(res.branch_ids, function (index, branchId) {
+        //                 $('#up_branch_id option[value="' + branchId + '"]')
+        //                     .prop('disabled', true);
+        //             });
+        //         }
+        //     });
+        // });
+    </script>
 
     <script>
          $(document).ready(function () {
@@ -489,34 +598,41 @@
                 }
             });
 
-            $('#up_discount_type').change(function () {
-                let discountType = $(this).val();
-                if ( discountType === 'fixed' || discountType === 'percent') {
+            $('#up_discount_type').on('change', function () {
+                let value = $(this).val();
+
+                if (value === 'fixed' || value === 'percent') {
                     $('.up_discount_area').removeClass('d-none');
-                }
+                    $('#up_discount_value').prop('disabled', false);
+                    $('#up_discount_date').prop('disabled', false);
+                } 
                 else {
                     $('.up_discount_area').addClass('d-none');
-                    $('#up_discount_value').val('');
-                    $('#up_discount_date').val('');
+                    $('#up_discount_value').prop('disabled', true).val('');
+                    $('#up_discount_date').prop('disabled', true).val('');
                 }
             });
 
             $('#product_id').select2({
+                dropdownParent: $('#createModal'),
                 templateResult: formatState,       
                 templateSelection: formatState, 
             });
 
             $('#branch_id').select2({
+                dropdownParent: $('#createModal'),
                 templateResult: formatState,       
                 templateSelection: formatState, 
             });
             
             $('#up_product_id').select2({
+                dropdownParent: $('#editModal'),
                 templateResult: formatState,       
                 templateSelection: formatState, 
             });
 
             $('#up_branch_id').select2({
+                dropdownParent: $('#editModal'),
                 templateResult: formatState,       
                 templateSelection: formatState, 
             });
@@ -696,6 +812,27 @@
                             $('#createModal').modal('hide');
                             $('#createForm')[0].reset();
                             $('.validation-error').html('');
+
+                            // 3. Reset select dropdowns (important)
+                            $('#product_id').val('').trigger('change');
+                            $('#branch_id option:first').prop('selected', true).trigger('change');
+                            $('#discount_type').val('none').trigger('change');
+
+                            // 4. Hide discount section again
+                            $('.discount_area').addClass('d-none');
+
+                            // 5. Clear discount fields properly
+                            $('#discount_value').val('');
+                            $('#discount_date').val('');
+
+                            // 6. Enable fields (if disabled before submit)
+                            $('#discount_value').prop('disabled', false);
+                            $('#discount_date').prop('disabled', false);
+
+                            // ✅ IMPORTANT
+                            reloadProductOptions();
+                            updateReloadProductOptions()
+
                             datatables.ajax.reload();
 
                             swal.fire({
@@ -746,6 +883,17 @@
                     success: function (res) {
                         let data = res.success;
                         // console.log(data);
+
+                        // reset branch select
+                        $('#up_branch_id option').prop('disabled', false);
+
+                        // disable used branches except current branch
+                        $.each(res.usedBranchIds, function(index, branchId){
+                            if(branchId != data.branch_id){
+                                $('#up_branch_id option[value="' + branchId + '"]')
+                                    .prop('disabled', true);
+                            }
+                        });
 
                         $('#up_id').val(data.id);
                         $('#up_branch_id').val(data.branch_id).trigger('change');
@@ -846,6 +994,10 @@
                                 }
                             },
                             success: function (res) {
+                                // ✅ Reload product select again
+                                reloadProductOptions();
+                                updateReloadProductOptions()
+
                                 Swal.fire({
                                     title: "Deleted!",
                                     text: `${res.message}`,
@@ -878,13 +1030,17 @@
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
+                        console.log(data);
 
+                        $('#view_product_name').html(data.name);
                         $('#view_branch_name').html(data.branch_name);
-                        $('#view_device_name').html(data.device_name);
-                        $('#view_device_code').html(data.device_code);
-                        $('#view_ip_address').html(data.ip_address);
-                        $('#view_last_active').html(data.last_active_at);
-                        $('#view_is_online').html(res.is_online);
+                        $('#view_qty').html(data.qty);
+                        $('#view_alert_qty').html(data.alert_qty);
+                        $('#view_discount_type').html(data.discount_type);
+                        $('#view_discount_value').html(data.discount_value);
+                        $('#view_selling_price').html(data.selling_price);
+                        $('#view_dis_date_start').html(res.dis_date_start);
+                        $('#view_dis_date_end').html(res.dis_date_end);
                         $('#created_date').html(res.created_date);
                         $('#updated_date').html(res.updated_date);
                         $('#view_status').html(res.statusHtml);
@@ -895,8 +1051,73 @@
 
                 });
             })
-        })
 
+            // Reload Product Options
+            function reloadProductOptions() {
+                $.ajax({
+                    url: "{{ route('admin.get.product') }}",
+                    type: "GET",
+
+                    success: function(res) {
+
+                        $('#product_id').html(`
+                            <option value="">-- Selected --</option>
+                        `);
+
+                        $.each(res.products, function(index, row) {
+
+                            let assigned = res.assignedCounts[row.id] ?? 0;
+
+                            let disabled = assigned >= res.totalBranches;
+
+                            $('#product_id').append(`
+                                <option value="${row.id}"
+                                    data-image-url="${row.image_url}"
+                                    ${disabled ? 'disabled' : ''}>
+                                    ${row.name}
+                                </option>
+                            `);
+                        });
+
+                        // Refresh Select2
+                        $('#product_id').trigger('change');
+                    }
+                });
+            }
+
+            // Update Reload Product Options
+            function updateReloadProductOptions() {
+                $.ajax({
+                    url: "{{ route('admin.get.product') }}",
+                    type: "GET",
+
+                    success: function(res) {
+
+                        $('#up_product_id').html(`
+                            <option value="">-- Selected --</option>
+                        `);
+
+                        $.each(res.products, function(index, row) {
+
+                            let assigned = res.assignedCounts[row.id] ?? 0;
+
+                            let disabled = assigned >= res.totalBranches;
+
+                            $('#up_product_id').append(`
+                                <option value="${row.id}"
+                                    data-image-url="${row.image_url}"
+                                    ${disabled ? 'disabled' : ''}>
+                                    ${row.name}
+                                </option>
+                            `);
+                        });
+
+                        // Refresh Select2
+                        $('#up_product_id').trigger('change');
+                    }
+                });
+            }
+        })
     </script>
 @endpush
 

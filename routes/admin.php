@@ -277,6 +277,10 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
     Route::resource('/product-branch', ProductBranchController::class)->names('product.branch');
     Route::get('/product-branch-data', [ProductBranchController::class, 'getData'])->name('product-branch-data');
     Route::post('/change-product-branch-status', [ProductBranchController::class, 'changeProductBranchStatus'])->name('product.branch.status');
+    Route::get('/get-product',[ProductBranchController::class, 'getProducts'])->name('get.product');
+    Route::get('/get-product-branches/{id}',[ProductBranchController::class, 'getProductBranches'])->name('get.product.branches');
+    Route::get('/product-branch/view/{id}', [ProductBranchController::class, 'productBranchView'])->name('product.branch.view');
+
 
 
     //______ Country _____//

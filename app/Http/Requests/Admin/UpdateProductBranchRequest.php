@@ -25,7 +25,7 @@ class UpdateProductBranchRequest extends FormRequest
     {
         return [
             'product_id' => [
-                'required',
+                'nullable',
                 'integer',
                 Rule::unique('product_branches')
                     ->where(function ($query) {
@@ -56,6 +56,25 @@ class UpdateProductBranchRequest extends FormRequest
             ],
         ];
     }
+    
+
+     // 👇 PUT IT HERE (inside same class)
+     public function withValidator($validator)
+     {
+         $validator->after(function ($validator) {
+ 
+             if (
+                 $this->selling_price !== null &&
+                 $this->purchase_price !== null &&
+                 (int) $this->selling_price < (int) $this->purchase_price
+             ) {
+                 $validator->errors()->add(
+                     'selling_price',
+                     'Selling price must be greater than or equal to purchase price.'
+                 );
+             }
+         });
+     }
 
 
     public function messages(): array

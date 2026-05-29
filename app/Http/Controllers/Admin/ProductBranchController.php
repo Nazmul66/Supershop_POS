@@ -93,9 +93,9 @@ class ProductBranchController extends Controller
                     <p class="mb-1 fw-semibold"><span class="text-dark fw-bold">Value: </span>'.$productBranch->discount_value.' '. $symbol.'</p>
                 </div>';
             })
-            ->addColumn('discount_date', function ($device) {
-                $dates = explode(' - ', $device->discount_date);
-                if( !empty($device->discount_date) ){
+            ->addColumn('discount_date', function ($productBranch) {
+                $dates = explode(' - ', $productBranch->discount_date);
+                if( !empty($productBranch->discount_date) ){
                     return '<div class="d-flex flex-column align-items-center">
                         <p class="mb-1 fw-semibold"><span class="text-dark fw-bold">Start:</span> '. trim($dates[0] ?? null) .'</p>
                         <p class="mb-1 fw-semibold"><span class="text-dark fw-bold">End: </span> '. trim($dates[1] ?? null) .'</p>
@@ -104,7 +104,7 @@ class ProductBranchController extends Controller
                 }
             })
             ->addColumn('status', function ($productBranch) {
-                if(auth("admin")->user()->can("status.device"))
+                if(auth("admin")->user()->can("status.product-branch"))
                     if ($productBranch->status == 1) {
                         return ' <a class="status" id="status" href="javascript:void(0)"
                             data-id="'.$productBranch->id.'" data-status="'.$productBranch->status.'"> <i
@@ -128,13 +128,13 @@ class ProductBranchController extends Controller
                             ></i>
                         </a>
 
-                        @if(auth("admin")->user()->can("update.product"))
+                        @if(auth("admin")->user()->can("update.product-branch"))
                             <a href="javascript:void(0)" data-id="'.$productBranch->id.'" data-bs-toggle="modal" id="editButton" data-bs-target="#editModal">
                                 <i style="font-size: 20px;" class="ti ti-edit cursor-pointer text-info"></i>
                             </a>
                         @endif
 
-                        @if(auth("admin")->user()->can("delete.product"))
+                        @if(auth("admin")->user()->can("delete.product-branch"))
                             <a href="javascript:void(0)" data-id="'.$productBranch->id.'" id="deleteBtn">
                                 <i style="font-size: 20px;" class="ti ti-trash text-danger" title="Delete"></i>
                             </a>
@@ -149,8 +149,8 @@ class ProductBranchController extends Controller
 
     public function changeProductBranchStatus(Request $request)
     {
-        if (!$this->user || !$this->user->can('status.device')) {
-            throw UnauthorizedException::forPermissions(['status.device']);
+        if (!$this->user || !$this->user->can('status.product-branch')) {
+            throw UnauthorizedException::forPermissions(['status.product-branch']);
         }
 
         $id = $request->id;
@@ -174,8 +174,8 @@ class ProductBranchController extends Controller
      */
     public function store(CreateProductBranchRequest $request)
     {
-        if (!$this->user || !$this->user->can('create.device')) {
-            throw UnauthorizedException::forPermissions(['create.device']);
+        if (!$this->user || !$this->user->can('create.product-branch')) {
+            throw UnauthorizedException::forPermissions(['create.product-branch']);
         }
 
         // dd('has work');
@@ -221,8 +221,8 @@ class ProductBranchController extends Controller
      */
     public function edit(ProductBranch $productBranch)
     {
-        if (!$this->user || !$this->user->can('update.device')) {
-            throw UnauthorizedException::forPermissions(['update.device']);
+        if (!$this->user || !$this->user->can('update.product-branch')) {
+            throw UnauthorizedException::forPermissions(['update.product-branch']);
         }
         // all used branch ids of this product
         $usedBranchIds = ProductBranch::where('product_id', $productBranch->product_id)
@@ -240,8 +240,8 @@ class ProductBranchController extends Controller
      */
     public function update(UpdateProductBranchRequest $request, $id)
     {
-        if (!$this->user || !$this->user->can('update.device')) {
-            throw UnauthorizedException::forPermissions(['update.device']);
+        if (!$this->user || !$this->user->can('update.product-branch')) {
+            throw UnauthorizedException::forPermissions(['update.product-branch']);
         }
 
         $productBranch  = ProductBranch::find($id);
@@ -277,8 +277,8 @@ class ProductBranchController extends Controller
      */
     public function destroy(ProductBranch $productBranch)
     {
-        if (!$this->user || !$this->user->can('delete.device')) {
-            throw UnauthorizedException::forPermissions(['delete.device']);
+        if (!$this->user || !$this->user->can('delete.product-branch')) {
+            throw UnauthorizedException::forPermissions(['delete.product-branch']);
         }
 
         $productBranch->delete();
@@ -319,7 +319,6 @@ class ProductBranchController extends Controller
             'totalBranches'   => $totalBranches,
         ]);
     }
-    
 
     public function productBranchView($id)
     {
@@ -354,19 +353,21 @@ class ProductBranchController extends Controller
         ]);
     }
 
-
-    public function allDevicePdf()
+    public function allProductBranchPdf()
     {
-        if (!$this->user || !$this->user->can('pdf.device')) {
-            throw UnauthorizedException::forPermissions(['pdf.device']);
+        if (!$this->user || !$this->user->can('pdf.product-branch')) {
+            throw UnauthorizedException::forPermissions(['pdf.product-branch']);
         }
         
-        $devices = Device::get();
+        $productBranches = ProductBranch::leftJoin('branches', 'branches.id', 'product_branches.branch_id')
+            ->leftJoin('products', 'products.id', 'product_branches.product_id')
+            ->select('branches.name as branch_name', 'products.*', 'product_branches.*')
+            ->get();
 
-        $pdf = Pdf::loadView('admin.pages.product_branch.pdf', compact('devices'))
+        $pdf = Pdf::loadView('admin.pages.product_branch.pdf', compact('productBranches'))
             ->setPaper('a4', 'portrait');
 
-        return $pdf->download('Device.pdf');
-        // return view('admin.pages.product_branch.pdf', compact('devices'));
+        return $pdf->download('Product Branches.pdf');
+        // return view('admin.pages.product_branch.pdf', compact('productBranches'));
     }
 }

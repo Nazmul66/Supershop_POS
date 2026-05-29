@@ -10,7 +10,7 @@
 	<meta name="author" content="Dreams Technologies">
 	<meta name="robots" content="index, follow">
 
-    <title>Branch PDF</title>
+    <title>Branch Wise Product PDF</title>
 
     	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('public/admin/assets/img/favicon.png') }}">
@@ -26,11 +26,9 @@
     html,body{
         font-family: "Nunito", sans-serif;
     }
-
     .page-break {
         page-break-after: always;
     }
-
     header {
         position: fixed;
         top: -100px;
@@ -57,16 +55,22 @@
     table {
         width: 100%;
         border-collapse: collapse;
+        border-spacing: 0;
     }
 
     table th, table td {
         border: 1px solid #444;
         padding: 8px;
-        font-size: 12px;
+        font-size: 9px !important;
     }
 
     table th {
         background: #f2f2f2;
+    }
+    table th td,
+    table tr td{
+        padding: 2px 8px;
+        line-height: 1.1;
     }
     .fs-10 {
         font-size: 0.625rem !important;
@@ -86,6 +90,19 @@
         background-color: #EA5455 !important;
         color: #ffffff;
     }
+    .mb-1{
+        margin-bottom: 4px;
+    }
+    .mb-0{
+        margin-bottom: 0px;
+    }
+    .fw-semibold{
+        font-weight: 600;
+    }
+    
+    .fw-bold{
+        font-weight: 700;
+    }
 </style>
 
 {{-- Active sidebar --}}
@@ -96,7 +113,7 @@
 <body>
 
     <header>
-        <h2>Branch List</h2>
+        <h2>Branch Wise Product List</h2>
         <p>Generated on: {{ date('d-m-Y H:i:A') }}</p>
     </header>
 
@@ -109,24 +126,74 @@
             <thead>
                 <tr>
                     <th>SL.</th>
-                    <th>Name</th>
-                    <th>Slug</th>
-                    <th>Created Date</th>
+                    <th>Product Name</th>
+                    <th>Branch Name</th>
+                    <th>Product Bio</th>
+                    <th>Discount Bio</th>
                     <th>Created By</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($branches as $index => $row)
+                @foreach ($productBranches as $index => $row)
                     <tr>
                         <td>{{ $index+1 }}</td>
-                        <td>{{ $row->name }}</td>
-                        <td>{{ $row->slug }}</td>
-                        <td>{{ $row->created_at }}</td>
+                        <td style="width: 120px;">
+                            <table>
+                                <tr>
+                                    <td style="width: 45px; border: 1px solid transparent; padding: 0px;">
+                                        <img src={{ asset($row->thumb_image) }} alt="" style="width: 45px;">
+                                    </td>
+                                    <td style="border: 1px solid transparent; padding: 0px;">
+                                        <p class="text-dark">{{ $row->name }}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+
+                        <td>
+                            <p class="text-dark">{{ $row->branch_name }}</p>
+                        </td>
+
+                        <td>
+                            @php
+                                $symbol = match ($row->discount_type) {
+                                    'fixed' => 'BDT',
+                                    'percent' => '%',
+                                    default => '',
+                                };
+                            @endphp
+                            <div class="">
+                                <p class="mb-1"><span class="text-dark fw-bold">Quantity: </span>{{ $row->qty }} Pcs</p>
+                                <p class="mb-1"><span class="text-dark fw-bold">Alert Qty: </span>{{ $row->alert_qty }} Pcs</p>
+                                <p class="mb-0"><span class="text-dark fw-bold">MRP:</span> {{ $row->selling_price }}/- BDT</p>
+
+                            </div>
+                        </td>
+
+
+                        <td>
+                            @php
+                                $dates = explode(' - ', $row->discount_date);
+                            @endphp
+                            @if( !empty($row->discount_date) )
+                                <p class="mb-1"><span class="text-dark fw-bold">Type: </span>{{ Str::title($row->discount_type) }}</p>
+                                <p class="mb-1"><span class="text-dark fw-bold">Value: </span>{{ $row->discount_value.' '. $symbol }}</p>
+
+                                <p class="mb-1"><span class="text-dark fw-bold">Start:</span>{{ trim($dates[0] ?? null) }}</p>
+                                <p class="mb-1"><span class="text-dark fw-bold">End: </span>{{ trim($dates[1] ?? null) }}</p>
+                            @endif
+                        </td>
+
                         @php
                             $adminName = \App\Models\Admin::find($row->created_by)?->name ?? 'Unknown';
                         @endphp
-                        <td>{{ $adminName }}</td>
+                        <td>
+                            <div>
+                                <p class="text-dark fw-bold">{{ $adminName }}</p>
+                                <p class="mb-1"><span class="text-dark fw-bold">Date: </span>{{ date('d F, Y H:i:s A', strtotime($row->created_at)) }}</p>
+                            </div>
+                        </td>
                         <td>
                             @if ( $row->status == 1 )
                                 <span class="badge bg-success fw-medium fs-10">Active</span>

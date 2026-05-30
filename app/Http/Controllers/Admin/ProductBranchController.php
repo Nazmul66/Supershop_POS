@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Requests\Admin\CreateProductBranchRequest;
 use App\Http\Requests\Admin\UpdateProductBranchRequest;
+use App\Models\Admin;
 use App\Models\Branch;
 use App\Models\Product;
 use App\Models\ProductBranch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
@@ -33,8 +35,9 @@ class ProductBranchController extends Controller
      */
     public function index()
     {
-        $branches = Branch::where('status', 1)->get();
-        $products = Product::where('status', 1)->get();
+        $branches      = Branch::where('status', 1)->get();
+        $products      = Product::where('status', 1)->get();
+        $admins        = Admin::where('status', 1)->get();
         // Total branch count
         $totalBranches = $branches->count();
         // Existing assigned branches count
@@ -42,18 +45,55 @@ class ProductBranchController extends Controller
             'product_id', DB::raw('COUNT(branch_id) as total'))
             ->groupBy('product_id')
             ->pluck('total', 'product_id');
-        return view('admin.pages.product_branch.index', compact('branches', 'products', 'assignedCounts', 'totalBranches'));
+        return view('admin.pages.product_branch.index', compact('branches', 'products', 'assignedCounts', 'totalBranches', 'admins'));
     }
 
-    public function getData()
+    public function getData(Request $request)
     {
+        // dd($request->all());
         // get all data
-        $ProductBranches = ProductBranch::leftJoin('branches', 'branches.id', 'product_branches.branch_id')
-            ->leftJoin('products', 'products.id', 'product_branches.product_id')
-            ->select('branches.name as branch_name', 'products.*', 'product_branches.*')
-            ->get();
+        $productBranches = "";
+        $query = ProductBranch::leftJoin('branches', 'branches.id', 'product_branches.branch_id')
+            ->leftJoin('products', 'products.id', 'product_branches.product_id');
 
-        return DataTables::of($ProductBranches)
+
+            // Products
+            if( !empty($request->product_id) ){
+                $query->where('product_branches.product_id', $request->product_id);
+            }
+
+            // Branch
+            if( !empty($request->branch_id) ){
+                $query->where('product_branches.branch_id', $request->branch_id);
+            }
+
+            // Date Range created_at
+            if (!empty($request->creation_date)) {
+                $dates = explode(' - ', $request->creation_date);
+            
+                if (count($dates) === 2) {
+                    $start = Carbon::parse($dates[0])->startOfDay();
+                    $end   = Carbon::parse($dates[1])->endOfDay();
+            
+                    $query->whereBetween('product_branches.created_at', [$start, $end]);
+                }
+            }
+
+            // Admin User
+            if (!empty($request->admin_user)) {
+                $query->whereIn('product_branches.created_by', $request->admin_user);
+            }
+
+            // Status
+            if (!empty($request->status)) {
+                $query->whereIn('product_branches.status', $request->status);
+            }
+
+            $productBranches = $query->select('product_branches.*', 'products.*', 'branches.name as branch_name')
+                ->orderBy('product_branches.id', "DESC")
+                ->get();
+
+        return DataTables::of($productBranches)
             ->addIndexColumn()
             ->addColumn('created_by', function ($productBranch) {
                 $adminName = \App\Models\Admin::find($productBranch->created_by)?->name ?? 'Unknown';
@@ -123,19 +163,19 @@ class ProductBranchController extends Controller
             ->addColumn('action', function ($productBranch) {
                 $actionHtml = Blade::render('<div class="copy-row">
                     <div class="all_icons">
-                        <a href="javascript:void(0)" id="viewButton" data-id="'.$productBranch->id.'" data-bs-toggle="modal" data-bs-target="#viewModal">
+                        <a href="javascript:void(0)" id="viewButton" data-id="'.$productBranch->id.'" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-success" data-bs-placement="top" data-bs-original-title="View">
                             <i  class="ti ti-eye cursor-pointer text-success" style="font-size: 20px;"
                             ></i>
                         </a>
 
                         @if(auth("admin")->user()->can("update.product-branch"))
-                            <a href="javascript:void(0)" data-id="'.$productBranch->id.'" data-bs-toggle="modal" id="editButton" data-bs-target="#editModal">
+                            <a href="javascript:void(0)" data-id="'.$productBranch->id.'" id="editButton" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-info" data-bs-placement="top" data-bs-original-title="Edit">
                                 <i style="font-size: 20px;" class="ti ti-edit cursor-pointer text-info"></i>
                             </a>
                         @endif
 
                         @if(auth("admin")->user()->can("delete.product-branch"))
-                            <a href="javascript:void(0)" data-id="'.$productBranch->id.'" id="deleteBtn">
+                            <a href="javascript:void(0)" data-id="'.$productBranch->id.'" id="deleteBtn" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-danger" data-bs-placement="top" title="Delete">
                                 <i style="font-size: 20px;" class="ti ti-trash text-danger" title="Delete"></i>
                             </a>
                         @endif

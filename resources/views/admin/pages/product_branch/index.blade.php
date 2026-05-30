@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @push('add-title')
-    Branch Product Template
+    Branch Wise Product Template
 @endpush
 
 @push('add-css')
@@ -26,6 +26,16 @@
             background: #853d43 !important;
             color: #e9e8e8 !important;
             cursor: not-allowed;
+        }
+        .calender_icon {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #9292a9;
+            cursor: pointer;
+            background: #F7F7F7;
         }
     </style>
 @endpush
@@ -65,6 +75,8 @@
             </li>
         </ul>
         <div class="page-btn">
+            <button type="button" class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer" aria-controls="offcanvasExample"><i class="ti ti-filter me-1"></i>Filter</button>
+
             @if(auth("admin")->user()->can("create.product-branch"))
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="ti ti-circle-plus me-1"></i>Add Branch Product</button>
              @endif
@@ -431,12 +443,120 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
+
+        {{-- Filter Drawer Option --}}
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="filterDrawer" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <h4 class="offcanvas-title" id="offcanvasExampleLabel">Branch Product Filter</h4>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div> <!-- end offcanvas-header-->
+
+            <div class="offcanvas-body">
+                <form method="GET" action="{{ route('admin.product.branch.index') }}" id="filterForm" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <h4 class="text-dark mb-2" style="font-weight: 700;">Products</h4>
+
+                        <div class="bg-input-field ">
+                            <select name="product_id" id="filter_product_id" class="form-select">
+                                <option value=" " selected  data-image-url="{{ asset('public/admin/assets/images/select_option.png') }}">Select Product</option>
+                                                            
+                                @foreach ($products as $index => $row)
+                                    <option value="{{ $row->id }}" data-image-url="{{ asset($row->thumb_image) }}" {{ request('product_id') == $row->id ? 'selected' : '' }}><strong>{{ $row->name }}</strong></option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="text-dark mb-2" style="font-weight: 700;">Branches</h4>
+
+                        <div class="bg-input-field ">
+                            <select name="branch_id" id="filter_branch_id" class="form-select">
+                                <option value=" " selected data-image-url="{{ asset('public/admin/assets/images/select_option.png') }}">Select Branch</option>
+
+                                @foreach ($branches  as $index => $row)
+                                    <option value="{{ $row->id }}" {{ request('branch_id') == $row->id ? 'selected' : '' }}>{{ $row->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="text-dark mb-2" style="font-weight: 700;">Creation Date Range</h4>
+
+                        <div class="bg-input-field">
+                            <div class="position-relative">
+                                <input type="text" id="creation_date" name="creation_date" class="form-control form_inputs" value="{{ request('creation_date') }}" placeholder="Select date range" />
+                                <label for="creation_date" class="calender_icon">
+                                    <i class="ti ti-calendar-event"></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="text-dark mb-2" style="font-weight: 700;">Admin User</h4>
+
+                        <div class="bg-input-field ">
+                            <select name="admin_user[]" id="admin_user" class="form-select" multiple>
+                                @foreach ($admins as $index => $row)
+                                    <option value="{{ $row->id }}" {{ in_array($row->id, request('admin_user', [])) ? 'selected' : '' }}>{{ $row->name  }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        @php
+                            $selectedAdmins = request('admin_user', []);
+                            $allAdminIds = $admins->pluck('id')->toArray();
+                            $isAllSelected = count($selectedAdmins) === count($allAdminIds) && count($allAdminIds) > 0;
+                        @endphp
+
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" value="admin_status" id="admin_status" {{ $isAllSelected ? 'checked' : '' }}>
+                            <label class="form-check-label" for="admin_status">
+                                Select All
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <h4 class="text-dark mb-2" style="font-weight: 700;">Product Status</h4>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="status[]" value="1" id="status_active" {{ in_array('1', request('status', [])) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="status_active">
+                                    Active
+                                </label>
+                            </div>
+            
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="status[]" value="0" id="status_deactive" {{ in_array('0', request('status', [])) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="status_deactive">
+                                    Deactive
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center justify-content-end gap-3">
+                            <button type="button" id="resetFilter" class="btn btn-danger">Reset Filter</button>
+                            <button type="submit" class="btn btn-secondary">Apply Filter</button>
+                        </div>
+                    </div>
+                </form>
+            </div> <!-- end offcanvas-body-->
+        </div>
+
     </div>
 
 @endsection
 
 @push('add-js')
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.6/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.6/js/buttons.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('public/admin/assets/js/daterangepicker.js') }}"></script>
@@ -613,6 +733,23 @@
                 }
             });
 
+            $('#filter_product_id').select2({
+                dropdownParent: $('#filterDrawer'),
+                templateResult: formatState,       
+                templateSelection: formatState, 
+            });
+
+            $('#filter_branch_id').select2({
+                dropdownParent: $('#filterDrawer'),
+                templateResult: formatState,       
+                templateSelection: formatState, 
+            });
+
+            $('#admin_user').select2({
+                placeholder: "Select users",
+                closeOnSelect: false,
+            });
+
             $('#product_id').select2({
                 dropdownParent: $('#createModal'),
                 templateResult: formatState,       
@@ -654,6 +791,31 @@
                 return $state;
             };
         });
+
+
+        /* -------- SELECT ALL -------- */
+        $('#admin_status').on('change', function () {
+            if ($(this).is(':checked')) {
+                let allValues = [];
+
+                $('#admin_user option').each(function () {
+                    allValues.push($(this).val());
+                });
+
+                $('#admin_user').val(allValues).trigger('change');
+            } else {
+                $('#admin_user').val(null).trigger('change');
+            }
+        });
+
+        /* -------- ON SELECT / UNSELECT -------- */
+        $('#admin_user').on('change', function () {
+            let total = $('#admin_user option').length;
+            let selected = $('#admin_user option:selected').length;
+
+            $('#admin_status').prop('checked', total === selected);
+        });
+
 
         // Multiple Date Range
         $(function() {
@@ -697,19 +859,44 @@
             // Initialize both inputs
             initDateRangePicker('#discount_date', "up");
             initDateRangePicker('#up_discount_date', "up");
+            initDateRangePicker('#creation_date', "auto");
         });
     </script>
 
     <script>
         $(document).ready(function () {
+            $('#productBranchTable').on('draw.dt', function () {
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                tooltipTriggerList.forEach(el => {
+                    new bootstrap.Tooltip(el);
+                });
+            });
 
             // Show Data through Datatable
             let datatables = $('#productBranchTable').DataTable({
-                order: [[0, 'desc']],
-                processing: true,
-                serverSide: true,
-                ajax: "{{ route('admin.product-branch-data') }}",
-                // pageLength: 30,
+                "order": [[0, 'desc']],
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url" : "{{ route('admin.product-branch-data') }}",
+                    "data": function(e){
+                        function getCheckedValues(name) {
+                            return $(`input[name="${name}[]"]:checked`).map(function () {
+                                    return this.value;
+                                }).get();
+                        }
+
+                        let statusValues    = getCheckedValues('status');
+            
+                        e.product_name      = $('#product_name').val();
+                        e.product_id        = $('#filter_product_id').val();
+                        e.branch_id         = $('#filter_branch_id').val();
+                        e.creation_date     = $('#creation_date').val();
+                        e.admin_user        = $('#admin_user').val(); // array (select2 multiple)
+                        e.status            = statusValues;
+                    }
+                },
+                pageLength: 10,
                 columns: [
                     { 
                         data: 'DT_RowIndex', 
@@ -749,7 +936,140 @@
                     {
                         data: 'created_by',
                     },
-                ]
+                ],
+                layout: {
+                    topStart: {
+                        buttons: [
+                            {
+                                text: `<i class="ti ti-refresh"></i>`,
+                                className: 'btn btn-outline-secondary refresh_btn',
+                            },
+                            {
+                                text: '<i class="ti ti-adjustments"></i> Filter Column',
+                                className: 'btn btn-secondary filter-column-btn',
+                                action: function () {
+                                    // Bootstrap dropdown will handle it
+                                }
+                            },
+                        ],
+                        pageLength: {
+                            menu: [10, 25, 50, 100, 250, -1]
+                        },
+                    },
+                    // topEnd: {
+                    //     paging: true,
+                    // }
+                },
+                language: {
+                    lengthMenu: "Show _MENU_"
+                },
+                initComplete: function () {
+                    let table = this.api(); // Safe reference to DataTable
+
+                    // Inject dropdown HTML AFTER table initialization
+                    $('.filter-column-btn').replaceWith(`
+                        <div class="dropdown">
+                            <button class="btn btn-secondary border dropdown-toggle filter-column-btn"
+                                    data-bs-toggle="dropdown">
+                                <i class="ti ti-adjustments"></i> Filter Column
+                            </button>
+                            <div class="dropdown-menu filter-column-menu p-2"></div>
+                        </div>
+                    `);
+
+                    let columnMenu = $('.filter-column-menu');
+
+                    // Build checkboxes for all columns
+                    table.columns().every(function (index) {
+                        let column = this;
+                        let title = $(column.header()).text().trim();
+                        if (!title) return;
+
+                        columnMenu.append(`
+                            <div class="form-check mb-1">
+                                <input class="form-check-input toggle-column"
+                                    type="checkbox"
+                                    data-column="${index}"
+                                    checked>
+                                <label class="form-check-label">${title}</label>
+                            </div>
+                        `);
+                    });
+
+                    // Bind toggle event
+                    $(document).on('change', '.toggle-column', function () {
+                        let columnIndex = $(this).data('column');
+                        let visible = $(this).is(':checked');
+                        table.column(columnIndex).visible(visible);
+                    });
+                }
+            });
+
+            // filter form
+            $('#filterForm').on('submit', function (e) {
+                e.preventDefault(); // 🔥 stop page reload
+
+                let params = new URLSearchParams();
+
+                // Dropdowns
+                if ($('#filter_product_id').val())
+                    params.append('product_id', $('#filter_product_id').val());
+
+                if ($('#filter_branch_id').val())
+                    params.append('branch_id', $('#filter_branch_id').val());
+
+                if ($('#creation_date').val())
+                    params.append('creation_date', $('#creation_date').val());
+
+                // Select2 multiple
+                let adminUsers = $('#admin_user').val();
+                if (adminUsers)
+                    adminUsers.forEach(val => params.append('admin_user[]', val));
+
+                // Checkboxes
+                $('input[name="status[]"]:checked').each(function () {
+                    params.append('status[]', $(this).val());
+                });
+
+                // Update URL
+                let newUrl = window.location.pathname + '?' + params.toString();
+                window.history.pushState({}, '', newUrl);
+
+                // console.log(params);
+                datatables.ajax.reload();
+            });
+
+            // refresh the datatables data
+            $(document).on('click', '.refresh_btn', function (e) {
+                e.preventDefault();
+                datatables.ajax.reload(null, false); // 🔥 correct
+            });
+
+            // Reset Filter
+            $('#resetFilter').on('click', function () {
+                $('.form-check-input').prop('checked', false);
+                $('.form_inputs').val('');
+                $('.select_form').val('');
+
+                /* ---DATE RANGE PICKER  --- */
+                if ($('.daterange').length) {
+                    $('.daterange').val('');
+                }
+
+                /* -----SELECT2 RESET ---- */
+                $('.select2-hidden-accessible').each(function () {
+                    $(this).val(' ').trigger('change');
+                });
+
+                /* ----- MULTI SELECT / SELECT2 ----- */
+                $('select[multiple]').val(null).trigger('change');
+
+                // --- REMOVE URL PARAMETERS AND RELOAD PAGE ---
+                const cleanUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+
+                // Reload Datatables
+                datatables.ajax.reload();
             });
 
             // status updates
@@ -895,6 +1215,9 @@
                             }
                         });
 
+                        // Open modal
+                        $('#editModal').modal('show');
+
                         $('#up_id').val(data.id);
                         $('#up_branch_id').val(data.branch_id).trigger('change');
                         $('#up_product_id').val(data.product_id).trigger('change');
@@ -1030,7 +1353,10 @@
                     contentType: false,  // Prevent jQuery from setting contentType
                     success: function (res) {
                         let data = res.success;
-                        console.log(data);
+                        // console.log(data);
+
+                        // Open modal
+                        $('#viewModal').modal('show');
 
                         $('#view_product_name').html(data.name);
                         $('#view_branch_name').html(data.branch_name);
@@ -1119,5 +1445,6 @@
             }
         })
     </script>
+
 @endpush
 

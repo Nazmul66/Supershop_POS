@@ -228,7 +228,7 @@
                                         data-bs-dismiss="modal">Close
                                 </button>
 
-                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
+                                <button type="submit" id="submitBtn" class="btn btn-primary waves-effect waves-light">
                                     Save Changes
                                 </button>
                             </div>
@@ -361,7 +361,7 @@
                                         data-bs-dismiss="modal">Close
                                 </button>
 
-                                <button type="submit" id="btn-store" class="btn btn-primary waves-effect waves-light">
+                                <button type="submit" id="edit_btn" class="btn btn-primary waves-effect waves-light">
                                    Update
                                 </button>
                             </div>
@@ -1126,8 +1126,14 @@
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
+                    beforeSend: function () {
+                        $('#submitBtn').prop('disabled', true);
+                        $('#submitBtn').html(`
+                            <i class="fas fa-spinner fa-spin me-2"></i> Loading...
+                        `);
+                    },
                     success: function (res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.status === true) {
                             $('#createModal').modal('hide');
                             $('#createForm')[0].reset();
@@ -1152,7 +1158,6 @@
                             // ✅ IMPORTANT
                             reloadProductOptions();
                             updateReloadProductOptions()
-
                             datatables.ajax.reload();
 
                             swal.fire({
@@ -1161,6 +1166,11 @@
                                 icon: "success"
                             })
                         }
+                    },
+                    // 🔹 Always runs (success or error)
+                    complete: function () {
+                        $('#submitBtn').prop('disabled', false);
+                        $('#submitBtn').html(`Save Changes`);
                     },
                     error: function (err) {
                         let error = err.responseJSON.errors;
@@ -1254,8 +1264,13 @@
                     data: formData,
                     processData: false,  // Prevent jQuery from processing the data
                     contentType: false,  // Prevent jQuery from setting contentType
+                    beforeSend: function () {
+                        $('#edit_btn').prop('disabled', true);
+                        $('#edit_btn').html(`
+                            <i class="fas fa-spinner fa-spin me-2"></i> Loading...
+                        `);
+                    },
                     success: function (res) {
-
                         swal.fire({
                             title: "Success",
                             text: "Branch Wise Product Updated Successfully",
@@ -1266,6 +1281,11 @@
                         $('#EditForm')[0].reset();
                         $('.validation-error').html('');
                         datatables.ajax.reload();
+                    },
+                    // 🔹 Always runs (success or error)
+                    complete: function () {
+                        $('#edit_btn').prop('disabled', false);
+                        $('#edit_btn').html(`Update`);
                     },
                     error: function (err) {
                         let error = err.responseJSON.errors;
@@ -1290,7 +1310,6 @@
                         })
                     }
                 });
-
             });
 
             // Delete Data

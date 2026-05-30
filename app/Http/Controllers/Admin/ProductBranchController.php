@@ -89,7 +89,7 @@ class ProductBranchController extends Controller
                 $query->whereIn('product_branches.status', $request->status);
             }
 
-            $productBranches = $query->select('product_branches.*', 'products.*', 'branches.name as branch_name')
+            $productBranches = $query->select('product_branches.*', 'products.thumb_image','products.name as product_name', 'branches.name as branch_name')
                 ->orderBy('product_branches.id', "DESC")
                 ->get();
 
@@ -109,7 +109,7 @@ class ProductBranchController extends Controller
             ->addColumn('product_name', function ($productBranch) {
                 return '<div class="d-flex align-items-center gap-1">
                     <img src="'.asset( $productBranch->thumb_image ).'" alt="" style="width: 45px;">
-                    <p class="text-dark fw-bold" style="white-space: normal; width: 200px;">'.$productBranch->name.'</p>
+                    <p class="text-dark fw-bold" style="white-space: normal; width: 200px;">'.$productBranch->product_name.'</p>
                 </div>';
             })
             ->addColumn('branch_name', function ($productBranch) {

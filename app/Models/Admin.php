@@ -15,6 +15,13 @@ class Admin extends Authenticatable // must added Authenticatable and remove Mod
 
     protected $guard_name = 'admin';  // Important for Spatie permission
 
+    //If your database column contains JSON like:
+    //Now $admin->current_branch_id will automatically become: [1, 2, 3]
+    protected $casts = [
+        'current_branch_id' => 'array',
+        'current_device_id' => 'array',
+    ];
+
     protected $fillable = [
         'current_branch_id', 'current_device_id', 'name', 'type', 'phone', 'email', 'password','image','status', 'username', 'address', 'postal_code','email_verified_at', 'country_id', 'state_id', 'city_id'
     ];

@@ -56,17 +56,14 @@ class ProductBranchController extends Controller
         $query = ProductBranch::leftJoin('branches', 'branches.id', 'product_branches.branch_id')
             ->leftJoin('products', 'products.id', 'product_branches.product_id');
 
-
             // Products
             if( !empty($request->product_id) ){
                 $query->where('product_branches.product_id', $request->product_id);
             }
-
             // Branch
             if( !empty($request->branch_id) ){
                 $query->where('product_branches.branch_id', $request->branch_id);
             }
-
             // Date Range created_at
             if (!empty($request->creation_date)) {
                 $dates = explode(' - ', $request->creation_date);
@@ -78,12 +75,10 @@ class ProductBranchController extends Controller
                     $query->whereBetween('product_branches.created_at', [$start, $end]);
                 }
             }
-
             // Admin User
             if (!empty($request->admin_user)) {
                 $query->whereIn('product_branches.created_by', $request->admin_user);
             }
-
             // Status
             if (!empty($request->status)) {
                 $query->whereIn('product_branches.status', $request->status);

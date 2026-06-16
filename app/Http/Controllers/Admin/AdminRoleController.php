@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CreateAdminRoleRequest;
+use App\Http\Requests\Admin\UpdateAdminRoleRequest;
 use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Models\Branch;
@@ -60,60 +62,23 @@ class AdminRoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateAdminRoleRequest $request)
     {
         if (!$this->user || !$this->user->can('create.admin-role')) {
             throw UnauthorizedException::forPermissions(['create.admin-role']);
         }
 
         // dd($request->all());
-        $request->validate(
-            [
-                'branch_name'  => ['required', 'integer'],
-                'device_name'  => ['required', 'integer'],
-                'name'         => ['required', 'string', 'unique:admins,name', 'max:255'],
-                'email'        => ['required', 'unique:admins,email', 'email', 'max:255'],
-                'phone'        => ['required', 'regex:/^[0-9]{11,15}$/'],
-                'password'     => [
-                    $request->isMethod('post') ? 'required' : 'nullable',
-                    'string', 
-                    'min:8', 
-                    'regex:/[a-z]/',    // Must contain at least one lowercase letter
-                    'regex:/[A-Z]/',    // Must contain at least one uppercase letter
-                    'regex:/[0-9]/',    // Must contain at least one number
-                    'regex:/[@$!%*?&#]/' // Must contain a special character
-                ],        
-                'roles' => [
-                    'required', 
-                    'array', 
-                    'exists:roles,name' // Ensure each role exists in the database
-                ],
-            ],
-            [
-                'branch_name.required' => 'The Branch name field is required.',
-                'device_name.unique'   => 'This Device name is already in use.',
-                'name.required'     => 'The name field is required.',
-                'name.unique'       => 'This name is already in use.',
-                'email.required'    => 'The email field is required.',
-                'email.email'       => 'Please enter a valid email address.',
-                'email.unique'      => 'This email is already in use.',
-                'password.required' => 'The password field is required.',
-                'password.min'      => 'The password must be at least 8 characters.',
-                'password.regex'    => 'The password must include uppercase, lowercase, numbers, and special characters.',
-                'roles.required'    => 'Please assign at least one role.',
-                'roles.exists'      => 'One or more of the selected roles are invalid.',
-            ]
-        );
 
         DB::beginTransaction();
         try {
            $admin =  Admin::create([
                 'current_branch_id'     => $request->branch_name,
                 'current_device_id'     => $request->device_name,
-                'name'     => $request->name,
-                'email'    => $request->email,
-                'phone'    => $request->phone,
-                'password' => Hash::make($request->password),
+                'name'       => $request->name,
+                'email'      => $request->email,
+                'phone'      => $request->phone,
+                'password'   => Hash::make($request->password),
             ]);
 
             $admin->syncRoles($request->roles); // sync roles
@@ -158,49 +123,11 @@ class AdminRoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateAdminRoleRequest $request, string $id)
     {
         if (!$this->user || !$this->user->can('update.admin-role')) {
             throw UnauthorizedException::forPermissions(['update.admin-role']);
         }
-
-        $request->validate(
-            [
-                'branch_name'  => ['required', 'integer'],
-                'device_name'  => ['required', 'integer'],
-                'name'     => ['required', 'string', 'max:255', 'unique:admins,name,' . $id],
-                'email'    => ['required', 'email', 'max:255', 'unique:admins,email,' . $id],
-                'phone'    => ['required', 'regex:/^[0-9]{11,15}$/'],
-                'password' => [
-                    $request->isMethod('post') ? 'required' : 'nullable',
-                    'string', 
-                    'min:8', 
-                    'regex:/[a-z]/',    // Must contain at least one lowercase letter
-                    'regex:/[A-Z]/',    // Must contain at least one uppercase letter
-                    'regex:/[0-9]/',    // Must contain at least one number
-                    'regex:/[@$!%*?&#]/' // Must contain a special character
-                ],        
-                'roles' => [
-                    'required', 
-                    'array', 
-                    'exists:roles,name' // Ensure each role exists in the database
-                ],
-            ],
-            [
-                'branch_name.required' => 'The Branch name field is required.',
-                'device_name.unique'   => 'This Device name is already in use.',
-                'name.required'     => 'The name field is required.',
-                'name.unique'       => 'This name is already in use.',
-                'email.required'    => 'The email field is required.',
-                'email.email'       => 'Please enter a valid email address.',
-                'email.unique'      => 'This email is already in use.',
-                'password.required' => 'The password field is required.',
-                'password.min'      => 'The password must be at least 8 characters.',
-                'password.regex'    => 'The password must include uppercase, lowercase, numbers, and special characters.',
-                'roles.required'    => 'Please assign at least one role.',
-                'roles.exists'      => 'One or more of the selected roles are invalid.',
-            ]
-        );
 
         DB::beginTransaction();
         try {

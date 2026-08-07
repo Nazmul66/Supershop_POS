@@ -218,10 +218,10 @@ button:focus {
     outline: none !important;
     cursor: pointer !important;
 }
-table.dataTable td.dt-type-numeric,
+/* table.dataTable td.dt-type-numeric,
 table.dataTable th.dt-type-numeric{
     text-align: left !important;
-}
+} */
 
 
 /* Bootstrap CSS */
@@ -1106,3 +1106,93 @@ label:not(.form-check-label):not(.custom-file-label) {
     border-radius: 6px;
   }
 
+  .sidebar_column {
+    border: 1px solid #808080;
+    width: 100%;
+    height: calc(100vh - 85px);
+    overflow-y: auto;
+    background: #fff;
+}
+.main_column{
+    width: 100%;
+    height: calc(100vh - 85px);
+    overflow-y: hidden;
+}
+.inside_table_row{
+    border: 1px solid #808080;
+    background-color: #A9A9A9;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+
+
+.card_wise_breakdown{
+    margin: auto;
+}
+.card_wise_breakdown .card_wise tbody{
+    font-size: 11px;
+}
+.card_wise_breakdown .card_wise thead tr th{
+    font-size: 13px;
+    background: transparent;
+    border: 1px solid #000;
+    font-weight: 800;
+}
+.card_wise_breakdown .card_wise tbody tr td{
+    font-size: 11px;
+    border: 1px solid #000;
+    color: #000;
+    font-weight: 600;
+}
+.card_wise_breakdown .card_wise tbody tr.total_card_wise td{
+    font-size: 11px;
+    font-weight: 800;
+    color: #000;
+    border: 1px solid #000;
+}
+
+.report_view_structure{
+    position: relative;
+    background: #fff;
+    min-height: 100vh;
+    padding: 10px 24px 20px;
+    border: 1px solid #000;
+    border-radius: 2px;
+}
+.custom-pagination{
+    position: absolute;
+    top: 90px;
+    left: 70px;
+}
+.custom-pagination button{
+    font-size: 12px;
+    font-weight: 700;
+    color: #6a6565;
+    border: 2px solid #dee2e6 !important;
+    width: 35px;
+    height: 28px;
+}
+.custom-pagination button:hover{
+    color: #fff !important;
+    background: #288EA5 !important;
+    border: 2px solid #288EA5 !important;
+}
+.custom-pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+#pageInput{
+    width: 60px;
+    height: 27px;
+    text-align: center;
+    border: 1px solid #1b333a4a;
+    color: #686868;
+}
+#pageInput::-webkit-outer-spin-button,
+#pageInput::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

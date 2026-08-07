@@ -34,7 +34,7 @@
             height: 25px;
             border: 1px solid #dfdfdf;
             padding: 0px 10px;
-            border-bottom: 1px solid #1E78C8;
+            border-bottom: 2px solid #1E78C8;
         }
         .discount_form::placeholder,
         .discount_form::-webkit-input-placeholder,

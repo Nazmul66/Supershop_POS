@@ -110,6 +110,18 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" name="status" id="status">
+                                <option value="1" @if( $admin->status == 1 ) selected @endif>Active</option>
+                                <option value="0" @if( $admin->status == 0 ) selected @endif>Deactive</option>
+                            </select>
+
+                             @error('status')
+                                <span id="phone-error" class="text-danger mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input class="form-control" type="password" name="password" id="password" placeholder="Password...">
 

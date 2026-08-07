@@ -59,37 +59,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td><span class="badge bg-info" style="font-size: 14px; padding: 10px 10px;">SuperAdmin</span></td>
-                            <td>
-                                <a href="javascript:void();" class="badge bg-danger text-white" style="font-size: 14px; padding: 10px 10px;">N/A</a>
-                            </td>
-                            <td>
-                                <a href="javascript:void();" class="badge bg-danger text-white" style="font-size: 14px; padding: 10px 10px;">N/A</a>
-                            </td>
-                            <td style="width: 600px;">
-                                <span class="badge bg-success" style="font-size: 14px; padding: 10px 10px;">SuperAdmin</span>
-                            </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-
                         @foreach ($admins as $row => $admin )
                             <tr>
                                 <td>{{ $row + 1 }}</td>
                                 <td><span class="badge bg-info" style="font-size: 14px; padding: 10px 10px;">{{ $admin->name }}</span></td>
                                 <td>
-                                    <a href="mailto: {{ $admin->email }}" class="badge bg-info text-white" style="font-size: 14px; padding: 10px 10px;">{{ $admin->email }}</a>
-                                </td>
-                                <td>
-                                    @if ( !empty( $admin->phone ) )
-                                        <a href="tel: {{ $admin->phone }}" class="badge bg-info text-white" style="font-size: 14px; padding: 10px 10px;">{{ $admin->phone }}</a>
+                                    @if(!$admin->hasRole('SuperAdmin'))
+                                        <a href="mailto: {{ $admin->email }}" class="badge bg-info text-white" style="font-size: 14px; padding: 10px 10px;">{{ $admin->email }}</a>
                                     @else
                                         <a href="javascript:void();" class="badge bg-danger text-white" style="font-size: 14px; padding: 10px 10px;">N/A</a>
                                     @endif
-
+                                </td>
+                                <td>
+                                    @if(!$admin->hasRole('SuperAdmin'))
+                                        @if ( !empty( $admin->phone ) )
+                                            <a href="tel: {{ $admin->phone }}" class="badge bg-info text-white" style="font-size: 14px; padding: 10px 10px;">{{ $admin->phone }}</a>
+                                        @else
+                                            <a href="javascript:void();" class="badge bg-danger text-white" style="font-size: 14px; padding: 10px 10px;">*************</a>
+                                        @endif
+                                    @else
+                                        <a href="javascript:void();" class="badge bg-danger text-white" style="font-size: 14px; padding: 10px 10px;">N/A</a>
+                                    @endif
                                 </td>
                                 <td style="width: 600px;">
                                     @foreach ($admin->getRoleNames() as $role)
@@ -98,20 +88,23 @@
                                 </td>
                                 <td>
                                     <div class="d-flex gap-3">
-                                        @if(auth("admin")->user()->can("update.admin-role"))
-                                            <a class="btn btn-sm btn-info" href="{{ route('admin.admin-role.edit', $admin->id) }}">
-                                            <i class='fas fa-edit'></i></a>
-                                        @endif
+                                        @if(!$admin->hasRole('SuperAdmin'))
+                                            @if(auth("admin")->user()->can("update.admin-role"))
+                                                <a class="btn btn-sm btn-info" href="{{ route('admin.admin-role.edit', $admin->id) }}">
+                                                <i class='fas fa-edit'></i></a>
+                                            @endif
 
-                                        @if(auth("admin")->user()->can("delete.admin-role"))
-                                            <form action="{{ route('admin.admin-role.destroy', $admin->id) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('delete')
+                                            @if(auth("admin")->user()->can("delete.admin-role"))
+                                                <form action="{{ route('admin.admin-role.destroy', $admin->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('delete')
 
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        @else
                                         @endif
                                     </div>
                                 </td>

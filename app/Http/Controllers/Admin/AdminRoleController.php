@@ -37,7 +37,7 @@ class AdminRoleController extends Controller
             throw UnauthorizedException::forPermissions(['index.admin-role']);
         }
 
-        $admins = Admin::where('id', '!=', Admin::min('id'))->get();
+        $admins = Admin::where('status', 1)->get();
         return view('admin.pages.role_and_permission.admin.index',[
             "admins" => $admins,
         ]);
@@ -67,7 +67,6 @@ class AdminRoleController extends Controller
         if (!$this->user || !$this->user->can('create.admin-role')) {
             throw UnauthorizedException::forPermissions(['create.admin-role']);
         }
-
         // dd($request->all());
 
         DB::beginTransaction();
@@ -79,6 +78,7 @@ class AdminRoleController extends Controller
                 'email'      => $request->email,
                 'phone'      => $request->phone,
                 'password'   => Hash::make($request->password),
+                'status'     => $request->status,
             ]);
 
             $admin->syncRoles($request->roles); // sync roles
@@ -128,6 +128,7 @@ class AdminRoleController extends Controller
         if (!$this->user || !$this->user->can('update.admin-role')) {
             throw UnauthorizedException::forPermissions(['update.admin-role']);
         }
+        // dd($request->all());
 
         DB::beginTransaction();
         try {
@@ -141,6 +142,7 @@ class AdminRoleController extends Controller
                 'email'    => $request->email,
                 'phone'    => $request->phone,
                 'password' => $request->password ? Hash::make($request->password) : $admin->password, // Update password only if provided
+                'status'     => $request->status,
             ]);
  
             $admin->syncRoles($request->roles); // sync roles

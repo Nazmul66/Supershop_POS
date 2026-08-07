@@ -152,6 +152,9 @@ Route::group(["as" => 'admin.',"prefix" => '/admin', 'middleware' => ['auth:admi
 
     // All Report Blade File
     Route::group(["as" => 'report.',"prefix" => '/report'], function () {
+        Route::get('/reportViewerForm', function(){
+            return view('admin.pages.report.reportViewer');
+        });
         Route::get('/product-receive', function(){
             return view('admin.pages.report.product_receive.index');
         });
